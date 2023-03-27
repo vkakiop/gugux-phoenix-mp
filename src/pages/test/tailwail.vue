@@ -132,6 +132,8 @@ onLoad(() => {
     trackId: "1891117943458005044",
     userId: "1508181957879767040",
   }).then((res) => {
+    info.value = res.data;
+    console.log(info.value)
   });
 })
 
