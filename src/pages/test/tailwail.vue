@@ -120,12 +120,19 @@ const info = ref({});
 onLoad(() => {
   console.log('on page loaded!')
   getTrackInfo({
-      trackId: "1891117943458005044",
-      userId: "1508181957879767040",
+      trackId: "1784282934071197921",
+      userId: "1619234350272200750",
     }).then((res) => {
       info.value = res.data;
       console.log(info.value)
     });
+
+  //报错测试
+  getTrackInfo({
+    trackId: "1891117943458005044",
+    userId: "1508181957879767040",
+  }).then((res) => {
+  });
 })
 
 function toggleBarVisible(visible: boolean) {

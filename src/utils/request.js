@@ -1,4 +1,5 @@
 import axios from 'axios'
+import buildURL from 'axios/lib/helpers/buildURL'
 import errorCode from '@/utils/errorCode'
 import {isPlatformMp} from '@/utils/utils'
 import JSONBIG from 'json-bigint'
@@ -62,8 +63,10 @@ service.interceptors.response.use(res => {
         }
     },
     error => {
-        console.log('err' + error)
-        let { message } = error;
+        let message = error + '';
+        if (typeof(error) == 'object') {
+            message = error.message + ''
+        }
         if (message == "Network Error") {
             message = "后端接口连接异常";
         }
@@ -85,9 +88,9 @@ service.interceptors.response.use(res => {
 
 axios.defaults.adapter = function(config) { //自己定义个适配器，用来适配uniapp的语法
     return new Promise((resolve, reject) => {
-        console.log(config)
-        var settle = require('axios/lib/core/settle');
-        var buildURL = require('axios/lib/helpers/buildURL');
+        //console.log(config)
+        //var settle = require('axios/lib/core/settle');
+        //var buildURL = require('axios/lib/helpers/buildURL');
         // uni.request({
         //     method: config.method.toUpperCase(),
         //     url: config.baseURL + buildURL(config.url, config.params, config.paramsSerializer),
@@ -122,7 +125,7 @@ axios.defaults.adapter = function(config) { //自己定义个适配器，用来�
             success:(res)=> {
                 let data = res.data
                 try {
-                    var JSONbig = require('json-bigint')({storeAsString: true});
+                    var JSONbig = JSONBIG({storeAsString: true});
                     resolve({data:JSONbig.parse(data)});
                 }
                 catch (err) {
