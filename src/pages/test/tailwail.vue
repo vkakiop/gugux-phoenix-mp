@@ -73,7 +73,7 @@
 </template>
 
 
-<script setup lang="ts">
+<script setup>
 
 import { ref, onBeforeUnmount } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
@@ -109,7 +109,7 @@ const go2SubDemo = () => {
 };
 const themeRef = ref(uni.getSystemInfoSync().theme);
 // #ifdef MP
-uni.onThemeChange(({ theme }: { theme: 'dark' | 'light' }) => {
+uni.onThemeChange(theme => {
   themeRef.value = theme;
 });
 // #endif
@@ -137,9 +137,9 @@ onLoad(() => {
   });
 })
 
-function toggleBarVisible(visible: boolean) {
+function toggleBarVisible(visible) {
   const app = getApp()
-  app.globalData!.tabbarVisible = visible
+  app.globalData.tabbarVisible = visible
   console.log(app.globalData)
 }
 const classObj = {
