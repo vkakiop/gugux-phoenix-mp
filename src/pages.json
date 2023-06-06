@@ -8,6 +8,30 @@
 	},
 	"pages": [
 		{
+			"path": "pages/login/phone",
+			"style": {
+				"navigationBarTitleText": "咕咕行"
+			}
+		},
+		{
+			"path": "pages/login/phonecode",
+			"style": {
+				"navigationBarTitleText": "咕咕行"
+			}
+		},
+		{
+			"path": "pages/login/password",
+			"style": {
+				"navigationBarTitleText": "咕咕行"
+			}
+		},
+		{
+			"path": "pages/agreement/index",
+			"style": {
+				"navigationBarTitleText": "咕咕行"
+			}
+		},
+		{
 			"path": "pages/mine/mine",
 			"style": {
 				"navigationBarTitleText": "uni-app"

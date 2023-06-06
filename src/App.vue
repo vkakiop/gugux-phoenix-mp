@@ -1,6 +1,17 @@
 <script>
 export default {
+  globalData: {
+    loginToken:{
+      accessToken:'',
+      expireTime:0,
+    }
+  },
   onLaunch: function () {
+    let ggx_login_token_text = uni.getStorageSync('ggx_login_token')
+    if (ggx_login_token_text) {
+      this.globalData.loginToken = JSON.parse(ggx_login_token_text) || {}
+    }
+    console.log('loginToken',this.globalData)
     console.log('App Launch')
   },
   onShow: function () {

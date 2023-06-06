@@ -1,7 +1,7 @@
 import axios from 'axios'
 import buildURL from 'axios/lib/helpers/buildURL'
 import errorCode from '@/utils/errorCode'
-import {isPlatformMp} from '@/utils/utils'
+import {isPlatformMp,getTokenValue} from '@/utils/utils'
 import JSONBIG from 'json-bigint'
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 
@@ -31,6 +31,22 @@ const service = axios.create({
     }]
 
   })
+
+// request拦截器
+service.interceptors.request.use(config => {
+    // 是否需要设置 token
+    if (config.headers['isToken']) {
+        let token = getTokenValue()
+        if (token) {
+            config.headers['token'] = token // 让每个请求携带自定义token 请根据实际情况自行修改
+        }
+    }
+
+    return config
+}, error => {
+    console.log(error)
+    Promise.reject(error)
+})
 
 service.interceptors.response.use(res => {
         if (isPlatformMp()) {

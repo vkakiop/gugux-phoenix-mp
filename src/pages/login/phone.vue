@@ -1,0 +1,84 @@
+<template>
+  <view class="m-30">
+    <view class="text-right h-30 leading-30">
+      <navigator url="/pages/index/index" open-type="switchTab">跳过</navigator>
+    </view>
+    <phoneslogan></phoneslogan>
+    <view class="mt-50">
+      <view class="mb-10">未注册手机验证后完成注册</view>
+      <view class="h-48 bg-[#e9ebef] rounded-full flex justify-center items-center">
+        <view class="mr-10">+86</view>
+        <input v-model="pageData.phone" placeholder="请输入手机号" maxlength="11"/>
+      </view>
+      <view class="mt-18">
+        <button class="mb-25 h-48 leading-48 rounded-full bg-[#4ba1f8] text-white" @click="onGetValidCode">获取验证码</button>
+        <navigator url="/pages/login/password">
+          <view class="text-center">账号密码登录</view>
+        </navigator>
+      </view>
+    </view>
+    <u-popup :show="pageData.isDialogShow" mode="center" round="10" :customStyle="{marginLeft:'60rpx',marginRight:'60rpx'}">
+      <view class="m-22">
+        <view class="text-center font-bold">同意隐私条款</view>
+        <view class="my-28">登录注册需要您阅读并同意我们的<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>
+        </view>
+        <view class="flex justify-center items-center">
+          <button class="h-40 leading-40 rounded-full bg-[#f4f5f6] text-black" @click="pageData.isDialogShow=false">不同意</button>
+          <button class="h-40 leading-40 rounded-full bg-[#4ba1f8] text-white" @click="pageData.isDialogShow=false;pageData.isAgree=true;onGetValidCode();">我同意</button>
+        </view>
+      </view>
+    </u-popup>
+  </view>
+</template>
+
+<script setup>
+import {reactive} from 'vue'
+import phoneslogan from './components/phoneslogan.vue'
+const pageData = reactive({
+  phone:'',
+  isDialogShow:false,
+  isAgree:false, //同意协议
+})
+
+const vaildPhone = ()=>{
+  let reg =  /^1[3456789]\d{9}$/;
+  if(pageData.phone == ''){
+    uni.showToast({
+      title: '请输入手机号',
+      icon:'none',
+      duration: 2000
+    });
+    return false
+  }
+  if(reg.test(pageData.phone)){
+    return true
+  }
+  else{
+    uni.showToast({
+      title: '请输入正确的手机号'+pageData.phone,
+      icon:'none',
+      duration: 2000
+    });
+    return false
+  }
+}
+
+const onGetValidCode = ()=>{
+  if (vaildPhone()) {
+    if (!pageData.isAgree) {
+      pageData.isDialogShow=true
+    }
+    else {
+      uni.navigateTo({url:'./phonecode?phone='+pageData.phone})
+    }
+  }
+}
+
+const gotoAgreement = (url) =>{
+  uni.navigateTo({url})
+}
+</script>
+
+<style lang="scss" scoped>
+
+</style>

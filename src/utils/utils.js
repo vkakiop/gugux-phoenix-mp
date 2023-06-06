@@ -128,3 +128,12 @@ export function formatedDistance(p1) {
 	}
 	return text
 }
+
+export function getTokenValue() {
+	const app = getApp()
+	let token = app.globalData.loginToken && app.globalData.loginToken.accessToken
+	if (!token || token == 'undefined') {
+		token = ''
+	}
+	return token
+}
