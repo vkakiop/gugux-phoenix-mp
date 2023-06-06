@@ -6,7 +6,13 @@
 			"^u-(.*)": "uview-plus/components/u-$1/u-$1.vue"
 		}
 	},
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	"pages": [
+		{
+			"path": "pages/mine/mine",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		},
 		{
 			"path": "pages/index/index",
 			"style": {
@@ -14,9 +20,10 @@
 			}
 		},
 		{
-			"path": "pages/mine/mine",
+			"path": "pages/personCenter/personCenter",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
 			}
 		}
 	],
@@ -28,8 +35,10 @@
 	},
 	"tabBar": {
 		"color": "black",
+		"selectedColor":"#C3011F",
 		"backgroundColor": "#fff",
-		"list": [{
+		"list": [
+			{
 				"pagePath": "pages/index/index",
 				"iconPath": "static/img/tabbar/home.png",
 				"selectedIconPath": "static/img/tabbar/homeactive.png",
@@ -43,5 +52,4 @@
 			}
 		]
 	}
-
 }
