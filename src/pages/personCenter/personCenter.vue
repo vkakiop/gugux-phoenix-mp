@@ -27,8 +27,10 @@
 		</view>
 		<view class="flex justify-between  p-10 lineView">
 			<view class="">名片</view>
-			<view>
-				等等十三月
+			<view >
+				<navigator url="/pages/personCenter/personQRcode">
+				<image src="../../static/logo.png" class="w-24 " mode="widthFix" style="border-radius: 50%;"> </image>
+				</navigator>
 			</view>
 		</view>
 		<view class="flex justify-between  p-10 lineView">
