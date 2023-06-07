@@ -1,5 +1,10 @@
 <template>
   <view>
+    <view class="relative p-1  mb-2 h-20">
+			<navigator  hover-class="navigator-hover">
+			 <icon type="search" size="26"  class="float-right" />
+			 	</navigator>
+		</view>
     home
     userInfo:{{loginToken.accessToken}}
   </view>

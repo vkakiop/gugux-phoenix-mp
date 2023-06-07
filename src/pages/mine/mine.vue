@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import  waterFall from "../../components/waterfall.vue"
+import  waterFall from "../../components/index/waterfall.vue"
 import { reactive, ref } from 'vue';
 const content = ref('在大多数场景下，并不需要设置 background-color 属性，因为uni-popup的主窗口默认是透明的，在向里面插入内容的时候 ，样式完全交由用户定制，如果设置了背景色 ，例如 uni-popup-dialog 中的圆角就很难去实现，不设置背景色，更适合用户去自由发挥。')
 const src = 'https://cdn.uviewui.com/uview/album/1.jpg'

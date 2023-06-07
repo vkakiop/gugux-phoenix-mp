@@ -12,13 +12,10 @@ export default {
       this.globalData.loginToken = JSON.parse(ggx_login_token_text) || {}
     }
     console.log('loginToken',this.globalData)
-    console.log('App Launch')
   },
   onShow: function () {
-    console.log('App Show')
   },
   onHide: function () {
-    console.log('App Hide')
   },
 }
 </script>
