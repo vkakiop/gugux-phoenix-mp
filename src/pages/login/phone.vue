@@ -12,9 +12,8 @@
       </view>
       <view class="mt-18">
         <button class="mb-25 h-48 leading-48 rounded-full bg-[#4ba1f8] text-white" @click="onGetValidCode">获取验证码</button>
-        <navigator url="/pages/login/password">
-          <view class="text-center">账号密码登录</view>
-        </navigator>
+        <view class="text-center" @click="gotoLoginPassword">账号密码登录</view>
+
       </view>
     </view>
     <u-popup :show="pageData.isDialogShow" mode="center" round="10" :customStyle="{marginLeft:'60rpx',marginRight:'60rpx'}">
@@ -83,6 +82,10 @@ const onGetValidCode = ()=>{
 
 const gotoAgreement = (url) =>{
   uni.navigateTo({url})
+}
+
+const gotoLoginPassword = ()=>{
+  uni.navigateTo({url:'/pages/login/password?url='+encodeURIComponent(pageData.url)})
 }
 </script>
 

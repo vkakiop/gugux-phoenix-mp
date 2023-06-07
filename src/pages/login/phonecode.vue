@@ -1,7 +1,6 @@
 <template>
   <view class="m-30">
-    <view class="text-right h-30">
-    </view>
+    <view class="text-right h-30"></view>
     <phoneslogan></phoneslogan>
     <view class="mt-58 text-[#7b7b7c]">{{pageData.isLoading ? '正在发送至' : '已经发送至'}}：{{ pageData.phone }}</view>
     <view class="phone_code_single">
@@ -35,6 +34,7 @@
 <script setup>
 import {reactive,watch,onMounted} from 'vue'
 import {authSms,authSmsLogin} from '@/api/login/index'
+import {tokenSave} from '@/utils/login'
 import phoneslogan from './components/phoneslogan.vue'
 import {onLoad} from "@dcloudio/uni-app"
 
@@ -122,29 +122,7 @@ const codefocusFun = (index)=>{
 //按钮点击事件
 const onLogin = ()=>{
   authSmsLogin({code:pageData.code,phone:pageData.phone}).then(res=>{
-    const app = getApp()
-    if (res.data && res.data.accessToken) {
-      app.globalData.loginToken = res.data
-
-      uni.setStorage({
-        key: 'ggx_login_token',
-        data: JSON.stringify(res.data),
-        success: function () {
-          let url = pageData.url || '/pages/index/index'
-          uni.switchTab({url:url})
-        }
-      });
-    }
-    else {
-      uni.showToast({
-        title: 'token获取错误！',
-        icon:'none',
-        duration: 2000
-      });
-      setTimeout(()=>{
-        uni.navigateBack({delta: 1})
-      },2000)
-    }
+    tokenSave(res,pageData.url)
   })
 }
 </script>

@@ -12,7 +12,7 @@ onLoad((option)=>{
   uni.clearStorageSync('ggx_login_token')
 
   let url = option.url || '/pages/index/index'
-  uni.redirectTo({url:url})
+  uni.navigateTo({url:url})
 })
 </script>
 

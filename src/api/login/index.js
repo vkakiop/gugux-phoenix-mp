@@ -24,3 +24,15 @@ export function authSmsLogin(data) {
     })
 }
 
+// 密码登录
+export function authPwdLogin(data) {
+    return request({
+        url: '/gugux-services-auth-api/app/auth/pwd/login',
+        headers: {
+            isToken: false
+        },
+        method: 'post',
+        data:data
+    })
+}
+
