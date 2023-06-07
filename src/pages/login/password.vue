@@ -12,9 +12,7 @@
         <image v-if="pageData.password" class="w-18 h-18 absolute right-15 top-14" src="@/static/login/eye.png" @click="pageData.password = '';"></image>
       </view>
       <button :class="['mt-25','h-48','leading-48','rounded-full','bg-[#4ba1f8]',pageData.password.length < 6 ? '' : 'active:bg-[#3194f9]',pageData.password.length < 6 ? 'text-[#ddd]' : 'text-white']" @click="onLogin">登录</button>
-
       <view class="mt-18 text-center" @click="gotoLoginPhone">验证码登录</view>
-
     </view>
   </view>
 </template>

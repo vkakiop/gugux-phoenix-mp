@@ -14,7 +14,6 @@
       <view class="mt-18">
         <button class="mb-25 h-48 leading-48 rounded-full bg-[#4ba1f8] active:bg-[#3194f9] text-white" @click="onGetValidCode">获取验证码</button>
         <view class="text-center" @click="gotoLoginPassword">账号密码登录</view>
-
       </view>
     </view>
     <u-popup :show="pageData.isDialogShow" mode="center" round="10" :customStyle="{marginLeft:'60rpx',marginRight:'60rpx'}">
