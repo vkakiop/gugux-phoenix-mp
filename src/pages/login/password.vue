@@ -13,6 +13,25 @@
       </view>
       <button :class="['mt-25','h-48','leading-48','rounded-full','bg-[#4ba1f8]',pageData.password.length < 6 ? '' : 'active:bg-[#3194f9]',pageData.password.length < 6 ? 'text-[#ddd]' : 'text-white']" @click="onLogin">登录</button>
       <view class="mt-18 text-center" @click="gotoLoginPhone">验证码登录</view>
+      <view class="mt-58 text-13 flex items-center">
+        <u-checkbox-group v-model="pageData.isAgreeItems">
+          <u-checkbox shape="circle" activeColor="#4ba1f8" label=""></u-checkbox>
+        </u-checkbox-group>
+        <view>
+          我已阅读并同意<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>
+        </view>
+      </view>
+      <u-popup :show="pageData.isDialogShow" mode="center" round="10" :customStyle="{marginLeft:'60rpx',marginRight:'60rpx'}">
+        <view class="m-22">
+          <view class="text-center font-bold">同意隐私条款</view>
+          <view class="my-28">登录注册需要您阅读并同意我们的<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>
+          </view>
+          <view class="flex justify-center items-center">
+            <button class="w-115 h-40 leading-40 rounded-full bg-[#f4f5f6] active:bg-[#eeeff0] text-black" :style="{border:'none'}" @click="pageData.isDialogShow=false">不同意</button>
+            <button class="w-115 h-40 leading-40 rounded-full bg-[#4ba1f8] active:bg-[#3194f9] text-white" :style="{border:'none'}" @click="pageData.isDialogShow=false;pageData.isAgreeItems=[''];onGetValidCode();">我同意</button>
+          </view>
+        </view>
+      </u-popup>
     </view>
   </view>
 </template>
@@ -31,14 +50,21 @@ onLoad((option)=>{
 const pageData = reactive({
   url:'',
   phone:'',
-  password:''
+  password:'',
+  isDialogShow:false,
+  isAgreeItems:[],
 })
 const onLogin = ()=>{
   if (pageData.password.length >= 6) {
     if (vaildPhone()) {
-      authPwdLogin({phone:pageData.phone,password:pageData.password}).then(res=>{
-        tokenSave(res,pageData.url)
-      })
+      if (pageData.isAgreeItems.length == 0) {
+        pageData.isDialogShow=true
+      }
+      else {
+        authPwdLogin({phone:pageData.phone,password:pageData.password}).then(res=>{
+          tokenSave(res,pageData.url)
+        })
+      }
     }
   }
 }
@@ -64,6 +90,14 @@ const vaildPhone = ()=>{
     });
     return false
   }
+}
+
+const checkboxChange = (n) => {
+  console.log('change', n);
+}
+
+const gotoAgreement = (url) =>{
+  uni.navigateTo({url})
 }
 
 const gotoLoginPhone = ()=>{
