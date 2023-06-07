@@ -42,10 +42,13 @@
     <!-- <view>    <w-qrcode ref="qrcode" :options="options" @press="longtap"></w-qrcode></view> -->
 
    <view style="width: 200px;height: 300px;background-color: brown;"></view>
+   <waterFall></waterFall>
+   
   </view>
 </template>
 
 <script setup>
+import waterFall from "@/components/index/waterfall.vue"
 import { ref, onMounted, reactive } from 'vue'
 import { onShow } from "@dcloudio/uni-app"
 const loginToken = ref({})

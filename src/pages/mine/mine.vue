@@ -1,10 +1,10 @@
 <template>
 	<view>
 		<view class="flex" @click="skipPerson">
-			<view><u-avatar :src="src" size="60"></u-avatar></view>
+			<view><u-avatar :src="pageData.mineMessage[0].icon" size="60"></u-avatar></view>
 			<view class="flex flex-col  justify-center">
-				<view class="p-2 ml-10">等等十三月</view>
-				<view class="p-2 ml-10">咕咕号:11123214</view>
+				<view class="p-2 ml-10">{{ pageData.mineMessage[0].nickname }}</view>
+				<view class="p-2 ml-10">咕咕号:{{ pageData.mineMessage[0].guguId }}</view>
 			</view>
 		</view>
 		<view class="flex">
@@ -19,8 +19,7 @@
 					<view :class="{ hide: !iSinfo }">
 						swipeAction的跟手联动是非常考验性能的。为了提高交互体验，本组件在 app 端 vue 页面、h5、微信小程序使用了wxs 技术，nvue 页面使用 bindingx
 						技术，可以达到流畅的体验。在其他小程序平台由于底层不支持优化技术，只能使用使用普通 js ，此时性能一般。uni-swipe-action 和 uni-swipe-action-item
-						需要同时使用uni-swipe-action 不能嵌套在 swiper 中使用长列表不建议使用
-						autoClose属性，会影响组件性能，造成卡顿，原因是打开之后要通知其他已经打开的组件关闭，会导致多个组件重新渲染
+						需要同时使用uni-swipe-action 不能嵌套在 swiper 中使用长列表不建议使用autoClose属性，会影响组件性能，造成卡顿，原因是打开之后要通知其他已经打开的组件关闭，会导致多个组件重新渲染
 					</view>
 					<text @tap="showinfo" v-if="!iSinfo">展开</text>
 				</view>
@@ -36,29 +35,29 @@
 				<u-tabs :list="list1" @click="click"></u-tabs>
 			</template>
 		</view>
-		<view class="flex collectView" v-if="cllectRadio==2">
-			<view class="p-5  ml-20"  :class="lableCollect==1?'bg-gray-300':'bg-gray-200'">文章</view>
-			<view class="p-5  ml-20" :class="lableCollect==2?'bg-gray-300':'bg-gray-200'">视频</view>
+		<view class="flex collectView" v-if="cllectRadio == 2">
+			<view class="p-5  ml-20" :class="lableCollect == 1 ? 'bg-gray-300' : 'bg-gray-200'">文章</view>
+			<view class="p-5  ml-20" :class="lableCollect == 2 ? 'bg-gray-300' : 'bg-gray-200'">视频</view>
 		</view>
 		<waterFall></waterFall>
 	</view>
 </template>
 
 <script setup>
+import { getMineMessage } from "@/api/mine/index.js"
 import { reactive, ref } from 'vue'
-import  waterFall from "../../components/index/waterfall.vue"
-import {onShow} from "@dcloudio/uni-app"
-import {needLogin} from "@/utils/utils"
-
-onShow(()=>{
-  needLogin()
+import waterFall from "@/components/index/waterfall.vue"
+import { onShow, onLoad } from "@dcloudio/uni-app"
+import { needLogin } from "@/utils/utils"
+onShow(() => {
+	needLogin()
 })
 const content = ref('在大多数场景下，并不需要设置 background-color 属性，因为uni-popup的主窗口默认是透明的，在向里面插入内容的时候 ，样式完全交由用户定制，如果设置了背景色 ，例如 uni-popup-dialog 中的圆角就很难去实现，不设置背景色，更适合用户去自由发挥。')
 const src = 'https://cdn.uviewui.com/uview/album/1.jpg'
 const TabCur2 = ref('')
-const cllectRadio=ref(0)
+const cllectRadio = ref(0)
 const iSinfo = ref(false)
-const lableCollect=ref(1)
+const lableCollect = ref(1)
 const uReadMore = ref()
 const list1 = reactive([{
 	name: '作品(999)',
@@ -69,7 +68,7 @@ const list1 = reactive([{
 }])
 const click = (item) => {
 	console.log('item', item);
-	cllectRadio.value=item.index
+	cllectRadio.value = item.index
 
 }
 const load = () => {
@@ -79,10 +78,26 @@ const showinfo = () => {
 	iSinfo.value = !iSinfo.value
 }
 const skipPerson = () => {
- uni.navigateTo({
- 	url:'/pages/personCenter/personCenter'
- })
+	uni.navigateTo({
+		url: '/pages/personCenter/personCenter'
+	})
 }
+const pageData = reactive({
+		//数据全部列表
+		mineMessage: []
+	})
+	const paramsForm = reactive({
+		id: '',
+		state: 1,
+	})
+onLoad(() => {
+
+	getMineMessage({}).then(res => {
+		pageData.mineMessage=[{...res.data}]
+		console.log(pageData.mineMessage[0]);
+	})
+})
+
 </script>
 
 <style lang="scss" scoped>
@@ -140,10 +155,10 @@ const skipPerson = () => {
 	-webkit-line-clamp: 2; //此处为上限行数
 	-webkit-box-orient: vertical;
 }
-.collectView{
-	view{
+
+.collectView {
+	view {
 		border-radius: 20%;
 	}
 }
-
 </style>

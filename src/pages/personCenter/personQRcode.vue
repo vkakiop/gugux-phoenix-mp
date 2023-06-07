@@ -61,18 +61,12 @@ onShareTimeline(() => {
 		title: '标题',
 		path: '/pages/index/index',
 		desc: '分享描述',
-		imageUrl: "../../static/login.png",
+		imageUrl: "../../static/logo.png",
 	}
 })
 </script>
 
 <style lang="scss" scoped>
-// .viewSty{
-// 	position: relative;
-// 	width: 100%;
-// 	height: 100vh;
-// 	background-color: blue;
-// }
 .codeSty {
 	width: 96%;
 	margin: auto;

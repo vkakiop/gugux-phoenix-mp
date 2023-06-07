@@ -57,7 +57,6 @@ const fetch = () => {
 		let {
 			list
 		} = res.data
-		console.log(list);
 		if (list.length == 10) {
 			data.list = [...data.list, ...list]
 			s++
@@ -130,7 +129,6 @@ onMounted(() => {
 })
 onReachBottom(() => {
 	fetch()
-	console.log('触底了');
 })
 // 监听数据的变化
 watch(() => data.list, (newValue, oldValue) => {
