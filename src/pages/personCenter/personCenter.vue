@@ -1,9 +1,9 @@
 <template>
 	<view>
-		<view class="flex justify-between  text-700 p-10 lineView">
+		<view class="flex justify-between text-700 p-10 lineView items-center">
 			<view class="">头像</view>
 			<view>
-				<image :src="pageData.userInfo.cover" class="w-60 rounded" mode="widthFix" > </image>
+				<image :src="pageData.userInfo.cover" class="w-60 rounded" mode="widthFix" style="border-radius: 50%;"> </image>
 			</view>
 		</view>
 

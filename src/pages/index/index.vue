@@ -17,11 +17,6 @@
           <uni-icons type="top" size="26" @click="drowDown('bottom')" v-else></uni-icons>
         </view>
       </view>
-      <view class="content">
-        <view v-if="current === 0"><text class="content-text">选项卡1的内容</text></view>
-        <view v-if="current === 1"><text class="content-text">选项卡2的内容</text></view>
-        <view v-if="current === 2"><text class="content-text">选项卡3的内容</text></view>
-      </view>
     </view>
     <view class="gridBox" v-if="iconType == 'top'">
       <uni-grid :column="3" :show-border="false" :square="false" @change="change" class="girdItem">
@@ -32,16 +27,7 @@
         </uni-grid-item>
       </uni-grid>
     </view>
-    <view>
-      token:{{ loginToken.accessToken }}
-    </view>
-    <view>
-      <navigator url="/pages/login/phone" open-type="redirect">去登录</navigator>
-      <navigator url="/pages/login/logout" open-type="redirect">退出登录</navigator>
-    </view>
-    <!-- <view>    <w-qrcode ref="qrcode" :options="options" @press="longtap"></w-qrcode></view> -->
-    <view style="width: 200px;height: 300px;background-color: brown;"></view>
-    <waterFall></waterFall>
+    <view> <waterFall></waterFall></view>
 
   </view>
 </template>
@@ -161,6 +147,7 @@ const options = ref({
   position: absolute;
   top: 24vw;
   left: 2vw;
+  z-index: 999;
 
   .grid-item-box {
     margin: 5px;
