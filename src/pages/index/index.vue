@@ -1,5 +1,11 @@
 <template>
   <view>
+    <view class="relative p-10  mb-10 bg-blue-500">
+			<navigator url="/pages/index/searchHistory"  hover-class="navigator-hover">
+			 <icon type="search" size="26"  class="absolute right-0" />
+			 	</navigator>
+		</view>
+ 
     <view>
       token:{{loginToken.accessToken}}
     </view>
