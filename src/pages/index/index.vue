@@ -8,11 +8,13 @@
     <view>
       <view class="uni-common-mt">
         <view>推荐</view>
-        <uni-segmented-control :current="current" :values="items" style-type="text" active-color="#dd524d"
-          @clickItem="onClickItem" />
+        <view class="segmentSty">
+          <uni-segmented-control :current="current" :values="items" style-type="text" active-color="#dd524d"
+            @clickItem="onClickItem" />
+        </view>
         <view class="flex items-center">更多
-        	<uni-icons type="bottom" size="26" @click="drowDown('top')" v-if="iconType=='bottom'"></uni-icons>
-				<uni-icons type="top" size="26" @click="drowDown('bottom')" v-else></uni-icons>
+          <uni-icons type="bottom" size="26" @click="drowDown('top')" v-if="iconType == 'bottom'"></uni-icons>
+          <uni-icons type="top" size="26" @click="drowDown('bottom')" v-else></uni-icons>
         </view>
       </view>
       <view class="content">
@@ -21,15 +23,15 @@
         <view v-if="current === 2"><text class="content-text">选项卡3的内容</text></view>
       </view>
     </view>
-    <view class="gridBox" v-if="iconType=='top'">
-			<uni-grid :column="3" :show-border="false" :square="false" @change="change"  class="girdItem">
-				<uni-grid-item v-for="(item ,index) in list" :index="index" :key="index">
-					<view class="grid-item-box">
-						<text class="text">{{item.text}}</text>
-					</view>
-				</uni-grid-item>
-			</uni-grid>
-		</view>
+    <view class="gridBox" v-if="iconType == 'top'">
+      <uni-grid :column="3" :show-border="false" :square="false" @change="change" class="girdItem">
+        <uni-grid-item v-for="(item, index) in list" :index="index" :key="index">
+          <view class="grid-item-box">
+            <text class="text">{{ item.text }}</text>
+          </view>
+        </uni-grid-item>
+      </uni-grid>
+    </view>
     <view>
       token:{{ loginToken.accessToken }}
     </view>
@@ -37,7 +39,9 @@
       <navigator url="/pages/login/phone" open-type="redirect">去登录</navigator>
       <navigator url="/pages/login/logout" open-type="redirect">退出登录</navigator>
     </view>
-    <w-qrcode ref="qrcode" :options="options" @press="longtap"></w-qrcode>
+    <!-- <view>    <w-qrcode ref="qrcode" :options="options" @press="longtap"></w-qrcode></view> -->
+
+   <view style="width: 200px;height: 300px;background-color: brown;"></view>
   </view>
 </template>
 
@@ -48,40 +52,40 @@ const loginToken = ref({})
 const iconType = ref('bottom')
 const items = ref(['选项1', '选项2', '选项3', '选项1', '选项2', '选项3'])
 const current = ref(0)
-const list=reactive( [{
-text: 'Grid 1',
-badge: '0',
-type: "primary"
+const list = reactive([{
+  text: 'Grid 1',
+  badge: '0',
+  type: "primary"
 },
 {
 
-text: 'Grid 2',
-badge: '1',
-type: "success"
+  text: 'Grid 2',
+  badge: '1',
+  type: "success"
 },
 {
 
-text: 'Grid 3',
-badge: '99',
-type: "warning"
+  text: 'Grid 3',
+  badge: '99',
+  type: "warning"
 },
 {
 
-text: 'Grid 4',
-badge: '2',
-type: "error"
+  text: 'Grid 4',
+  badge: '2',
+  type: "error"
 },
 {
 
-text: 'Grid 5'
+  text: 'Grid 5'
 },
 {
 
-text: 'Grid 6'
+  text: 'Grid 6'
 },
 {
 
-text: 'Grid 7'
+  text: 'Grid 7'
 }
 ])
 function onClickItem(e) {
@@ -98,21 +102,21 @@ function drowDown(item) {
   console.log('点击了下拉');
 }
 function change(e) {
-				let {
-					index
-				} = e.detail
-				list[index].badge && list[index].badge++
+  let {
+    index
+  } = e.detail
+  list[index].badge && list[index].badge++
 
-				uni.showToast({
-					title: `点击第${index+1}个宫格`,
-					icon: 'none'
-				})
-			}
-      //二维码
+  uni.showToast({
+    title: `点击第${index + 1}个宫格`,
+    icon: 'none'
+  })
+}
+//二维码
 const options = ref({
-    code: '这是你生成二维码的值', // 生成二维码的值
-    size: 460, // 460代表生成的二维码的宽高均为460rpx
-    img: { // 二维码log配置 非必传
+  code: '这是你生成二维码的值', // 生成二维码的值
+  size: 460, // 460代表生成的二维码的宽高均为460rpx
+  img: { // 二维码log配置 非必传
     src: '/static/logo.png', // 图片地址
     size: 60, // 图片大小
     degree: 15, // 圆角大小 如果type为round生效
@@ -126,11 +130,14 @@ const options = ref({
 <style lang="scss" scoped>
 .uni-common-mt {
   margin-top: 20px;
-  padding: 0px 10px;
+  // padding: 0px 10px;
   display: flex;
   align-items: center;
   font-size: 12px;
-  justify-content: space-between;
+  justify-content: space-around;
+  .segmentSty{
+    flex: 2;
+  }
 }
 
 
@@ -143,30 +150,34 @@ const options = ref({
   height: 150px;
   text-align: center;
 }
+
 .gridBox {
-		border: 1px solid #838383;
-		width: 96vw;
-		position: absolute;
-    top: 24vw;
-		left: 2vw;
-    .grid-item-box {
+  border: 1px solid #838383;
+  width: 96vw;
+  position: absolute;
+  top: 24vw;
+  left: 2vw;
+
+  .grid-item-box {
     margin: 5px;
-		flex: 1;
+    flex: 1;
     background-color: aqua;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		padding: 15px 0;
-	}
-	}
-  .text {
-		border: 1px solid black;
-		border-radius: 8px;
-		padding: 14px;
-		font-size: 14px;
-		margin-top: 5px;
-	}
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 0;
+  }
+}
+
+.text {
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
 .content-text {
   font-size: 14px;
   color: #666;
