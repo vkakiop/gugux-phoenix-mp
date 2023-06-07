@@ -67,7 +67,7 @@ const vaildPhone = ()=>{
 }
 
 const gotoLoginPhone = ()=>{
-  uni.navigateTo({url:'/pages/login/phone?url='+encodeURIComponent(pageData.url)})
+  uni.reLaunch({url:'/pages/login/phone?url='+encodeURIComponent(pageData.url)})
 }
 </script>
 

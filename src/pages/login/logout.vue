@@ -11,8 +11,9 @@ onLoad((option)=>{
   }
   uni.clearStorageSync('ggx_login_token')
 
-  let url = option.url || '/pages/index/index'
-  uni.navigateTo({url:url})
+  let returnUrl = decodeURIComponent(option.url || '')
+  let url = returnUrl || '/pages/index/index'
+  uni.reLaunch({url:url})
 })
 </script>
 
