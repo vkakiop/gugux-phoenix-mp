@@ -7,7 +7,7 @@ import {onMounted} from 'vue'
 onMounted(()=>{
   uni.showToast({
     title: 'mount2',
-    icon:'error',
+    icon:'none',
     duration: 4000
   });
 })

@@ -70,7 +70,7 @@ service.interceptors.response.use(res => {
             //Toast.fail(msg);
             uni.showToast({
                 title: msg,
-                icon:'error',
+                icon:'none',
                 duration: 2000
             });
             return Promise.reject('error')
@@ -95,7 +95,7 @@ service.interceptors.response.use(res => {
         //Toast.fail(message);
         uni.showToast({
             title: message,
-            icon:'error',
+            icon:'none',
             duration: 2000
         });
         return Promise.reject(error)

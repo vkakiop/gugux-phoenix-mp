@@ -33,11 +33,18 @@
 
 <script setup>
 import {reactive} from 'vue'
+import {onLoad} from "@dcloudio/uni-app"
 import phoneslogan from './components/phoneslogan.vue'
 const pageData = reactive({
+  url:'',
   phone:'',
   isDialogShow:false,
   isAgree:false, //同意协议
+})
+
+onLoad((option)=>{
+  pageData.url = decodeURIComponent(option.url || '')
+  console.log('return url:',pageData.url)
 })
 
 const vaildPhone = ()=>{
@@ -69,7 +76,7 @@ const onGetValidCode = ()=>{
       pageData.isDialogShow=true
     }
     else {
-      uni.navigateTo({url:'./phonecode?phone='+pageData.phone})
+      uni.navigateTo({url:'./phonecode?phone='+pageData.phone+'&url='+encodeURIComponent(pageData.url)})
     }
   }
 }

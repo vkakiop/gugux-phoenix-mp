@@ -1,5 +1,6 @@
 <template>
 	<view>
+    <needlogin></needlogin>
 		<view class="flex" @click="skipPerson">
 			<view><u-avatar :src="src" size="60"></u-avatar></view>
 			<view class="flex flex-col  justify-center">
@@ -64,7 +65,7 @@ const list1 = reactive([{
 const click = (item) => {
 	console.log('item', item);
 	cllectRadio.value=item.index
-	
+
 }
 const load = () => {
 	uReadMore.value.uReadMore.init();
