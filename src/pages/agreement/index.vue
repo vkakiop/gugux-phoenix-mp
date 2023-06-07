@@ -16,7 +16,7 @@ onLoad((option)=>{
   else {
     uni.showToast({
       title: '协议code参数有误！',
-      icon:'error',
+      icon:'none',
       duration: 2000
     });
   }

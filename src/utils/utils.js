@@ -137,3 +137,19 @@ export function getTokenValue() {
 	}
 	return token
 }
+
+export function getCurrentPageUrl() {
+	let pages = getCurrentPages();    //获取加载的页面
+	let currentPages = pages[pages.length - 1];  //获取当前页面的对象
+	let url = currentPages.route;  //当前页面url
+	let options = currentPages.options;   //获取url中所带的参数
+	//拼接url的参数
+	let currentPage= url + '?';
+	for (let key in options) {
+		let value = options[key]
+		currentPage+= key + '=' + value + '&';
+	}
+	currentPage= '/'+currentPage.substring(0, currentPage.length - 1);
+	return currentPage;
+}
+

@@ -9,7 +9,7 @@ import testinfo from './components/testinfo.vue'
 onMounted(()=>{
   // uni.showToast({
   //   title: 'mount1',
-  //   icon:'error',
+  //   icon:'none',
   //   duration: 2000
   // });
 })
