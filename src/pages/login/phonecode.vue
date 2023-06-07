@@ -17,7 +17,7 @@
         <view v-for="(item,index) in 6"
               :key="index"
               @click="codefocusFun(index)"
-              :style="(index == pageData.code.length? 'background-color:#FEF2F2;':'color: #313131;background-color:#eee')">
+              :style="(index == pageData.code.length? 'background-color:#FEF2F2;':'color: #313131;background-color:#e9ebef')">
           {{pageData.code[index]}}
         </view>
       </view>
