@@ -15,14 +15,7 @@ export default {
     console.log('loginToken',this.globalData)
   },
   onShow: function () {
-    uni.showToast({title:'test',icon:'none'})
-    // let url = getCurrentPageUrl()
-    // uni.showToast({title:url,icon:'none'})
-    // return false
-    // const app = getApp()
-    // if (!app.globalData.loginToken.accessToken) {
-    //   uni.redirectTo({url:'/pages/login/phone?url='+encodeURIComponent(url)})
-    // }
+    console.log('App Show')
   },
   onHide: function () {
   },
