@@ -32,6 +32,7 @@
 
 <script setup>
 import {reactive} from 'vue'
+import {authSms} from '@/api/login/index'
 import {onLoad} from "@dcloudio/uni-app"
 import phoneslogan from './components/phoneslogan.vue'
 const pageData = reactive({
@@ -69,13 +70,21 @@ const vaildPhone = ()=>{
   }
 }
 
+//获取验证码
+const getCode = ()=>{
+  pageData.isLoading = true
+  authSms({phone:pageData.phone,type:1}).then(res=>{
+    uni.navigateTo({url:'./phonecode?phone='+pageData.phone+'&url='+encodeURIComponent(pageData.url)})
+  })
+}
+
 const onGetValidCode = ()=>{
   if (vaildPhone()) {
     if (!pageData.isAgree) {
       pageData.isDialogShow=true
     }
     else {
-      uni.navigateTo({url:'./phonecode?phone='+pageData.phone+'&url='+encodeURIComponent(pageData.url)})
+      getCode()
     }
   }
 }

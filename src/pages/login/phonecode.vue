@@ -53,7 +53,8 @@ onLoad((option)=>{
   pageData.url = decodeURIComponent(option.url || '')
   console.log('return url:',pageData.url)
   pageData.phone = option.phone
-  getCode() // 获取验证码
+  //getCode() // 获取验证码
+  getTimer()
 })
 
 watch(()=>pageData.count,(newVal,oldVal)=>{
