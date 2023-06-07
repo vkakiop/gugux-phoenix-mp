@@ -22,7 +22,7 @@
 		<view class="flex justify-between p-10 lineView">
 			<view class="">咕咕号</view>
 			<view>
-				2311234<text class="text-blue-500"> 复制</text>
+				2311234<text class="text-blue-500" @click="copy(copyText)"> 复制</text>
 			</view>
 		</view>
 		<view class="flex justify-between  p-10 lineView">
@@ -64,6 +64,18 @@
 </template>
 
 <script setup>
+import {ref} from 'vue'
+const copyText=ref('我是复制的文本111')
+function copy(value) {
+  uni.setClipboardData({
+    data: value,//要被复制的内容
+    success: () => {//复制成功的回调函数
+      uni.showToast({//提示
+        title: '复制成功'
+      })
+    }
+  });
+}
 const logOff = () => {
 	uni.showModal({
 		// title: '提示',

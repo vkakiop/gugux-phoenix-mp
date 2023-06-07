@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 // 我的
-export function getMineMessage(data) {
+export function getUserBase(data) {
     return request({
         url: '/gugux-services-user-api/app/user/base',
         headers: {

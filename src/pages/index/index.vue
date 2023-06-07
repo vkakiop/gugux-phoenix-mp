@@ -40,10 +40,9 @@
       <navigator url="/pages/login/logout" open-type="redirect">退出登录</navigator>
     </view>
     <!-- <view>    <w-qrcode ref="qrcode" :options="options" @press="longtap"></w-qrcode></view> -->
+    <view style="width: 200px;height: 300px;background-color: brown;"></view>
+    <waterFall></waterFall>
 
-   <view style="width: 200px;height: 300px;background-color: brown;"></view>
-   <waterFall></waterFall>
-   
   </view>
 </template>
 
@@ -91,6 +90,7 @@ const list = reactive([{
   text: 'Grid 7'
 }
 ])
+
 function onClickItem(e) {
   if (current.value !== e.currentIndex) {
     console.log(e.currentIndex);
@@ -138,7 +138,8 @@ const options = ref({
   align-items: center;
   font-size: 12px;
   justify-content: space-around;
-  .segmentSty{
+
+  .segmentSty {
     flex: 2;
   }
 }
