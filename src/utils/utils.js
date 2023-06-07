@@ -157,6 +157,8 @@ export function needLogin() {
 	const app = getApp()
 	if (!app.globalData.loginToken.accessToken) {
 		uni.reLaunch({url:'/pages/login/phone?url='+encodeURIComponent(getCurrentPageUrl())})
+		return false
 	}
+	return true
 }
 

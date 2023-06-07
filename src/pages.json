@@ -9,18 +9,17 @@
 	},
 	"pages": [
 		{
-			"path": "pages/mine/mine",
-			"style": {
-				"navigationBarTitleText": "uni-app"
-			}
-		},
-		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "uni-app"
 			}
 		},
-	
+		{
+			"path": "pages/mine/mine",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		},
 		{
 			"path": "pages/personCenter/personCenter",
 			"style": {
@@ -78,12 +77,12 @@
         }
         ,{
             "path" : "pages/personCenter/personQRcode",
-            "style" :                                                                                    
+            "style" :
             {
                 "navigationBarTitleText": "二维码名片",
                 "enablePullDownRefresh": false
             }
-            
+
         }
     ],
 	"globalStyle": {
