@@ -65,7 +65,16 @@
 				"navigationBarTitleText": "咕咕行"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/index/searchHistory",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

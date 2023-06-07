@@ -56,7 +56,7 @@
 			</view>
 		</view>
 		<view>
-			<view style="line-height: 100px;text-align: center;" @click="logOff">退出登录 </view>
+			<view style="line-height: 100px;text-align: center;" @click="logOff">  退出登录 </view>
 		</view>
 	</view>
 </template>
@@ -71,11 +71,11 @@ const logOff = () => {
 		success: function (res) {
 			if (res.confirm) {
 				console.log('用户点击确定');
-				uni.switchTab({
-					url:'/pages/index/index'
-				})
 			} else if (res.cancel) {
 				console.log('用户点击取消');
+				uni.redirectTo({
+					url:'/pages/login/logout'
+				})
 			}
 		}
 	});
