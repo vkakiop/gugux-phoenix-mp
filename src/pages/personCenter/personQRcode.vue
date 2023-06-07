@@ -34,6 +34,11 @@ import {
 	onShareTimeline
 } from "@dcloudio/uni-app"
 //二维码
+const codeId=ref('')
+onLoad((option)=>{
+ console.log('跳转到二维码页面携带的id:'+option.id);
+ codeId.value=option.id
+})
 const options = ref({
 	code: '这是你生成二维码的值', // 生成二维码的值
 	size: 460, // 460代表生成的二维码的宽高均为460rpx
@@ -50,7 +55,7 @@ const options = ref({
 onShareAppMessage(() => {
 	return {
 		title: '分享二维码',
-		path: '/pages/personCenter/personQRcode',
+		path: `/pages/personCenter/personQRcode?id=${codeId.value}`,
 		desc: '分享描述',
 		imageUrl: "../../static/logo.png",
 	}

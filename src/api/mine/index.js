@@ -10,3 +10,14 @@ export function getUserBase(data) {
         params:data
     })
 }
+// 个人信息
+export function getUserInfo(data) {
+    return request({
+        url: '/gugux-services-user-api/app/user/info',
+        headers: {
+            isToken: true
+        },
+        method: 'get',
+        params:data
+    })
+}
