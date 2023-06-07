@@ -15,7 +15,7 @@
 			<view style="display: flex;align-items: center;justify-content: space-between;box-sizing: border-box;padding: 0px 5px;">
 				<view>搜索历史:</view>
 
-				<view style="color: red;font-size: 28px;" @click="empty">×</view>
+				<view style="color: red;font-size: 28px;" @click="empty"><uni-icons type="trash" size="30"></uni-icons></view>
 			</view>
 			<view class="searchHistoryItem">
 				<view v-for="(item, index) in searchHistoryList" :key="index">

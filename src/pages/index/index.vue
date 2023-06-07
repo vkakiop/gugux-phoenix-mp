@@ -1,13 +1,37 @@
 <template>
   <view>
     <view class="relative p-10  mb-10 bg-blue-500">
-			<navigator url="/pages/index/searchHistory"  hover-class="navigator-hover">
-			 <icon type="search" size="26"  class="absolute right-0" />
-			 	</navigator>
-		</view>
-
+      <navigator url="/pages/index/searchHistory" hover-class="navigator-hover">
+        <icon type="search" size="26" class="absolute right-0" />
+      </navigator>
+    </view>
     <view>
-      token:{{loginToken.accessToken}}
+      <view class="uni-common-mt">
+        <view>推荐</view>
+        <uni-segmented-control :current="current" :values="items" style-type="text" active-color="#dd524d"
+          @clickItem="onClickItem" />
+        <view class="flex items-center">更多
+        	<uni-icons type="bottom" size="26" @click="drowDown('top')" v-if="iconType=='bottom'"></uni-icons>
+				<uni-icons type="top" size="26" @click="drowDown('bottom')" v-else></uni-icons>
+        </view>
+      </view>
+      <view class="content">
+        <view v-if="current === 0"><text class="content-text">选项卡1的内容</text></view>
+        <view v-if="current === 1"><text class="content-text">选项卡2的内容</text></view>
+        <view v-if="current === 2"><text class="content-text">选项卡3的内容</text></view>
+      </view>
+    </view>
+    <view class="gridBox" v-if="iconType=='top'">
+			<uni-grid :column="3" :show-border="false" :square="false" @change="change"  class="girdItem">
+				<uni-grid-item v-for="(item ,index) in list" :index="index" :key="index">
+					<view class="grid-item-box">
+						<text class="text">{{item.text}}</text>
+					</view>
+				</uni-grid-item>
+			</uni-grid>
+		</view>
+    <view>
+      token:{{ loginToken.accessToken }}
     </view>
     <view>
       <navigator url="/pages/login/phone" open-type="redirect">去登录</navigator>
@@ -18,10 +42,73 @@
 </template>
 
 <script setup>
-import {ref,onMounted} from 'vue'
-import {onShow} from "@dcloudio/uni-app"
+import { ref, onMounted, reactive } from 'vue'
+import { onShow } from "@dcloudio/uni-app"
+const loginToken = ref({})
+const iconType = ref('bottom')
+const items = ref(['选项1', '选项2', '选项3', '选项1', '选项2', '选项3'])
+const current = ref(0)
+const list=reactive( [{
+text: 'Grid 1',
+badge: '0',
+type: "primary"
+},
+{
 
-//二维码
+text: 'Grid 2',
+badge: '1',
+type: "success"
+},
+{
+
+text: 'Grid 3',
+badge: '99',
+type: "warning"
+},
+{
+
+text: 'Grid 4',
+badge: '2',
+type: "error"
+},
+{
+
+text: 'Grid 5'
+},
+{
+
+text: 'Grid 6'
+},
+{
+
+text: 'Grid 7'
+}
+])
+function onClickItem(e) {
+  if (current.value !== e.currentIndex) {
+    console.log(e.currentIndex);
+    current.value = e.currentIndex
+  }
+}
+onShow(() => {
+  loginToken.value = getApp().globalData.loginToken
+})
+function drowDown(item) {
+  iconType.value = item
+  console.log('点击了下拉');
+}
+function change(e) {
+				let {
+					index
+				} = e.detail
+				list[index].badge && list[index].badge++
+
+				uni.showToast({
+					title: `点击第${index+1}个宫格`,
+					icon: 'none'
+				})
+			}
+      //二维码
 const options = ref({
     code: '这是你生成二维码的值', // 生成二维码的值
     size: 460, // 460代表生成的二维码的宽高均为460rpx
@@ -34,13 +121,56 @@ const options = ref({
     width: 8 //图片周围白色边框的宽度 默认5
   },
 })
-
-
-const loginToken = ref({})
-onShow(()=>{
-  loginToken.value = getApp().globalData.loginToken
-})
 </script>
 
 <style lang="scss" scoped>
+.uni-common-mt {
+  margin-top: 20px;
+  padding: 0px 10px;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  justify-content: space-between;
+}
+
+
+.content {
+  /* #ifndef APP-NVUE */
+  display: flex;
+  /* #endif */
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  text-align: center;
+}
+.gridBox {
+		border: 1px solid #838383;
+		width: 96vw;
+		position: absolute;
+    top: 24vw;
+		left: 2vw;
+    .grid-item-box {
+    margin: 5px;
+		flex: 1;
+    background-color: aqua;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 15px 0;
+	}
+	}
+  .text {
+		border: 1px solid black;
+		border-radius: 8px;
+		padding: 14px;
+		font-size: 14px;
+		margin-top: 5px;
+	}
+.content-text {
+  font-size: 14px;
+  color: #666;
+}
 </style>
+
+
