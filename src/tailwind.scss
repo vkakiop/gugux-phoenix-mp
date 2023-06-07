@@ -1,2 +1,7 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/utilities';
+
+//去掉按钮边框
+uni-button:after,button:after {
+  border: 0px solid #fff!important;
+}

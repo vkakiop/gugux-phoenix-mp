@@ -6,14 +6,14 @@
     <phoneslogan></phoneslogan>
     <view class="mt-50">
       <view class="mb-10">未注册手机验证后完成注册</view>
-      <view class="h-48 bg-[#e9ebef] rounded-full flex justify-center items-center">
-        <view class="mr-10">+86</view>
+      <view class="h-48 bg-[#e9ebef] rounded-full flex justify-center items-center relative">
+        <view class="mr-10 text-[#888]">+86</view>
         <input v-model="pageData.phone" placeholder="请输入手机号" maxlength="11"/>
+        <image v-if="pageData.phone" class="w-18 h-18 absolute right-15 top-14" src="@/static/login/clear.png" @click="pageData.phone = '';"></image>
       </view>
       <view class="mt-18">
-        <button class="mb-25 h-48 leading-48 rounded-full bg-[#4ba1f8] text-white" @click="onGetValidCode">获取验证码</button>
+        <button class="mb-25 h-48 leading-48 rounded-full bg-[#4ba1f8] active:bg-[#3194f9] text-white" @click="onGetValidCode">获取验证码</button>
         <view class="text-center" @click="gotoLoginPassword">账号密码登录</view>
-
       </view>
     </view>
     <u-popup :show="pageData.isDialogShow" mode="center" round="10" :customStyle="{marginLeft:'60rpx',marginRight:'60rpx'}">
@@ -22,8 +22,8 @@
         <view class="my-28">登录注册需要您阅读并同意我们的<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>
         </view>
         <view class="flex justify-center items-center">
-          <button class="h-40 leading-40 rounded-full bg-[#f4f5f6] text-black" @click="pageData.isDialogShow=false">不同意</button>
-          <button class="h-40 leading-40 rounded-full bg-[#4ba1f8] text-white" @click="pageData.isDialogShow=false;pageData.isAgree=true;onGetValidCode();">我同意</button>
+          <button class="w-115 h-40 leading-40 rounded-full bg-[#f4f5f6] active:bg-[#eeeff0] text-black" :style="{border:'none'}" @click="pageData.isDialogShow=false">不同意</button>
+          <button class="w-115 h-40 leading-40 rounded-full bg-[#4ba1f8] active:bg-[#3194f9] text-white" :style="{border:'none'}" @click="pageData.isDialogShow=false;pageData.isAgree=true;onGetValidCode();">我同意</button>
         </view>
       </view>
     </u-popup>
@@ -88,7 +88,3 @@ const gotoLoginPassword = ()=>{
   uni.navigateTo({url:'/pages/login/password?url='+encodeURIComponent(pageData.url)})
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>
