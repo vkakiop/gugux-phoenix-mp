@@ -1,6 +1,5 @@
 <template>
 	<view>
-    <needlogin></needlogin>
 		<view class="flex" @click="skipPerson">
 			<view><u-avatar :src="src" size="60"></u-avatar></view>
 			<view class="flex flex-col  justify-center">
@@ -46,8 +45,16 @@
 </template>
 
 <script setup>
+import { reactive, ref } from 'vue'
 import  waterFall from "../../components/index/waterfall.vue"
-import { reactive, ref } from 'vue';
+import {onShow} from "@dcloudio/uni-app"
+import {needLogin} from "@/utils/utils"
+
+onShow(()=>{
+  needLogin()
+})
+
+
 const content = ref('在大多数场景下，并不需要设置 background-color 属性，因为uni-popup的主窗口默认是透明的，在向里面插入内容的时候 ，样式完全交由用户定制，如果设置了背景色 ，例如 uni-popup-dialog 中的圆角就很难去实现，不设置背景色，更适合用户去自由发挥。')
 const src = 'https://cdn.uviewui.com/uview/album/1.jpg'
 const TabCur2 = ref('')

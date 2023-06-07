@@ -12,8 +12,9 @@
 
 <script setup>
 import {ref,onMounted} from 'vue'
+import {onShow} from "@dcloudio/uni-app"
 const loginToken = ref({})
-onMounted(()=>{
+onShow(()=>{
   loginToken.value = getApp().globalData.loginToken
 })
 </script>
