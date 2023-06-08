@@ -2,7 +2,7 @@
   <view class="w-full">
     <template v-for="(element,index) in content" :key="index">
           <view class="items text-left px-6 py-6">
-            <p v-if="element.itemType == 1" class="item_content">{{element.content}}</p>
+            <p v-if="element.itemType == 1" class="text-15">{{element.content}}</p>
             <view v-if="element.itemType == 2">
               <view class="relative">
                 <image @click="previewImage(element.content)" :src="element.content" class="rounded-8" mode="widthFix"/>
