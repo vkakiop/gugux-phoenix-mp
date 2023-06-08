@@ -4,7 +4,7 @@
 			<swiper-item v-for="(item,index) in list" :key="index">
 				<view class="swiper-item uni-bg-red">
 					<view @click="handleVideo(index)" class="viewSty">
-						<video class="video" :id="'video'+index" title="产品介绍" :src="item.src"   loop  :show-center-play-btn="true" :show-play-btn="true" :show-fullscreen-btn="true" @error="videoErrorCallback">
+						<video class="video" :id="'video'+index" title="产品介绍" :src="item.src"   loop  :controls="false" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false" @error="videoErrorCallback">
 						</video>
 						<image src="../../static/img/video.png"  class="imgSize" v-if="status===1"></image>
 					</view>

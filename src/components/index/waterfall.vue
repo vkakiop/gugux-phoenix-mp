@@ -6,8 +6,7 @@
 				<view class="column-value" v-for="(item2, index2) in data[`column_${index + 1}`]" :key="index2">
 					<view class="" v-if="item2.title">
 						<!-- itemType=2是图片，itemtpye=3是视频 -->
-						<view class="viewSty" v-if="item2.cover.itemType == 2" @click="skipVideo" >
-							<image src="/static/img/video.png" class="imgSize"></image>
+						<view v-if="item2.cover.itemType == 2" @click="skipDetails(item2)">
 							<image :src="item2.cover.content" mode="widthFix" @load="imgLoad(item2)"
 								@error="imgError(item2)" class="imgsty">
 							</image>
@@ -34,14 +33,37 @@ import {
 	getCurrentInstance,
 	onMounted
 } from 'vue';
+import { opusSearchNew, opusSearchArticle, opusSearchVideo } from "@/api/worksSearch/index.js"
 import {
-	onLoad,
 	onReachBottom,
-	onShow
 } from '@dcloudio/uni-app';
 import {
 	getClassify
-} from "../../api/workList/work.js"
+} from "@/api/workList/work.js"
+const props = defineProps({
+	paramsForm: {
+		type: Object,
+		default: {}
+	}
+})
+const paramsForm = ref(
+	{
+		"keyword": "",
+		"pageNum": 1,
+		"pageSize": 10,
+		"searchTime": "",
+		"type": 0
+	}
+)
+// 监听父子通信的数据的变化
+watch(props.paramsForm, (newValue, oldValue) => {
+	console.log(newValue);
+	paramsForm.value = newValue
+	getDataApi()
+});
+const pageData = reactive({
+})
+
 const _this = getCurrentInstance();
 const data = reactive({
 	list: [{
@@ -52,6 +74,57 @@ const data = reactive({
 });
 // 数据赋值
 let s = 1
+const getDataApi = () => {
+	if (paramsForm.value.type === 0) {
+		opusSearchNew(paramsForm.value).then(res => {
+			console.log('type === 0', res.data);
+			let {
+				list
+			} = res.data
+			if (list.length == 10) {
+				data.list = [...list]
+				s++
+			} else {
+				uni.showToast({
+					title: '没有更多了',
+					icon: 'none'
+				})
+			}
+		})
+	} else if (paramsForm.value.type === 1) {
+		opusSearchArticle(paramsForm).then(res => {
+			console.log('type === 1', res.data);
+			let {
+				list
+			} = res.data
+			if (list.length == 10) {
+				data.list = [...list]
+				s++
+			} else {
+				uni.showToast({
+					title: '没有更多了',
+					icon: 'none'
+				})
+			}
+		})
+	} else if (paramsForm.value.type === 2) {
+		opusSearchVideo(paramsForm).then(res => {
+			console.log('type === 2', res.data);
+			let {
+				list
+			} = res.data
+			if (list.length == 10) {
+				data.list = [...list]
+				s++
+			} else {
+				uni.showToast({
+					title: '没有更多了',
+					icon: 'none'
+				})
+			}
+		})
+	}
+}
 const fetch = () => {
 	getClassify({}, s).then(res => {
 		let {
@@ -123,12 +196,19 @@ async function initValue(i) {
 		index: i
 	});
 }
+function skipDetails(item2) {
+	uni.navigateTo({
+		url: `/pages/opus/index?id=${item2.id}`
+	})
+}
 onMounted(() => {
 	initValue(0);
-	fetch()
+	// fetch()
+	getDataApi()
 })
 onReachBottom(() => {
-	fetch()
+	// fetch()
+	getDataApi()
 })
 // 监听数据的变化
 watch(() => data.list, (newValue, oldValue) => {
@@ -148,10 +228,10 @@ function imgError(item) {
 	const i = item.index;
 	initValue(i + 1);
 }
-const skipVideo=()=>{
+const skipVideo = () => {
 	uni.navigateTo({
 		// url:'/pages/VideoCarousel/VideoCarousel?id=2271797284497418261'
-		url:'/pages/VideoCarousel/VideoCarousel?id=1805042228997966063'
+		url: '/pages/VideoCarousel/VideoCarousel?id=1805042228997966063'
 	})
 }
 </script>
@@ -175,18 +255,18 @@ const skipVideo=()=>{
 }
 
 
-.viewSty{
+.viewSty {
 	position: relative;
-	.imgSize {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 60px;
-	height: 60px;
-	margin-left: -30px;
-	margin-top: -30px;
-	z-index: 99;
-}
-}
 
+	.imgSize {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 60px;
+		height: 60px;
+		margin-left: -30px;
+		margin-top: -30px;
+		z-index: 99;
+	}
+}
 </style>

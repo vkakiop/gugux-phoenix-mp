@@ -81,6 +81,7 @@
     "weapp-ide-cli": "^1.0.1",
     "weapp-tailwindcss-children": "^0.1.0",
     "weapp-tailwindcss-webpack-plugin": "^2.0.0",
-    "windicss": "^3.5.6"
+    "windicss": "^3.5.6",
+    "@tailwindcss/line-clamp": "^0.4.2"
   }
 }
