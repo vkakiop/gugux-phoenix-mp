@@ -1,6 +1,8 @@
 <template>
   <view class="m-30">
-    <view class="text-right h-30"></view>
+    <view class="text-right h-30 leading-30">
+      <navigator url="/pages/index/index" open-type="switchTab">跳过</navigator>
+    </view>
     <phoneslogan></phoneslogan>
     <view class="mt-45">
       <view class="h-48 bg-[#e9ebef] rounded-full flex items-center relative">
@@ -15,7 +17,7 @@
       </view>
       <view class="h-48 bg-[#e9ebef] rounded-full flex justify-center items-center mt-10 relative">
         <input class="w-4/5 h-48" v-model="pageData.code" placeholder="请输入验证码" maxlength="6"/>
-        <image v-if="pageData.code" class="w-18 h-18 absolute right-15 top-14" src="@/static/login/eye.png" @click="pageData.code = '';"></image>
+        <!--image v-if="pageData.code" class="w-18 h-18 absolute right-15 top-14" src="@/static/login/eye.png" @click="pageData.code = '';"></image-->
       </view>
       <button :class="['mt-25','h-48','leading-48','rounded-full','bg-[#4ba1f8]',pageData.code.length < 6 ? '' : 'active:bg-[#3194f9]',pageData.code.length < 6 ? 'text-[#ddd]' : 'text-white']" @click="onLogin">登录</button>
       <!--view class="mt-18 text-center" @click="gotoLoginPhone">验证码登录</view-->
