@@ -103,7 +103,19 @@
                 "enablePullDownRefresh": false
             }
 
-        }
+        },
+		{
+			"path": "pages/safeguard/safeguarddetail",
+			"style": {
+				"navigationBarTitleText": "咕咕行"
+			}
+		},
+		{
+			"path": "pages/safeguard/gonavigation",
+			"style": {
+				"navigationBarTitleText": "咕咕行"
+			}
+		}
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
