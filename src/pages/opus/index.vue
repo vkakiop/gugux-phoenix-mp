@@ -1,7 +1,7 @@
 <template>
     <view>
       <customNav>
-        <view><uni-icons type="back" size="24"></uni-icons></view>
+        <view @click="gotoBack"><uni-icons type="back" size="24"></uni-icons></view>
         <view class="flex items-center">
           <image class="w-24 h-24 rounded-full flex-none" :src="pageData.detail.icon"/>
           <view class="name mx-10 text-14 line-clamp-1">{{pageData.detail.author}}</view>
@@ -34,6 +34,10 @@ const pageData = reactive({
     "recommendedCity": [],
   }
 })
+
+const gotoBack = () => {
+  uni.navigateBack({delta: 1})
+}
 
 const getData = () => {
   getDataApi({id:pageData.id})
