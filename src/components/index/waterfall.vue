@@ -6,7 +6,7 @@
 				<view class="column-value" v-for="(item2, index2) in data[`column_${index + 1}`]" :key="index2">
 					<view class="" v-if="item2.title">
 						<!-- itemType=2是图片，itemtpye=3是视频 -->
-						<view v-if="item2.cover.itemType == 2">
+						<view v-if="item2.cover.itemType == 2" @click="skipDetails(item2)">
 							<image :src="item2.cover.content" mode="widthFix" @load="imgLoad(item2)"
 								@error="imgError(item2)" class="imgsty">
 							</image>
@@ -77,12 +77,12 @@ let s = 1
 const getDataApi = () => {
 	if (paramsForm.value.type === 0) {
 		opusSearchNew(paramsForm.value).then(res => {
-			console.log('type === 0',res.data);
+			console.log('type === 0', res.data);
 			let {
 				list
 			} = res.data
 			if (list.length == 10) {
-				data.list = [...data.list, ...list]
+				data.list = [...list]
 				s++
 			} else {
 				uni.showToast({
@@ -93,12 +93,12 @@ const getDataApi = () => {
 		})
 	} else if (paramsForm.value.type === 1) {
 		opusSearchArticle(paramsForm).then(res => {
-			console.log('type === 1',res.data);
+			console.log('type === 1', res.data);
 			let {
 				list
 			} = res.data
 			if (list.length == 10) {
-				data.list = [...data.list, ...list]
+				data.list = [...list]
 				s++
 			} else {
 				uni.showToast({
@@ -109,12 +109,12 @@ const getDataApi = () => {
 		})
 	} else if (paramsForm.value.type === 2) {
 		opusSearchVideo(paramsForm).then(res => {
-			console.log('type === 2',res.data);
+			console.log('type === 2', res.data);
 			let {
 				list
 			} = res.data
 			if (list.length == 10) {
-				data.list = [...data.list, ...list]
+				data.list = [...list]
 				s++
 			} else {
 				uni.showToast({
@@ -195,6 +195,11 @@ async function initValue(i) {
 		...data.list[i],
 		index: i
 	});
+}
+function skipDetails(item2) {
+	uni.navigateTo({
+		url: `/pages/opus/index?id=${item2.id}`
+	})
 }
 onMounted(() => {
 	initValue(0);
