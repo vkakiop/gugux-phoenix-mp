@@ -5,7 +5,7 @@
             <p v-if="element.itemType == 1" class="item_content">{{element.content}}</p>
             <view v-if="element.itemType == 2">
               <view class="relative">
-                <image @click="previewImage(element.content)" :src="element.content" class="rounded-8" style="max-width:100%;"/>
+                <image @click="previewImage(element.content)" :src="element.content" class="rounded-8" mode="widthFix"/>
                 <view v-if="element.name" class="location_bg absolute left-5 bottom-5 px-10 text-white text-12 rounded">
                   <uni-icons type="location-filled" size="16"></uni-icons>{{element.name}} {{computedLocation(element.x,element.y)}}<!--(距您 {{element.name}})-->
                 </view>
@@ -14,7 +14,7 @@
             </view>
             <view v-if="element.itemType == 3">
               <view class="relative" v-if="element.videoIsPlay == 0" @click="onMaskClick(index)">
-                <image :src="element.thumbnail" class="rounded-8" style="max-width:100%;"/>
+                <image :src="element.thumbnail" class="rounded-8" mode="widthFix"/>
                 <view v-if="element.name" class="location_bg absolute left-5 bottom-5 px-10 text-white text-12 rounded">
                   <uni-icons type="location-filled" size="16"></uni-icons>{{element.name}} {{computedLocation(element.x,element.y)}}<!--(距您 {{element.name}})-->
                 </view>
@@ -37,7 +37,7 @@
 <script setup>
 import {ref, reactive, watch, onMounted, computed} from "vue";
 import { distanceOf,formatedDistance } from "@/utils/utils"
-//import locusTip from './locusTip.vue'
+import locusTip from './locusTip.vue'
 const props = defineProps({
   content:{
     type:Array,
