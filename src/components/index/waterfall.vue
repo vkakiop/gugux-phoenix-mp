@@ -6,7 +6,7 @@
 				<view class="column-value" v-for="(item2, index2) in data[`column_${index + 1}`]" :key="index2">
 					<view class="" v-if="item2.title">
 						<!-- itemType=2是图片，itemtpye=3是视频 -->
-						<view  v-if="item2.cover.itemType == 2" >
+						<view v-if="item2.cover.itemType == 2">
 							<image :src="item2.cover.content" mode="widthFix" @load="imgLoad(item2)"
 								@error="imgError(item2)" class="imgsty">
 							</image>
@@ -33,14 +33,13 @@ import {
 	getCurrentInstance,
 	onMounted
 } from 'vue';
+import { opusSearchNew, opusSearchArticle, opusSearchVideo } from "@/api/worksSearch/index.js"
 import {
-	onLoad,
 	onReachBottom,
-	onShow
 } from '@dcloudio/uni-app';
 import {
 	getClassify
-} from "../../api/workList/work.js"
+} from "@/api/workList/work.js"
 const _this = getCurrentInstance();
 const data = reactive({
 	list: [{
@@ -51,6 +50,55 @@ const data = reactive({
 });
 // 数据赋值
 let s = 1
+// const getDataApi = () => {
+// 	console.log(props.paramsForm);
+// 	if (props.paramsForm.type === 0) {
+// 		opusSearchNew(props.paramsForm).then(res => {
+// 			let {
+// 				list
+// 			} = res.data
+// 			if (list.length == 10) {
+// 				data.list = [...data.list, ...list]
+// 				s++
+// 			} else {
+// 				uni.showToast({
+// 					title: '没有更多了',
+// 					icon: 'none'
+// 				})
+// 			}
+// 		})
+// 	} else if (props.paramsForm.type === 1) {
+// 		opusSearchArticle(paramsForm).then(res => {
+// 			let {
+// 				list
+// 			} = res.data
+// 			if (list.length == 10) {
+// 				data.list = [...data.list, ...list]
+// 				s++
+// 			} else {
+// 				uni.showToast({
+// 					title: '没有更多了',
+// 					icon: 'none'
+// 				})
+// 			}
+// 		})
+// 	} else if (props.paramsForm.type === 2) {
+// 		opusSearchVideo(paramsForm).then(res => {
+// 			let {
+// 				list
+// 			} = res.data
+// 			if (list.length == 10) {
+// 				data.list = [...data.list, ...list]
+// 				s++
+// 			} else {
+// 				uni.showToast({
+// 					title: '没有更多了',
+// 					icon: 'none'
+// 				})
+// 			}
+// 		})
+// 	}
+// }
 const fetch = () => {
 	getClassify({}, s).then(res => {
 		let {
@@ -125,9 +173,11 @@ async function initValue(i) {
 onMounted(() => {
 	initValue(0);
 	fetch()
+	// getDataApi()
 })
 onReachBottom(() => {
 	fetch()
+	// getDataApi()
 })
 // 监听数据的变化
 watch(() => data.list, (newValue, oldValue) => {
@@ -147,10 +197,10 @@ function imgError(item) {
 	const i = item.index;
 	initValue(i + 1);
 }
-const skipVideo=()=>{
+const skipVideo = () => {
 	uni.navigateTo({
 		// url:'/pages/VideoCarousel/VideoCarousel?id=2271797284497418261'
-		url:'/pages/VideoCarousel/VideoCarousel?id=1805042228997966063'
+		url: '/pages/VideoCarousel/VideoCarousel?id=1805042228997966063'
 	})
 }
 </script>
@@ -174,18 +224,18 @@ const skipVideo=()=>{
 }
 
 
-.viewSty{
+.viewSty {
 	position: relative;
-	.imgSize {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 60px;
-	height: 60px;
-	margin-left: -30px;
-	margin-top: -30px;
-	z-index: 99;
-}
-}
 
+	.imgSize {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 60px;
+		height: 60px;
+		margin-left: -30px;
+		margin-top: -30px;
+		z-index: 99;
+	}
+}
 </style>

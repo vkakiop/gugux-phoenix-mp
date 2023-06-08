@@ -5,18 +5,24 @@ export function getWorks(data) {
 	return request({
 		url: '/gugux-services-opus-api/app/opus/list/city',
 		method: 'post',
+		headers: {
+            isToken: true
+        },
 		data: data
 	})
 }
-
+// 作品列表
 export const postVideorecommend = (data) => {
 	return request({
 		url: '/gugux-services-opus-api/app/opus/video/recommend',
 		method: 'post',
+		headers: {
+            isToken: true
+        },
 		data: data
 	})
 }
-// 作品分类列表
+// 作品列表
 export const getClassify = (data,num=1) => {
 	return request({
 		url: `/gugux-services-opus-api/app/opus/list/1622581366744965137/${num}/10`,

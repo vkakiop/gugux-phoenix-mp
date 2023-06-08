@@ -1,9 +1,7 @@
 <template>
   <view>
     <view class="relative p-10  mb-10 ">
-      <navigator url="/pages/index/searchHistory" hover-class="navigator-hover">
-        <icon type="search" size="26" class="absolute right-0" />
-      </navigator>
+        <icon type="search" size="26" class="absolute right-0"  @click="skipHistory"/>
     </view>
     <view>
       <view class="uni-common-mt">
@@ -110,6 +108,11 @@ function change(e) {
   uni.showToast({
     title: `点击第${index + 1}个宫格`,
     icon: 'none'
+  })
+}
+function skipHistory(){
+  uni.navigateTo({
+    url:`/pages/index/searchHistory`
   })
 }
 </script>

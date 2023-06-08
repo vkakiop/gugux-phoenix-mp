@@ -11,7 +11,7 @@
 		<!-- 搜索框 -->
 
 		<!-- 搜索历史 -->
-		<view class="searchHistory" v-if="isShowHistory===true">
+		<view class="searchHistory" >
 			<view
 				style="display: flex;align-items: center;justify-content: space-between;box-sizing: border-box;padding: 0px 5px;">
 				<view>搜索历史:</view>
@@ -27,27 +27,20 @@
 		</view>
 		<!-- 搜索历史 -->
 		<!-- 搜索内容 -->
-		<view v-else> 
-			<u-tabs
-					:list="menuList"
-					lineWidth="40"
-					lineColor="#f56c6c"
-					:activeStyle="{
-						color: '#303133',
-						fontWeight: 'bold',
-						transform: 'scale(1.05)'
-					}"
-					:inactiveStyle="{
-						color: '#606266',
-						transform: 'scale(1)'
-					}"
-					itemStyle="padding-left: 15rpx; padding-right: 15rpx; height: 66rpx;"
-					@click="menuClick"
-				>
-				</u-tabs>
-				<view> <waterFall></waterFall></view>
+		<view >
+			<u-tabs :list="menuList" lineWidth="40" lineColor="#f56c6c" :activeStyle="{
+				color: '#303133',
+				fontWeight: 'bold',
+				transform: 'scale(1.05)'
+			}" :inactiveStyle="{
+	color: '#606266',
+	transform: 'scale(1)'
+}" itemStyle="padding-left: 15rpx; padding-right: 15rpx; height: 66rpx;" @click="menuClick">
+			</u-tabs>
+			<view>
+				<waterFall  ref="addRef"></waterFall>
+			</view>
 		</view>
-		
 		<!-- 搜索内容 -->
 	</view>
 </template>
@@ -55,7 +48,24 @@
 <script setup>
 import waterFall from "@/components/index/waterfall.vue"
 import { reactive, ref } from 'vue';
-const isShowHistory=ref(true)
+import { onLoad, onShow } from "@dcloudio/uni-app";
+onLoad(()=>{
+
+})
+const paramsForm = ref({
+	"keyword": "",
+	"pageNum": 1,
+	"pageSize": 10,
+	"searchTime": "",
+	"type": 0
+})
+const addRef = ref();
+const initDialog = (value,title,row)=>{
+    value && nextTick(()=>{
+      addRef.value.init(row);
+    })
+}
+const isShowHistory = ref(true)
 const menuList = reactive([{
 	name: '综合',
 }, {
@@ -70,7 +80,7 @@ const menuList = reactive([{
 const inputValue = ref('')
 const searchHistoryList = ref([])
 function menuClick(item) {
-	console.log('item', item);
+	paramsForm.value.type = item.index
 }
 function search() {
 	if (inputValue.value == '') {
@@ -78,8 +88,8 @@ function search() {
 			title: '搜索内容不能为空'
 		});
 	} else {
-		console.log('点击了搜索');
-		isShowHistory.value=false
+		paramsForm.value.keyword = inputValue.value
+		isShowHistory.value = false
 		if (!searchHistoryList.value.includes(inputValue.value)) {
 			searchHistoryList.value.unshift(inputValue.value);
 			uni.setStorage({
@@ -108,7 +118,6 @@ function empty() {
 	uni.removeStorage({
 		key: 'searchList'
 	});
-
 	searchHistoryList.value = [];
 }
 </script>
