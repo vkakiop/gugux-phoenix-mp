@@ -28,7 +28,12 @@
       </uni-grid>
     </view>
     <view> <waterFall></waterFall></view>
-
+    <u-modal :show="show" @confirm="confirmShow" @cancel="closeShow" title="紧急通知" confirmColor="#D9001B" cancelColor="#0000FF"
+      showCancelButton ref="uModal" confirmText="去导航" cancelText="查看详情">
+      <view class="slot-content">
+				<rich-text :nodes="content"></rich-text>
+			</view>
+  </u-modal>
   </view>
 </template>
 
@@ -76,6 +81,21 @@ const list = reactive([{
   text: 'Grid 7'
 }
 ])
+
+const show = ref(false);
+const content = ref('');
+content.value = '您的好友等第十三月(1511837394)在重庆市四川商会触发了紧急通知，请点击电话联系或导航前往。'
+const	confirmShow =() => {
+    show.value = false;
+    console.log('去导航');
+    uni.navigateTo({url:'/pages/safeguard/gonavigation?id='+encodeURIComponent(123)})
+}
+const	closeShow =() => {
+    show.value = false;
+    console.log('查看详情');
+    uni.navigateTo({url:'/pages/safeguard/safeguarddetail?id='+encodeURIComponent(123)})
+}
+
 
 function onClickItem(e) {
   if (current.value !== e.currentIndex) {
