@@ -2222,4 +2222,7 @@ module.exports = {
       '1920':'3840rpx'
     },
   },
+  plugins: [
+    require('@tailwindcss/line-clamp')
+  ]
 };
