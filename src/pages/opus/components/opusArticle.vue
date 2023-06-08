@@ -4,7 +4,7 @@
            class="w-375 h-170"
            mode="aspectFill"
            :src="detail.cover.itemType == 2 ? detail.cover.content : detail.cover.thumbnail"
-           @click="previewImage(detail.cover.itemType == 2 ? detail.cover.content : detail.cover.thumbnail)"
+           @click="previewCover(detail.cover)"
     />
     <view class="mx-27">
       <view class="flex justify-between">
@@ -73,11 +73,25 @@ const props = defineProps({
   },
 })
 
+const previewCover = (item)=>{
+  if (item.itemType == 2) {
+    previewImage(item.content)
+  }
+  else if (item.itemType == 3) {
+    previewMedia(item.content)
+  }
+}
+
 const previewImage = (url)=>{
   uni.previewImage({
     urls:[url],
     current:url
   })
+}
+
+const previewMedia = (url) => {
+  let urls = [url]
+  uni.navigateTo({url:'/pages/opus/videoplay?url='+encodeURIComponent(url)+'&urls='+encodeURIComponent(JSON.stringify(urls))})
 }
 </script>
 

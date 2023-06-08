@@ -36,16 +36,6 @@ const playVideo = ()=> {
   let currentId = 'video' + pageData.current; // 获取当前视频id
   pageData.videoContent = uni.createVideoContext(currentId, this).play();
   pageData.status = 0;
-  // 获取视频列表
-  pageData.urls.forEach((item, index) => { // 获取json对象并遍历, 停止非当前视频
-    if (item != null && item.src != "") {
-      let temp = 'video' + index;
-      if (temp != currentId) {
-        // 暂停其余视频
-        uni.createVideoContext(temp, this).pause(); //暂停视频播放事件
-      }
-    }
-  })
 }
 
 //点击视频播放或者暂停
