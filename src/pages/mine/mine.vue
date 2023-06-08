@@ -33,7 +33,24 @@
 		</view>
 		<view class="">
 			<template>
-				<u-tabs :list="list1" @click="click"></u-tabs>
+				<u-tabs
+					:list="list1"
+					lineWidth="30"
+					lineColor="#f56c6c"
+					:activeStyle="{
+						color: '#303133',
+						fontWeight: 'bold',
+						transform: 'scale(1.05)'
+					}"
+					:inactiveStyle="{
+						color: '#606266',
+						transform: 'scale(1)'
+					}"
+					itemStyle="padding-left: 15px; padding-right: 15px; height: 34px;"
+					@click="click"
+				>
+				</u-tabs>
+				<!-- <u-tabs :list="list1" @click="click"></u-tabs> -->
 			</template>
 		</view>
 		<view class="flex collectView" v-if="cllectRadio == 2">

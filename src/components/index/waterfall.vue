@@ -6,8 +6,7 @@
 				<view class="column-value" v-for="(item2, index2) in data[`column_${index + 1}`]" :key="index2">
 					<view class="" v-if="item2.title">
 						<!-- itemType=2是图片，itemtpye=3是视频 -->
-						<view class="viewSty" v-if="item2.cover.itemType == 2" @click="skipVideo" >
-							<image src="/static/img/video.png" class="imgSize"></image>
+						<view  v-if="item2.cover.itemType == 2" >
 							<image :src="item2.cover.content" mode="widthFix" @load="imgLoad(item2)"
 								@error="imgError(item2)" class="imgsty">
 							</image>
