@@ -40,6 +40,30 @@ import {
 import {
 	getClassify
 } from "@/api/workList/work.js"
+const props = defineProps({
+	paramsForm: {
+		type: Object,
+		default: {}
+	}
+})
+const paramsForm = ref(
+	{
+		"keyword": "",
+		"pageNum": 1,
+		"pageSize": 10,
+		"searchTime": "",
+		"type": 0
+	}
+)
+// 监听父子通信的数据的变化
+watch(props.paramsForm, (newValue, oldValue) => {
+	console.log(newValue);
+	paramsForm.value = newValue
+	getDataApi()
+});
+const pageData = reactive({
+})
+
 const _this = getCurrentInstance();
 const data = reactive({
 	list: [{
@@ -50,55 +74,57 @@ const data = reactive({
 });
 // 数据赋值
 let s = 1
-// const getDataApi = () => {
-// 	console.log(props.paramsForm);
-// 	if (props.paramsForm.type === 0) {
-// 		opusSearchNew(props.paramsForm).then(res => {
-// 			let {
-// 				list
-// 			} = res.data
-// 			if (list.length == 10) {
-// 				data.list = [...data.list, ...list]
-// 				s++
-// 			} else {
-// 				uni.showToast({
-// 					title: '没有更多了',
-// 					icon: 'none'
-// 				})
-// 			}
-// 		})
-// 	} else if (props.paramsForm.type === 1) {
-// 		opusSearchArticle(paramsForm).then(res => {
-// 			let {
-// 				list
-// 			} = res.data
-// 			if (list.length == 10) {
-// 				data.list = [...data.list, ...list]
-// 				s++
-// 			} else {
-// 				uni.showToast({
-// 					title: '没有更多了',
-// 					icon: 'none'
-// 				})
-// 			}
-// 		})
-// 	} else if (props.paramsForm.type === 2) {
-// 		opusSearchVideo(paramsForm).then(res => {
-// 			let {
-// 				list
-// 			} = res.data
-// 			if (list.length == 10) {
-// 				data.list = [...data.list, ...list]
-// 				s++
-// 			} else {
-// 				uni.showToast({
-// 					title: '没有更多了',
-// 					icon: 'none'
-// 				})
-// 			}
-// 		})
-// 	}
-// }
+const getDataApi = () => {
+	if (paramsForm.value.type === 0) {
+		opusSearchNew(paramsForm.value).then(res => {
+			console.log('type === 0',res.data);
+			let {
+				list
+			} = res.data
+			if (list.length == 10) {
+				data.list = [...data.list, ...list]
+				s++
+			} else {
+				uni.showToast({
+					title: '没有更多了',
+					icon: 'none'
+				})
+			}
+		})
+	} else if (paramsForm.value.type === 1) {
+		opusSearchArticle(paramsForm).then(res => {
+			console.log('type === 1',res.data);
+			let {
+				list
+			} = res.data
+			if (list.length == 10) {
+				data.list = [...data.list, ...list]
+				s++
+			} else {
+				uni.showToast({
+					title: '没有更多了',
+					icon: 'none'
+				})
+			}
+		})
+	} else if (paramsForm.value.type === 2) {
+		opusSearchVideo(paramsForm).then(res => {
+			console.log('type === 2',res.data);
+			let {
+				list
+			} = res.data
+			if (list.length == 10) {
+				data.list = [...data.list, ...list]
+				s++
+			} else {
+				uni.showToast({
+					title: '没有更多了',
+					icon: 'none'
+				})
+			}
+		})
+	}
+}
 const fetch = () => {
 	getClassify({}, s).then(res => {
 		let {
@@ -172,12 +198,12 @@ async function initValue(i) {
 }
 onMounted(() => {
 	initValue(0);
-	fetch()
-	// getDataApi()
+	// fetch()
+	getDataApi()
 })
 onReachBottom(() => {
-	fetch()
-	// getDataApi()
+	// fetch()
+	getDataApi()
 })
 // 监听数据的变化
 watch(() => data.list, (newValue, oldValue) => {

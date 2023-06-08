@@ -38,7 +38,7 @@
 }" itemStyle="padding-left: 15rpx; padding-right: 15rpx; height: 66rpx;" @click="menuClick">
 			</u-tabs>
 			<view>
-				<waterFall  ref="addRef"></waterFall>
+				<waterFall  :paramsForm="paramsForm"></waterFall>
 			</view>
 		</view>
 		<!-- 搜索内容 -->
@@ -50,7 +50,6 @@ import waterFall from "@/components/index/waterfall.vue"
 import { reactive, ref } from 'vue';
 import { onLoad, onShow } from "@dcloudio/uni-app";
 onLoad(()=>{
-
 })
 const paramsForm = ref({
 	"keyword": "",
@@ -60,11 +59,6 @@ const paramsForm = ref({
 	"type": 0
 })
 const addRef = ref();
-const initDialog = (value,title,row)=>{
-    value && nextTick(()=>{
-      addRef.value.init(row);
-    })
-}
 const isShowHistory = ref(true)
 const menuList = reactive([{
 	name: '综合',
