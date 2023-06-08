@@ -1,7 +1,7 @@
 <template>
   <view class="w-full">
     <template v-for="(element,index) in content" :key="index">
-          <view class="text-left px-6 py-6">
+          <view class="items text-left px-6 py-6">
             <p v-if="element.itemType == 1" class="item_content">{{element.content}}</p>
             <view v-if="element.itemType == 2">
               <view class="relative">
@@ -13,18 +13,12 @@
 
             </view>
             <view v-if="element.itemType == 3">
-              <view class="relative" v-if="element.videoIsPlay == 0" @click="onMaskClick(index)">
+              <view class="relative" @click="previewMedia(element.content)">
                 <image :src="element.thumbnail" class="rounded-8" mode="widthFix"/>
                 <view v-if="element.name" class="location_bg absolute left-5 bottom-5 px-10 text-white text-12 rounded">
                   <uni-icons type="location-filled" size="16"></uni-icons>{{element.name}} {{computedLocation(element.x,element.y)}}<!--(距您 {{element.name}})-->
                 </view>
-                <view class="icon_play w-full h-full absolute w-50 h-50"><img class="w-50 h-50" src="@/static/opus/icon_play.png"/></view>
-              </view>
-              <view class="relative" v-if="element.videoIsPlay > 0">
-                <vue3videoPlay v-if="element.videoIsPlay > 0"
-                               v-bind="element.videoOptions" :id="'video_'+index" :controls="false"
-                />
-                <view class="video_mask" @click="onMaskClick(index)" ></view>
+                <view class="icon_play w-full h-full absolute w-50 h-50"><image class="w-50 h-50" src="@/static/opus/icon_play.png"/></view>
               </view>
             </view>
             <view v-if="element.itemType == 4">
@@ -99,46 +93,22 @@ const lines_add = (index) => {
   //emits('update:modelValue',lines)
 }
 
-const lines_edit = (line) => {
-  params.value = line;
-  paramsIsAdd.value = false;
-  isDialogShow.value = true;
-}
-
 onMounted(()=>{
 
 })
 
-//视频播放
-const videoOptions = {
-  width: "100%", //播放器高度
-  height: "100%", //播放器高度
-  color: "#409eff", //主题色
-  title: "", //视频名称
-  src: "", //视频源https://cdn.jsdelivr.net/gh/xdlumia/files/video-play/IronMan.mp4
-  muted: false, //静音
-  webFullScreen: false,
-  speedRate: ["0.75", "1.0", "1.25", "1.5", "2.0"], //播放倍速
-  autoPlay: true, //自动播放
-  loop: false, //循环播放
-  mirror: false, //镜像画面
-  ligthOff: false, //关灯模式
-  volume: 0.3, //默认音量大小
-  control: true, //是否显示控制
-  controlBtns: [
-    "audioTrack",
-    "quality",
-    "speedRate",
-    "volume",
-    "setting",
-    "pip",
-    "pageFullScreen",
-    "fullScreen",
-  ], //显示所有按钮,
-}
 
 const onMaskClick = (index) => {
 
+}
+
+const previewMedia = (url) => {
+  let urls = props.content.filter(item=>{
+    return item.itemType == 3
+  }).map(item=>{
+    return item.content
+  })
+  uni.navigateTo({url:'/pages/opus/videoplay?url='+encodeURIComponent(url)+'&urls='+encodeURIComponent(JSON.stringify(urls))})
 }
 
 const previewImage = (url)=>{
@@ -161,8 +131,8 @@ const previewImage = (url)=>{
   }
 
   .icon_play {
-    top:calc(50% - 0.25rem);
-    left:calc(50% - 0.25rem);
+    top:calc(50% - 50rpx);
+    left:calc(50% - 50rpx);
   }
 
   .video_mask {

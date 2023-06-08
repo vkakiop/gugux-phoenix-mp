@@ -20,12 +20,12 @@ import { onLoad } from '@dcloudio/uni-app'
 import opusArticle from './components/opusArticle'
 
 onLoad((option)=>{
-    pageData.id = option.id
+    //pageData.id = option.id
     getData();
 })
 
 const pageData = reactive({
-  id: '',
+  id: '1601683533353328803',
   detail: {
     "cover": {},
     "opusType": 1,

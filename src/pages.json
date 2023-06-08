@@ -45,6 +45,12 @@
 			}
 		},
 		{
+			"path": "pages/opus/videoplay",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
 			"path": "pages/login/phone",
 			"style": {
 				"navigationBarTitleText": "咕咕行"
