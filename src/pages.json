@@ -51,21 +51,27 @@
 			}
 		},
 		{
+			"path": "pages/login/index",
+			"style": {
+				"navigationBarTitleText": "手机登录"
+			}
+		},
+		{
 			"path": "pages/login/phone",
 			"style": {
-				"navigationBarTitleText": "咕咕行"
+				"navigationBarTitleText": "手机登录(暂时不用)"
 			}
 		},
 		{
 			"path": "pages/login/phonecode",
 			"style": {
-				"navigationBarTitleText": "咕咕行"
+				"navigationBarTitleText": "验证码登陆(暂时不用)"
 			}
 		},
 		{
 			"path": "pages/login/password",
 			"style": {
-				"navigationBarTitleText": "咕咕行"
+				"navigationBarTitleText": "账号密码登陆(暂时不用)"
 			}
 		},
 		{
