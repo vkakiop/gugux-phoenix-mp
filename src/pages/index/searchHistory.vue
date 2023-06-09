@@ -38,7 +38,74 @@
 }" itemStyle="padding-left: 15rpx; padding-right: 15rpx; height: 66rpx;" @click="menuClick">
 			</u-tabs>
 			<view>
-				<!-- <waterFall  :paramsForm="paramsForm"></waterFall> -->
+				<view v-if="paramsForm.type === 0">
+					<view class="waterfalls-flow">
+						<view v-for="(item, index) in data.column" :key="index" class="waterfalls-flow-column"
+							:style="{ 'width': w, 'margin-left': index == 0 ? 0 : m }"
+							:id="`waterfalls_flow_column_${index + 1}`">
+							<view class="column-value" v-for="(item2, index2) in data[`column_${index + 1}`]" :key="index2">
+								<view class="" v-if="item2.title">
+									<!-- itemType=2是图片，itemtpye=3是视频 -->
+									<view v-if="item2.cover.itemType == 2" @click="skipDetails(item2)">
+										<image :src="item2.cover.content" mode="widthFix" @load="imgLoad(item2)"
+											@error="imgError(item2)" class="imgsty">
+										</image>
+									</view>
+									<view class="viewSty" v-else @click="skipVideo">
+										<image src="/static/img/video.png" class="imgSize"></image>
+										<image :src="item2.cover.thumbnail" mode="widthFix" @load="imgLoad(item2)"
+											@error="imgError(item2)" class="imgsty"></image>
+									</view>
+									<text>{{ item2.title }} 我是第{{ index + 1 }}列我是第{{ index2 }}个</text>
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+				<view v-if="paramsForm.type === 1"><view class="waterfalls-flow">
+						<view v-for="(item, index) in data.column" :key="index" class="waterfalls-flow-column"
+							:style="{ 'width': w, 'margin-left': index == 0 ? 0 : m }"
+							:id="`waterfalls_flow_column_${index + 1}`">
+							<view class="column-value" v-for="(item2, index2) in data[`column_${index + 1}`]" :key="index2">
+								<view class="" v-if="item2.title">
+									<!-- itemType=2是图片，itemtpye=3是视频 -->
+									<view v-if="item2.cover.itemType == 2" @click="skipDetails(item2)">
+										<image :src="item2.cover.content" mode="widthFix" @load="imgLoad(item2)"
+											@error="imgError(item2)" class="imgsty">
+										</image>
+									</view>
+									<view class="viewSty" v-else @click="skipVideo">
+										<image src="/static/img/video.png" class="imgSize"></image>
+										<image :src="item2.cover.thumbnail" mode="widthFix" @load="imgLoad(item2)"
+											@error="imgError(item2)" class="imgsty"></image>
+									</view>
+									<text>{{ item2.title }} 我是第{{ index + 1 }}列我是第{{ index2 }}个</text>
+								</view>
+							</view>
+						</view>
+					</view></view>
+				<view v-if="paramsForm.type === 2"><view class="waterfalls-flow">
+						<view v-for="(item, index) in data.column" :key="index" class="waterfalls-flow-column"
+							:style="{ 'width': w, 'margin-left': index == 0 ? 0 : m }"
+							:id="`waterfalls_flow_column_${index + 1}`">
+							<view class="column-value" v-for="(item2, index2) in data[`column_${index + 1}`]" :key="index2">
+								<view class="" v-if="item2.title">
+									<!-- itemType=2是图片，itemtpye=3是视频 -->
+									<view v-if="item2.cover.itemType == 2" @click="skipDetails(item2)">
+										<image :src="item2.cover.content" mode="widthFix" @load="imgLoad(item2)"
+											@error="imgError(item2)" class="imgsty">
+										</image>
+									</view>
+									<view class="viewSty" v-else @click="skipVideo">
+										<image src="/static/img/video.png" class="imgSize"></image>
+										<image :src="item2.cover.thumbnail" mode="widthFix" @load="imgLoad(item2)"
+											@error="imgError(item2)" class="imgsty"></image>
+									</view>
+									<text>{{ item2.title }} 我是第{{ index + 1 }}列我是第{{ index2 }}个</text>
+								</view>
+							</view>
+						</view>
+					</view></view>
 			</view>
 		</view>
 		<!-- 搜索内容 -->
@@ -46,19 +113,26 @@
 </template>
 
 <script setup>
-// import waterFall from "@/components/index/waterfall.vue"
-import { reactive, ref } from 'vue';
-import { onLoad, onShow } from "@dcloudio/uni-app";
-onLoad(() => {
-})
-const paramsForm = ref({
+import {
+	ref,
+	reactive,
+	watch,
+	computed,
+	getCurrentInstance,
+	onMounted
+} from 'vue';
+import { opusSearchNew, opusSearchArticle, opusSearchVideo } from "@/api/worksSearch/index.js"
+import {
+	onReachBottom
+} from '@dcloudio/uni-app';
+import { list } from 'postcss';
+const paramsForm = reactive({
 	"keyword": "",
 	"pageNum": 1,
 	"pageSize": 10,
 	"searchTime": "",
 	"type": 0
 })
-const addRef = ref();
 const isShowHistory = ref(true)
 const menuList = reactive([{
 	name: '综合',
@@ -71,10 +145,85 @@ const menuList = reactive([{
 	name: '用户'
 }
 ])
+
 const inputValue = ref('')
 const searchHistoryList = ref([])
+const _this = getCurrentInstance();
+const data = reactive({
+	list: [],
+	column: 2,
+	columnSpace: 2,
+});
+// 计算列宽
+const w = computed(() => {
+	const column_rate = `${100 / data.column - (+data.columnSpace)}%`;
+	return column_rate;
+})
+// 计算margin
+const m = computed(() => {
+	const column_margin = `${(100 - (100 / data.column - (+data.columnSpace)).toFixed(5) * data.column) / (data.column - 1)}%`;
+	return column_margin;
+})
+// 每列的数据初始化
+for (let i = 1; i <= data.column; i++) {
+	data[`column_${i}`] = [];
+}
+// 获取最小值的对象
+const getMin = (a, s) => {
+	let m = a[0][s];
+	let mo = a[0];
+	for (var i = a.length - 1; i >= 0; i--) {
+		if (a[i][s] < m) {
+			m = a[i][s];
+		}
+	}
+	mo = a.filter(i => i[s] == m);
+	return mo[0];
+}
+// 计算每列的高度
+function getMinColumnHeight() {
+	return new Promise(resolve => {
+		const heightArr = [];
+		for (let i = 1; i <= data.column; i++) {
+			const query = uni.createSelectorQuery().in(_this);
+			query.select(`#waterfalls_flow_column_${i}`).boundingClientRect(data => {
+				heightArr.push({
+					column: i,
+					height: data.height
+				});
+			}).exec(() => {
+				if (data.column <= heightArr.length) {
+					// console.log(heightArr);
+					resolve(getMin(heightArr, 'height'));
+				}
+			});
+		}
+	})
+};
+async function initValue(i) {
+	if (i >= data.list.length) return false;
+	const minHeightRes = await getMinColumnHeight();
+	data[`column_${minHeightRes.column}`].push({
+		...data.list[i],
+		index: i
+	});
+}
+onMounted(() => {
+	initValue(0);
+})
+// 图片加载完成
+function imgLoad(item) {
+	const i = item.index;
+	initValue(i + 1);
+}
+// 图片加载失败
+function imgError(item) {
+	const i = item.index;
+	initValue(i + 1);
+}
 const menuClick = (item) => {
-	paramsForm.value.type = item.index
+	paramsForm.type = item.index
+	getDataApi()
 }
 const search = () => {
 	if (inputValue.value == '') {
@@ -82,8 +231,9 @@ const search = () => {
 			title: '搜索内容不能为空'
 		});
 	} else {
-		paramsForm.value.keyword = inputValue.value
+		paramsForm.keyword = inputValue.value
 		isShowHistory.value = false
+		getDataApi()
 		if (!searchHistoryList.value.includes(inputValue.value)) {
 			searchHistoryList.value.unshift(inputValue.value);
 			uni.setStorage({
@@ -115,9 +265,39 @@ const empty = () => {
 	});
 	searchHistoryList.value = [];
 }
+const getDataApi = () => {
+	if (paramsForm.type === 0) {
+		opusSearchNew(paramsForm).then(res => {
+			// console.log('type === 0', res.data.list);
+			for (let i = 1; i <= 2; i++) {
+				data[`column_${i}`] = [];
+			}
+			data.list = [...res.data.list]
+			initValue(0);
+		})
+	} else if (paramsForm.type === 1) {
+		opusSearchArticle(paramsForm).then(res => {
+			// console.log('type === 1', res.data.list);
+			for (let i = 1; i <= 2; i++) {
+				data[`column_${i}`] = [];
+			}
+			data.list = [...res.data.list]
+			initValue(0);
+		})
+	} else if (paramsForm.type === 2) {
+		opusSearchVideo(paramsForm).then(res => {
+			// console.log('type === 2', res.data);
+			for (let i = 1; i <= 2; i++) {
+				data[`column_${i}`] = [];
+			}
+			data.list = [...res.data.list]
+			initValue(0);
+		})
+	}
+}
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .search {
 	width: 100%;
 	height: 30px;
@@ -150,6 +330,39 @@ const empty = () => {
 	height: 20px;
 	border: 1px solid #eee;
 	margin: 0px 5px;
+}
+
+.waterfalls-flow {
+	padding-top: 50upx;
+
+	&-column {
+		float: left;
+		padding: 0 0 200upx;
+	}
+}
+
+.column-value {
+	width: 100%;
+}
+
+.imgsty {
+	width: 100%
+}
+
+
+.viewSty {
+	position: relative;
+
+	.imgSize {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 60px;
+		height: 60px;
+		margin-left: -30px;
+		margin-top: -30px;
+		z-index: 99;
+	}
 }
 </style>
 
