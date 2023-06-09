@@ -62,7 +62,8 @@
 						</view>
 					</view>
 				</view>
-				<view v-if="paramsForm.type === 1"><view class="waterfalls-flow">
+				<view v-if="paramsForm.type === 1">
+					<view class="waterfalls-flow">
 						<view v-for="(item, index) in data.column" :key="index" class="waterfalls-flow-column"
 							:style="{ 'width': w, 'margin-left': index == 0 ? 0 : m }"
 							:id="`waterfalls_flow_column_${index + 1}`">
@@ -83,8 +84,10 @@
 								</view>
 							</view>
 						</view>
-					</view></view>
-				<view v-if="paramsForm.type === 2"><view class="waterfalls-flow">
+					</view>
+				</view>
+				<view v-if="paramsForm.type === 2">
+					<view class="waterfalls-flow">
 						<view v-for="(item, index) in data.column" :key="index" class="waterfalls-flow-column"
 							:style="{ 'width': w, 'margin-left': index == 0 ? 0 : m }"
 							:id="`waterfalls_flow_column_${index + 1}`">
@@ -105,7 +108,8 @@
 								</view>
 							</view>
 						</view>
-					</view></view>
+					</view>
+				</view>
 			</view>
 		</view>
 		<!-- 搜索内容 -->
@@ -294,6 +298,11 @@ const getDataApi = () => {
 			initValue(0);
 		})
 	}
+}
+const skipDetails = (item) => {
+	uni.navigateTo({
+		url: `/pages/opus/index?id=${item.id}`
+	})
 }
 </script>
 
