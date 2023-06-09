@@ -1,5 +1,5 @@
 <template>
-    <view>
+    <view v-if="pageData.detail.id">
       <customNav>
         <view @click="gotoBack"><uni-icons type="back" size="24"></uni-icons></view>
         <view class="flex items-center" @click="gotoMine">
