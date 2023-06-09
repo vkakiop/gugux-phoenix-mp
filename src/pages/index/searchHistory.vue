@@ -11,7 +11,7 @@
 		<!-- 搜索框 -->
 
 		<!-- 搜索历史 -->
-		<view class="searchHistory" >
+		<view class="searchHistory">
 			<view
 				style="display: flex;align-items: center;justify-content: space-between;box-sizing: border-box;padding: 0px 5px;">
 				<view>搜索历史:</view>
@@ -27,7 +27,7 @@
 		</view>
 		<!-- 搜索历史 -->
 		<!-- 搜索内容 -->
-		<view >
+		<view>
 			<u-tabs :list="menuList" lineWidth="40" lineColor="#f56c6c" :activeStyle="{
 				color: '#303133',
 				fontWeight: 'bold',
@@ -38,7 +38,7 @@
 }" itemStyle="padding-left: 15rpx; padding-right: 15rpx; height: 66rpx;" @click="menuClick">
 			</u-tabs>
 			<view>
-				<waterFall  :paramsForm="paramsForm"></waterFall>
+				<!-- <waterFall  :paramsForm="paramsForm"></waterFall> -->
 			</view>
 		</view>
 		<!-- 搜索内容 -->
@@ -46,10 +46,10 @@
 </template>
 
 <script setup>
-import waterFall from "@/components/index/waterfall.vue"
+// import waterFall from "@/components/index/waterfall.vue"
 import { reactive, ref } from 'vue';
 import { onLoad, onShow } from "@dcloudio/uni-app";
-onLoad(()=>{
+onLoad(() => {
 })
 const paramsForm = ref({
 	"keyword": "",
@@ -73,10 +73,10 @@ const menuList = reactive([{
 ])
 const inputValue = ref('')
 const searchHistoryList = ref([])
-function menuClick(item) {
+const menuClick = (item) => {
 	paramsForm.value.type = item.index
 }
-function search() {
+const search = () => {
 	if (inputValue.value == '') {
 		uni.showModal({
 			title: '搜索内容不能为空'
@@ -105,7 +105,8 @@ function search() {
 		}
 	}
 }
-function empty() {
+
+const empty = () => {
 	uni.showToast({
 		title: '已清空'
 	});

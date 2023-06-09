@@ -16,7 +16,7 @@
 		<view class="flex justify-between mt-20  p-10 lineView">
 			<view class="">手机号</view>
 			<view>
-				<text class="text-blue-500"> 绑定手机号</text>
+				<text class="text-blue-500"> {{pageData.userInfo.phone  }}</text>
 			</view>
 		</view>
 		<view class="flex justify-between p-10 lineView">

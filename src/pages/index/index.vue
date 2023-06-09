@@ -1,7 +1,7 @@
 <template>
   <view>
     <view class="relative p-10  mb-10 ">
-        <icon type="search" size="26" class="absolute right-0"  @click="skipHistory"/>
+      <icon type="search" size="26" class="absolute right-0" @click="skipHistory" />
     </view>
     <view>
       <view class="uni-common-mt">
@@ -31,13 +31,15 @@
         </uni-grid-item>
       </uni-grid>
     </view>
-    <view> <waterFall></waterFall></view>
-    <u-modal :show="show" @confirm="confirmShow" @cancel="closeShow" title="紧急通知" confirmColor="#D9001B" cancelColor="#0000FF"
-      showCancelButton ref="uModal" confirmText="去导航" cancelText="查看详情">
+    <view>
+      <waterFall></waterFall>
+    </view>
+    <u-modal :show="show" @confirm="confirmShow" @cancel="closeShow" title="紧急通知" confirmColor="#D9001B"
+      cancelColor="#0000FF" showCancelButton ref="uModal" confirmText="去导航" cancelText="查看详情">
       <view class="slot-content">
-				<rich-text :nodes="content"></rich-text>
-			</view>
-  </u-modal>
+        <rich-text :nodes="content"></rich-text>
+      </view>
+    </u-modal>
 
   </view>
 </template>
@@ -99,15 +101,15 @@ const list = reactive([{
 const show = ref(false);
 const content = ref('');
 content.value = '您的好友等第十三月(1511837394)在重庆市四川商会触发了紧急通知，请点击电话联系或导航前往。'
-const	confirmShow =() => {
-    show.value = false;
-    console.log('去导航');
-    uni.navigateTo({url:'/pages/safeguard/gonavigation?id='+encodeURIComponent(123)})
+const confirmShow = () => {
+  show.value = false;
+  console.log('去导航');
+  uni.navigateTo({ url: '/pages/safeguard/gonavigation?id=' + encodeURIComponent(123) })
 }
-const	closeShow =() => {
-    show.value = false;
-    console.log('查看详情');
-    uni.navigateTo({url:'/pages/safeguard/safeguarddetail?id='+encodeURIComponent(123)})
+const closeShow = () => {
+  show.value = false;
+  console.log('查看详情');
+  uni.navigateTo({ url: '/pages/safeguard/safeguarddetail?id=' + encodeURIComponent(123) })
 }
 
 
@@ -116,6 +118,7 @@ function onClickItem(e) {
     console.log(e.currentIndex);
     current.value = e.currentIndex
   }
+}
 function menuClick(item) {
   console.log('item', item);
 }
@@ -135,11 +138,12 @@ function change(e) {
     icon: 'none'
   })
 }
-function skipHistory(){
+function skipHistory() {
   uni.navigateTo({
-    url:`/pages/index/searchHistory`
+    url: `/pages/index/searchHistory`
   })
 }
+
 </script>
 
 <style lang="scss" scoped>
@@ -149,6 +153,7 @@ function skipHistory(){
   align-items: center;
   justify-content: space-between;
 }
+
 .gridBox {
   border: 1px solid #838383;
   background-color: white;
@@ -164,6 +169,7 @@ function skipHistory(){
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
     .text {
       border: 1px solid blue;
       display: inline;
