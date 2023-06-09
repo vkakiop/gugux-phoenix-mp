@@ -78,7 +78,7 @@ const getDataApi = () => {
 	if (paramsForm.value.type === 0) {
 		opusSearchNew(paramsForm.value).then(res => {
 			console.log('type === 0', res.data);
-			if (list.length == 10) {
+			if (res.data.list.length == 10) {
 				data.list = [...data.list,...res.data.list]
 				s++
 			} else {
@@ -91,7 +91,7 @@ const getDataApi = () => {
 	} else if (paramsForm.value.type === 1) {
 		opusSearchArticle(paramsForm).then(res => {
 			console.log('type === 1', res.data);
-			if (list.length == 10) {
+			if (res.data.list.length == 10) {
 				data.list = [...data.list,...res.data.list]
 				s++
 			} else {
@@ -103,7 +103,7 @@ const getDataApi = () => {
 		})
 	} else if (paramsForm.value.type === 2) {
 		opusSearchVideo(paramsForm).then(res => {
-			if (list.length == 10) {
+			if (res.data.list.length == 10) {
 				data.list = [...data.list,...res.data.list]
 				s++
 			} else {
