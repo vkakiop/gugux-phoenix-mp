@@ -1,6 +1,6 @@
 <template>
   <view class="bg-black">
-    <swiper class="swiper w-screen h-screen" vertical :interval="2000" :duration="600" @animationfinish="animationfinish" @change="handleChange" circular>
+    <swiper class="swiper w-screen h-screen" vertical :current="pageData.current" :interval="2000" :duration="600" @animationfinish="animationfinish" @change="handleChange" :circular="false">
       <swiper-item v-for="(item,index) in pageData.urls" :key="index">
         <view v-if="index == pageData.current" @click="handleVideo(index)" class="w-screen h-screen">
           <video autoplay class="w-screen h-screen fixed" :id="'video'+index" title="产品介绍" :src="item"  loop  :controls="false" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false" @error="videoErrorCallback">
@@ -13,20 +13,23 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import {getCurrentInstance, reactive} from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 const pageData = reactive({
   url:'',
   urls:[],
   current:0,
-  status:0,
+  status:0,//0播放 1暂停
 })
+
+const { ctx } = getCurrentInstance()
+
 onLoad((option)=>{
   pageData.url = decodeURIComponent(option.url || '')
   pageData.urls = JSON.parse(decodeURIComponent(option.urls || '')) || []
   pageData.urls.forEach((item,index)=>{
     if (item == pageData.url) {
-      pageData.current == index
+      pageData.current = index
     }
   })
   console.log('pageData:',pageData)
@@ -34,7 +37,7 @@ onLoad((option)=>{
 
 const playVideo = ()=> {
   let currentId = 'video' + pageData.current; // 获取当前视频id
-  pageData.videoContent = uni.createVideoContext(currentId, this).play();
+  pageData.videoContent = uni.createVideoContext(currentId, ctx).play();
   pageData.status = 0;
 }
 
@@ -42,13 +45,11 @@ const playVideo = ()=> {
 const handleVideo = (index)=> {
   let currentId = 'video' + index
   if (pageData.status == 1) {
-    uni.createVideoContext(currentId, this).play()
+    uni.createVideoContext(currentId, ctx).play()
     pageData.status = 0
-    console.log('执行了播放', pageData.status);
   } else {
-    uni.createVideoContext(currentId, this).pause()
+    uni.createVideoContext(currentId, ctx).pause()
     pageData.status = 1
-    console.log('执行了暂停', pageData.status);
   }
 }
 
@@ -58,10 +59,8 @@ const animationfinish = (e)=>{
 }
 
 const handleChange = ()=>{
-  console.log('视频切换了', pageData.current);
   let currentId = 'video' + pageData.current
-  let currentId2 = 'video' + (pageData.current + 1)
-  uni.createVideoContext(currentId, this).pause()
+  uni.createVideoContext(currentId, ctx).pause()
   pageData.status = 1
 }
 
