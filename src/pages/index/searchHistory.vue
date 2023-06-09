@@ -126,10 +126,6 @@ import {
 	onMounted
 } from 'vue';
 import { opusSearchNew, opusSearchArticle, opusSearchVideo } from "@/api/worksSearch/index.js"
-import {
-	onReachBottom
-} from '@dcloudio/uni-app';
-import { list } from 'postcss';
 const paramsForm = reactive({
 	"keyword": "",
 	"pageNum": 1,
@@ -156,6 +152,8 @@ const _this = getCurrentInstance();
 const data = reactive({
 	list: [],
 	column: 2,
+	column_1: [],
+	column_2: [],
 	columnSpace: 2,
 });
 // 计算列宽
@@ -182,6 +180,7 @@ const getMin = (a, s) => {
 		}
 	}
 	mo = a.filter(i => i[s] == m);
+	console.log('mo', mo, a, m);
 	return mo[0];
 }
 // 计算每列的高度
@@ -191,27 +190,24 @@ function getMinColumnHeight() {
 		for (let i = 1; i <= data.column; i++) {
 			const query = uni.createSelectorQuery().in(_this);
 			query.select(`#waterfalls_flow_column_${i}`).boundingClientRect(data => {
+				console.log(data);
 				heightArr.push({
 					column: i,
 					height: data.height
 				});
-			}).exec(() => {
-				if (data.column <= heightArr.length) {
-					// console.log(heightArr);
-					resolve(getMin(heightArr, 'height'));
-				}
-			});
+			})
+				.exec(
+					() => {
+						console.log('执行了i', i, heightArr);
+						if (data.column <= heightArr.length) {
+							resolve(getMin(heightArr, 'height'));
+						}
+					}
+				);
 		}
 	})
 };
-async function initValue(i) {
-	if (i >= data.list.length) return false;
-	const minHeightRes = await getMinColumnHeight();
-	data[`column_${minHeightRes.column}`].push({
-		...data.list[i],
-		index: i
-	});
-}
+
 onMounted(() => {
 	initValue(0);
 })
@@ -238,25 +234,25 @@ const search = () => {
 		paramsForm.keyword = inputValue.value
 		isShowHistory.value = false
 		getDataApi()
-		if (!searchHistoryList.value.includes(inputValue.value)) {
-			searchHistoryList.value.unshift(inputValue.value);
-			uni.setStorage({
-				key: 'searchList',
-				data: JSON.stringify(searchHistoryList.value)
-			});
-		} else {
-			//有搜索记录，删除之前的旧记录，将新搜索值重新push到数组首位
-			let i = searchHistoryList.value.indexOf(inputValue.value);
-			searchHistoryList.value.splice(i, 1);
-			searchHistoryList.value.unshift(inputValue.value);
-			uni.showToast({
-				title: '不能重复添加'
-			});
-			uni.setStorage({
-				key: 'searchList',
-				data: JSON.stringify(searchHistoryList.value)
-			});
-		}
+		// if (!searchHistoryList.value.includes(inputValue.value)) {
+		// 	searchHistoryList.value.unshift(inputValue.value);
+		// 	uni.setStorage({
+		// 		key: 'searchList',
+		// 		data: JSON.stringify(searchHistoryList.value)
+		// 	});
+		// } else {
+		// 	//有搜索记录，删除之前的旧记录，将新搜索值重新push到数组首位
+		// 	let i = searchHistoryList.value.indexOf(inputValue.value);
+		// 	searchHistoryList.value.splice(i, 1);
+		// 	searchHistoryList.value.unshift(inputValue.value);
+		// 	uni.showToast({
+		// 		title: '不能重复添加'
+		// 	});
+		// 	uni.setStorage({
+		// 		key: 'searchList',
+		// 		data: JSON.stringify(searchHistoryList.value)
+		// 	});
+		// }
 	}
 }
 
@@ -270,27 +266,45 @@ const empty = () => {
 	searchHistoryList.value = [];
 }
 const getDataApi = () => {
-	if (paramsForm.type === 0) {
-		opusSearchNew(paramsForm).then(res => {
-			// console.log('type === 0', res.data.list);
+	if (paramsForm.type == 0) {
+		opusSearchNew({
+			"keyword": paramsForm.keyword,
+			"pageNum": paramsForm.pageNum,
+			"pageSize": paramsForm.pageSize,
+			"searchTime": "",
+			"type": paramsForm.type
+		}).then(res => {
+			console.log('type === 0', res.data.list);
 			for (let i = 1; i <= 2; i++) {
 				data[`column_${i}`] = [];
 			}
 			data.list = [...res.data.list]
 			initValue(0);
 		})
-	} else if (paramsForm.type === 1) {
-		opusSearchArticle(paramsForm).then(res => {
-			// console.log('type === 1', res.data.list);
+	} else if (paramsForm.type == 1) {
+		opusSearchArticle({
+			"keyword": paramsForm.keyword,
+			"pageNum": paramsForm.pageNum,
+			"pageSize": paramsForm.pageSize,
+			"searchTime": "",
+			"type": paramsForm.type
+		}).then(res => {
+			console.log('type === 1', res.data.list);
 			for (let i = 1; i <= 2; i++) {
 				data[`column_${i}`] = [];
 			}
 			data.list = [...res.data.list]
 			initValue(0);
 		})
-	} else if (paramsForm.type === 2) {
-		opusSearchVideo(paramsForm).then(res => {
-			// console.log('type === 2', res.data);
+	} else if (paramsForm.type == 2) {
+		opusSearchVideo({
+			"keyword": paramsForm.keyword,
+			"pageNum": paramsForm.pageNum,
+			"pageSize": paramsForm.pageSize,
+			"searchTime": "",
+			"type": paramsForm.type
+		}).then(res => {
+			// console.log('type === 2', res.data.list);
 			for (let i = 1; i <= 2; i++) {
 				data[`column_${i}`] = [];
 			}
@@ -299,11 +313,27 @@ const getDataApi = () => {
 		})
 	}
 }
+async function initValue(i) {
+	if (i >= data.list.length) return false;
+	const minHeightRes = await getMinColumnHeight();
+	data[`column_${minHeightRes.column}`].push({
+		...data.list[i],
+		index: i
+	});
+}
 const skipDetails = (item) => {
 	uni.navigateTo({
 		url: `/pages/opus/index?id=${item.id}`
 	})
 }
+watch(() => data.column_2, (nv, oldv) => {
+	// data.column_2=new Set([...nv])
+	console.log('data.column_2', nv, oldv);
+})
+watch(() => data.column_1, (nv, oldv) => {
+	// data.column_1=new Set([...nv])
+	console.log('data.column_1', nv, oldv);
+})
 </script>
 
 <style scoped lang="scss">
