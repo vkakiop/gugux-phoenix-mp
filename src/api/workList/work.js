@@ -11,7 +11,7 @@ export function getWorks(data) {
 		data: data
 	})
 }
-// 作品列表
+// 视频列表
 export const postVideorecommend = (data) => {
 	return request({
 		url: '/gugux-services-opus-api/app/opus/video/recommend',
