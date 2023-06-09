@@ -1,6 +1,7 @@
 import axios from 'axios'
 import buildURL from 'axios/lib/helpers/buildURL'
 import errorCode from '@/utils/errorCode'
+import { tansParams, blobValidate } from '@/utils/ruoyi'
 import {isPlatformMp,getTokenValue} from '@/utils/utils'
 import JSONBIG from 'json-bigint'
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
@@ -35,11 +36,25 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(config => {
     // 是否需要设置 token
-    if (config.headers['isToken']) {
+    if (config.headers['isToken'] !== false) {
         let token = getTokenValue()
         if (token) {
             config.headers['token'] = token // 让每个请求携带自定义token 请根据实际情况自行修改
         }
+    }
+    // get请求映射params参数
+    if (config.method === 'get' && config.params) {
+        let url = config.url + '?' + tansParams(config.params);
+        url = url.slice(0, -1);
+        config.params = {};
+        config.url = url;
+    }
+    if (config.method === 'post' && config.params) {
+        config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+        let url = config.url;
+        config.url = url;
+        config.data = tansParams(config.params).slice(0, -1);
+        config.params = {};
     }
 
     return config

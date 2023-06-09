@@ -5,7 +5,8 @@
 			"^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue",
 			"^u-(.*)": "uview-plus/components/u-$1/u-$1.vue",
 			"^w-(.*)": "@uni-ui/code-ui/components/w-$1/index.vue",
-			"customNav": "@/components/common/customNav.vue"
+			"customNav": "@/components/common/customNav.vue",
+			"loginPop": "@/components/login/loginPop.vue"
 		}
 	},
 	"pages": [

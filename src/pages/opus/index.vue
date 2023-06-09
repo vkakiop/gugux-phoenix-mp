@@ -1,21 +1,46 @@
 <template>
-    <view>
+    <view v-if="pageData.detail.id">
       <customNav>
-        <view @click="gotoBack"><uni-icons type="back" size="24"></uni-icons></view>
+        <view @click="gotoBack" class="ml-3 mt-5"><uni-icons type="back" size="24"></uni-icons></view>
         <view class="flex items-center" @click="gotoMine">
           <image class="w-24 h-24 rounded-full flex-none" :src="pageData.detail.icon"/>
           <view class="name mx-6 text-14 line-clamp-1">{{pageData.detail.author}}</view>
         </view>
-        <button class="flex-none mr-100 w-64 h-26 leading-26 rounded-full bg-[#4ba1f8] active:bg-[#3194f9] text-white text-12">+关注</button>
+        <button :class="['flex-none', 'mr-100', 'w-64', 'h-26', 'leading-26', 'rounded-full', 'text-12', pageData.detail.isFollow ? '' : 'bg-[#4ba1f8]', pageData.detail.isFollow ? '' : 'active:bg-[#3194f9]', pageData.detail.isFollow ? '' : 'text-white']" @click="attention">{{pageData.detail.isFollow ? '-':'+'}}关注</button>
       </customNav>
       <opus-article :detail="pageData.detail" v-if="pageData.detail.opusType == 1"></opus-article>
       <!--opus-video :detail="pageData.detail" v-else-if="pageData.detail.opusType == 2"></opus-video-->
+      <view class="fixed bottom-0 h-50 w-screen bg-white">
+        <view class="mx-20 flex justify-between mt-7">
+          <view class="flex">
+            <view class="flex" @click="collection">
+              <image v-if="pageData.detail.isCollection" class="w-24 h-24" src="@/static/opus/icon_star_ed.png"/>
+              <image v-else class="w-24 h-24" src="@/static/opus/icon_star.png"/>
+              <view class="ml-5 mt-2">{{pageData.detail.collectionNum}}</view>
+            </view>
+            <view class="flex ml-20" @click="comment">
+              <image class="w-24 h-24" src="@/static/opus/icon_comment.png"/>
+              <view class="ml-5 mt-2">{{pageData.detail.commentNum}}</view>
+            </view>
+            <view class="flex ml-20" @click="like">
+              <image v-if="pageData.detail.isLike" class="w-24 h-24" src="@/static/opus/icon_heart_ed.png"/>
+              <image v-else class="w-24 h-24" src="@/static/opus/icon_heart.png"/>
+              <view class="ml-5 mt-2">{{pageData.detail.likeNum}}</view>
+            </view>
+          </view>
+          <view>
+            <button class="bg-white" open-type="share"><img class="w-24 h-24" src="@/static/opus/icon_return.png"></button>
+          </view>
+        </view>
+      </view>
+      <loginPop :isShow="pageData.isShowLoginPop" @close="pageData.isShowLoginPop = false"></loginPop>
     </view>
 </template>
 
 <script setup>
 import { ref, reactive ,onMounted} from "vue"
-import {  opusInfo } from "@/api/opus/index"
+import { opusInfo,opusCollect,opusLike,userFans,userFansRemove } from "@/api/opus/index"
+import { getTokenValue } from "@/utils/utils"
 import { onLoad } from '@dcloudio/uni-app'
 import opusArticle from './components/opusArticle'
 
@@ -27,6 +52,7 @@ onLoad((option)=>{
 const pageData = reactive({
   //id: '1601683533353328803',
   id:'',
+  isShowLoginPop:false,
   detail: {
     "cover": {},
     "opusType": 1,
@@ -36,8 +62,96 @@ const pageData = reactive({
   }
 })
 
+const attention = ()=>{
+  let action = pageData.detail.isFollow ? 0 : 1
+  if (getTokenValue()) {
+    let opusAttention = action ? userFans : userFansRemove
+    opusAttention({id:pageData.detail.createdBy}).then(res=>{
+      if (action) {
+        pageData.detail.isFollow = true
+
+      } else {
+        pageData.detail.isFollow = false
+      }
+      uni.showToast({
+        title: (action ? '' : '取消')+'关注成功',
+        icon:'none',
+        duration: 2000
+      })
+    })
+  }
+  else {
+    pageData.isShowLoginPop = true
+  }
+
+}
+
+const collection = ()=>{
+  let action = pageData.detail.isCollection ? 0 : 1
+  if (getTokenValue()) {
+    opusCollect({opusId: pageData.id, action: action}).then(res => {
+      if (action) {
+        pageData.detail.isCollection = true
+        pageData.detail.collectionNum ++
+      } else {
+        pageData.detail.isAttention = false
+        if (pageData.detail.collectionNum > 0) {
+          pageData.detail.collectionNum --
+        }
+      }
+      uni.showToast({
+        title: (action ? '' : '取消') + '收藏成功',
+        icon: 'none',
+        duration: 2000
+      })
+    })
+  }
+  else {
+    pageData.isShowLoginPop = true
+  }
+}
+
+const like = ()=>{
+  let action = pageData.detail.isLike ? 0 : 1
+  if (getTokenValue()) {
+    opusLike({opusId: pageData.id, action: action}).then(res => {
+      if (action) {
+        pageData.detail.isLike = true
+        pageData.detail.likeNum ++
+      } else {
+        pageData.detail.isLike = false
+        if (pageData.detail.likeNum > 0) {
+          pageData.detail.likeNum --
+        }
+      }
+      uni.showToast({
+        title: (action ? '' : '取消') + '点赞成功',
+        icon: 'none',
+        duration: 2000
+      })
+    })
+  }
+  else {
+    pageData.isShowLoginPop = true
+  }
+}
+
+const comment = ()=>{
+  uni.showToast({
+    title: '评论',
+    icon:'none',
+    duration: 2000
+  });
+}
+
 const gotoBack = ()=>{
-  uni.navigateBack({delta: 1})
+  let pages = getCurrentPages()
+  if (pages.length == 1) {
+    uni.switchTab({url:'/pages/index/index'})
+  }
+  else {
+    uni.navigateBack({delta: 1})
+  }
 }
 
 const gotoMine = ()=>{
@@ -54,4 +168,15 @@ const getDataApi = (params)=>{
     })
 }
 
+const onShareAppMessage = ()=>{
+  return {
+    title:pageData.detail.brief,
+    path:'/pages/opus/index?id='+pageData.id,
+    imageUrl:pageData.detail.cover.itemType == 2 ? pageData.detail.cover.content : pageData.detail.cover.thumbnail
+  }
+}
+
+const onShareTimeline = ()=>{
+  return onShareAppMessage()
+}
 </script>

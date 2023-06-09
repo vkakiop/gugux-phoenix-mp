@@ -39,27 +39,6 @@
         </view>
       </view>
     </view>
-    <view class="fixed bottom-0 h-40 w-screen bg-white">
-      <view class="mx-20 flex justify-between mt-7">
-        <view class="flex" @click="showApp">
-          <view class="flex">
-            <img class="w-24 h-24" src="@/static/opus/icon_star.png">
-            <view class="ml-5 mt-2">{{detail.collectionNum}}</view>
-          </view>
-          <view class="flex ml-20">
-            <img class="w-24 h-24" src="@/static/opus/icon_comment.png">
-            <view class="ml-5 mt-2">{{detail.commentNum}}</view>
-          </view>
-          <view class="flex ml-20">
-            <img class="w-24 h-24" src="@/static/opus/icon_heart.png">
-            <view class="ml-5 mt-2">{{detail.likeNum}}</view>
-          </view>
-        </view>
-        <view @click="copyUrl">
-          <img class="w-24 h-24" src="@/static/opus/icon_return.png">
-        </view>
-      </view>
-    </view>
   </view>
 </template>
 

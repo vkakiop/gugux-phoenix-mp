@@ -1,7 +1,7 @@
 <template>
   <view class="m-30">
     <view class="text-right h-30 leading-30">
-      <navigator url="/pages/index/index" open-type="switchTab">跳过</navigator>
+      <!--navigator url="/pages/index/index" open-type="switchTab">跳过</navigator-->
     </view>
     <phoneslogan></phoneslogan>
     <view class="mt-45">
@@ -35,8 +35,8 @@
           <view class="my-28">登录注册需要您阅读并同意我们的<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>
           </view>
           <view class="flex justify-center items-center">
-            <button class="w-115 h-40 leading-40 rounded-full bg-[#f4f5f6] active:bg-[#eeeff0] text-black" :style="{border:'none'}" @click="pageData.isDialogShow=false">不同意</button>
-            <button class="w-115 h-40 leading-40 rounded-full bg-[#4ba1f8] active:bg-[#3194f9] text-white" :style="{border:'none'}" @click="pageData.isDialogShow=false;pageData.isAgreeItems=[''];onLogin();">我同意</button>
+            <button class="w-115 h-40 leading-40 rounded-full bg-[#f4f5f6] active:bg-[#eeeff0] text-black" @click="pageData.isDialogShow=false">不同意</button>
+            <button class="w-115 h-40 leading-40 rounded-full bg-[#4ba1f8] active:bg-[#3194f9] text-white" @click="pageData.isDialogShow=false;pageData.isAgreeItems=[''];onLogin();">我同意</button>
           </view>
         </view>
       </u-popup>

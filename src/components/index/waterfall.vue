@@ -230,8 +230,7 @@ function imgError(item) {
 }
 const skipVideo = () => {
 	uni.navigateTo({
-		// url:'/pages/VideoCarousel/VideoCarousel?id=2271797284497418261'
-		url: '/pages/VideoCarousel/VideoCarousel?id=1805042228997966063'
+		url: '/pages/VideoCarousel/VideoCarousel?id=1805042160278493446'
 	})
 }
 </script>
