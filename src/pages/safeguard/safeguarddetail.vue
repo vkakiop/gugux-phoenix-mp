@@ -23,7 +23,7 @@
     <view class="box">
       <text>现场图片：</text>
       <view class="photo">
-          <image v-for="(item,index) in pageData.data.imgs" @click="previewImage(item)" :key="index" :src="item" alt=""></image>
+          <image v-for="(item,index) in pageData.data.imgs" @click="previewImage(pageData.data.imgs,index)" :key="index" :src="item" alt=""></image>
       </view>
     </view>
     <view class="box">
@@ -80,11 +80,10 @@ onLoad((option) => {
   }
 })
 
-const previewImage = (url)=>{
-  console.log(url)
+const previewImage = (url,index)=>{
   uni.previewImage({
-    urls:[url],
-    current:url
+    urls:url,
+    current:index
   })
 }
 </script>
