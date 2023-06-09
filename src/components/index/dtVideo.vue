@@ -1,8 +1,8 @@
 <template>
 	<view>
 		<swiper class="swiper" vertical :interval="interval" :duration="duration" @animationfinish="animationfinish" @change="handleChange" circular>
-			<swiper-item v-for="(item,index) in list" :key="index">
-				<view class="swiper-item uni-bg-red">
+			<swiper-item v-for="(item,index) in list" :key="index" >
+				<view class="swiper-item uni-bg-red" v-if="index==current">
 					<view @click="handleVideo(index)" class="viewSty">
 						<video class="video" :id="'video'+index" title="产品介绍" :src="item.src"   loop  :controls="false" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false" @error="videoErrorCallback">
 						</video>
@@ -69,7 +69,6 @@
 		},
 		methods: {
 			handleChange() {
-				console.log('视频切换了', this.current);
 				let currentId = 'video' + this.current
 				let currentId2 = 'video' + (this.current + 1)
 				uni.createVideoContext(currentId, this).pause()
