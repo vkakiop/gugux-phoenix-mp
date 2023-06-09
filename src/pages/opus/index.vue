@@ -94,7 +94,7 @@ const collection = ()=>{
         pageData.detail.isCollection = true
         pageData.detail.collectionNum ++
       } else {
-        pageData.detail.isAttention = false
+        pageData.detail.isCollection = false
         if (pageData.detail.collectionNum > 0) {
           pageData.detail.collectionNum --
         }
