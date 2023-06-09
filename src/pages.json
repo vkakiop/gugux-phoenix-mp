@@ -115,6 +115,18 @@
 			"style": {
 				"navigationBarTitleText": "咕咕行"
 			}
+		},
+		{
+			"path": "pages/emergencycontact/index",
+			"style": {
+				"navigationBarTitleText": "咕咕行"
+			}
+		},
+		{
+			"path": "pages/emergencycontact/success",
+			"style": {
+				"navigationBarTitleText": "咕咕行"
+			}
 		}
     ],
 	"globalStyle": {
