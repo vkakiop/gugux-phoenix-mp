@@ -64,43 +64,10 @@ const computedLocation = computed({
   }
 })
 
-
-const vue3videoPlayRef = ref();
-
-const itemTypes = [
-  {id:1,label:"文字"},
-  {id:2,label:"图片"},
-  {id:3,label:"视频"},
-]
-const itemType_change = (itemType)=>{
-  if (paramsIsAdd.value) {
-    params.value = {itemType:itemType};
-  }
-}
-const params = ref({itemType:1});
-const paramsIsAdd = ref(true);
-const isDialogShow = ref(false);
-const initDialog = () =>{ isDialogShow.value = false}
-const submitForm = async (formEl) => {
-
-}
-const lines_add = (index) => {
-  params.value = {itemType:1}
-  paramsIsAdd.value = true;
-  isDialogShow.value = true;
-
-  //lines.push({'id':10,'name':'new'})
-  //emits('update:modelValue',lines)
-}
-
 onMounted(()=>{
 
 })
 
-
-const onMaskClick = (index) => {
-
-}
 
 const previewMedia = (url) => {
   let urls = props.content.filter(item=>{

@@ -14,17 +14,17 @@
         <view class="mx-20 flex justify-between mt-7">
           <view class="flex">
             <view class="flex" @click="collection">
-              <img v-if="pageData.detail.isCollection" class="w-24 h-24" src="@/static/opus/icon_star_ed.png">
-              <img v-else class="w-24 h-24" src="@/static/opus/icon_star.png">
+              <image v-if="pageData.detail.isCollection" class="w-24 h-24" src="@/static/opus/icon_star_ed.png"/>
+              <image v-else class="w-24 h-24" src="@/static/opus/icon_star.png"/>
               <view class="ml-5 mt-2">{{pageData.detail.collectionNum}}</view>
             </view>
             <view class="flex ml-20" @click="comment">
-              <img class="w-24 h-24" src="@/static/opus/icon_comment.png">
+              <image class="w-24 h-24" src="@/static/opus/icon_comment.png"/>
               <view class="ml-5 mt-2">{{pageData.detail.commentNum}}</view>
             </view>
             <view class="flex ml-20" @click="like">
-              <img v-if="pageData.detail.isLike" class="w-24 h-24" src="@/static/opus/icon_heart_ed.png">
-              <img v-else class="w-24 h-24" src="@/static/opus/icon_heart.png">
+              <image v-if="pageData.detail.isLike" class="w-24 h-24" src="@/static/opus/icon_heart_ed.png"/>
+              <image v-else class="w-24 h-24" src="@/static/opus/icon_heart.png"/>
               <view class="ml-5 mt-2">{{pageData.detail.likeNum}}</view>
             </view>
           </view>
