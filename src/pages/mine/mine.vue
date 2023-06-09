@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view v-if="pageData.mineMessage.id">
 		<view class="flex" @click="skipPerson">
 			<view><u-avatar :src="pageData.mineMessage.icon" size="60"></u-avatar></view>
 			<view class="flex flex-col  justify-center">
