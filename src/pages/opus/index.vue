@@ -1,7 +1,7 @@
 <template>
     <view v-if="pageData.detail.id">
       <customNav>
-        <view @click="gotoBack"><uni-icons type="back" size="24"></uni-icons></view>
+        <view @click="gotoBack" class="ml-3 mt-5"><uni-icons type="back" size="24"></uni-icons></view>
         <view class="flex items-center" @click="gotoMine">
           <image class="w-24 h-24 rounded-full flex-none" :src="pageData.detail.icon"/>
           <view class="name mx-6 text-14 line-clamp-1">{{pageData.detail.author}}</view>
