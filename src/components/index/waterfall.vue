@@ -82,7 +82,7 @@ const getDataApi = () => {
 				list
 			} = res.data
 			if (list.length == 10) {
-				data.list = [...list]
+				data.list = [...data.list,...list]
 				s++
 			} else {
 				uni.showToast({
@@ -98,7 +98,7 @@ const getDataApi = () => {
 				list
 			} = res.data
 			if (list.length == 10) {
-				data.list = [...list]
+				data.list = [...data.list,...list]
 				s++
 			} else {
 				uni.showToast({
@@ -114,7 +114,7 @@ const getDataApi = () => {
 				list
 			} = res.data
 			if (list.length == 10) {
-				data.list = [...list]
+				data.list = [...data.list,...list]
 				s++
 			} else {
 				uni.showToast({
