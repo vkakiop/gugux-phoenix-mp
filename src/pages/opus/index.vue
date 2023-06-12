@@ -122,10 +122,12 @@ const like = ()=>{
       if (action) {
         pageData.detail.isLike = true
         pageData.detail.likeNum ++
+        console.log(pageData.detail.likeNum);
       } else {
         pageData.detail.isLike = false
         if (pageData.detail.likeNum > 0) {
           pageData.detail.likeNum --
+          console.log(pageData.detail.likeNum);
         }
       }
       uni.showToast({
