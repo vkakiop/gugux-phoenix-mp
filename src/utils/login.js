@@ -1,11 +1,11 @@
-import {switchTabPathes} from '@/config/index'
+import {switchTabPathes,configLoginToken} from '@/config/index'
 export function tokenSave(res,returnUrl) {
     const app = getApp()
     if (res.data && res.data.accessToken) {
         app.globalData.loginToken = res.data
 
         uni.setStorage({
-            key: 'ggx_login_token',
+            key: configLoginToken,
             data: JSON.stringify(res.data),
             success: function () {
                 let url = returnUrl || '/pages/index/index'

@@ -1,5 +1,6 @@
 <script>
 import {getCurrentPageUrl} from '@/utils/utils'
+import {configLoginToken} from '@/config/index'
 export default {
   globalData: {
     loginToken:{
@@ -8,7 +9,7 @@ export default {
     }
   },
   onLaunch: function () {
-    let ggx_login_token_text = uni.getStorageSync('ggx_login_token')
+    let ggx_login_token_text = uni.getStorageSync(configLoginToken)
     if (ggx_login_token_text) {
       this.globalData.loginToken = JSON.parse(ggx_login_token_text) || {}
     }
