@@ -38,15 +38,19 @@
 </template>
 
 <script setup>
-import { ref, reactive ,onMounted} from "vue"
+import { reactive } from "vue"
 import { opusInfo,opusCollect,opusLike,userFans,userFansRemove } from "@/api/opus/index"
 import { getTokenValue } from "@/utils/utils"
-import { onLoad } from '@dcloudio/uni-app'
+import {onLoad, onShow} from '@dcloudio/uni-app'
 import opusArticle from './components/opusArticle'
 
 onLoad((option)=>{
     pageData.id = option.id
-    getData();
+    //getData()
+})
+
+onShow(() => {
+  getData()
 })
 
 const pageData = reactive({
