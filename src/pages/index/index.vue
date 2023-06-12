@@ -104,8 +104,8 @@ content.value = '您的好友等第十三月(1511837394)在重庆市四川商会
 const confirmShow = () => {
   show.value = false;
   console.log('去导航');
-  uni.navigateTo({ url: '/pages/emergencycontact/index?id=' + encodeURIComponent(13333333333) })
-  // uni.navigateTo({ url: '/pages/safeguard/gonavigation?id=' + encodeURIComponent(123) })
+  // uni.navigateTo({ url: '/pages/emergencycontact/index?id=' + encodeURIComponent(13333333333) })
+  uni.navigateTo({ url: '/pages/safeguard/gonavigation?id=' + encodeURIComponent(123) })
 }
 const closeShow = () => {
   show.value = false;
