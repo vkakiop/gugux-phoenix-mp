@@ -17,7 +17,7 @@
 		lastVideoId:''
 	})
 	onLoad((option) => {
-		console.log(option.id);
+		// console.log(option.id);
 		pageData.lastVideoId=option.id
 		// postVideorecommend({
 		// 	"lastVideoId": option.id

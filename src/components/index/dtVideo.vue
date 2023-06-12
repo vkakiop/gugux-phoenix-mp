@@ -30,8 +30,7 @@
 							<view>{{ item.commentNum }}</view>
 						</view>
 						<view class="button mb-10" @click.stop="collection(item)">
-							<image v-if="item.isCollection" class="w-24 h-24"
-								src="@/static/opus/icon_star_ed.png" />
+							<image v-if="item.isCollection" class="w-24 h-24" src="@/static/opus/icon_star_ed.png" />
 							<image v-else class="w-24 h-24" src="@/static/opus/icon_star.png" />
 							<view>{{ item.collectionNum }}</view>
 						</view>
@@ -52,8 +51,9 @@
 <script setup>
 import { postVideorecommend } from "@/api/workList/work"
 import { getTokenValue } from "@/utils/utils"
-import { opusCollect, opusLike, userFans, userFansRemove } from "@/api/opus/index"
+import { opusInfo, opusCollect, opusLike, userFans, userFansRemove } from "@/api/opus/index"
 import { getCurrentInstance, reactive, watch } from 'vue'
+import { onLoad, onShow } from '@dcloudio/uni-app'
 const props = defineProps({
 	lastVideoId: {
 		type: String,
@@ -64,6 +64,7 @@ const pageData = reactive({
 	id: '',
 	isShowLoginPop: false,
 	detail: {
+		'isLogin': false,
 		"cover": {},
 		"opusType": 1,
 		"content": [
@@ -79,6 +80,8 @@ const getDataApi = () => {
 	postVideorecommend({
 		"lastVideoId": pageData.lastVideoId
 	}).then(res => {
+		res.data.forEach((item) => {
+		})
 		pageData.list = [...pageData.list, ...res.data]
 		pageData.lastVideoId = res.data[res.data.length - 1].id
 	})
@@ -87,7 +90,6 @@ const { ctx } = getCurrentInstance()
 watch(() => props.lastVideoId, (newV, oldV) => {
 	if (newV) {
 		pageData.id = newV
-		pageData.detail.createdBy = newV
 		pageData.lastVideoId = newV
 		getDataApi()
 	}
@@ -122,7 +124,11 @@ const animationfinish = (e) => {
 
 const handleChange = () => {
 	pageData.id = pageData.list[pageData.current].id
-	pageData.detail= pageData.list[pageData.current]
+	pageData.list[pageData.current].isLogin = false
+	pageData.detail = pageData.list[pageData.current]
+	opusInfo({ id: pageData.id }).then((res) => {
+		pageData.detail = res.data
+	})
 	let currentId = 'video' + pageData.current
 	uni.createVideoContext(currentId, ctx).pause()
 	pageData.status = 1
@@ -137,51 +143,51 @@ const videoErrorCallback = () => {
 }
 //关注
 const attention = (item) => {
-	  let action = item.isFollow ? 0 : 1
-	  if (getTokenValue()) {
-	    let opusAttention = action ? userFans : userFansRemove
-	    opusAttention({id:item.createdBy}).then(res=>{
-	      if (action) {
-	        item.isFollow = true
-	      } else {
-	        item.isFollow = false
-	      }
-	      uni.showToast({
-	        title: (action ? '' : '取消')+'关注成功',
-	        icon:'none',
-	        duration: 2000
-	      })
-	    })
-	  }
-	  else {
-	    pageData.isShowLoginPop = true
-	  }
+	let action = item.isFollow ? 0 : 1
+	if (getTokenValue()) {
+		let opusAttention = action ? userFans : userFansRemove
+		opusAttention({ id: item.createdBy }).then(res => {
+			if (action) {
+				item.isFollow = true
+			} else {
+				item.isFollow = false
+			}
+			uni.showToast({
+				title: (action ? '' : '取消') + '关注成功',
+				icon: 'none',
+				duration: 2000
+			})
+		})
+	}
+	else {
+		pageData.isShowLoginPop = true
+	}
 
 }
 //收藏
 const collection = (item) => {
-	  let action = item.isCollection ? 0 : 1
-	  if (getTokenValue()) {
-	    opusCollect({opusId: item.id, action: action}).then(res => {
-	      if (action) {
-	        item.isCollection = true
-	        item.collectionNum ++
-	      } else {
-	        item.isCollection = false
-	        if (item.collectionNum > 0) {
-	          item.collectionNum --
-	        }
-	      }
-	      uni.showToast({
-	        title: (action ? '' : '取消') + '收藏成功',
-	        icon: 'none',
-	        duration: 2000
-	      })
-	    })
-	  }
-	  else {
-	    pageData.isShowLoginPop = true
-	  }
+	let action = item.isCollection ? 0 : 1
+	if (getTokenValue()) {
+		opusCollect({ opusId: item.id, action: action }).then(res => {
+			if (action) {
+				item.isCollection = true
+				item.collectionNum++
+			} else {
+				item.isCollection = false
+				if (item.collectionNum > 0) {
+					item.collectionNum--
+				}
+			}
+			uni.showToast({
+				title: (action ? '' : '取消') + '收藏成功',
+				icon: 'none',
+				duration: 2000
+			})
+		})
+	}
+	else {
+		pageData.isShowLoginPop = true
+	}
 }
 //点赞
 const like = (item) => {
@@ -223,7 +229,14 @@ const onShareAppMessage = () => {
 		imageUrl: pageData.detail.cover.itemType == 2 ? pageData.detail.cover.content : pageData.detail.cover.thumbnail
 	}
 }
-
+onShow(() => {
+	console.log('页面更新', pageData.id);
+	getDataApi()
+	// opusInfo({ id: pageData.id }).then((res) => {
+	// 	console.log(res.data);
+	// 	// pageData.detail = res.data
+	// })
+})
 const onShareTimeline = () => {
 	return onShareAppMessage()
 }
@@ -295,5 +308,6 @@ const onShareTimeline = () => {
 		}
 	}
 
-}</style>
+}
+</style>
   
