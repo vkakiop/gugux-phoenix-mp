@@ -15,32 +15,43 @@
 						<view class="title">@{{ item.title }}</view>
 						<view class="desc">{{ item.brief }}</view>
 					</view>
-					<view class="buttons">
-						<view class="header_group" @click.stop="attention(item)">
-							<image class="header" src="/static/logo.png"></image>
-							<view class="add">{{ item.isFollow ? '-' : '+' }}</view>
+					<cover-view>
+						<view class="buttons">
+							<debounce @debounce="attention(item)" class="header_group">
+								<view>
+									<image class="header" src="/static/logo.png"></image>
+									<view class="add">{{ item.isFollow ? '-' : '+' }}</view>
+								</view>
+							</debounce>
+							<debounce @debounce="like(item)" class="button mb-10">
+								<view>
+									<image v-if="item.isLike" class="w-24 h-24" src="@/static/opus/icon_heart_ed.png" />
+									<image v-else class="w-24 h-24" src="@/static/opus/icon_heart.png" />
+									<view>{{ item.likeNum }}</view>
+								</view>
+							</debounce>
+							<debounce @debounce="comment(item)" class="button mb-10">
+								<view>
+									<img class="w-24 h-24" src="@/static/opus/icon_comment.png">
+									<view>{{ item.commentNum }}</view>
+								</view>
+							</debounce>
+							<debounce @debounce="collection(item)" class="button mb-10">
+								<view>
+									<image v-if="item.isCollection" class="w-24 h-24"
+										src="@/static/opus/icon_star_ed.png" />
+									<image v-else class="w-24 h-24" src="@/static/opus/icon_star.png" />
+									<view>{{ item.collectionNum }}</view>
+								</view>
+							</debounce>
+							<view class="button mb-10">
+								<button open-type="share" style="background-color: transparent;">
+									<image class="w-24 h-24" src="@/static/opus/icon_return.png" />
+								</button>
+								<view>分享</view>
+							</view>
 						</view>
-						<view class="button mb-10" @click.stop="like(item)">
-							<image v-if="item.isLike" class="w-24 h-24" src="@/static/opus/icon_heart_ed.png" />
-							<image v-else class="w-24 h-24" src="@/static/opus/icon_heart.png" />
-							<view>{{ item.likeNum }}</view>
-						</view>
-						<view class="button mb-10" @click.stop="comment">
-							<img class="w-24 h-24" src="@/static/opus/icon_comment.png">
-							<view>{{ item.commentNum }}</view>
-						</view>
-						<view class="button mb-10" @click.stop="collection(item)">
-							<image v-if="item.isCollection" class="w-24 h-24" src="@/static/opus/icon_star_ed.png" />
-							<image v-else class="w-24 h-24" src="@/static/opus/icon_star.png" />
-							<view>{{ item.collectionNum }}</view>
-						</view>
-						<view class="button mb-10">
-							<button open-type="share" style="background-color: transparent;">
-								<image class="w-24 h-24" src="@/static/opus/icon_return.png" />
-							</button>
-							<view>分享</view>
-						</view>
-					</view>
+					</cover-view>
 				</view>
 			</swiper-item>
 		</swiper>
@@ -80,22 +91,22 @@ const getDataApi = () => {
 	postVideorecommend({
 		"lastVideoId": pageData.lastVideoId
 	}).then(res => {
-		res.data.forEach((item) => {
-		})
 		pageData.list = [...pageData.list, ...res.data]
 		pageData.lastVideoId = res.data[res.data.length - 1].id
+		// console.log(pageData.list);
 	})
 }
 const { ctx } = getCurrentInstance()
 watch(() => props.lastVideoId, (newV, oldV) => {
 	if (newV) {
-		pageData.id = newV
 		pageData.lastVideoId = newV
 		getDataApi()
 	}
 }, { deep: true, immediate: true })
 watch(() => pageData.current, (newV, oldV) => {
 	if (newV == pageData.list.length - 1) {
+		// pageData.id = newV
+		console.log('pageData.current', newV);
 		getDataApi()
 	}
 }, { deep: true, immediate: true })
@@ -224,18 +235,17 @@ const comment = () => {
 //分享
 const onShareAppMessage = () => {
 	return {
-		title: pageData.detail.brief,
-		path: '/pages/opus/index?id=' + pageData.id,
-		imageUrl: pageData.detail.cover.itemType == 2 ? pageData.detail.cover.content : pageData.detail.cover.thumbnail
+		title: pageData.list[pageData.current].brief,
+		path: '/pages/opus/index?id=' + pageData.list[pageData.current].id,
+		imageUrl: pageData.list[pageData.current].thumbnail
 	}
 }
 onShow(() => {
 	console.log('页面更新', pageData.id);
-	getDataApi()
-	// opusInfo({ id: pageData.id }).then((res) => {
-	// 	console.log(res.data);
-	// 	// pageData.detail = res.data
-	// })
+	opusInfo({ id: pageData.list[pageData.current].id }).then((res) => {
+		// console.log(res.data);
+		pageData.list[pageData.current] = res.data
+	})
 })
 const onShareTimeline = () => {
 	return onShareAppMessage()
@@ -271,7 +281,7 @@ const onShareTimeline = () => {
 		color: white;
 		text-align: center;
 		justify-content: center;
-		z-index: 1;
+		z-index: 999;
 
 		.header_group {
 			margin-bottom: 50upx;
