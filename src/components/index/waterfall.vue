@@ -11,7 +11,7 @@
 								@error="imgError(item2)" class="imgsty">
 							</image>
 						</view>
-						<view class="viewSty" v-else @click="skipVideo">
+						<view class="viewSty" v-else @click="skipVideo(item2)">
 							<image src="/static/img/video.png" class="imgSize"></image>
 							<image :src="item2.cover.thumbnail" mode="widthFix" @load="imgLoad(item2)"
 								@error="imgError(item2)" class="imgsty"></image>
@@ -218,9 +218,9 @@ function imgError(item) {
 	const i = item.index;
 	initValue(i + 1);
 }
-const skipVideo = () => {
+const skipVideo = (item) => {
 	uni.navigateTo({
-		url: '/pages/VideoCarousel/VideoCarousel?id=1805042160278493446'
+		url: '/pages/VideoCarousel/VideoCarousel?id='+item.id
 	})
 }
 </script>

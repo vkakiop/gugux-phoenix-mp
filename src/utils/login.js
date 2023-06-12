@@ -1,14 +1,26 @@
+import {switchTabPathes,configLoginToken} from '@/config/index'
 export function tokenSave(res,returnUrl) {
     const app = getApp()
     if (res.data && res.data.accessToken) {
         app.globalData.loginToken = res.data
 
         uni.setStorage({
-            key: 'ggx_login_token',
+            key: configLoginToken,
             data: JSON.stringify(res.data),
             success: function () {
                 let url = returnUrl || '/pages/index/index'
-                uni.switchTab({url:url})
+                if (returnUrl) {
+                    let isSwitch = isSwitchTab(url)
+                    if (isSwitch) {
+                        uni.switchTab({url:url})
+                    }
+                    else {
+                        uni.navigateTo({url:url})
+                    }
+                }
+                else {
+                    uni.navigateBack({delta: 1})
+                }
             }
         });
     }
@@ -22,4 +34,16 @@ export function tokenSave(res,returnUrl) {
             uni.navigateBack({delta: 1})
         },2000)
     }
+}
+
+export function isSwitchTab(path) {
+    let isSwitch = false
+    if (path) {
+        switchTabPathes.forEach(item=>{
+            if (item.indexOf(path) != -1) {
+                isSwitch = true
+            }
+        })
+    }
+    return isSwitch
 }

@@ -6,6 +6,7 @@
 			"^u-(.*)": "uview-plus/components/u-$1/u-$1.vue",
 			"^w-(.*)": "@uni-ui/code-ui/components/w-$1/index.vue",
 			"customNav": "@/components/common/customNav.vue",
+			"debounce": "@/components/common/debounce.vue",
 			"loginPop": "@/components/login/loginPop.vue"
 		}
 	},
@@ -54,7 +55,8 @@
 		{
 			"path": "pages/login/index",
 			"style": {
-				"navigationBarTitleText": "手机登录"
+				"navigationBarTitleText": "手机登录",
+				"navigationStyle": "custom"
 			}
 		},
 		{

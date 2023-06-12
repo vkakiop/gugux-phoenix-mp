@@ -156,7 +156,7 @@ export function getCurrentPageUrl() {
 export function needLogin() {
 	const app = getApp()
 	if (!app.globalData.loginToken.accessToken) {
-		uni.reLaunch({url:'/pages/login/index?url='+encodeURIComponent(getCurrentPageUrl())})
+		uni.navigateTo({url:'/pages/login/index?url='+encodeURIComponent(getCurrentPageUrl())})
 		return false
 	}
 	return true

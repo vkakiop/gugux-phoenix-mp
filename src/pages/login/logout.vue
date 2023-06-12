@@ -2,6 +2,7 @@
 </template>
 
 <script setup>
+import {configLoginToken} from '@/config/index'
 import {onLoad} from "@dcloudio/uni-app"
 onLoad((option)=>{
   const app = getApp()
@@ -9,7 +10,7 @@ onLoad((option)=>{
     accessToken:'',
     expireTime:0,
   }
-  uni.clearStorageSync('ggx_login_token')
+  uni.clearStorageSync(configLoginToken)
 
   let returnUrl = decodeURIComponent(option.url || '')
   let url = returnUrl || '/pages/index/index'

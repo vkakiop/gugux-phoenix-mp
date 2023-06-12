@@ -1,4 +1,8 @@
 <template>
+  <customNav>
+    <view @click="gotoBack" class="ml-3 mt-5"><uni-icons type="back" size="24"></uni-icons></view>
+    <view class="name mx-6 text-14 line-clamp-1">手机登录</view>
+  </customNav>
   <view class="m-30">
     <view class="text-right h-30 leading-30">
       <!--navigator url="/pages/index/index" open-type="switchTab">跳过</navigator-->
@@ -8,9 +12,11 @@
       <view class="h-48 bg-[#e9ebef] rounded-full flex items-center relative">
         <input class="w-3/5 ml-30 h-48" v-model="pageData.phone" placeholder="请输入手机号码" maxlength="11"/>
         <view class="w-80 h-22 leading-22 absolute right-15 top-11">
-          <button v-if="!pageData.isReget" @click="getCode" class=" text-10 rounded-full bg-[#4ba1f8] active:bg-[#3194f9] text-white">
-            获取验证码
-          </button>
+          <debounce v-if="!pageData.isReget" @debounce="getCode">
+            <button class=" text-10 rounded-full bg-[#4ba1f8] active:bg-[#3194f9] text-white">
+              获取验证码
+            </button>
+          </debounce>
           <button v-else class="text-10 rounded-full bg-[#f4f5f6] text-black">重发({{pageData.count}})</button>
         </view>
 
@@ -19,7 +25,9 @@
         <input class="w-4/5 h-48" v-model="pageData.code" placeholder="请输入验证码" maxlength="6"/>
         <!--image v-if="pageData.code" class="w-18 h-18 absolute right-15 top-14" src="@/static/login/eye.png" @click="pageData.code = '';"></image-->
       </view>
-      <button :class="['mt-25','h-48','leading-48','rounded-full','bg-[#4ba1f8]',pageData.code.length < 6 ? '' : 'active:bg-[#3194f9]',pageData.code.length < 6 ? 'text-[#ddd]' : 'text-white']" @click="onLogin">登录</button>
+      <debounce @debounce="onLogin">
+        <button :class="['mt-25','h-48','leading-48','rounded-full','bg-[#4ba1f8]',pageData.code.length < 6 ? '' : 'active:bg-[#3194f9]',pageData.code.length < 6 ? 'text-[#ddd]' : 'text-white']">登录</button>
+      </debounce>
       <!--view class="mt-18 text-center" @click="gotoLoginPhone">验证码登录</view-->
       <view class="mt-58 text-13 flex items-center">
         <u-checkbox-group v-model="pageData.isAgreeItems">
@@ -46,7 +54,7 @@
 
 <script setup>
 import {reactive,watch,onMounted} from 'vue'
-import {tokenSave} from '@/utils/login'
+import {tokenSave,isSwitchTab} from '@/utils/login'
 import {authSms,authSmsLogin} from '@/api/login/index'
 import phoneslogan from './components/phoneslogan.vue'
 import {onLoad} from "@dcloudio/uni-app"
@@ -90,6 +98,7 @@ const onLogin = ()=>{
 
 //获取验证码
 const getCode = ()=>{
+  console.log('getCode')
   authSms({phone:pageData.phone,type:1}).then(res=>{
     pageData.count = 60
     pageData.isReget = true
@@ -142,6 +151,15 @@ const gotoAgreement = (url) =>{
 // const gotoLoginPhone = ()=>{
 //   uni.reLaunch({url:'/pages/login/phone?url='+encodeURIComponent(pageData.url)})
 // }
+
+const gotoBack = ()=>{
+  if (isSwitchTab(pageData.url)) {
+    uni.switchTab({url:'/pages/index/index'})
+  }
+  else {
+    uni.navigateBack({delta: 1})
+  }
+}
 </script>
 
 <style lang="scss" scoped>

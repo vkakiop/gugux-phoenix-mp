@@ -6,27 +6,35 @@
           <image class="w-24 h-24 rounded-full flex-none" :src="pageData.detail.icon"/>
           <view class="name mx-6 text-14 line-clamp-1">{{pageData.detail.author}}</view>
         </view>
-        <button :class="['flex-none', 'mr-100', 'w-64', 'h-26', 'leading-26', 'rounded-full', 'text-12', pageData.detail.isFollow ? '' : 'bg-[#4ba1f8]', pageData.detail.isFollow ? '' : 'active:bg-[#3194f9]', pageData.detail.isFollow ? '' : 'text-white']" @click="attention">{{pageData.detail.isFollow ? '-':'+'}}关注</button>
+        <debounce @debounce="attention">
+          <button :class="['flex-none', 'mr-100', 'w-64', 'h-26', 'leading-26', 'rounded-full', 'text-12', pageData.detail.isFollow ? '' : 'bg-[#4ba1f8]', pageData.detail.isFollow ? '' : 'active:bg-[#3194f9]', pageData.detail.isFollow ? '' : 'text-white']">{{pageData.detail.isFollow ? '-':'+'}}关注</button>
+        </debounce>
       </customNav>
       <opus-article :detail="pageData.detail" v-if="pageData.detail.opusType == 1"></opus-article>
       <!--opus-video :detail="pageData.detail" v-else-if="pageData.detail.opusType == 2"></opus-video-->
       <view class="fixed bottom-0 h-50 w-screen bg-white">
         <view class="mx-20 flex justify-between mt-7">
           <view class="flex">
-            <view class="flex" @click="collection">
-              <image v-if="pageData.detail.isCollection" class="w-24 h-24" src="@/static/opus/icon_star_ed.png"/>
-              <image v-else class="w-24 h-24" src="@/static/opus/icon_star.png"/>
-              <view class="ml-5 mt-2">{{pageData.detail.collectionNum}}</view>
-            </view>
-            <view class="flex ml-20" @click="comment">
-              <image class="w-24 h-24" src="@/static/opus/icon_comment.png"/>
-              <view class="ml-5 mt-2">{{pageData.detail.commentNum}}</view>
-            </view>
-            <view class="flex ml-20" @click="like">
-              <image v-if="pageData.detail.isLike" class="w-24 h-24" src="@/static/opus/icon_heart_ed.png"/>
-              <image v-else class="w-24 h-24" src="@/static/opus/icon_heart.png"/>
-              <view class="ml-5 mt-2">{{pageData.detail.likeNum}}</view>
-            </view>
+            <debounce @debounce="collection">
+              <view class="flex">
+                <image v-if="pageData.detail.isCollection" class="w-24 h-24" src="@/static/opus/icon_star_ed.png"/>
+                <image v-else class="w-24 h-24" src="@/static/opus/icon_star.png"/>
+                <view class="ml-5 mt-2">{{pageData.detail.collectionNum}}</view>
+              </view>
+            </debounce>
+            <debounce @debounce="comment">
+              <view class="flex ml-20">
+                <image class="w-24 h-24" src="@/static/opus/icon_comment.png"/>
+                <view class="ml-5 mt-2">{{pageData.detail.commentNum}}</view>
+              </view>
+            </debounce>
+            <debounce @debounce="like">
+              <view class="flex ml-20">
+                <image v-if="pageData.detail.isLike" class="w-24 h-24" src="@/static/opus/icon_heart_ed.png"/>
+                <image v-else class="w-24 h-24" src="@/static/opus/icon_heart.png"/>
+                <view class="ml-5 mt-2">{{pageData.detail.likeNum}}</view>
+              </view>
+            </debounce>
           </view>
           <view>
             <button class="bg-white" open-type="share"><img class="w-24 h-24" src="@/static/opus/icon_return.png"></button>
@@ -38,15 +46,19 @@
 </template>
 
 <script setup>
-import { ref, reactive ,onMounted} from "vue"
+import { reactive } from "vue"
 import { opusInfo,opusCollect,opusLike,userFans,userFansRemove } from "@/api/opus/index"
 import { getTokenValue } from "@/utils/utils"
-import { onLoad } from '@dcloudio/uni-app'
+import {onLoad, onShow} from '@dcloudio/uni-app'
 import opusArticle from './components/opusArticle'
 
 onLoad((option)=>{
     pageData.id = option.id
-    getData();
+    //getData()
+})
+
+onShow(() => {
+  getData()
 })
 
 const pageData = reactive({
@@ -118,10 +130,12 @@ const like = ()=>{
       if (action) {
         pageData.detail.isLike = true
         pageData.detail.likeNum ++
+        console.log(pageData.detail.likeNum);
       } else {
         pageData.detail.isLike = false
         if (pageData.detail.likeNum > 0) {
           pageData.detail.likeNum --
+          console.log(pageData.detail.likeNum);
         }
       }
       uni.showToast({
