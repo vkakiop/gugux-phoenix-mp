@@ -54,7 +54,8 @@
 		{
 			"path": "pages/login/index",
 			"style": {
-				"navigationBarTitleText": "手机登录"
+				"navigationBarTitleText": "手机登录",
+				"navigationStyle": "custom"
 			}
 		},
 		{

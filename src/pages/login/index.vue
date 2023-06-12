@@ -1,4 +1,8 @@
 <template>
+  <customNav>
+    <view @click="gotoBack" class="ml-3 mt-5"><uni-icons type="back" size="24"></uni-icons></view>
+    <view class="name mx-6 text-14 line-clamp-1">手机登录</view>
+  </customNav>
   <view class="m-30">
     <view class="text-right h-30 leading-30">
       <!--navigator url="/pages/index/index" open-type="switchTab">跳过</navigator-->
@@ -46,7 +50,7 @@
 
 <script setup>
 import {reactive,watch,onMounted} from 'vue'
-import {tokenSave} from '@/utils/login'
+import {tokenSave,isSwitchTab} from '@/utils/login'
 import {authSms,authSmsLogin} from '@/api/login/index'
 import phoneslogan from './components/phoneslogan.vue'
 import {onLoad} from "@dcloudio/uni-app"
@@ -142,6 +146,15 @@ const gotoAgreement = (url) =>{
 // const gotoLoginPhone = ()=>{
 //   uni.reLaunch({url:'/pages/login/phone?url='+encodeURIComponent(pageData.url)})
 // }
+
+const gotoBack = ()=>{
+  if (isSwitchTab(pageData.url)) {
+    uni.switchTab({url:'/pages/index/index'})
+  }
+  else {
+    uni.navigateBack({delta: 1})
+  }
+}
 </script>
 
 <style lang="scss" scoped>
