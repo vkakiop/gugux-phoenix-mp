@@ -25,7 +25,7 @@
 		</view>
 		<view class="gridBox" v-if="iconType == 'top'">
 			<uni-grid :column="3" :show-border="false" :square="false" @change="change">
-				<uni-grid-item v-for="(item, index) in list" :index="index" :key="index">
+				<uni-grid-item v-for="(item, index) in gridList" :index="index" :key="index">
 					<view class="grid-item-box  ">
 						<text class="text">{{ item.text }}</text>
 					</view>
@@ -33,29 +33,9 @@
 			</uni-grid>
 		</view>
 		<!-- 瀑布流 -->
-		<view class="padding-top-lg">
-			<view class="waterfalls-flow">
-				<view v-for="(item, index) in data.column" :key="index" class="waterfalls-flow-column"
-					:style="{ 'width': w, 'margin-left': index == 0 ? 0 : m }" :id="`waterfalls_flow_column_${index + 1}`">
-					<view class="column-value" v-for="(item2, index2) in data[`column_${index + 1}`]" :key="index2">
-						<view class="" v-if="item2.title">
-							<!-- itemType=2是图片，itemtpye=3是视频 -->
-							<view v-if="item2.cover.itemType == 2" @click="skipDetails(item2)">
-								<image :src="item2.cover.content" mode="widthFix" @load="imgLoad(item2)"
-									@error="imgError(item2)" class="imgsty">
-								</image>
-							</view>
-							<view class="viewSty" v-else @click="skipVideo(item2)">
-								<image src="/static/img/video.png" class="imgSize"></image>
-								<image :src="item2.cover.thumbnail" mode="widthFix" @load="imgLoad(item2)"
-									@error="imgError(item2)" class="imgsty"></image>
-							</view>
-							<text>{{ item2.title }} 我是第{{ index + 1 }}列我是第{{ index2 }}个</text>
-						</view>
-					</view>
-				</view>
-			</view>
-		</view>
+	<view class="" v-if="isShow">
+		<eimlFlow :list="list" :columnNum="2"></eimlFlow>
+	</view>
 		<!-- 瀑布流 -->
 		<u-modal :show="show" @confirm="confirmShow" @cancel="closeShow" title="紧急通知" confirmColor="#D9001B"
 			cancelColor="#0000FF" showCancelButton ref="uModal" confirmText="去导航" cancelText="查看详情">
@@ -68,13 +48,15 @@
 </template>
 
 <script setup>
+import eimlFlow from "@/components/eiml-flow-layout/eiml-flow-layout.vue"
 import {
 	ref,
 	reactive,
 	watch,
 	computed,
 	getCurrentInstance,
-	onMounted
+	onMounted,
+	nextTick
 } from 'vue';
 import {
 	opusSearchNew,
@@ -85,32 +67,105 @@ import {
 	onShow,
 	onReachBottom
 } from "@dcloudio/uni-app"
-const paramsForm = ref({
-	"keyword": "",
-	"pageNum": 1,
-	"pageSize": 20,
-	"searchTime": "",
-	"type": 0
-})
+const internalInstance = getCurrentInstance()
+const menuList = reactive([{
+			name: '综合',
+		}, {
+			name: '文章',
+		}, {
+			name: '视频'
+		},
+		{
+			name: '用户'
+		}
+	])
+   const gridList =ref([{
+						text: 'Grid 1',
+						badge: '0',
+						type: "primary"
+					},
+					{
+						text: 'Grid 2',
+						badge: '1',
+						type: "success"
+					},
+					{
+						text: 'Grid 3',
+						badge: '99',
+						type: "warning"
+					},
+					{
+						text: 'Grid 4',
+						badge: '2',
+						type: "error"
+					},
+					{
+						text: 'Grid 5'
+					},
+					{
+						text: 'Grid 6'
+					},
+					{
+						text: 'Grid 7'
+					},
+					{
+						text: 'Grid 8'
+					},
+					{
+						text: 'Grid 9'
+					}
+				])
+//瀑布流--开始
+ const isShow = ref(true)
+ const list = ref([])
+ const paramsForm = ref({
+ 	"keyword": "",
+ 	"pageNum": 1,
+ 	"pageSize": 10,
+ 	"searchTime": "",
+ 	"type": 0
+ })
+ function menuClick(item) {
+	 paramsForm.value.pageSize=10
+ 	paramsForm.value.type = item.index
+ 	getDataApi()
+ }
+ const getDataApi = () => {
+ 	if (paramsForm.value.type == 0) {
+ 		isShow.value = false
+ 		opusSearchNew(paramsForm.value).then(res => {
+ 			isShow.value = true
+ 			list.value = [...res.data.list]
+ 		})
+ 	} else if (paramsForm.value.type == 1) {
+ 		isShow.value = false
+ 		opusSearchArticle(paramsForm.value).then(res => {
+ 			isShow.value = true
+ 			list.value = [...res.data.list]
+ 		})
+ 	} else if (paramsForm.value.type == 2) {
+ 		isShow.value = false
+ 		opusSearchVideo(paramsForm.value).then(res => {
+ 			isShow.value = true
+ 			list.value = [...res.data.list]
+ 		})
+ 	}
+ 	//操作数据后更新视图
+ 	internalInstance.ctx.$forceUpdate()
+ }
+	watch(() => paramsForm.value.type, (newV, oldV) => {
+		getDataApi()
+	}, {
+		deep: true,
+		immediate: true
+	})
+ // 数据赋值
+ onMounted(() => {
+ 	getDataApi()
+ })
+//瀑布流--结尾
 const loginToken = ref({})
 const iconType = ref('bottom')
-const menuList = reactive([{
-	name: '推荐',
-}, {
-	name: '文章',
-}, {
-	name: '视频'
-},
-{
-	name: '游记'
-},
-{
-	name: '车友圈'
-},
-{
-	name: '逛吃'
-}
-])
 const show = ref(false);
 const content = ref('');
 content.value = '您的好友等第十三月(1511837394)在重庆市四川商会触发了紧急通知，请点击电话联系或导航前往。'
@@ -134,199 +189,17 @@ function onClickItem(e) {
 }
 function drowDown(item) {
 	iconType.value = item
-	console.log('点击了下拉');
 }
 function skipHistory() {
 	uni.navigateTo({
 		url: `/pages/index/searchHistory`
 	})
 }
-// 瀑布流数据
 // 监听父子通信的数据的变化
 const _this = getCurrentInstance();
-const data = reactive({
-	list: [{
-		image: '',
-	},],
-	column: 2,
-	columnSpace: 1,
-});
-const getDataApi = () => {
-	if (paramsForm.value.type === 0) {
-		opusSearchNew(paramsForm.value).then(res => {
-			if (res.data.list.length >= 10) {
-				data.list = [...data.list, ...res.data.list]
-			} else {
-				uni.showToast({
-					title: '没有更多了',
-					icon: 'none'
-				})
-			}
-		})
-	} else if (paramsForm.value.type === 1) {
-		opusSearchArticle(paramsForm.value).then(res => {
-			if (res.data.list.length >= 10) {
-				data.list = [...data.list, ...res.data.list]
-			} else {
-				uni.showToast({
-					title: '没有更多了',
-					icon: 'none'
-				})
-			}
-		})
-	} else if (paramsForm.value.type === 2) {
-		opusSearchVideo(paramsForm.value).then(res => {
-			if (res.data.list.length >= 10) {
-				data.list = [...data.list, ...res.data.list]
-			} else {
-				uni.showToast({
-					title: '没有更多了',
-					icon: 'none'
-				})
-			}
-		})
-	}
-}
-// 计算列宽
-const w = computed(() => {
-	const column_rate = `${100 / data.column - (+data.columnSpace)}%`;
-	//49%
-	return column_rate;
-})
-// 计算margin
-const m = computed(() => {
-	const column_margin = `${(100 - (100 / data.column - (+data.columnSpace)).toFixed(5) * data.column) / (data.column - 1)}%`;
-	//2%
-	return column_margin;
-})
-// 每列的数据初始化
-for (let i = 1; i <= data.column; i++) {
-	data[`column_${i}`] = [];
-}
-// 获取最小值的对象
-const getMin = (a, s) => {
-	let m = a[0][s];
-	let mo = a[0];
-	for (var i = a.length - 1; i >= 0; i--) {
-		if (a[i][s] < m) {
-			m = a[i][s];
-		}
-	}
-	mo = a.filter(i => i[s] == m);
-	return mo[0];
-}
-// 计算每列的高度
-function getMinColumnHeight() {
-	return new Promise(resolve => {
-		const heightArr = [];
-		for (let i = 1; i <= data.column; i++) {
-			const query = uni.createSelectorQuery().in(_this);
-			query.select(`#waterfalls_flow_column_${i}`).boundingClientRect(data => {
-				heightArr.push({
-					column: i,
-					height: data.height
-				});
-			}).exec(() => {
-				if (data.column <= heightArr.length) {
-					resolve(getMin(heightArr, 'height'));
-				}
-			});
-		}
-	})
-};
-async function initValue(i) {
-	if (i >= data.list.length) return false;
-	const minHeightRes = await getMinColumnHeight();
-	data[`column_${minHeightRes.column}`].push({
-		...data.list[i],
-		index: i
-	});
-}
-
-function skipDetails(item2) {
-	uni.navigateTo({
-		url: `/pages/opus/index?id=${item2.id}`
-	})
-}
-onMounted(() => {
-	initValue(0);
-	getDataApi()
-})
-// 监听数据的变化
-watch(() => data.list, (newValue, oldValue) => {
-	const oldLength = oldValue ? oldValue.length : 0;
-	data.list = newValue;
-	if (oldLength > 0) initValue(oldLength);
-}, {
-	immediate: true
-});
-// 图片加载完成
-function imgLoad(item) {
-	const i = item.index;
-	initValue(i + 1);
-}
-// 图片加载失败
-function imgError(item) {
-	const i = item.index;
-	initValue(i + 1);
-}
-const skipVideo = (item) => {
-	uni.navigateTo({
-		url: '/pages/VideoCarousel/VideoCarousel?id=' + item.id
-	})
-}
-// 瀑布流数据
-function menuClick(item) {
-	if (paramsForm.value.type != item.index) {
-		paramsForm.value.type = item.index
-		// 每列的数据初始化
-		initValue(0);
-		for (let i = 1; i <= data.column; i++) {
-			data[`column_${i}`] = [];
-		}
-		if (paramsForm.value.type === 0) {
-			opusSearchNew(paramsForm.value).then(res => {
-				// console.log('paramsForm.value.type==0', res.data.list);
-				if (res.data.list.length >= 10) {
-					data.list = res.data.list
-				} else {
-					uni.showToast({
-						title: '没有更多了',
-						icon: 'none'
-					})
-				}
-			})
-		} else if (paramsForm.value.type === 1) {
-			opusSearchArticle(paramsForm.value).then(res => {
-				// console.log('paramsForm.value.type==1', res.data.list);
-				if (res.data.list.length >= 10) {
-					data.list = res.data.list
-				} else {
-					uni.showToast({
-						title: '没有更多了',
-						icon: 'none'
-					})
-				}
-			})
-		} else if (paramsForm.value.type === 2) {
-			opusSearchVideo(paramsForm.value).then(res => {
-				// console.log('paramsForm.value.type==2', res.data.list);
-				if (res.data.list.length >= 10) {
-					data.list = res.data.list
-				} else {
-					uni.showToast({
-						title: '没有更多了',
-						icon: 'none'
-					})
-				}
-			})
-		}
-	}
-}
 onShow(() => {
 	loginToken.value = getApp().globalData.loginToken
 })
-
 function change(e) {
 	let {
 		index
@@ -336,16 +209,29 @@ function change(e) {
 		icon: 'none'
 	})
 }
-
 const skipFriendDetail = () => {
 	uni.navigateTo({
 		url: '/pages/friendDetail/friendDetail'
 	})
 }
 onReachBottom(() => {
-	paramsForm.value.pageSize += 10
-	getDataApi()
-})
+		console.log('触底了')
+		paramsForm.value.pageSize+=10
+		if (paramsForm.value.type == 0) {
+			opusSearchNew(paramsForm.value).then(res => {
+				list.value = [...res.data.list]
+			})
+		} else if (paramsForm.value.type == 1) {
+			opusSearchArticle(paramsForm.value).then(res => {
+				list.value = [...res.data.list]
+			})
+		} else if (paramsForm.value.type == 2) {
+			opusSearchVideo(paramsForm.value).then(res => {
+				list.value = [...res.data.list]
+			})
+		}
+		
+	})
 </script>
 
 <style lang="scss" scoped>

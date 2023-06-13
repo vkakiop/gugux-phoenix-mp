@@ -18,10 +18,27 @@
 			}
 		},
 		{
+			"path": "pages/test/waterfalls",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		}
+		,
+
+		{
 			"path": "pages/mine/mine",
 			"style": {
 				"navigationBarTitleText": "uni-app"
 			}
+		},
+		{
+		    "path" : "pages/index/searchHistory",
+		    "style" :
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		
 		},
 		{
 			"path": "pages/personCenter/personCenter",
@@ -90,15 +107,6 @@
 			}
 		}
 	    ,{
-            "path" : "pages/index/searchHistory",
-            "style" :
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-
-        }
-        ,{
             "path" : "pages/personCenter/personQRcode",
             "style" :
             {

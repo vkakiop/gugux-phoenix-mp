@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="content">
 		<!-- 搜索框 -->
 		<view class="search">
 			<view style="display: flex;align-items: center;">
@@ -12,8 +12,7 @@
 
 		<!-- 搜索历史 -->
 		<view class="searchHistory">
-			<view
-				style="display: flex;align-items: center;justify-content: space-between;box-sizing: border-box;padding: 0px 5px;">
+			<view style="display: flex;align-items: center;justify-content: space-between;box-sizing: border-box;padding: 0px 5px;">
 				<view>搜索历史:</view>
 
 				<view style="color: red;font-size: 28px;" @click="empty"><uni-icons type="trash" size="30"></uni-icons>
@@ -26,383 +25,193 @@
 			</view>
 		</view>
 		<!-- 搜索历史 -->
-		<!-- 搜索内容 -->
 		<view>
-			<u-tabs :list="menuList" lineWidth="40" lineColor="#f56c6c" :activeStyle="{
-				color: '#303133',
-				fontWeight: 'bold',
-				transform: 'scale(1.05)'
-			}" :inactiveStyle="{
-	color: '#606266',
-	transform: 'scale(1)'
-}" itemStyle="padding-left: 15rpx; padding-right: 15rpx; height: 66rpx;" @click="menuClick">
-			</u-tabs>
-			<view>
-				<view v-if="paramsForm.type === 0">
-					<view class="waterfalls-flow">
-						<view v-for="(item, index) in data.column" :key="index" class="waterfalls-flow-column"
-							:style="{ 'width': w, 'margin-left': index == 0 ? 0 : m }"
-							:id="`waterfalls_flow_column_${index + 1}`">
-							<view class="column-value" v-for="(item2, index2) in data[`column_${index + 1}`]" :key="index2">
-								<view class="" v-if="item2.title">
-									<!-- itemType=2是图片，itemtpye=3是视频 -->
-									<view v-if="item2.cover.itemType == 2" @click="skipDetails(item2)">
-										<image :src="item2.cover.content" mode="widthFix" @load="imgLoad(item2)"
-											@error="imgError(item2)" class="imgsty">
-										</image>
-									</view>
-									<view class="viewSty" v-else @click="skipVideo">
-										<image src="/static/img/video.png" class="imgSize"></image>
-										<image :src="item2.cover.thumbnail" mode="widthFix" @load="imgLoad(item2)"
-											@error="imgError(item2)" class="imgsty"></image>
-									</view>
-									<text>{{ item2.title }} 我是第{{ index + 1 }}列我是第{{ index2 }}个</text>
-								</view>
-							</view>
-						</view>
-					</view>
+			<view class="uni-common-mt">
+				<view style="flex:2">
+					<u-tabs :list="menuList" lineWidth="40" lineColor="#f56c6c" :activeStyle="{
+	            color: '#303133',
+	            fontWeight: 'bold',
+	            transform: 'scale(1.05)'
+	          }" :inactiveStyle="{
+	  color: '#606266',
+	  transform: 'scale(1)'
+	}" itemStyle="padding-left: 15rpx; padding-right: 15rpx; height: 66rpx;" @click="menuClick">
+					</u-tabs>
 				</view>
-				<view v-if="paramsForm.type === 1">
-					<view class="waterfalls-flow">
-						<view v-for="(item, index) in data.column" :key="index" class="waterfalls-flow-column"
-							:style="{ 'width': w, 'margin-left': index == 0 ? 0 : m }"
-							:id="`waterfalls_flow_column_${index + 1}`">
-							<view class="column-value" v-for="(item2, index2) in data[`column_${index + 1}`]" :key="index2">
-								<view class="" v-if="item2.title">
-									<!-- itemType=2是图片，itemtpye=3是视频 -->
-									<view v-if="item2.cover.itemType == 2" @click="skipDetails(item2)">
-										<image :src="item2.cover.content" mode="widthFix" @load="imgLoad(item2)"
-											@error="imgError(item2)" class="imgsty">
-										</image>
-									</view>
-									<view class="viewSty" v-else @click="skipVideo">
-										<image src="/static/img/video.png" class="imgSize"></image>
-										<image :src="item2.cover.thumbnail" mode="widthFix" @load="imgLoad(item2)"
-											@error="imgError(item2)" class="imgsty"></image>
-									</view>
-									<text>{{ item2.title }} 我是第{{ index + 1 }}列我是第{{ index2 }}个</text>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
-				<view v-if="paramsForm.type === 2">
-					<view class="waterfalls-flow">
-						<view v-for="(item, index) in data.column" :key="index" class="waterfalls-flow-column"
-							:style="{ 'width': w, 'margin-left': index == 0 ? 0 : m }"
-							:id="`waterfalls_flow_column_${index + 1}`">
-							<view class="column-value" v-for="(item2, index2) in data[`column_${index + 1}`]" :key="index2">
-								<view class="" v-if="item2.title">
-									<!-- itemType=2是图片，itemtpye=3是视频 -->
-									<view v-if="item2.cover.itemType == 2" @click="skipDetails(item2)">
-										<image :src="item2.cover.content" mode="widthFix" @load="imgLoad(item2)"
-											@error="imgError(item2)" class="imgsty">
-										</image>
-									</view>
-									<view class="viewSty" v-else @click="skipVideo">
-										<image src="/static/img/video.png" class="imgSize"></image>
-										<image :src="item2.cover.thumbnail" mode="widthFix" @load="imgLoad(item2)"
-											@error="imgError(item2)" class="imgsty"></image>
-									</view>
-									<text>{{ item2.title }} 我是第{{ index + 1 }}列我是第{{ index2 }}个</text>
-								</view>
-							</view>
-						</view>
-					</view>
+				<view class="flex items-center">更多
+					<uni-icons type="bottom" size="26" v-if="iconType == 'bottom'"></uni-icons>
+					<uni-icons type="top" size="26" v-else></uni-icons>
 				</view>
 			</view>
 		</view>
-		<!-- 搜索内容 -->
+		<view class="" v-if="show">
+			<eimlFlow :list="list" :columnNum="2"></eimlFlow>
+		</view>
 	</view>
 </template>
 
 <script setup>
-import {
-	ref,
-	reactive,
-	watch,
-	computed,
-	getCurrentInstance,
-	onMounted
-} from 'vue';
-import { opusSearchNew, opusSearchArticle, opusSearchVideo } from "@/api/worksSearch/index.js"
-const paramsForm = reactive({
-	"keyword": "",
-	"pageNum": 1,
-	"pageSize": 10,
-	"searchTime": "",
-	"type": 0
-})
-const isShowHistory = ref(true)
-const menuList = reactive([{
-	name: '综合',
-}, {
-	name: '文章',
-}, {
-	name: '视频'
-},
-{
-	name: '用户'
-}
-])
-
-const inputValue = ref('')
-const searchHistoryList = ref([])
-const _this = getCurrentInstance();
-const data = reactive({
-	list: [],
-	column: 2,
-	column_1: [],
-	column_2: [],
-	columnSpace: 2,
-});
-// 计算列宽
-const w = computed(() => {
-	const column_rate = `${100 / data.column - (+data.columnSpace)}%`;
-	return column_rate;
-})
-// 计算margin
-const m = computed(() => {
-	const column_margin = `${(100 - (100 / data.column - (+data.columnSpace)).toFixed(5) * data.column) / (data.column - 1)}%`;
-	return column_margin;
-})
-// 每列的数据初始化
-for (let i = 1; i <= data.column; i++) {
-	data[`column_${i}`] = [];
-}
-// 获取最小值的对象
-const getMin = (a, s) => {
-	let m = a[0][s];
-	let mo = a[0];
-	for (var i = a.length - 1; i >= 0; i--) {
-		if (a[i][s] < m) {
-			m = a[i][s];
+	import eimlFlow from "@/components/eiml-flow-layout/eiml-flow-layout.vue"
+	import {
+		opusSearchNew,
+		opusSearchArticle,
+		opusSearchVideo
+	} from "@/api/worksSearch/index.js"
+	import {
+		ref,
+		reactive,
+		watch,
+		computed,
+		getCurrentInstance,
+		onMounted
+	} from 'vue';
+	import {
+		onReachBottom,
+		onLoad
+	} from '@dcloudio/uni-app';
+	const internalInstance = getCurrentInstance()
+	const inputValue = ref('')
+	const isShowHistory = ref(true)
+	const show = ref(true)
+	const iconType = ref('bottom')
+	const menuList = reactive([{
+			name: '综合',
+		}, {
+			name: '文章',
+		}, {
+			name: '视频'
+		},
+		{
+			name: '用户'
 		}
-	}
-	mo = a.filter(i => i[s] == m);
-	console.log('mo', mo, a, m);
-	return mo[0];
-}
-// 计算每列的高度
-function getMinColumnHeight() {
-	return new Promise(resolve => {
-		const heightArr = [];
-		for (let i = 1; i <= data.column; i++) {
-			const query = uni.createSelectorQuery().in(_this);
-			query.select(`#waterfalls_flow_column_${i}`).boundingClientRect(data => {
-				console.log(data);
-				heightArr.push({
-					column: i,
-					height: data.height
-				});
-			})
-				.exec(
-					() => {
-						console.log('执行了i', i, heightArr);
-						if (data.column <= heightArr.length) {
-							resolve(getMin(heightArr, 'height'));
-						}
-					}
-				);
-		}
+	])
+	const list = ref([])
+	const paramsForm = ref({
+		"keyword": "",
+		"pageNum": 1,
+		"pageSize": 10,
+		"searchTime": "",
+		"type": 0
 	})
-};
 
-onMounted(() => {
-	initValue(0);
-})
-// 图片加载完成
-function imgLoad(item) {
-	const i = item.index;
-	initValue(i + 1);
-}
-// 图片加载失败
-function imgError(item) {
-	const i = item.index;
-	initValue(i + 1);
-}
-const menuClick = (item) => {
-	paramsForm.type = item.index
-	getDataApi()
-}
-const search = () => {
-	if (inputValue.value == '') {
-		uni.showModal({
-			title: '搜索内容不能为空'
-		});
-	} else {
-		paramsForm.keyword = inputValue.value
-		isShowHistory.value = false
+	function menuClick(item) {
+		paramsForm.value.pageSize=10
+		paramsForm.value.type = item.index
 		getDataApi()
-		// if (!searchHistoryList.value.includes(inputValue.value)) {
-		// 	searchHistoryList.value.unshift(inputValue.value);
-		// 	uni.setStorage({
-		// 		key: 'searchList',
-		// 		data: JSON.stringify(searchHistoryList.value)
-		// 	});
-		// } else {
-		// 	//有搜索记录，删除之前的旧记录，将新搜索值重新push到数组首位
-		// 	let i = searchHistoryList.value.indexOf(inputValue.value);
-		// 	searchHistoryList.value.splice(i, 1);
-		// 	searchHistoryList.value.unshift(inputValue.value);
-		// 	uni.showToast({
-		// 		title: '不能重复添加'
-		// 	});
-		// 	uni.setStorage({
-		// 		key: 'searchList',
-		// 		data: JSON.stringify(searchHistoryList.value)
-		// 	});
-		// }
 	}
-}
-
-const empty = () => {
-	uni.showToast({
-		title: '已清空'
-	});
-	uni.removeStorage({
-		key: 'searchList'
-	});
-	searchHistoryList.value = [];
-}
-const getDataApi = () => {
-	if (paramsForm.type == 0) {
-		opusSearchNew({
-			"keyword": paramsForm.keyword,
-			"pageNum": paramsForm.pageNum,
-			"pageSize": paramsForm.pageSize,
-			"searchTime": "",
-			"type": paramsForm.type
-		}).then(res => {
-			console.log('type === 0', res.data.list);
-			for (let i = 1; i <= 2; i++) {
-				data[`column_${i}`] = [];
-			}
-			data.list = [...res.data.list]
-			initValue(0);
-		})
-	} else if (paramsForm.type == 1) {
-		opusSearchArticle({
-			"keyword": paramsForm.keyword,
-			"pageNum": paramsForm.pageNum,
-			"pageSize": paramsForm.pageSize,
-			"searchTime": "",
-			"type": paramsForm.type
-		}).then(res => {
-			console.log('type === 1', res.data.list);
-			for (let i = 1; i <= 2; i++) {
-				data[`column_${i}`] = [];
-			}
-			data.list = [...res.data.list]
-			initValue(0);
-		})
-	} else if (paramsForm.type == 2) {
-		opusSearchVideo({
-			"keyword": paramsForm.keyword,
-			"pageNum": paramsForm.pageNum,
-			"pageSize": paramsForm.pageSize,
-			"searchTime": "",
-			"type": paramsForm.type
-		}).then(res => {
-			// console.log('type === 2', res.data.list);
-			for (let i = 1; i <= 2; i++) {
-				data[`column_${i}`] = [];
-			}
-			data.list = [...res.data.list]
-			initValue(0);
-		})
+	const search = () => {
+		if (inputValue.value == '') {
+			uni.showModal({
+				title: '搜索内容不能为空'
+			});
+		} else {
+			paramsForm.value.pageSize=10
+			paramsForm.value.keyword = inputValue.value
+			isShowHistory.value = false
+			getDataApi()
+		}
 	}
-}
-async function initValue(i) {
-	if (i >= data.list.length) return false;
-	const minHeightRes = await getMinColumnHeight();
-	data[`column_${minHeightRes.column}`].push({
-		...data.list[i],
-		index: i
-	});
-}
-const skipDetails = (item) => {
-	uni.navigateTo({
-		url: `/pages/opus/index?id=${item.id}`
+	const empty = () => {
+		uni.showToast({
+			title: '已清空'
+		});
+		uni.removeStorage({
+			key: 'searchList'
+		});
+		searchHistoryList.value = [];
+	}
+	// 数据赋值
+	onMounted(() => {
+		getDataApi()
 	})
-}
-watch(() => data.column_2, (nv, oldv) => {
-	// data.column_2=new Set([...nv])
-	console.log('data.column_2', nv, oldv);
-})
-watch(() => data.column_1, (nv, oldv) => {
-	// data.column_1=new Set([...nv])
-	console.log('data.column_1', nv, oldv);
-})
+	const getDataApi = () => {
+		if (paramsForm.value.type == 0) {
+			show.value = false
+			opusSearchNew(paramsForm.value).then(res => {
+				show.value = true
+				list.value = [...res.data.list]
+			})
+		} else if (paramsForm.value.type == 1) {
+			show.value = false
+			opusSearchArticle(paramsForm.value).then(res => {
+				show.value = true
+				list.value = [...res.data.list]
+			})
+		} else if (paramsForm.value.type == 2) {
+			show.value = false
+			opusSearchVideo(paramsForm.value).then(res => {
+				show.value = true
+				list.value = [...res.data.list]
+			})
+		}
+		//操作数据后更新视图
+		internalInstance.ctx.$forceUpdate()
+	}
+	watch(() => paramsForm.value.type, (newV, oldV) => {
+		getDataApi()
+	}, {
+		deep: true,
+		immediate: true
+	})
+	onReachBottom(() => {
+		console.log('触底了')
+		paramsForm.value.pageSize+=10
+		if (paramsForm.value.type == 0) {
+			opusSearchNew(paramsForm.value).then(res => {
+				list.value = [...res.data.list]
+			})
+		} else if (paramsForm.value.type == 1) {
+			opusSearchArticle(paramsForm.value).then(res => {
+				list.value = [...res.data.list]
+			})
+		} else if (paramsForm.value.type == 2) {
+			opusSearchVideo(paramsForm.value).then(res => {
+				list.value = [...res.data.list]
+			})
+		}
+		
+	})
 </script>
 
 <style scoped lang="scss">
-.search {
-	width: 100%;
-	height: 30px;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	box-sizing: border-box;
-	padding: 0px 15px;
-}
-
-.searchInput {
-	background-color: #f8f9fa;
-	width: 220px;
-	margin-left: 5px;
-}
-
-.searchHistory {
-	width: 100%;
-	margin-top: 5px;
-}
-
-.searchHistoryItem {
-	width: 100%;
-	display: flex;
-	flex-wrap: wrap;
-}
-
-.searchHistoryItem view {
-	/* width: 50px; */
-	height: 20px;
-	border: 1px solid #eee;
-	margin: 0px 5px;
-}
-
-.waterfalls-flow {
-	padding-top: 50upx;
-
-	&-column {
-		float: left;
-		padding: 0 0 200upx;
+	.uni-common-mt {
+		margin-top: 30rpx;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 	}
-}
 
-.column-value {
-	width: 100%;
-}
-
-.imgsty {
-	width: 100%
-}
-
-
-.viewSty {
-	position: relative;
-
-	.imgSize {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		width: 60px;
-		height: 60px;
-		margin-left: -30px;
-		margin-top: -30px;
-		z-index: 99;
+	.search {
+		width: 100%;
+		height: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		box-sizing: border-box;
+		padding: 0px 15px;
 	}
-}
+
+	.searchInput {
+		background-color: #f8f9fa;
+		width: 220px;
+		margin-left: 5px;
+	}
+
+	.searchHistory {
+		width: 100%;
+		margin-top: 5px;
+	}
+
+	.searchHistoryItem {
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	.searchHistoryItem view {
+		/* width: 50px; */
+		height: 20px;
+		border: 1px solid #eee;
+		margin: 0px 5px;
+	}
 </style>
-
-
