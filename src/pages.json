@@ -130,6 +130,16 @@
 			"style": {
 				"navigationBarTitleText": "咕咕行"
 			}
+		},
+		{
+		    "path" : "pages/friendDetail/friendDetail",
+		    "style" :                                                                                    
+		    {    
+				"navigationStyle": "custom",
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		    
 		}
     ],
 	"globalStyle": {
