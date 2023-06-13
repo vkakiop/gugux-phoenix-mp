@@ -22,8 +22,8 @@
 							</debounce>
 							<debounce @debounce="like(item)" class="button mb-10">
 								<view>
-									<image v-if="item.isLike" class="w-24 h-24" src="@/static/opus/icon_heart_ed.png" />
-									<image v-else class="w-24 h-24" src="@/static/opus/icon_heart.png" />
+									<image v-if="item.isLike" class="w-24 h-24" src="@/static/opus/icon_like_ed.png" />
+									<image v-else class="w-24 h-24" src="@/static/opus/icon_like.png" />
 									<view>{{ item.likeNum }}</view>
 								</view>
 							</debounce>
@@ -35,14 +35,14 @@
 							</debounce>
 							<debounce @debounce="collection(item)" class="button mb-10">
 								<view>
-									<image v-if="item.isCollection" class="w-24 h-24" src="@/static/opus/icon_star_ed.png" />
-									<image v-else class="w-24 h-24" src="@/static/opus/icon_star.png" />
+									<image v-if="item.isCollection" class="w-24 h-24" src="@/static/opus/icon_collect_ed.png" />
+									<image v-else class="w-24 h-24" src="@/static/opus/icon_collect.png" />
 									<view>{{ item.collectionNum }}</view>
 								</view>
 							</debounce>
 							<view class="button mb-10" @click='handleShare'>
 								<button open-type="share" style="background-color: transparent;">
-									<image class="w-24 h-24" src="@/static/opus/icon_return.png" />
+									<image class="w-24 h-24" src="@/static/opus/icon_share.png" />
 								</button>
 								<view>分享</view>
 							</view>
