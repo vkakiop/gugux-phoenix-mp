@@ -8,11 +8,11 @@
       <view>
         <view>电话：<text>{{ pageData.data.phone }}</text>
         </view>
-        <view>拨打电话</view>
+        <view @click="callPhone(pageData.data.phone)">拨打电话</view>
       </view>
       <view>
         <view>现场地址：</view>
-        <view>去导航</view>
+        <view @click="goNav">去导航</view>
       </view>
       <view>{{ pageData.data.address }}</view>
     </view>
@@ -125,7 +125,20 @@ const previewImage = (url,index)=>{
     current:index
   })
 }
-
+const goNav = ()=>{
+  uni.navigateTo({ url: '/pages/safeguard/gonavigation?id=' + encodeURIComponent(123) })
+}
+const callPhone = (phone) =>{
+  uni.makePhoneCall({
+    phoneNumber: phone,
+    success(){
+    console.log('‘拨打成功了’');
+    },
+    fail() {
+    console.log('‘拨打失败了’');
+    }
+  });
+}
 onUnload(()=>{
   player.pause();
 })

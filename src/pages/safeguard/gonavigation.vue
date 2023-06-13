@@ -22,17 +22,22 @@
 import { ref, onMounted, reactive } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 const pageData = reactive({
-    latitude:39.909,
-    longitude:116.39742,
+    userLat:'',
+    userLon:'',
+    latitude:30.909,
+    longitude:120.39742,
     covers:[{
-        latitude: 39.909,
-        longitude: 116.39742,
+        latitude: 30.909,
+        longitude: 120.39742,
         // iconPath: '../../../static/location.png'
     }]
 })
 onLoad((option)=>{
   if (option.id) {
     console.log(option)
+    getApi();
+    //   wx请求获取位置权限
+    
   }
   else {
     uni.showToast({
@@ -43,7 +48,7 @@ onLoad((option)=>{
   }
 })
 const  openMap = (lon,lat) => {
-    console.log("获取经纬度ssssfff", lon, lat);
+    console.log("获取经纬度ssssfff",  lat,lon);
     //打开地图，并将门店位置传入
     uni.getLocation({
         success: res => {
@@ -58,6 +63,115 @@ const  openMap = (lon,lat) => {
         }
         
     })
+}
+
+const getApi = ()=>{
+    // wx请求获取位置权限
+    getAuthorize()
+        .then(() => {
+            //   同意后获取
+            getLocationInfo();
+        })
+        .catch(() => {
+            //   不同意给出弹框，再次确认
+            openConfirm()
+                .then(() => {
+                    getLocationInfo();
+                })
+                .catch(() => {
+                    rejectGetLocation();
+                });
+        });
+}
+
+//   初次位置授权
+const getAuthorize = () => {
+    return new Promise((resolve, reject) => {
+        uni.authorize({
+            scope: "scope.userLocation",
+            success: () => {
+                resolve(); // 允许授权
+            },
+            fail: () => {
+                reject(); // 拒绝授权
+            },
+        });
+    });
+}
+// 确认授权后，获取用户位置
+const getLocationInfo = () => {
+    const that = this;
+    uni.getLocation({
+        type: "gcj02",
+        success: function(res) {
+            // 暂时
+            pageData.userLon = res.userLon; //118.787575;
+            pageData.userLat = res.userLat; //32.05024;
+            console.log("获取当前的用户经度", pageData.userLon);
+            console.log("获取当前的用户纬度", pageData.userLat);
+            var long = 0;
+            var lat = 0;
+            //小数点保留六位  经度
+            if (pageData.userLon.toString().indexOf('.') > 0) {
+                const longlatsplit = pageData.userLon.toString().split('.');
+                if (longlatsplit.length >= 2) {
+                    long = parseFloat(longlatsplit[0] === "" ? 0 : longlatsplit[0]) + parseFloat("." + longlatsplit[1].slice(0,6));
+                }
+            }
+            if (pageData.userLat.toString().indexOf('.') > 0) {
+                const longlatsplit1 = pageData.userLat.toString().split('.');
+                if (longlatsplit1.length >= 2) {
+                    lat = parseFloat(longlatsplit1[0] === "" ? 0 : longlatsplit1[0]) + parseFloat("." + longlatsplit1[1].slice(0,6));
+                }
+            }
+            // cookie.set("longitude", long);
+            // cookie.set("latitude", lat);
+            // console.log("纬度", lat);
+            // console.log("经度", long);
+            // this.distance(pageData.latitude,pageData.longitude);
+            // that.markers = [{
+            //     id: "",
+            //     latitude: res.latitude,
+            //     longitude: res.longitude,
+            //     iconPath: "/static/logo.png",
+            //     width: that.markerHeight, //宽
+            //     height: that.markerHeight, //高
+            // }, ];
+            // that.getList();
+        },
+    });
+}
+
+// 拒绝授权后，弹框提示是否手动打开位置授权
+const openConfirm = () => {
+    return new Promise((resolve, reject) => {
+        uni.showModal({
+            title: "请求授权当前位置",
+            content: "我们需要获取地理位置信息，为您进行导航",
+            success: (res) => {
+                console.log(res)
+                if (res.confirm) {
+                    uni.openSetting().then((res) => {
+                        if (res[1].authSetting["scope.userLocation"] === true) {
+                            resolve(); // 打开地图权限设置
+                        } else {
+                            reject();
+                        }
+                    });
+                } else if (res.cancel) {
+                    reject();
+                }
+            },
+        });
+    });
+}
+// 彻底拒绝位置获取
+const rejectGetLocation = () => {
+    uni.showToast({
+        title: "你拒绝了授权，无法获得周边信息",
+        icon: "none",
+        duration: 2000,
+    });
 }
 </script>
 <style lang="scss" scoped>
