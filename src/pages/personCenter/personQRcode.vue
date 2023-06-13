@@ -1,18 +1,23 @@
 <template>
-	<view style="background-color: blue ;width: 100vw;height: 100vh" class="flex justify-center a">
+	<view style="background-color:#F7F8F9 ;width: 100vw;height: 100vh" class="flex justify-center ">
 		<view class="codeSty">
-			<view class="flex flex-col  justify-center items-center">
-				<view><u-avatar :src="src" size="60"></u-avatar></view>
-				<view class="nickname">等等十三月</view>
-				<view class="guguID">咕咕号:11123214</view>
+			<image src="/static/callingcard/perBack.png" class="backgroundSTY"></image>
+			<view class="flex flex-col justify-center items-center  relative z-20 ">
+				<view>
+					<image src="/static/logo.png" class="w-83 h-83 rounded-full mt-20"></image>
+				</view>
+				<view class="nickname mt-5" >等等十三月</view>
+				<view class="guguID mt-5" >咕咕号:11123214</view>
 			</view>
-			<w-qrcode ref="qrcode" :options="options" @press="longtap" class="codeguguSTy"></w-qrcode>
+			<view class="mt-10">
+				<w-qrcode ref="qrcode" :options="options" @press="longtap"></w-qrcode>
+			</view>
 			<view class="qdText">扫描上面的二维码图案，加我咕咕号</view>
 			<view class="m-20">
-				<image src="/static/logo.png" mode="heightFix" style="width: 167rpx;height: 167rpx;"></image>
+				<image src="/static/callingcard/warlAll.png" class="w-72 h-33"></image>
 			</view>
 			<view class="flex justify-between mt-10">
-				<button class="btnStyle1">保存图片</button>
+				<button class="btnStyle1 mr-5">保存图片</button>
 				<button class="btnStyle2" open-type="share">分享</button>
 			</view>
 		</view>
@@ -40,7 +45,7 @@
 		size: 460, // 460代表生成的二维码的宽高均为460rpx
 		img: { // 二维码log配置 非必传
 			src: '/static/logo.png', // 图片地址
-			size: 60, // 图片大小
+			size: 160, // 图片大小
 			degree: 15, // 圆角大小 如果type为round生效
 			type: 'round', //图片展示类型 默认none 可选值  round圆角  circle圆 如果为round 可以传入degree设置圆角大小 默认 5
 			color: '#ffffff', //图片周围的白色边框
@@ -87,23 +92,22 @@
 	}
 
 	.codeSty {
+		position: relative;
 		width: 638rpx;
 		height: 832rpx;
-		background: #FFFFFF;
+		background: #fff;
 		border: 6px solid #FFFFFF;
 		border-radius: 14rpx;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		position: absolute;
-		top: 10%;
-		margin: 0 auto;
+		margin-top: 188rpx;
 	}
 
 	.btnStyle1 {
+		font-size: 35rpx;
 		width: 246rpx;
 		height: 85rpx;
-		text-align: center;
 		line-height: 85rpx;
 		background: #272A29;
 		border-radius: 43rpx;
@@ -111,21 +115,13 @@
 	}
 
 	.btnStyle2 {
+		font-size: 35rpx;
 		width: 371rpx;
 		height: 85rpx;
-		text-align: center;
 		line-height: 85rpx;
 		background: #F8CF01;
 		color: #272A29;
 		border-radius: 43rpx;
-	}
-
-	.codeguguSTy {
-		width: 638rpx;
-		height: 832rpx;
-		background: #FFFFFF;
-		border: 6px solid #FFFFFF;
-		border-radius: 14rpx;
 	}
 
 	.qdText {
@@ -135,5 +131,15 @@
 		font-family: Source Han Sans SC;
 		font-weight: 300;
 		color: #929292;
+	}
+
+	.backgroundSTY {
+		position: absolute;
+		top: -20rpx;
+		left: -16rpx;
+		z-index: 10;
+		width: 638rpx;
+		height: 328rpx;
+		border-radius: 14rpx;
 	}
 </style>
