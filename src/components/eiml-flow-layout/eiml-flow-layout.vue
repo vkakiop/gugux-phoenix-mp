@@ -6,8 +6,6 @@
 				<child :item="item"></child>
 			</view>
 		</view>
-		
-		
 		<!--下段代码是预加载，渲染出来后遍能读取到组件的属性了，然后进行排版
 		 想要代码简单且通用，就需要牺牲一些东西-->
 		<scroll-view style="width: 0rpx;height: 0rpx;">
@@ -20,7 +18,7 @@
 </template>
 
 <script>
-	import child from "@/components/eiml-flow-child/eiml-flow-child.vue"
+	import child from "../eiml-flow-child/eiml-flow-child.vue"
 	export default {
 		props:["columnNum","list"],
 		components:{
@@ -38,16 +36,9 @@
 			return {
 				defColumnNum:2,//默认列数，如果不传，则默认两列
 				columnWidth:0,
-				
 				lastChildCount:0,
-				
 				tabList:[]
-				
 			}
-		},
-		mounted() {
-			// console.log("------------mounted")
-			// this.queryHeight();
 		},
 		methods: {
 			queryHeight(){
@@ -55,7 +46,6 @@
 					this.columnNum=this.defColumnNum;
 				}
 				this.columnWidth=100/this.columnNum;
-				
 				var that=this;
 				var temHeightList={};
 				const query = uni.createSelectorQuery().in(this);
@@ -77,12 +67,9 @@
 					temTabList[i]=temArr;
 					temTabHeightList[i]=0;
 				}
-				
-				
 				for(var i=0;i<this.list.length;i++){
 					var item=this.list[i];
 					var itemHeight=listHeight['child'+i];
-					
 					var minHeight=1000000;
 					var minIndex=0;
 					for(var j=0;j<temTabHeightList.length;j++){
@@ -95,13 +82,9 @@
 					temTabList[minIndex].push(item);
 					temTabHeightList[minIndex]+=itemHeight;
 				}
-				
 				this.tabList=temTabList;
-				
 				this.lastChildCount=this.list.length;
-				// console.log("=======刷新完成======",temTabList)
-			}
-			
+			}	
 		}
 	}
 </script>

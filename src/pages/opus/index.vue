@@ -2,42 +2,42 @@
     <view v-if="pageData.detail.id">
       <customNav>
         <view @click="gotoBack" class="ml-3 mt-5"><uni-icons type="back" size="24"></uni-icons></view>
-        <view class="flex items-center" @click="gotoMine">
-          <image class="w-24 h-24 rounded-full flex-none" :src="pageData.detail.icon"/>
+        <view class="flex flex-1 items-center" @click="gotoMine">
+          <image class="w-32 h-32 rounded-full flex-none" :src="pageData.detail.icon"/>
           <view class="name mx-6 text-14 line-clamp-1">{{pageData.detail.author}}</view>
         </view>
         <debounce @debounce="attention">
-          <button :class="['flex-none', 'mr-100', 'w-64', 'h-26', 'leading-26', 'rounded-full', 'text-12', pageData.detail.isFollow ? '' : 'bg-[#4ba1f8]', pageData.detail.isFollow ? '' : 'active:bg-[#3194f9]', pageData.detail.isFollow ? '' : 'text-white']">{{pageData.detail.isFollow ? '-':'+'}}关注</button>
+          <button :class="['flex-none', 'mr-100', 'w-64', 'h-26', 'leading-26', 'rounded-full', 'text-12', pageData.detail.isFollow ? '' : 'bg-[#f8cf01]', pageData.detail.isFollow ? '' : 'active:bg-[#f2ca01]', pageData.detail.isFollow ? '' : 'text-[#272a29]']">{{pageData.detail.isFollow ? '已':'+'}}关注</button>
         </debounce>
       </customNav>
       <opus-article :detail="pageData.detail" v-if="pageData.detail.opusType == 1"></opus-article>
       <!--opus-video :detail="pageData.detail" v-else-if="pageData.detail.opusType == 2"></opus-video-->
       <view class="fixed bottom-0 h-50 w-screen bg-white">
-        <view class="mx-20 flex justify-between mt-7">
+        <view class="mx-20 flex justify-between mt-12">
+          <view>
+            <button class="bg-white" open-type="share"><img class="w-24 h-24 mb-5" src="@/static/opus/icon_share.png"></button>
+          </view>
           <view class="flex">
-            <debounce @debounce="collection">
-              <view class="flex">
-                <image v-if="pageData.detail.isCollection" class="w-24 h-24" src="@/static/opus/icon_star_ed.png"/>
-                <image v-else class="w-24 h-24" src="@/static/opus/icon_star.png"/>
-                <view class="ml-5 mt-2">{{pageData.detail.collectionNum}}</view>
+            <debounce @debounce="like">
+              <view class="flex mr-20">
+                <image v-if="pageData.detail.isLike" class="w-24 h-24" src="@/static/opus/icon_like_ed.png"/>
+                <image v-else class="w-24 h-24" src="@/static/opus/icon_like.png"/>
+                <view class="ml-5 mt-2">{{pageData.detail.likeNum}}</view>
               </view>
             </debounce>
             <debounce @debounce="comment">
-              <view class="flex ml-20">
+              <view class="flex mr-20">
                 <image class="w-24 h-24" src="@/static/opus/icon_comment.png"/>
                 <view class="ml-5 mt-2">{{pageData.detail.commentNum}}</view>
               </view>
             </debounce>
-            <debounce @debounce="like">
-              <view class="flex ml-20">
-                <image v-if="pageData.detail.isLike" class="w-24 h-24" src="@/static/opus/icon_heart_ed.png"/>
-                <image v-else class="w-24 h-24" src="@/static/opus/icon_heart.png"/>
-                <view class="ml-5 mt-2">{{pageData.detail.likeNum}}</view>
+            <debounce @debounce="collection">
+              <view class="flex mr-0">
+                <image v-if="pageData.detail.isCollection" class="w-24 h-24" src="@/static/opus/icon_collect_ed.png"/>
+                <image v-else class="w-24 h-24" src="@/static/opus/icon_collect.png"/>
+                <view class="ml-5 mt-2">{{pageData.detail.collectionNum}}</view>
               </view>
             </debounce>
-          </view>
-          <view>
-            <button class="bg-white" open-type="share"><img class="w-24 h-24" src="@/static/opus/icon_return.png"></button>
           </view>
         </view>
       </view>
@@ -66,11 +66,11 @@ const pageData = reactive({
   id:'',
   isShowLoginPop:false,
   detail: {
-    "cover": {},
-    "opusType": 1,
-    "content": [
-    ],
-    "recommendedCity": [],
+    cover: {},
+    opusType: 1,
+    content: [],
+    recommendedCity: [],
+    topics:[],
   }
 })
 
