@@ -68,8 +68,30 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from 'vue'
-import { onShow } from "@dcloudio/uni-app"
+import {
+	ref,
+	reactive,
+	watch,
+	computed,
+	getCurrentInstance,
+	onMounted
+} from 'vue';
+import {
+	opusSearchNew,
+	opusSearchArticle,
+	opusSearchVideo
+} from "@/api/worksSearch/index.js"
+import {
+	onShow,
+	onReachBottom
+} from "@dcloudio/uni-app"
+const paramsForm = ref({
+	"keyword": "",
+	"pageNum": 1,
+	"pageSize": 20,
+	"searchTime": "",
+	"type": 0
+})
 const loginToken = ref({})
 const iconType = ref('bottom')
 const menuList = reactive([{
@@ -89,6 +111,7 @@ const menuList = reactive([{
 	name: '逛吃'
 }
 ])
+const show = ref(false);
 const content = ref('');
 content.value = '您的好友等第十三月(1511837394)在重庆市四川商会触发了紧急通知，请点击电话联系或导航前往。'
 const confirmShow = () => {
@@ -103,95 +126,22 @@ const closeShow = () => {
 	uni.navigateTo({ url: '/pages/safeguard/safeguarddetail?id=' + encodeURIComponent(123) })
 }
 
-
 function onClickItem(e) {
 	if (current.value !== e.currentIndex) {
 		console.log(e.currentIndex);
 		current.value = e.currentIndex
 	}
 }
-function menuClick(item) {
-	console.log('item', item);
-}
-onShow(() => {
-	loginToken.value = getApp().globalData.loginToken
-})
 function drowDown(item) {
 	iconType.value = item
 	console.log('点击了下拉');
-}
-function change(e) {
-	let {
-		index
-	} = e.detail
-	uni.showToast({
-		title: `点击第${index + 1}个宫格`,
-		icon: 'none'
-	})
 }
 function skipHistory() {
 	uni.navigateTo({
 		url: `/pages/index/searchHistory`
 	})
 }
-// import waterFall from "@/components/index/waterfall.vue"
-import {
-	ref,
-	reactive,
-	watch,
-	computed,
-	getCurrentInstance,
-	onMounted
-} from 'vue';
-import {
-	opusSearchNew,
-	opusSearchArticle,
-	opusSearchVideo
-} from "@/api/worksSearch/index.js"
-import {
-	onShow,
-	onReachBottom
-} from "@dcloudio/uni-app"
-const list = reactive([{
-	text: '推荐',
-	badge: '0',
-	type: "primary"
-},
-{
-	text: '游记',
-},
-{
-
-	text: '用车',
-},
-{
-
-	text: '视频',
-},
-{
-
-	text: '车友群'
-},
-{
-
-	text: '逛吃'
-},
-{
-
-	text: '溪流'
-}
-])
-const show = ref(false);
-const content = ref('');
-content.value = '您的好友等第十三月(1511837394)在重庆市四川商会触发了紧急通知，请点击电话联系或导航前往。'
 // 瀑布流数据
-const paramsForm = ref({
-	"keyword": "",
-	"pageNum": 1,
-	"pageSize": 20,
-	"searchTime": "",
-	"type": 0
-})
 // 监听父子通信的数据的变化
 const _this = getCurrentInstance();
 const data = reactive({
@@ -204,7 +154,6 @@ const data = reactive({
 const getDataApi = () => {
 	if (paramsForm.value.type === 0) {
 		opusSearchNew(paramsForm.value).then(res => {
-			// console.log('paramsForm.value.type==0', res.data.list);
 			if (res.data.list.length >= 10) {
 				data.list = [...data.list, ...res.data.list]
 			} else {
@@ -216,7 +165,6 @@ const getDataApi = () => {
 		})
 	} else if (paramsForm.value.type === 1) {
 		opusSearchArticle(paramsForm.value).then(res => {
-			// console.log('paramsForm.value.type==1', res.data.list);
 			if (res.data.list.length >= 10) {
 				data.list = [...data.list, ...res.data.list]
 			} else {
@@ -228,7 +176,6 @@ const getDataApi = () => {
 		})
 	} else if (paramsForm.value.type === 2) {
 		opusSearchVideo(paramsForm.value).then(res => {
-			// console.log('paramsForm.value.type==2', res.data.list);
 			if (res.data.list.length >= 10) {
 				data.list = [...data.list, ...res.data.list]
 			} else {
@@ -329,13 +276,6 @@ const skipVideo = (item) => {
 	})
 }
 // 瀑布流数据
-function onClickItem(e) {
-	if (current.value !== e.currentIndex) {
-		console.log(e.currentIndex);
-		current.value = e.currentIndex
-	}
-}
-
 function menuClick(item) {
 	if (paramsForm.value.type != item.index) {
 		paramsForm.value.type = item.index
@@ -346,7 +286,7 @@ function menuClick(item) {
 		}
 		if (paramsForm.value.type === 0) {
 			opusSearchNew(paramsForm.value).then(res => {
-				console.log('paramsForm.value.type==0', res.data.list);
+				// console.log('paramsForm.value.type==0', res.data.list);
 				if (res.data.list.length >= 10) {
 					data.list = res.data.list
 				} else {
@@ -358,7 +298,7 @@ function menuClick(item) {
 			})
 		} else if (paramsForm.value.type === 1) {
 			opusSearchArticle(paramsForm.value).then(res => {
-				console.log('paramsForm.value.type==1', res.data.list);
+				// console.log('paramsForm.value.type==1', res.data.list);
 				if (res.data.list.length >= 10) {
 					data.list = res.data.list
 				} else {
@@ -370,7 +310,7 @@ function menuClick(item) {
 			})
 		} else if (paramsForm.value.type === 2) {
 			opusSearchVideo(paramsForm.value).then(res => {
-				console.log('paramsForm.value.type==2', res.data.list);
+				// console.log('paramsForm.value.type==2', res.data.list);
 				if (res.data.list.length >= 10) {
 					data.list = res.data.list
 				} else {
@@ -387,11 +327,6 @@ onShow(() => {
 	loginToken.value = getApp().globalData.loginToken
 })
 
-function drowDown(item) {
-	iconType.value = item
-	console.log('点击了下拉');
-}
-
 function change(e) {
 	let {
 		index
@@ -402,11 +337,6 @@ function change(e) {
 	})
 }
 
-function skipHistory() {
-	uni.navigateTo({
-		url: `/pages/index/searchHistory`
-	})
-}
 const skipFriendDetail = () => {
 	uni.navigateTo({
 		url: '/pages/friendDetail/friendDetail'

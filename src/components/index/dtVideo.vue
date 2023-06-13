@@ -40,7 +40,7 @@
 									<view>{{ item.collectionNum }}</view>
 								</view>
 							</debounce>
-							<view class="button mb-10">
+							<view class="button mb-10" @click='handleShare'>
 								<button open-type="share" style="background-color: transparent;">
 									<image class="w-24 h-24" src="@/static/opus/icon_return.png" />
 								</button>
@@ -56,8 +56,12 @@
 </template>
 
 <script setup>
-	import {postVideorecommend} from "@/api/workList/work"
-	import {getTokenValue} from "@/utils/utils"
+	import {
+		postVideorecommend
+	} from "@/api/workList/work"
+	import {
+		getTokenValue
+	} from "@/utils/utils"
 	import {
 		opusInfo,
 		opusCollect,
@@ -68,7 +72,8 @@
 	import {
 		getCurrentInstance,
 		reactive,
-		watch
+		watch,
+		ref
 	} from 'vue'
 	import {
 		onLoad,
@@ -80,6 +85,7 @@
 			default: ''
 		}
 	})
+	const isShare = ref(false)
 	const pageData = reactive({
 		id: '',
 		isShowLoginPop: false,
@@ -121,7 +127,6 @@
 		pageData.videoContent = uni.createVideoContext(currentId, ctx).play();
 		pageData.status = 0;
 	}
-
 	//点击视频播放或者暂停
 	const handleVideo = (index) => {
 		let currentId = 'video' + index
@@ -173,6 +178,7 @@
 			})
 		} else {
 			pageData.isShowLoginPop = true
+			isShare.value = false
 		}
 
 	}
@@ -201,6 +207,7 @@
 			})
 		} else {
 			pageData.isShowLoginPop = true
+			isShare.value = false
 		}
 	}
 	//点赞
@@ -228,6 +235,7 @@
 			})
 		} else {
 			pageData.isShowLoginPop = true
+			isShare.value = false
 		}
 	}
 	const comment = () => {
@@ -245,17 +253,24 @@
 			imageUrl: pageData.list[pageData.current].thumbnail
 		}
 	}
-	onShow(() => {
-		opusInfo({
-			id: pageData.list[pageData.current].id
-		}).then((res) => {
-			postVideorecommend({
-				"lastVideoId": res.data.id
-			}).then(res2 => {
-				pageData.list = res2.data
-				pageData.lastVideoId = res2.data[res2.data.length - 1].id
-			})
+
+	const fetch = () => {
+		postVideorecommend({
+			"lastVideoId": pageData.list[pageData.current].id
+		}).then(res2 => {
+			pageData.list = res2.data
+			pageData.status = 0;
+			pageData.current=0
+			pageData.lastVideoId = res2.data[res2.data.length - 1].id
 		})
+	}
+	const handleShare = () => {
+		isShare.value = true
+	}
+	onShow(() => {
+		if (!isShare.value){
+			fetch()
+		}
 	})
 	const onShareTimeline = () => {
 		return onShareAppMessage()
