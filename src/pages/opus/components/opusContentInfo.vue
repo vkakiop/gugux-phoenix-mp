@@ -1,11 +1,11 @@
 <template>
   <view class="w-full">
     <template v-for="(element,index) in content" :key="index">
-          <view class="items text-left px-6 py-6">
-            <p v-if="element.itemType == 1" class="text-15">{{element.content}}</p>
+          <view class="items text-left pb-20">
+            <p v-if="element.itemType == 1" class="text-16 text-[#272a29]">{{element.content}}</p>
             <view v-if="element.itemType == 2">
               <view class="relative">
-                <image @click="previewImage(element.content)" :src="element.content" class="rounded-8" mode="widthFix"/>
+                <image @click="previewImage(element.content)" :src="element.content" class="rounded-5 w-full align-top" mode="widthFix"/>
                 <view v-if="element.name" class="location_bg absolute left-5 bottom-5 px-10 text-white text-12 rounded">
                   <uni-icons type="location-filled" size="16"></uni-icons>{{element.name}} {{computedLocation(element.x,element.y)}}<!--(距您 {{element.name}})-->
                 </view>
@@ -14,8 +14,8 @@
             </view>
             <view v-if="element.itemType == 3">
               <view class="relative" @click="previewMedia(element.content)">
-                <image :src="element.thumbnail" class="rounded-8" mode="widthFix"/>
-                <view v-if="element.name" class="location_bg absolute left-5 bottom-5 px-10 text-white text-12 rounded">
+                <image :src="element.thumbnail" class="rounded-5 w-full align-top" mode="widthFix"/>
+                <view v-if="element.name" class="bg-[rgba(0,0,0,0.5)] absolute left-5 bottom-5 px-10 text-white text-12 rounded">
                   <uni-icons type="location-filled" size="16"></uni-icons>{{element.name}} {{computedLocation(element.x,element.y)}}<!--(距您 {{element.name}})-->
                 </view>
                 <view class="icon_play w-full h-full absolute w-50 h-50"><image class="w-50 h-50" src="@/static/opus/icon_play.png"/></view>
@@ -37,32 +37,17 @@ const props = defineProps({
     type:Array,
     default:{},
   },
-})
-
-onMounted(()=>{
-  //getGeoLocation()
-})
-
-//距离获取
-const geo_x = ref(null);
-const geo_y = ref(null);
-// const getGeoLocation = (res) => {
-//   if(navigator.geolocation) {
-//     navigator.geolocation.getCurrentPosition(
-//         function(position) {
-//           geo_x.value = position.coords.longitude;
-//           geo_y.value = position.coords.latitude;
-//         },
-//         function(error) {
-//         }
-//     );
-//   }
-// }
-const computedLocation = computed({
-  get:(x,y) => {
-    return function(x,y) { return geo_x.value != null ? '(距您'+formatedDistance(distanceOf({x:x,y:y},{x:geo_x.value,y:geo_y.value}),1)+')' : ''}
+  geo_x:{
+    type:Object,
+    default:null,
+  },
+  geo_y:{
+    type:Object,
+    default:null,
   }
 })
+
+
 
 onMounted(()=>{
 
@@ -90,20 +75,18 @@ const previewImage = (url)=>{
     current:url
   })
 }
+
+const computedLocation = computed({
+  get:(x,y) => {
+    return function(x,y) { return props.geo_x != null ? '(距您'+formatedDistance(distanceOf({x:x,y:y},{x:props.geo_x,y:props.geo_y}),1)+')' : ''}
+  }
+})
 </script>
 <style scoped lang="scss">
 .items {
-  .location_bg {
-    background: rgba(0,0,0,0.5);
-  }
-
   .icon_play {
     top:calc(50% - 50rpx);
     left:calc(50% - 50rpx);
-  }
-
-  .video_mask {
-    background-color: white; position: absolute;z-index:1; width:100%; height: 100%;top:0; left: 0; opacity: 0;
   }
 }
 </style>

@@ -1,18 +1,18 @@
 <template>
   <u-popup :show="isShow" mode="bottom" round="10" :customStyle="{marginLeft:'0rpx',marginRight:'0rpx'}" @close="close">
     <view class="mx-30 my-20">
-      <view>登录或注册</view>
+      <view class="text-20 text-[#272a29] font-bold">登录或注册</view>
       <view class="mt-20 text-13 flex items-center">
         <!--u-checkbox-group v-model="pageData.isAgreeItems">
           <u-checkbox shape="circle" activeColor="#4ba1f8" label=""></u-checkbox>
         </u-checkbox-group-->
-        <view>
+        <view class="text-16 leading-30 text-[#272a29]">
           若手机号未注册将进入注册流程，注册即为同意<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>
         </view>
       </view>
-      <view>
-        <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber" class="mt-10 h-40 leading-40 rounded-full bg-[#09bb07] active:bg-[#09b307] text-white text-14">微信一键登录</button>
-        <button @click="gotoLogin" class="mt-10 h-40 leading-40 rounded-full bg-[#4ba1f8] active:bg-[#3194f9] text-white text-14">手机号登录/注册</button>
+      <view class="mt-20">
+        <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber" class="h-40 leading-40 rounded-full bg-[#09bb07] active:bg-[#09b307] text-white text-14">微信一键登录</button>
+        <button @click="gotoLogin" class="mt-20 h-40 leading-40 rounded-full bg-[#4ba1f8] active:bg-[#3194f9] text-white text-14">手机号登录/注册</button>
       </view>
       <!--u-popup :show="pageData.isDialogShow" mode="center" round="10" :customStyle="{marginLeft:'60rpx',marginRight:'60rpx'}">
         <view class="m-22">

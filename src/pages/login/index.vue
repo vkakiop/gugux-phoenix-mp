@@ -9,8 +9,10 @@
     </view>
     <phoneslogan></phoneslogan>
     <view class="mt-45">
+      <view class="mb-10 text-16 text-[#777]">未注册手机验证后完成注册</view>
       <view class="h-48 bg-[#e9ebef] rounded-full flex items-center relative">
-        <input class="w-3/5 ml-30 h-48" v-model="pageData.phone" placeholder="请输入手机号码" maxlength="11"/>
+        <view class="ml-10 -mt-2 text-[#777]">+86</view>
+        <input class="w-3/5 ml-10 h-48" v-model="pageData.phone" placeholder="请输入手机号码" maxlength="11"/>
         <view class="w-80 h-22 leading-22 absolute right-15 top-11">
           <debounce v-if="!pageData.isReget" @debounce="getCode">
             <button class=" text-10 rounded-full bg-[#4ba1f8] active:bg-[#3194f9] text-white">
@@ -22,7 +24,7 @@
 
       </view>
       <view class="h-48 bg-[#e9ebef] rounded-full flex justify-center items-center mt-10 relative">
-        <input class="w-4/5 h-48" v-model="pageData.code" placeholder="请输入验证码" maxlength="6"/>
+        <input class="w-4/5 h-48 ml-40" v-model="pageData.code" placeholder="请输入验证码" maxlength="6"/>
         <!--image v-if="pageData.code" class="w-18 h-18 absolute right-15 top-14" src="@/static/login/eye.png" @click="pageData.code = '';"></image-->
       </view>
       <debounce @debounce="onLogin">

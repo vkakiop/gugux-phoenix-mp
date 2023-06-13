@@ -1,29 +1,29 @@
 <template>
-  <view v-if="pageData.traceInfo.id" class="h-100 relative">
-    <image src="@/static/opus/locus_bg.png" class="absolute w-full h-98 -z-1"></image>
-    <view class="relative mx-10 pt-20">
-      <view class="bg-[#6aa4ff] absolute h-4 top-62 ml-50 w-190"></view>
-      <view class="w-90 absolute left-0">
-        <view :class="['title_tip','h-26','p-3','pt-3','overflow-hidden']">
-          <view class="h-16 overflow-hidden leading-16 text-center justify-center items-center text-white text-10">{{pageData.traceInfo.startPlace}}</view>
+  <view v-if="pageData.traceInfo.id" class="h-123 relative">
+    <image src="@/static/opus/locus_bg.png" class="absolute w-full h-123 -z-1"></image>
+    <view>
+      <view class="w-90 absolute left-0 bottom-63 w-77 h-32">
+        <view class="relative">
+          <image class="w-77 h-32 absolute left-0 top-0" src="@/static/opus/locus_tip.png"/>
+          <view class="absolute w-full left-0 top-0 text-10 text-[#272a2] text-center leading-25 line-clamp-1">{{pageData.traceInfo.startPlace}}</view>
         </view>
-        <view :class="['line_border','locus_icon_sanjiao','mx-auto']"></view>
-        <image class="w-12 h-12 absolute left-40" src="@/static/opus/locus_start.png"/>
       </view>
-      <view class="w-90 absolute right-0">
-        <view :class="['title_tip','h-26','p-3','pt-3','overflow-hidden']">
-          <view class="h-16 overflow-hidden leading-16 text-center justify-center items-center text-white text-10">{{pageData.traceInfo.endPlace}}</view>
+      <view class="w-90 absolute right-0 bottom-63 w-77 h-32">
+        <view class="relative">
+          <image class="w-77 h-32 absolute left-0 top-0" src="@/static/opus/locus_tip.png"/>
+          <view class="absolute w-full left-0 top-0 text-10 text-[#272a2] text-center leading-25 line-clamp-1">{{pageData.traceInfo.endPlace}}</view>
         </view>
-        <view :class="['line_border','locus_icon_sanjiao','mx-auto']"></view>
-        <image class="w-12 h-12 absolute right-40" src="@/static/opus/locus_end.png"></image>
       </view>
-      <view class="absolute mx-auto w-50 left-[50%] -ml-25 top-33" v-if="pageData.traceInfo.middlePlaceNum">
-        <view class="h-26 leading-26 text-center locus_tip_txt text-10">途径{{pageData.traceInfo.middlePlaceNum}}地</view>
-        <view class="flex justify-between">
-          <view class="w-10 h-10 rounded-full locus_cycyle_bg"></view>
-          <view class="w-10 h-10 rounded-full locus_cycyle_bg"></view>
-          <view class="w-10 h-10 rounded-full locus_cycyle_bg"></view>
+      <view v-if="pageData.traceInfo.middlePlaceNum" class="w-90 absolute right-140 bottom-63 w-77 h-32">
+        <view class="relative">
+          <image class="w-77 h-32 absolute left-0 top-0" src="@/static/opus/locus_tip.png"/>
+          <view class="absolute w-full left-0 top-0 text-10 text-[#272a2] text-center leading-25 line-clamp-1">途径{{pageData.traceInfo.middlePlaceNum}}个点</view>
         </view>
+      </view>
+      <view>
+        <image class="w-267 h-30 absolute left-29 top-60" src="@/static/opus/locus_line.png"/>
+        <image class="w-24 h-24 absolute left-27 top-60" src="@/static/opus/locus_start.png"/>
+        <image class="w-24 h-24 absolute right-27 top-60" src="@/static/opus/locus_end.png"/>
       </view>
     </view>
   </view>
@@ -66,7 +66,6 @@ watch(props.item,(val,oldVal)=>{
 <style lang="scss" scoped>
 .title_tip {
   border:4rpx solid #fff;
-  border-radius: 6rpx;
   background: #4b8ae6;
   line-height: 30rpx;
   overflow: hidden;
@@ -91,11 +90,5 @@ watch(props.item,(val,oldVal)=>{
   position: absolute;
   left: -8rpx;
   top: -18rpx;
-}
-.locus_cycyle_bg {
-  background: #6aa4ff;
-}
-.locus_tip_txt {
-  color: #4b8ae6;
 }
 </style>
