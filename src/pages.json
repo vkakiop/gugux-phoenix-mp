@@ -12,6 +12,14 @@
 	},
 	"pages": [
 		{
+		    "path" : "pages/personCenter/personQRcode",
+		    "style" :
+		    {
+		        "navigationBarTitleText": "二维码名片",
+		        "enablePullDownRefresh": false
+		    }
+		},
+		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "uni-app"
@@ -106,15 +114,7 @@
 				"navigationBarTitleText": "咕咕行"
 			}
 		}
-	    ,{
-            "path" : "pages/personCenter/personQRcode",
-            "style" :
-            {
-                "navigationBarTitleText": "二维码名片",
-                "enablePullDownRefresh": false
-            }
-
-        },
+	    ,
 		{
 			"path": "pages/safeguard/safeguarddetail",
 			"style": {

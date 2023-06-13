@@ -57,15 +57,13 @@
 			<view class="p-5  ml-20" :class="lableCollect == 1 ? 'bg-gray-300' : 'bg-gray-200'">文章</view>
 			<view class="p-5  ml-20" :class="lableCollect == 2 ? 'bg-gray-300' : 'bg-gray-200'">视频</view>
 		</view>
-		<waterFall></waterFall>
 	</view>
 </template>
 
 <script setup>
 import { getUserBase } from "@/api/mine/index.js"
 import { reactive, ref } from 'vue'
-import waterFall from "@/components/index/waterfall.vue"
-import { onShow, onLoad } from "@dcloudio/uni-app"
+import { onShow, onLoad,onReachBottom } from "@dcloudio/uni-app"
 import { needLogin } from "@/utils/utils"
 onShow(() => {
   if (needLogin()) {

@@ -13,36 +13,33 @@
 						<view class="desc">{{ item.brief }}</view>
 					</view>
 					<cover-view>
-						<view class="buttons">
+						<view class="buttons text-sm">
 							<debounce @debounce="attention(item)" class="header_group">
-								<view>
-									<image class="header" src="/static/logo.png"></image>
-									<view class="add">{{ item.isFollow ? '-' : '+' }}</view>
+								<image class="header" :src="item.icon"></image>
+								<view class="add">
+									<image src="@/static/video/+@3x.png" class="w-19 h-19" v-if="!item.isFollow"></image>
+									<image src="@/static/video/达人@3x.png" class="w-19 h-19" v-else></image>
 								</view>
 							</debounce>
 							<debounce @debounce="like(item)" class="button mb-10">
-								<view>
-									<image v-if="item.isLike" class="w-24 h-24" src="@/static/opus/icon_like_ed.png" />
-									<image v-else class="w-24 h-24" src="@/static/opus/icon_like.png" />
-									<view>{{ item.likeNum }}</view>
-								</view>
+								<image v-if="item.isLike" class="w-36 h-36" src="@/static/video/点赞填充@3x.png" />
+								<image v-else class="w-36 h-36" src="@/static/video/点赞@3x.png" />
+								<view>{{ item.likeNum }}</view>
 							</debounce>
 							<debounce @debounce="comment(item)" class="button mb-10">
-								<view>
-									<img class="w-24 h-24" src="@/static/opus/icon_comment.png">
-									<view>{{ item.commentNum }}</view>
-								</view>
+								<img class="w-36 h-36" src="@/static/video/评价@3x.png">
+								<view>{{ item.commentNum }}</view>
 							</debounce>
 							<debounce @debounce="collection(item)" class="button mb-10">
-								<view>
-									<image v-if="item.isCollection" class="w-24 h-24" src="@/static/opus/icon_collect_ed.png" />
-									<image v-else class="w-24 h-24" src="@/static/opus/icon_collect.png" />
-									<view>{{ item.collectionNum }}</view>
-								</view>
+							<view class="button mb-10">
+								<image v-if="item.isCollection" class="w-36 h-36" src="@/static/video/收藏填充@3x.png" />
+								<image v-else class="w-36 h-36" src="@/static/video/收藏@3x.png" />
+								<view>{{ item.collectionNum }}</view>
+							</view>
 							</debounce>
 							<view class="button mb-10" @click='handleShare'>
 								<button open-type="share" style="background-color: transparent;">
-									<image class="w-24 h-24" src="@/static/opus/icon_share.png" />
+									<image class="w-36 h-36" src="@/static/video/分享@3x.png" />
 								</button>
 								<view>分享</view>
 							</view>
@@ -100,6 +97,7 @@
 		}).then(res => {
 			pageData.list = [...pageData.list, ...res.data]
 			pageData.lastVideoId = res.data[res.data.length - 1].id
+			console.log(pageData.list);
 		})
 	}
 	const {
@@ -260,7 +258,7 @@
 		}).then(res2 => {
 			pageData.list = res2.data
 			pageData.status = 0;
-			pageData.current=0
+			pageData.current = 0
 			pageData.lastVideoId = res2.data[res2.data.length - 1].id
 		})
 	}
@@ -268,7 +266,7 @@
 		isShare.value = true
 	}
 	onShow(() => {
-		if (!isShare.value){
+		if (!isShare.value) {
 			fetch()
 		}
 	})
@@ -294,7 +292,6 @@
 			bottom: 200upx;
 			color: white;
 			text-indent: 1em;
-			font-size: 30upx;
 		}
 
 		.buttons {
@@ -313,13 +310,14 @@
 				height: 90upx;
 				width: 90upx;
 				position: relative;
-
 				.header {
 					border: 2px solid white;
 					margin: 0 auto;
 					border-radius: 90upx;
 					height: 90upx;
 					width: 90upx;
+					position: relative;
+					left: -5rpx;
 				}
 
 				.add {
@@ -331,7 +329,6 @@
 					left: 0upx;
 					width: 50upx;
 					height: 50upx;
-					font-size: 50upx;
 					line-height: 50upx;
 					border-radius: 50upx;
 				}
@@ -339,7 +336,6 @@
 
 			.button {
 				text-align: center;
-				font-size: 24upx;
 			}
 		}
 
