@@ -12,6 +12,20 @@
 	},
 	"pages": [
 		{
+			"path": "pages/mine/mine",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		},
+		{
+			"path": "pages/personCenter/personCenter",
+			"style": {
+				"navigationBarTitleText": "个人信息",
+				"enablePullDownRefresh": false
+			}
+		},
+		
+		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "uni-app"
@@ -33,13 +47,6 @@
 			}
 		}
 		,
-
-		{
-			"path": "pages/mine/mine",
-			"style": {
-				"navigationBarTitleText": "uni-app"
-			}
-		},
 		{
 		    "path" : "pages/index/searchHistory",
 		    "style" :
@@ -47,14 +54,6 @@
 		        "navigationBarTitleText": "",
 		        "enablePullDownRefresh": false
 		    }
-		
-		},
-		{
-			"path": "pages/personCenter/personCenter",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
 		},
 		{
             "path" : "pages/VideoCarousel/VideoCarousel",
