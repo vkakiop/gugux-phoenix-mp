@@ -44,7 +44,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="" v-if="show">
+		<view class="" v-if="isShow">
 			<eimlFlow :list="list" :columnNum="2"></eimlFlow>
 		</view>
 	</view>
@@ -72,7 +72,7 @@
 	const internalInstance = getCurrentInstance()
 	const inputValue = ref('')
 	const isShowHistory = ref(true)
-	const show = ref(true)
+	const isShow = ref(true)
 	const iconType = ref('bottom')
 	const menuList = reactive([{
 			name: '综合',
@@ -126,21 +126,21 @@
 	})
 	const getDataApi = () => {
 		if (paramsForm.value.type == 0) {
-			show.value = false
+			isShow.value = false
 			opusSearchNew(paramsForm.value).then(res => {
-				show.value = true
+				isShow.value = true
 				list.value = [...res.data.list]
 			})
 		} else if (paramsForm.value.type == 1) {
-			show.value = false
+			isShow.value = false
 			opusSearchArticle(paramsForm.value).then(res => {
-				show.value = true
+				isShow.value = true
 				list.value = [...res.data.list]
 			})
 		} else if (paramsForm.value.type == 2) {
-			show.value = false
+			isShow.value = false
 			opusSearchVideo(paramsForm.value).then(res => {
-				show.value = true
+				isShow.value = true
 				list.value = [...res.data.list]
 			})
 		}

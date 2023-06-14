@@ -32,7 +32,7 @@
       </uni-grid>
     </view>
     <view>
-      <waterFall></waterFall>
+      <!-- <waterFall></waterFall> -->
     </view>
     <u-modal :show="show" @confirm="confirmShow" @cancel="closeShow" title="紧急通知" confirmColor="#D9001B"
       cancelColor="#0000FF" showCancelButton ref="uModal" confirmText="去导航" cancelText="查看详情">
@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import waterFall from "@/components/index/waterfall.vue"
+// import waterFall from "@/components/index/waterfall.vue"
 import { ref, onMounted, reactive } from 'vue'
 import { onShow } from "@dcloudio/uni-app"
 const loginToken = ref({})
