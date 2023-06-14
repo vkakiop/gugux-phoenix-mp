@@ -1,7 +1,7 @@
 <template>
 	<view class="">
 		<view class="">
-			<image src="/static/mine/mine-bg.png" class="h-160 w-screen"></image>
+			<image src="/static/mine/mine-bg.jpg" class="h-160 w-screen"></image>
 		</view>
 		<view v-if="pageData.mineMessage.id" class="bg-gray-100 w-screen  px-14 relative -top-20" style="border-radius: 35rpx 35rpx 0px 0px;">
 			<view >
