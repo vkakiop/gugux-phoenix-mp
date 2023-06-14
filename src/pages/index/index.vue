@@ -32,7 +32,9 @@
       </uni-grid>
     </view>
     <view>
-      <!-- <waterFall></waterFall> -->
+    <view class="" v-if="isShow">
+    	<eimlFlow :list="waterlist" :columnNum="2"></eimlFlow>
+    </view>
     </view>
     <u-modal :show="show" @confirm="confirmShow" @cancel="closeShow" title="紧急通知" confirmColor="#D9001B"
       cancelColor="#0000FF" showCancelButton ref="uModal" confirmText="去导航" cancelText="查看详情">
@@ -40,15 +42,22 @@
         <rich-text :nodes="content"></rich-text>
       </view>
     </u-modal>
-
+    
   </view>
 </template>
 
 <script setup>
-// import waterFall from "@/components/index/waterfall.vue"
-import { ref, onMounted, reactive } from 'vue'
-import { onShow } from "@dcloudio/uni-app"
+	import eimlFlow from "@/components/eiml-flow-layout/eiml-flow-layout.vue"
+	import {
+		opusSearchNew,
+		opusSearchArticle,
+		opusSearchVideo
+	} from "@/api/worksSearch/index.js"
+import { ref, onMounted, reactive,watch,computed,getCurrentInstance } from 'vue'
+import { onShow,onReachBottom } from "@dcloudio/uni-app"
 const loginToken = ref({})
+const isShow = ref(true)
+const internalInstance = getCurrentInstance()
 const iconType = ref('bottom')
 const menuList = reactive([{
   name: '推荐',
@@ -67,37 +76,14 @@ const menuList = reactive([{
   name: '逛吃'
 }
 ])
-const list = reactive([{
-  text: '推荐',
-  badge: '0',
-  type: "primary"
-},
-{
-
-  text: '游记',
-},
-{
-
-  text: '用车',
-},
-{
-
-  text: '视频',
-},
-{
-
-  text: '车友群'
-},
-{
-
-  text: '逛吃'
-},
-{
-
-  text: '溪流'
-}
-])
-
+	const paramsForm = reactive({
+		"keyword": "",
+		"pageNum": 1,
+		"pageSize": 10,
+		"searchTime": "",
+		"type": 0
+	})
+		const waterlist = ref([])
 const show = ref(false);
 const content = ref('');
 content.value = '您的好友等第十三月(1511837394)在重庆市四川商会触发了紧急通知，请点击电话联系或导航前往。'
@@ -121,8 +107,43 @@ function onClickItem(e) {
   }
 }
 function menuClick(item) {
-  console.log('item', item);
-}
+		paramsForm.pageSize=10
+		paramsForm.type = item.index
+		getDataApi()
+	}
+	// 数据赋值
+	onMounted(() => {
+		getDataApi()
+	})
+	const getDataApi = () => {
+		if (paramsForm.type == 0) {
+			isShow.value = false
+			opusSearchNew(paramsForm).then(res => {
+				isShow.value = true
+				waterlist.value = [...res.data.list]
+			})
+		} else if (paramsForm.type == 1) {
+			isShow.value = false
+			opusSearchArticle(paramsForm).then(res => {
+				isShow.value = true
+				waterlist.value = [...res.data.list]
+			})
+		} else if (paramsForm.type == 2) {
+			isShow.value = false
+			opusSearchVideo(paramsForm).then(res => {
+				isShow.value = true
+				waterlist.value = [...res.data.list]
+			})
+		}
+		//操作数据后更新视图
+		internalInstance.ctx.$forceUpdate()
+	}
+	watch(() => paramsForm.type, (newV, oldV) => {
+		getDataApi()
+	}, {
+		deep: true,
+		immediate: true
+	})
 onShow(() => {
   loginToken.value = getApp().globalData.loginToken
 })
@@ -144,7 +165,24 @@ function skipHistory() {
     url: `/pages/index/searchHistory`
   })
 }
-
+	onReachBottom(() => {
+		console.log('触底了')
+		paramsForm.pageSize+=10
+		if (paramsForm.type == 0) {
+			opusSearchNew(paramsForm).then(res => {
+				waterlist.value = [...res.data.list]
+			})
+		} else if (paramsForm.type == 1) {
+			opusSearchArticle(paramsForm).then(res => {
+				waterlist.value = [...res.data.list]
+			})
+		} else if (paramsForm.type == 2) {
+			opusSearchVideo(paramsForm).then(res => {
+				waterlist.value = [...res.data.list]
+			})
+		}
+		
+	})
 </script>
 
 <style lang="scss" scoped>

@@ -34,7 +34,7 @@
 		<view class="">
 			<template>
 				<u-tabs
-					:list="list1"
+					:list="menuList"
 					lineWidth="30"
 					lineColor="#f56c6c"
 					:activeStyle="{
@@ -47,47 +47,103 @@
 						transform: 'scale(1)'
 					}"
 					itemStyle="padding-left: 15px; padding-right: 15px; height: 34px;"
-					@click="click"
+					@click="menuClick"
 				>
 				</u-tabs>
-				<!-- <u-tabs :list="list1" @click="click"></u-tabs> -->
 			</template>
 		</view>
 		<view class="flex collectView" v-if="cllectRadio == 2">
 			<view class="p-5  ml-20" :class="lableCollect == 1 ? 'bg-gray-300' : 'bg-gray-200'">文章</view>
 			<view class="p-5  ml-20" :class="lableCollect == 2 ? 'bg-gray-300' : 'bg-gray-200'">视频</view>
 		</view>
+		<view class="" v-if="isShow">
+			<eimlFlow :list="waterlist" :columnNum="2"></eimlFlow>
+		</view>
 	</view>
 </template>
 
 <script setup>
 import { getUserBase } from "@/api/mine/index.js"
-import { reactive, ref } from 'vue'
+import eimlFlow from "@/components/eiml-flow-layout/eiml-flow-layout.vue"
+import { ref, onMounted, reactive,watch,computed,getCurrentInstance } from 'vue'
+	import {
+		opusSearchNew,
+		opusSearchArticle,
+		opusSearchVideo
+	} from "@/api/worksSearch/index.js"
 import { onShow, onLoad,onReachBottom } from "@dcloudio/uni-app"
 import { needLogin } from "@/utils/utils"
 onShow(() => {
   if (needLogin()) {
-    getDataApi()
+    fetchData()
   }
 })
+const paramsForm = reactive({
+		"keyword": "",
+		"pageNum": 1,
+		"pageSize": 10,
+		"searchTime": "",
+		"type": 0
+	})
+	const internalInstance = getCurrentInstance()
 const content = ref('在大多数场景下，并不需要设置 background-color 属性，因为uni-popup的主窗口默认是透明的，在向里面插入内容的时候 ，样式完全交由用户定制，如果设置了背景色 ，例如 uni-popup-dialog 中的圆角就很难去实现，不设置背景色，更适合用户去自由发挥。')
 const src = 'https://cdn.uviewui.com/uview/album/1.jpg'
 const TabCur2 = ref('')
+const isShow = ref(true)
 const cllectRadio = ref(0)
 const iSinfo = ref(false)
 const lableCollect = ref(1)
 const uReadMore = ref()
-const list1 = reactive([{
+const menuList = reactive([{
 	name: '作品(999)',
 }, {
 	name: '喜欢',
 }, {
 	name: '收藏'
 }])
+const waterlist = ref([])
+const show = ref(false);
 const click = (item) => {
-	console.log('item', item);
-	cllectRadio.value = item.index
 }
+function menuClick(item) {
+	cllectRadio.value = item.index
+		paramsForm.pageSize=10
+		paramsForm.type = item.index
+			getDataApi()
+	}
+	// 数据赋值
+	onMounted(() => {
+		getDataApi()
+	})
+	const getDataApi = () => {
+		if (paramsForm.type == 0) {
+			isShow.value = false
+			opusSearchNew(paramsForm).then(res => {
+				isShow.value = true
+				waterlist.value = [...res.data.list]
+			})
+		} else if (paramsForm.type == 1) {
+			isShow.value = false
+			opusSearchArticle(paramsForm).then(res => {
+				isShow.value = true
+				waterlist.value = [...res.data.list]
+			})
+		} else if (paramsForm.type == 2) {
+			isShow.value = false
+			opusSearchVideo(paramsForm).then(res => {
+				isShow.value = true
+				waterlist.value = [...res.data.list]
+			})
+		}
+		//操作数据后更新视图
+		internalInstance.ctx.$forceUpdate()
+	}
+	watch(() => paramsForm.type, (newV, oldV) => {
+		getDataApi()
+	}, {
+		deep: true,
+		immediate: true
+	})
 const load = () => {
 	uReadMore.value.uReadMore.init();
 }
@@ -99,16 +155,30 @@ const skipPerson = () => {
 		url: '/pages/personCenter/personCenter'
 	})
 }
+onReachBottom(() => {
+		console.log('触底了')
+		paramsForm.pageSize+=10
+		if (paramsForm.type == 0) {
+			opusSearchNew(paramsForm).then(res => {
+				waterlist.value = [...res.data.list]
+			})
+		} else if (paramsForm.type == 1) {
+			opusSearchArticle(paramsForm).then(res => {
+				waterlist.value = [...res.data.list]
+			})
+		} else if (paramsForm.type == 2) {
+			opusSearchVideo(paramsForm).then(res => {
+				waterlist.value = [...res.data.list]
+			})
+		}
+		
+	})
 const pageData = reactive({
 		//数据全部列表
 		mineMessage: {}
 	})
-const paramsForm = reactive({
-	id: '',
-	state: 1,
-})
 
-const getDataApi = ()=>{
+const fetchData = ()=>{
 	getUserBase({}).then(res => {
     pageData.mineMessage={...res.data}
   })
