@@ -9,8 +9,8 @@
 					<image :src="pageData.mineMessage.icon" class="w-76 h-76 rounded-full "></image>
 				</view>
 				<view class="-mt-10 mb-10 font-bold">{{ pageData.mineMessage.nickname }}
-					<image src="/static/mine/vip.png" class="w-47 h-20 mx-5"></image>
-					<image src="/static/mine/dealer.png" class="w-47 h-20"></image>
+					<image src="/static/mine/vip.png" class="w-47 h-19 mx-5"></image>
+					<image src="/static/mine/dealer.png" class="w-57 h-19"></image>
 				</view>
 				<view class="mb-10 text-sm">
 					<image src="/static/mine/ID.png" class="w-15 h-15"></image>
