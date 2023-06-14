@@ -72,7 +72,7 @@
 	const internalInstance = getCurrentInstance()
 	const inputValue = ref('')
 	const isShowHistory = ref(true)
-	const isShow = ref(true)
+	const isShow = ref(false)
 	const iconType = ref('bottom')
 	const menuList = reactive([{
 			name: '综合',
@@ -95,9 +95,11 @@
 	})
 
 	function menuClick(item) {
-		paramsForm.value.pageSize=10
-		paramsForm.value.type = item.index
+	if(paramsForm.type!=item.index){
+		paramsForm.pageSize=10
+		paramsForm.type = item.index
 		getDataApi()
+	}	
 	}
 	const search = () => {
 		if (inputValue.value == '') {

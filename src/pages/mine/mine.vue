@@ -1,84 +1,109 @@
 <template>
-	<view v-if="pageData.mineMessage.id" class="bg-gray-100">
-		<view class="flex" @click="skipPerson">
-			<view><u-avatar :src="pageData.mineMessage.icon" size="60"></u-avatar></view>
-			<view class="flex flex-col  justify-center">
-				<view class="p-2 ml-10">{{ pageData.mineMessage.nickname }}</view>
-				<view class="p-2 ml-10">咕咕号:{{ pageData.mineMessage.guguId }}</view>
-			</view>
-		</view>
-		<view class="flex">
-			<view class="p-5 border-r-2 border-gray-500">128&nbsp;关注</view>
-			<view class="p-5 border-r-2 border-gray-500">157&nbsp;关注</view>
-			<view class="p-5 border-r-2 border-gray-500">128&nbsp;关注</view>
-			<view class="p-5">128&nbsp;关注</view>
-		</view>
-		<view>
-			<view class="Express">
-				<view class="info">
-					<view :class="{ hide: !iSinfo }">
-						swipeAction的跟手联动是非常考验性能的。为了提高交互体验，本组件在 app 端 vue 页面、h5、微信小程序使用了wxs 技术，nvue 页面使用 bindingx
-						技术，可以达到流畅的体验。在其他小程序平台由于底层不支持优化技术，只能使用使用普通 js ，此时性能一般。uni-swipe-action 和 uni-swipe-action-item
-						需要同时使用uni-swipe-action 不能嵌套在 swiper
-						中使用长列表不建议使用autoClose属性，会影响组件性能，造成卡顿，原因是打开之后要通知其他已经打开的组件关闭，会导致多个组件重新渲染
-					</view>
-					<text @tap="showinfo" v-if="!iSinfo">展开</text>
-				</view>
-				<text @tap="showinfo" v-if="iSinfo" class="hidebtn">收起</text>
-			</view>
-		</view>
-		<view class="flex">
-			<view class="p-5  bg-gray-500  ml-20">31岁</view>
-			<view class="p-5  bg-gray-500  ml-20">重庆渝北</view>
-		</view>
+	<view class="">
 		<view class="">
-			<template>
-				<u-tabs
-					:list="menuList"
-					lineWidth="30"
-					lineColor="#f56c6c"
-					:activeStyle="{
+			<image src="/static/mine/mine-bg.jpg" class="h-160 w-screen"></image>
+		</view>
+		<view v-if="pageData.mineMessage.id" class="bg-gray-100 w-screen  px-14 relative -top-20" style="border-radius: 35rpx 35rpx 0px 0px;">
+			<view >
+				<view class="relative bottom-24" @click="skipPerson">
+					<image :src="pageData.mineMessage.icon" class="w-76 h-76 rounded-full "></image>
+				</view>
+				<view class="-mt-10 mb-10 font-bold">{{ pageData.mineMessage.nickname }}
+					<image src="/static/mine/vip.png" class="w-47 h-19 mx-5"></image>
+					<image src="/static/mine/dealer.png" class="w-57 h-19"></image>
+				</view>
+				<view class="mb-10 text-sm">
+					<image src="/static/mine/ID.png" class="w-15 h-15"></image>
+					{{ pageData.mineMessage.guguId }}
+					<image src="/static/mine/copy.png" class="w-15 h-15 ml-10" @click.stop="copy(pageData.mineMessage.guguId)"></image>
+				</view>
+			</view>
+			<view class="flex text-sm" style="font-family: Source Han Sans SC;">
+				<view class="line relative w-60  flex items-center">
+					<view class="font-bold">{{pageData.mineMessage.fans}}</view>
+					<view class="textStyle">&nbsp;关注</view>
+				</view>
+				<view class="line relative w-60 ml-10 flex items-center">
+					<view class="font-bold">{{pageData.mineMessage.focus}}</view>
+				
+				<view class="textStyle">&nbsp;收藏</view></view>
+				<view class="w-60  ml-10 flex items-center">
+					<view class="font-bold">{{pageData.mineMessage.liked}}</view>
+				<view class="textStyle">&nbsp;获赞</view></view>
+			</view>
+			<view>
+				<view class="Express text-sm " style="font-family: Source Han Sans SC;">
+					<view class="info">
+						<view :class="{ hide: !iSinfo }">
+							<view v-if="pageData.mineMessage.introduce">
+								{{pageData.mineMessage.introduce}}
+							</view>
+							<view v-else>
+								这家伙很懒，连介绍都没写~~
+							</view>
+						</view>
+						<!-- <text @tap="showinfo" v-if="!iSinfo">展开</text> -->
+					</view>
+					<!-- <text @tap="showinfo" v-if="iSinfo" class="hidebtn">收起</text> -->
+				</view>
+			</view>
+
+			<view class="">
+				<template>
+					<u-tabs :list="menuList" lineWidth="30" lineColor="#f56c6c" :activeStyle="{
 						color: '#303133',
 						fontWeight: 'bold',
 						transform: 'scale(1.05)'
-					}"
-					:inactiveStyle="{
+					}" :inactiveStyle="{
 						color: '#606266',
 						transform: 'scale(1)'
-					}"
-					itemStyle="padding-left: 15px; padding-right: 15px; height: 34px;"
-					@click="menuClick"
-				>
-				</u-tabs>
-			</template>
-		</view>
-		<view class="flex collectView" v-if="cllectRadio == 2">
-			<view class="p-5  ml-20" :class="lableCollect == 1 ? 'bg-gray-300' : 'bg-gray-200'">文章</view>
-			<view class="p-5  ml-20" :class="lableCollect == 2 ? 'bg-gray-300' : 'bg-gray-200'">视频</view>
-		</view>
-		<view class="" v-if="isShow">
-			<eimlFlow :list="waterlist" :columnNum="2"></eimlFlow>
+					}" itemStyle="padding-left: 15px; padding-right: 15px; height: 34px;" @click="menuClick">
+					</u-tabs>
+				</template>
+			</view>
+			<view class="flex collectView" v-if="cllectRadio == 2">
+				<view class="p-5  ml-20" :class="lableCollect == 1 ? 'bg-gray-300' : 'bg-gray-200'">文章</view>
+				<view class="p-5  ml-20" :class="lableCollect == 2 ? 'bg-gray-300' : 'bg-gray-200'">视频</view>
+			</view>
+			<view class="" v-if="isShow">
+				<eimlFlow :list="waterlist" :columnNum="2"></eimlFlow>
+			</view>
 		</view>
 	</view>
 </template>
 
 <script setup>
-import { getUserBase } from "@/api/mine/index.js"
-import eimlFlow from "@/components/eiml-flow-layout/eiml-flow-layout.vue"
-import { ref, onMounted, reactive,watch,computed,getCurrentInstance } from 'vue'
+	import {
+		getUserBase
+	} from "@/api/mine/index.js"
+	import eimlFlow from "@/components/eiml-flow-layout/eiml-flow-layout.vue"
+	import {
+		ref,
+		onMounted,
+		reactive,
+		watch,
+		computed,
+		getCurrentInstance
+	} from 'vue'
 	import {
 		opusSearchNew,
 		opusSearchArticle,
 		opusSearchVideo
 	} from "@/api/worksSearch/index.js"
-import { onShow, onLoad,onReachBottom } from "@dcloudio/uni-app"
-import { needLogin } from "@/utils/utils"
-onShow(() => {
-  if (needLogin()) {
-    fetchData()
-  }
-})
-const paramsForm = reactive({
+	import {
+		onShow,
+		onLoad,
+		onReachBottom
+	} from "@dcloudio/uni-app"
+	import {
+		needLogin
+	} from "@/utils/utils"
+	onShow(() => {
+		if (needLogin()) {
+			fetchData()
+		}
+	})
+	const paramsForm = reactive({
 		"keyword": "",
 		"pageNum": 1,
 		"pageSize": 10,
@@ -86,31 +111,44 @@ const paramsForm = reactive({
 		"type": 0
 	})
 	const internalInstance = getCurrentInstance()
-const content = ref('在大多数场景下，并不需要设置 background-color 属性，因为uni-popup的主窗口默认是透明的，在向里面插入内容的时候 ，样式完全交由用户定制，如果设置了背景色 ，例如 uni-popup-dialog 中的圆角就很难去实现，不设置背景色，更适合用户去自由发挥。')
-const src = 'https://cdn.uviewui.com/uview/album/1.jpg'
-const TabCur2 = ref('')
-const isShow = ref(true)
-const cllectRadio = ref(0)
-const iSinfo = ref(false)
-const lableCollect = ref(1)
-const uReadMore = ref()
-const menuList = reactive([{
-	name: '作品(999)',
-}, {
-	name: '喜欢',
-}, {
-	name: '收藏'
-}])
-const waterlist = ref([])
-const show = ref(false);
-const click = (item) => {
-}
-function menuClick(item) {
-	cllectRadio.value = item.index
-		paramsForm.pageSize=10
-		paramsForm.type = item.index
+	const content = ref('在大多数场景下，并不需要设置 background-color 属性，因为uni-popup的主窗口默认是透明的，在向里面插入内容的时候 ，样式完全交由用户定制，如果设置了背景色 ，例如 uni-popup-dialog 中的圆角就很难去实现，不设置背景色，更适合用户去自由发挥。')
+	const src = 'https://cdn.uviewui.com/uview/album/1.jpg'
+	const TabCur2 = ref('')
+	const isShow = ref(false)
+	const cllectRadio = ref(0)
+	const iSinfo = ref(false)
+	const lableCollect = ref(1)
+	const uReadMore = ref()
+	const menuList = reactive([{
+		name: '作品(999)',
+	}, {
+		name: '喜欢',
+	}, {
+		name: '收藏'
+	}])
+	const waterlist = ref([])
+	const show = ref(false);
+	const click = (item) => {}
+
+	function menuClick(item) {
+		if (paramsForm.type != item.index) {
+			cllectRadio.value = item.index
+			paramsForm.pageSize = 10
+			paramsForm.type = item.index
 			getDataApi()
+		}
+
 	}
+	function copy(value) {
+	  uni.setClipboardData({
+	    data: value,//要被复制的内容
+	    success: () => {//复制成功的回调函数
+	      uni.showToast({//提示
+	        title: '复制成功'
+	      })
+	    }
+	  });
+	  }
 	// 数据赋值
 	onMounted(() => {
 		getDataApi()
@@ -144,20 +182,20 @@ function menuClick(item) {
 		deep: true,
 		immediate: true
 	})
-const load = () => {
-	uReadMore.value.uReadMore.init();
-}
-const showinfo = () => {
-	iSinfo.value = !iSinfo.value
-}
-const skipPerson = () => {
-	uni.navigateTo({
-		url: '/pages/personCenter/personCenter'
-	})
-}
-onReachBottom(() => {
+	const load = () => {
+		uReadMore.value.uReadMore.init();
+	}
+	const showinfo = () => {
+		iSinfo.value = !iSinfo.value
+	}
+	const skipPerson = () => {
+		uni.navigateTo({
+			url: '/pages/personCenter/personCenter'
+		})
+	}
+	onReachBottom(() => {
 		console.log('触底了')
-		paramsForm.pageSize+=10
+		paramsForm.pageSize += 10
 		if (paramsForm.type == 0) {
 			opusSearchNew(paramsForm).then(res => {
 				waterlist.value = [...res.data.list]
@@ -171,79 +209,101 @@ onReachBottom(() => {
 				waterlist.value = [...res.data.list]
 			})
 		}
-		
+
 	})
-const pageData = reactive({
+	const pageData = reactive({
 		//数据全部列表
 		mineMessage: {}
 	})
 
-const fetchData = ()=>{
-	getUserBase({}).then(res => {
-    pageData.mineMessage={...res.data}
-  })
-}
+	const fetchData = () => {
+		getUserBase({}).then(res => {
+			pageData.mineMessage = {
+				...res.data
+			}
+			console.log('个人主页', pageData.mineMessage);
+		})
+	}
 </script>
 
 <style lang="scss" scoped>
-.Express {
-	display: flex;
-	// width: 100%;
-	flex-direction: column;
-	background-color: #fff;
-	padding: 30upx;
-	position: relative;
-
-	.info {
+	.textStyle {
+		font-size: 30rpx;
+		font-family: Source Han Sans SC;
+		font-weight: 300;
+		color: #999999;
+	}
+	
+	.Express {
+		line-height: 24rpx;
+		font-size: 30rpx;
+		font-family: Source Han Sans SC;
+		font-weight: 300;
+		color: #999999;
 		display: flex;
 		flex-direction: column;
+		padding: 30upx 0;
+		position: relative;
 
-		view {
-			text-align: justify;
-			font-size: 14px;
-			font-family: PingFangSC-Regular, PingFang SC;
-			font-weight: 400;
-			color: rgba(102, 102, 102, 1);
-			word-break: break-word; //换行模式
-			background-color: #fff;
-		}
-
-		text {
-			width: 70px;
-			font-size: 14px;
+		.info {
 			display: flex;
-			justify-content: flex-end;
-			align-items: center;
-			background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 50%);
-			color: #0078FF;
-			position: absolute;
-			bottom: 30upx;
-			right: 30upx;
+			flex-direction: column;
+
+			view {
+				text-align: justify;
+				font-family: PingFangSC-Regular, PingFang SC;
+				font-weight: 400;
+				word-break: break-word; //换行模式
+			}
+
+			text {
+				width: 70px;
+				display: flex;
+				justify-content: flex-end;
+				align-items: center;
+				color: #0078FF;
+				position: absolute;
+				bottom: 30upx;
+				right: 30upx;
+			}
+		}
+
+	}
+
+	.hidebtn {
+		display: flex;
+		flex: 1;
+		justify-content: flex-end;
+		color: #0078FF;
+
+	}
+
+	.hide {
+		word-break: break-word; //换行模式
+		overflow: hidden;
+		text-overflow: ellipsis; //修剪文字
+		display: -webkit-box;
+		-webkit-line-clamp: 2; //此处为上限行数
+		-webkit-box-orient: vertical;
+	}
+
+	.collectView {
+		view {
+			border-radius: 20%;
 		}
 	}
 
-}
-
-.hidebtn {
-	display: flex;
-	flex: 1;
-	justify-content: flex-end;
-	color: #0078FF;
-	font-size: 14px;
-}
-
-.hide {
-	word-break: break-word; //换行模式
-	overflow: hidden;
-	text-overflow: ellipsis; //修剪文字
-	display: -webkit-box;
-	-webkit-line-clamp: 2; //此处为上限行数
-	-webkit-box-orient: vertical;
-}
-
-.collectView {
-	view {
-		border-radius: 20%;
+	.line::after {
+		position: absolute;
+		left: 40%;
+		bottom: 20%;
+		z-index: 11;
+		width: 100%;
+		height: 100%;
+		content: "";
+		display: block;
+		border-right: 1px solid gray;
+		transform: scale(0.5);
+		transform-origin: left bottom;
 	}
-}
 </style>

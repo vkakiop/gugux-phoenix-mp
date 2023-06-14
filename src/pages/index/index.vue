@@ -6,14 +6,14 @@
     <view>
       <view class="uni-common-mt">
         <view style="flex:2">
-          <u-tabs :list="menuList" lineWidth="40" lineColor="#f56c6c" :activeStyle="{
+          <u-tabs :list="computedMenuItems" lineWidth="40" lineColor="#f56c6c" :activeStyle="{
             color: '#303133',
             fontWeight: 'bold',
             transform: 'scale(1.05)'
           }" :inactiveStyle="{
   color: '#606266',
   transform: 'scale(1)'
-}" itemStyle="padding-left: 15rpx; padding-right: 15rpx; height: 66rpx;" @click="menuClick">
+}" itemStyle="padding-left: 15rpx; padding-right: 15rpx; height: 66rpx;" @click="(item)=>changeWaterfall(item.index)">
           </u-tabs>
         </view>
         <view class="flex items-center">更多
@@ -32,8 +32,13 @@
       </uni-grid>
     </view>
     <view>
-    <view class="" v-if="isShow">
-    	<eimlFlow :list="waterlist" :columnNum="2"></eimlFlow>
+    <view>
+      <view v-for="(waterItem,waterIndex) in pageData.waterfallItems">
+        <view v-show="waterIndex == pageData.currentIndex">
+          <waterfall :isComplete="waterItem.isComplete" :value="waterItem.items" :column="2" :columnSpace="1" :seat="2" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
+          </waterfall>
+        </view>
+      </view>
     </view>
     </view>
     <u-modal :show="show" @confirm="confirmShow" @cancel="closeShow" title="紧急通知" confirmColor="#D9001B"
@@ -47,13 +52,8 @@
 </template>
 
 <script setup>
-	import eimlFlow from "@/components/eiml-flow-layout/eiml-flow-layout.vue"
-	import {
-		opusSearchNew,
-		opusSearchArticle,
-		opusSearchVideo
-	} from "@/api/worksSearch/index.js"
 import { ref, onMounted, reactive,watch,computed,getCurrentInstance } from 'vue'
+<<<<<<< HEAD
 import { onShow,onReachBottom } from "@dcloudio/uni-app"
 const isShow = ref(true)
 const internalInstance = getCurrentInstance()
@@ -97,91 +97,85 @@ const closeShow = () => {
   console.log('查看详情');
   uni.navigateTo({ url: '/pages/safeguard/safeguarddetail?id=' + encodeURIComponent(123) })
 }
+=======
+import { opusList } from '@/api/opus/list'
+import waterfall from '@/components/index/waterfall.vue'
+import { onShow,onReachBottom,onPageScroll } from "@dcloudio/uni-app"
+>>>>>>> dd1bfd5329fc54863b4076fa751e1579d55d55bd
 
+onMounted(()=>{
+  changeWaterfall(0)
+})
 
-function onClickItem(e) {
-  if (current.value !== e.currentIndex) {
-    console.log(e.currentIndex);
-    current.value = e.currentIndex
+const pageData = reactive({
+  scrollTop:0,
+  currentIndex:0,
+  waterfallItems : [
+    {scrollTop:0,isComplete:false,name:'推荐',items:[],query:{
+        path:{category:'0',pageNum:1,pageSize:10},
+        data:{passTime:''}
+      }
+    },
+    {scrollTop:0,isComplete:false,name:'徒步',items:[],query:{
+        path:{category:'2431436580328327949',pageNum:1,pageSize:10},
+        data:{passTime:''}
+      }
+    },
+    {scrollTop:0,isComplete:false,name:'风景',items:[],query:{
+        path:{category:'1622581366744965137',pageNum:1,pageSize:10},
+        data:{passTime:''}
+      }
+    },
+    {scrollTop:0,isComplete:false,name:'骑行',items:[],query:{
+        path:{category:'1622581366744965136',pageNum:1,pageSize:10},
+        data:{passTime:''}
+      }
+    },
+  ],
+})
+
+const computedMenuItems = computed(()=>{
+  return pageData.waterfallItems.map(item=>{return {name:item.name}})
+})
+
+const changeWaterfall = (waterIndex)=>{
+  if (pageData.currentIndex != waterIndex) {
+    //读取滚动条高度
+    pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
+  }
+  pageData.currentIndex = waterIndex
+  if (pageData.waterfallItems[waterIndex].items.length == 0) {
+    getData()
+  }
+  else {
+    //写入滚动条高度
+    uni.pageScrollTo({
+      scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
+      duration: 300
+    });
   }
 }
-function menuClick(item) {
-		paramsForm.pageSize=10
-		paramsForm.type = item.index
-		getDataApi()
-	}
-	// 数据赋值
-	onMounted(() => {
-		getDataApi()
-	})
-	const getDataApi = () => {
-		if (paramsForm.type == 0) {
-			isShow.value = false
-			opusSearchNew(paramsForm).then(res => {
-				isShow.value = true
-				waterlist.value = [...res.data.list]
-			})
-		} else if (paramsForm.type == 1) {
-			isShow.value = false
-			opusSearchArticle(paramsForm).then(res => {
-				isShow.value = true
-				waterlist.value = [...res.data.list]
-			})
-		} else if (paramsForm.type == 2) {
-			isShow.value = false
-			opusSearchVideo(paramsForm).then(res => {
-				isShow.value = true
-				waterlist.value = [...res.data.list]
-			})
-		}
-		//操作数据后更新视图
-		internalInstance.ctx.$forceUpdate()
-	}
-	watch(() => paramsForm.type, (newV, oldV) => {
-		getDataApi()
-	}, {
-		deep: true,
-		immediate: true
-	})
-onShow(() => {
 
+const getData = () => {
+  let query = pageData.waterfallItems[pageData.currentIndex].query
+  opusList(query.path,query.data).then(res => {
+    if (res.data.page == res.data.totalPage) {
+      pageData.waterfallItems[pageData.currentIndex].isComplete = true
+    }
+    pageData.waterfallItems[pageData.currentIndex].items = pageData.waterfallItems[pageData.currentIndex].items.concat(res.data.list)
+  })
+}
+
+onReachBottom(() => {
+  if (!pageData.waterfallItems[pageData.currentIndex].isComplete) {
+    pageData.waterfallItems[pageData.currentIndex].query.path.pageNum ++
+    getData()
+  }
 })
-function drowDown(item) {
-  iconType.value = item
-  console.log('点击了下拉');
-}
-function change(e) {
-  let {
-    index
-  } = e.detail
-  uni.showToast({
-    title: `点击第${index + 1}个宫格`,
-    icon: 'none'
-  })
-}
-function skipHistory() {
-  uni.navigateTo({
-    url: `/pages/index/searchHistory`
-  })
-}
-	onReachBottom(() => {
-		console.log('触底了')
-		paramsForm.pageSize+=10
-		if (paramsForm.type == 0) {
-			opusSearchNew(paramsForm).then(res => {
-				waterlist.value = [...res.data.list]
-			})
-		} else if (paramsForm.type == 1) {
-			opusSearchArticle(paramsForm).then(res => {
-				waterlist.value = [...res.data.list]
-			})
-		} else if (paramsForm.type == 2) {
-			opusSearchVideo(paramsForm).then(res => {
-				waterlist.value = [...res.data.list]
-			})
-		}
 
-	})
+onPageScroll((res)=>{
+  pageData.scrollTop = res.scrollTop
+})
 </script>
 
 <style lang="scss" scoped>

@@ -12,6 +12,20 @@
 	},
 	"pages": [
 		{
+			"path": "pages/mine/mine",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		},
+		{
+			"path": "pages/personCenter/personCenter",
+			"style": {
+				"navigationBarTitleText": "个人信息",
+				"enablePullDownRefresh": false
+			}
+		},
+
+		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "uni-app"
@@ -25,7 +39,7 @@
 		        "enablePullDownRefresh": false
 		    }
 		},
-		
+
 		{
 			"path": "pages/test/waterfalls",
 			"style": {
@@ -33,13 +47,6 @@
 			}
 		}
 		,
-
-		{
-			"path": "pages/mine/mine",
-			"style": {
-				"navigationBarTitleText": "uni-app"
-			}
-		},
 		{
 		    "path" : "pages/index/searchHistory",
 		    "style" :
@@ -47,14 +54,6 @@
 		        "navigationBarTitleText": "",
 		        "enablePullDownRefresh": false
 		    }
-		
-		},
-		{
-			"path": "pages/personCenter/personCenter",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
 		},
 		{
             "path" : "pages/VideoCarousel/VideoCarousel",
@@ -142,13 +141,13 @@
 		},
 		{
 		    "path" : "pages/friendDetail/friendDetail",
-		    "style" :                                                                                    
-		    {    
+		    "style" :
+		    {
 				"navigationStyle": "custom",
 		        "navigationBarTitleText": "",
 		        "enablePullDownRefresh": false
 		    }
-		    
+
 		}
     ],
 	"globalStyle": {
@@ -164,14 +163,14 @@
 		"list": [
 			{
 				"pagePath": "pages/index/index",
-				"iconPath": "static/img/tabbar/home.png",
-				"selectedIconPath": "static/img/tabbar/homeactive.png",
+				"iconPath": "static/tabbar/home.png",
+				"selectedIconPath": "static/tabbar/homeactive.png",
 				"text": "首页"
 			},
 			{
 				"pagePath": "pages/mine/mine",
-				"iconPath": "static/img/tabbar/me.png",
-				"selectedIconPath": "static/img/tabbar/meactive.png",
+				"iconPath": "static/tabbar/me.png",
+				"selectedIconPath": "static/tabbar/meactive.png",
 				"text": "我的"
 			}
 		]
