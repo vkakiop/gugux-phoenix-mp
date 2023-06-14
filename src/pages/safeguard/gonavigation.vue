@@ -1,10 +1,10 @@
 <!-- 去导航 -->
 <template>
 	<view class="navi">
-        <!-- <view class="page-section page-section-gap" style="width: 100%; background: #ddd; height: 100vh;"> -->
+        <!-- <view class="page-section page-section-gap" style="width: 100%; background: #ddd; height: 100vh;">
             <map style="width: 100%; height: 100vh;" :latitude="pageData.latitude" :longitude="pageData.longitude" :markers="pageData.covers">
             </map>
-        <!-- </view> -->
+        </view>
         <view class="box">
             <view class="info">
                 <view>姓名：张三</view>
@@ -14,12 +14,17 @@
                 <view>拨打电话</view>
                 <view @click="openMap(pageData.longitude,pageData.latitude)">去导航</view>
             </view>
-        </view>
+        </view> -->
+        <u-button @click="openBox">打开</u-button>
+        <comment></comment>
+        <commentBox ref="commentBoxRef"></commentBox>
     </view>
 </template>
 
 <script setup>
 import { ref, onMounted, reactive } from 'vue'
+import comment from "@/components/common/comment.vue"
+import commentBox from "@/components/common/commentBox.vue"
 import { onLoad } from '@dcloudio/uni-app'
 const pageData = reactive({
     userLat:'',
@@ -33,20 +38,24 @@ const pageData = reactive({
     }]
 })
 onLoad((option)=>{
-  if (option.id) {
-    console.log(option)
-    getApi();
-    //   wx请求获取位置权限
+//   if (option.id) {
+//     console.log(option)
+//     // getApi();
+//     //   wx请求获取位置权限
     
-  }
-  else {
-    uni.showToast({
-      title: '协议code参数有误！',
-      icon:'none',
-      duration: 2000
-    });
-  }
+//   }
+//   else {
+//     uni.showToast({
+//       title: '协议code参数有误！',
+//       icon:'none',
+//       duration: 2000
+//     });
+//   }
 })
+const commentBoxRef = ref();
+const openBox = () =>{
+    commentBoxRef.value.init(true);
+}
 const  openMap = (lon,lat) => {
     console.log("获取经纬度ssssfff",  lat,lon);
     //打开地图，并将门店位置传入
