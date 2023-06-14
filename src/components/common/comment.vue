@@ -22,7 +22,7 @@
                         </view>
                         <view class="contain">
                             <view class="name">{{ item.userName }}</view>
-                            <view class="content">{{ item.content }}</view>
+                            <rich-text class="content" v-html="renderTxt(item.content)"></rich-text>
                             <view class="time">
                                 {{formatedCommentDate(item.createTime) }}<text class="replys">　回复</text>
                                 <view class="contain-reply" v-if="item.isExpand < 2">
@@ -32,7 +32,7 @@
                                         </view>
                                         <view class="contain-contain">
                                             <view class="name">{{ row.userName }} <image src="/static/img/right.png"></image> {{ row.replyName }}</view>
-                                            <view class="content">{{ row.content }}</view>
+                                            <rich-text class="content" v-html="renderTxt(row.content)"></rich-text>
                                             <view class="time">
                                                 {{formatedCommentDate(row.createTime) }}<text class="replys">　回复</text>
                                             </view>
@@ -73,6 +73,7 @@
 import { ref, onMounted, reactive } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import {formatedCommentDate,isArrayEmpty} from "@/utils/utils"
+import emoji from "@/utils/imconfig/emoji";
 import {opuscomment,commentlike,commentlist,subcommentlist} from '@/api/comment/index'
 const emit = defineEmits(['debounce'])
 const pageData = reactive({
@@ -120,7 +121,7 @@ const loadmore = () =>{
             id:i,
             userIcon: i%2 == 1 ? 'https://cdn.uviewui.com/uview/album/1.jpg' :'https://cdn.uviewui.com/uview/album/2.jpg',
             userName:'咕咕'+i,
-            content:'好震撼的地方，作者用心了！已经设置成手机壁纸了'+i,
+            content:'好震撼的地方，[花痴]作者用心了！已经设置成手机壁纸了[大笑]'+i,
             likesNum:13+i,
             isLike: i%2 == 1 ? 0:1,
             createTime:'2022-02-03 12:21:12',
@@ -166,6 +167,31 @@ const expandChange = (item)=>{
 const upChange = (item,type)=>{
     item.isExpand = type;
 }
+const customEmoji=(value) =>{
+    return `<img src="${value}" style="width:25px;height:25px;" />`;
+}
+const renderTxt =(txt = "") => {
+      let rnTxt = [];
+      let match = null;
+      const regex = /(\[.*?\])/g;
+      let start = 0;
+      let index = 0;
+      while ((match = regex.exec(txt))) {
+        index = match.index;
+        if (index > start) {
+          rnTxt.push(txt.substring(start, index));
+        }
+        if (match[1] in emoji.obj) {
+          const v = emoji.obj[match[1]];
+          rnTxt.push(customEmoji(v));
+        } else {
+          rnTxt.push(match[1]);
+        }
+        start = index + match[1].length;
+      }
+      rnTxt.push(txt.substring(start, txt.length));
+      return rnTxt.toString().replace(/,/g, "");
+    }
 </script>
 <style lang="scss" scoped>
 image{
