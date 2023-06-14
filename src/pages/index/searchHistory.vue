@@ -1,5 +1,5 @@
 <template>
-	<view class="content">
+	<view class="bg-gray-100">
 		<!-- 搜索框 -->
 		<view class="search">
 			<view style="display: flex;align-items: center;">

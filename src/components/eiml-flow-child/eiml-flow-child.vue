@@ -17,7 +17,7 @@
 				{{item.title}}
 			</view>
 			<view class="flex justify-between textStyle items-center h-30">
-				<view class=""> {{item.author}}</view>
+				<view class="">   <image :src="item.icon" class="w-16 h-16 rounded-full"></image>{{item.author}}</view>
 				<view class="">
 					<image src="/static/waterfalls/like.png" class="w-13 h-13"></image>
 					{{item.likeNum}}
@@ -112,7 +112,7 @@
 	}
 
 	.titleSty {
-		overflow-x: hidden;
+		overflow: hidden;
 		width: 324rpx;
 		height: 80rpx;
 		font-size: 26rpx;
