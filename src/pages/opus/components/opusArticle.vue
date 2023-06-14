@@ -1,5 +1,5 @@
 <template>
-  <view class="article">
+  <view>
     <view class="relative">
       <image v-if="detail.cover && ((detail.cover.itemType == 2 && detail.cover.content) || (detail.cover.itemType == 3 && detail.cover.thumbnail))"
              class="w-375 h-243"

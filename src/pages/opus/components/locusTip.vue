@@ -64,31 +64,4 @@ watch(props.item,(val,oldVal)=>{
 </script>
 
 <style lang="scss" scoped>
-.title_tip {
-  border:4rpx solid #fff;
-  background: #4b8ae6;
-  line-height: 30rpx;
-  overflow: hidden;
-}
-.locus_icon_sanjiao {
-  width: 0rpx;
-  height: 0rpx;
-  border-bottom: 10rpx solid transparent;
-  border-left: 10rpx solid transparent;
-  border-right: 10rpx solid transparent;
-  border-top: 15rpx solid #fff;
-  position: relative;
-}
-.locus_icon_sanjiao:after {
-  content:'';
-  width: 0rpx;
-  height: 0rpx;
-  border-bottom: 8rpx solid transparent;
-  border-left: 8rpx solid transparent;
-  border-right: 8rpx solid transparent;
-  border-top: 12rpx solid #4b8ae6;
-  position: absolute;
-  left: -8rpx;
-  top: -18rpx;
-}
 </style>

@@ -18,7 +18,7 @@
                 <view v-if="element.name" class="bg-[rgba(0,0,0,0.5)] absolute left-5 bottom-5 px-10 text-white text-12 rounded">
                   <uni-icons type="location-filled" size="16"></uni-icons>{{element.name}} {{computedLocation(element.x,element.y)}}<!--(距您 {{element.name}})-->
                 </view>
-                <view class="icon_play w-full h-full absolute w-50 h-50"><image class="w-64 h-64" src="@/static/opus/icon_play.png"/></view>
+                <view class="icon_play top-[calc(50% - 64rpx)] left-[calc(50% - 64rpx)] w-full h-full absolute w-50 h-50"><image class="w-64 h-64" src="@/static/opus/icon_play.png"/></view>
               </view>
             </view>
             <view v-if="element.itemType == 4">
