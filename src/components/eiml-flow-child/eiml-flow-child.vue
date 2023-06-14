@@ -1,24 +1,27 @@
 <template>
 	<view style="padding: 10rpx 5rpx 0rpx 5rpx;">
-		<view style="padding: 10rpx;border-radius: 10rpx;background: white;" @click="hanldeToView(item)">
-			<view v-if="item.cover.itemType==2">
+		<view style="padding: 10rpx;border-radius: 10rpx;background: white ;" @click="hanldeToView(item)">
+			<view v-if="item.cover.itemType==2" class="relative">
 				<image :src="item.cover.content" mode="widthFix" style="width: 100%;">
 				</image>
+				<view class="absolute  bottom-10 z-50  px-10 text-white text-12 rounded">
+					<image src="@/static/opus/icon_location_white.png"  class="w-9 h-11 mt-3"></image> {{item.cover.name}}{{computedLocation(item.cover.x,item.cover.y)}}
+				</view>
 			</view>
 			<view v-if="item.cover.itemType==3" class="relative">
-				  <image src="/static/video/videoplay.png" mode="" class="imageStyle"></image>
+				<image src="/static/video/videoplay.png" mode="" class="imageStyle"></image>
 				<image :src="item.cover.thumbnail" mode="widthFix" style="width: 100%;"></image>
 			</view>
-			<view  class="bg-[rgba(0,0,0,0.5)] absolute left-5 bottom-5 px-10 text-white text-12 rounded">
-			  <uni-icons type="location-filled" size="16"></uni-icons>{{item.cover.name}} 
-			</view>
+			
 			<view class="titleSty">
 				{{item.title}}
 			</view>
 			<view class="flex justify-between textStyle items-center h-30">
-				<view class="">	{{item.author}}</view>
-				<view class="">	<image src="/static/waterfalls/like.png"  class="w-13 h-13"></image>
-				{{item.likeNum}}</view>
+				<view class=""> {{item.author}}</view>
+				<view class="">
+					<image src="/static/waterfalls/like.png" class="w-13 h-13"></image>
+					{{item.likeNum}}
+				</view>
 			</view>
 
 		</view>
@@ -26,19 +29,50 @@
 </template>
 
 <script setup>
-	import { distanceOf,formatedDistance } from "@/utils/utils"
-import { computed } from 'vue';
+	import {
+		distanceOf,
+		formatedDistance
+	} from "@/utils/utils"
+	import {
+		computed,
+		ref,
+		onMounted
+	} from 'vue';
 	const props = defineProps({
 		item: {
 			type: Object,
 			default: {}
 		}
 	})
-	// const computedLocation = computed({
-	//   get:(x,y) => {
-	//     return function(x,y) { return x != null ? '(距您'+formatedDistance(distanceOf({x:x,y:y},{x:props.geo_x,y:props.geo_y}),1)+')' : ''}
-	//   }
-	// })
+	//距离获取
+	const geo_x = ref(null);
+	const geo_y = ref(null);
+	const getGeoLocation = (res) => {
+		uni.getLocation({
+			type: 'gcj02',
+			success: function(res) {
+				geo_x.value = res.longitude
+				geo_y.value = res.latitude
+			}
+		})
+	}
+	onMounted(() => {
+		getGeoLocation()
+	})
+	const computedLocation = computed({
+		get: (x, y) => {
+			return function(x, y) {
+				return geo_x.value != null ? '(距您' + formatedDistance(distanceOf({
+					x: x,
+					y: y
+				}, {
+					x: geo_x.value,
+					y: geo_y.value
+				}), 1) + ')' : ''
+			}
+		}
+	})
+	// console.log(.value );
 	const hanldeToView = (item) => {
 		if (item.cover.itemType == 2) {
 			uni.navigateTo({
@@ -53,7 +87,7 @@ import { computed } from 'vue';
 </script>
 
 <style scoped lang="scss">
-	.imageStyle{
+	.imageStyle {
 		position: absolute;
 		top: 50%;
 		left: 50%;
@@ -63,18 +97,21 @@ import { computed } from 'vue';
 		margin-top: -32rpx;
 		z-index: 99;
 	}
-	.textStyle{
+
+	.textStyle {
 		vertical-align: top;
 		line-height: 24rpx;
 		font-size: 25rpx;
 		font-family: Source Han Sans SC;
 		font-weight: 300;
 		color: #999999;
-		image{
+
+		image {
 			vertical-align: top;
 		}
 	}
-	.titleSty{
+
+	.titleSty {
 		overflow-x: hidden;
 		width: 324rpx;
 		height: 80rpx;
