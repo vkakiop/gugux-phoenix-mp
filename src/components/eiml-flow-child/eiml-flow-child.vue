@@ -6,29 +6,39 @@
 				</image>
 			</view>
 			<view v-if="item.cover.itemType==3" class="relative">
-				  <image src="/static/video/视频播放按钮@3x.png" mode="" class="imageStyle"></image>
+				  <image src="/static/video/videoplay.png" mode="" class="imageStyle"></image>
 				<image :src="item.cover.thumbnail" mode="widthFix" style="width: 100%;"></image>
 			</view>
-			<view class="itemName">
-				{{item.author}}
+			<view  class="bg-[rgba(0,0,0,0.5)] absolute left-5 bottom-5 px-10 text-white text-12 rounded">
+			  <uni-icons type="location-filled" size="16"></uni-icons>{{item.cover.name}} 
 			</view>
-			<view class="itemTitle">
+			<view class="titleSty">
 				{{item.title}}
 			</view>
-			<view class="itemPrice">
-				{{item.brief}}
+			<view class="flex justify-between textStyle items-center h-30">
+				<view class="">	{{item.author}}</view>
+				<view class="">	<image src="/static/waterfalls/like.png"  class="w-13 h-13"></image>
+				{{item.likeNum}}</view>
 			</view>
+
 		</view>
 	</view>
 </template>
 
 <script setup>
+	import { distanceOf,formatedDistance } from "@/utils/utils"
+import { computed } from 'vue';
 	const props = defineProps({
 		item: {
 			type: Object,
 			default: {}
 		}
 	})
+	// const computedLocation = computed({
+	//   get:(x,y) => {
+	//     return function(x,y) { return x != null ? '(距您'+formatedDistance(distanceOf({x:x,y:y},{x:props.geo_x,y:props.geo_y}),1)+')' : ''}
+	//   }
+	// })
 	const hanldeToView = (item) => {
 		if (item.cover.itemType == 2) {
 			uni.navigateTo({
@@ -53,17 +63,25 @@
 		margin-top: -32rpx;
 		z-index: 99;
 	}
-	.itemTitle {
-		font-size: 24rpx;
+	.textStyle{
+		vertical-align: top;
+		line-height: 24rpx;
+		font-size: 25rpx;
+		font-family: Source Han Sans SC;
+		font-weight: 300;
+		color: #999999;
+		image{
+			vertical-align: top;
+		}
 	}
-
-	.itemName {
-		font-weight: bold;
-		font-size: 30rpx;
-	}
-
-	.itemPrice {
-		font-size: 30rpx;
-		color: red;
+	.titleSty{
+		overflow-x: hidden;
+		width: 324rpx;
+		height: 80rpx;
+		font-size: 26rpx;
+		font-family: Source Han Sans SC;
+		font-weight: 400;
+		color: #272A29;
+		line-height: 40rpx;
 	}
 </style>

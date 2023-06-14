@@ -1,5 +1,5 @@
 <template>
-  <view>
+  <view class="bg-gray-100">
     <view class="relative p-10  mb-10 ">
       <icon type="search" size="26" class="absolute right-0" @click="skipHistory" />
     </view>
