@@ -53,8 +53,9 @@
 
 <script setup>
 import { ref, onMounted, reactive,watch,computed,getCurrentInstance } from 'vue'
-<<<<<<< HEAD
-import { onShow,onReachBottom } from "@dcloudio/uni-app"
+import { opusList } from '@/api/opus/list'
+import waterfall from '@/components/index/waterfall.vue'
+import { onShow,onReachBottom,onPageScroll } from "@dcloudio/uni-app"
 const isShow = ref(true)
 const internalInstance = getCurrentInstance()
 const iconType = ref('bottom')
@@ -97,11 +98,7 @@ const closeShow = () => {
   console.log('查看详情');
   uni.navigateTo({ url: '/pages/safeguard/safeguarddetail?id=' + encodeURIComponent(123) })
 }
-=======
-import { opusList } from '@/api/opus/list'
-import waterfall from '@/components/index/waterfall.vue'
-import { onShow,onReachBottom,onPageScroll } from "@dcloudio/uni-app"
->>>>>>> dd1bfd5329fc54863b4076fa751e1579d55d55bd
+
 
 onMounted(()=>{
   changeWaterfall(0)
