@@ -30,7 +30,7 @@
       <text>现场视频：</text>
       <view class="relative" v-for="(item,index) in pageData.data.video" :key="index" @click="previewMedia(item.address)">
         <image :src="item.cover" class="rounded-8 iconplayphoto" mode="widthFix"/>
-        <view class="icon_play w-full h-full absolute w-50 h-50"><image class="w-50 h-50" src="@/static/opus/icon_play.png"/></view>
+        <view class="icon_play w-full h-full absolute w-50 h-50"><image class="w-64 h-64" src="@/static/opus/icon_play.png"/></view>
       </view>
     </view>
     <view class="box">
@@ -192,8 +192,8 @@ const playAudio = (type,item) =>{
       left:0;
       image{
         position: absolute;
-        top:calc(50% - 50rpx);
-        left:calc(50% - 50rpx);
+        top:calc(50% - 64rpx);
+        left:calc(50% - 64rpx);
       }
     }
     .audio-box{

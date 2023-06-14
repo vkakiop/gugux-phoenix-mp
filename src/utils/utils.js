@@ -1,3 +1,5 @@
+import useLoginTokenStore from '@/store/modules/loginToken'
+
 export function isPlatformMp() {
 	const isMp = process.env.UNI_PLATFORM === "mp-weixin";
 	return isMp
@@ -130,8 +132,12 @@ export function formatedDistance(p1) {
 }
 
 export function getTokenValue() {
-	const app = getApp()
-	let token = app.globalData.loginToken && app.globalData.loginToken.accessToken
+
+	//const app = getApp()
+	//let token = app.globalData.loginToken && app.globalData.loginToken.accessToken
+	const loginTokenStore = useLoginTokenStore()
+	let loginToken = loginTokenStore.get()
+	let token = loginToken && loginToken.accessToken ? loginToken.accessToken : ''
 	if (!token || token == 'undefined') {
 		token = ''
 	}
@@ -154,8 +160,9 @@ export function getCurrentPageUrl() {
 }
 
 export function needLogin() {
-	const app = getApp()
-	if (!app.globalData.loginToken.accessToken) {
+	//const app = getApp()
+	//if (!app.globalData.loginToken.accessToken) {
+	if (!getTokenValue()) {
 		uni.navigateTo({url:'/pages/login/index?url='+encodeURIComponent(getCurrentPageUrl())})
 		return false
 	}

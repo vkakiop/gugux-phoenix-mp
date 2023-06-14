@@ -6,7 +6,7 @@
 					<video autoplay class="w-screen h-screen fixed" :id="'video' + index" :src="item.cover.content" loop :controls="false" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false" @error="videoErrorCallback">
 					</video>
 					<view v-if="pageData.status == 1" class="icon_play w-full h-full absolute w-50 h-50">
-						<image class="w-50 h-50" src="@/static/opus/icon_play.png" />
+						<image class="w-64 h-64" src="@/static/opus/icon_play.png" />
 					</view>
 					<view class="info">
 						<view class="title">@{{ item.title }}</view>
@@ -17,29 +17,29 @@
 							<debounce @debounce="attention(item)" class="header_group">
 								<image class="header" :src="item.icon"></image>
 								<view class="add">
-									<image src="@/static/video/+@3x.png" class="w-19 h-19" v-if="!item.isFollow"></image>
-									<image src="@/static/video/达人@3x.png" class="w-19 h-19" v-else></image>
+									<image src="@/static/video/attention.png" class="w-19 h-19" v-if="!item.isFollow"></image>
+									<image src="@/static/video/reture.png" class="w-19 h-19" v-else></image>
 								</view>
 							</debounce>
 							<debounce @debounce="like(item)" class="button mb-10">
-								<image v-if="item.isLike" class="w-36 h-36" src="@/static/video/点赞填充@3x.png" />
-								<image v-else class="w-36 h-36" src="@/static/video/点赞@3x.png" />
+								<image v-if="item.isLike" class="w-36 h-36" src="@/static/video/likefill.png" />
+								<image v-else class="w-36 h-36" src="@/static/video/like.png" />
 								<view>{{ item.likeNum }}</view>
 							</debounce>
 							<debounce @debounce="comment(item)" class="button mb-10">
-								<img class="w-36 h-36" src="@/static/video/评价@3x.png">
+								<img class="w-36 h-36" src="@/static/video/evaluate.png">
 								<view>{{ item.commentNum }}</view>
 							</debounce>
 							<debounce @debounce="collection(item)" class="button mb-10">
 							<view class="button mb-10">
-								<image v-if="item.isCollection" class="w-36 h-36" src="@/static/video/收藏填充@3x.png" />
-								<image v-else class="w-36 h-36" src="@/static/video/收藏@3x.png" />
+								<image v-if="item.isCollection" class="w-36 h-36" src="@/static/video/collectfill.png" />
+								<image v-else class="w-36 h-36" src="@/static/video/collect.png" />
 								<view>{{ item.collectionNum }}</view>
 							</view>
 							</debounce>
 							<view class="button mb-10" @click='handleShare'>
 								<button open-type="share" style="background-color: transparent;">
-									<image class="w-36 h-36" src="@/static/video/分享@3x.png" />
+									<image class="w-36 h-36" src="@/static/video/share.png" />
 								</button>
 								<view>分享</view>
 							</view>
@@ -277,8 +277,8 @@
 
 <style lang="scss" scoped>
 	.icon_play {
-		top: calc(50% - 50rpx);
-		left: calc(50% - 50rpx);
+		top: calc(50% - 64rpx);
+		left: calc(50% - 64rpx);
 	}
 
 	.swiper {

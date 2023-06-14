@@ -1,34 +1,78 @@
 <template>
 	<view style="padding: 10rpx 5rpx 0rpx 5rpx;">
-		<view style="padding: 10rpx;border-radius: 10rpx;background: white;" @click="hanldeToView(item)">
-			<view v-if="item.cover.itemType==2">
+		<view style="padding: 10rpx;border-radius: 10rpx;background: white ;" @click="hanldeToView(item)">
+			<view v-if="item.cover.itemType==2" class="relative">
 				<image :src="item.cover.content" mode="widthFix" style="width: 100%;">
 				</image>
+				<view class="absolute  bottom-10 z-50  px-10 text-white text-12 rounded">
+					<image src="@/static/opus/icon_location_white.png"  class="w-9 h-11 mt-3"></image> {{item.cover.name}}{{computedLocation(item.cover.x,item.cover.y)}}
+				</view>
 			</view>
 			<view v-if="item.cover.itemType==3" class="relative">
-				  <image src="/static/video/视频播放按钮@3x.png" mode="" class="imageStyle"></image>
+				<image src="/static/video/videoplay.png" mode="" class="imageStyle"></image>
 				<image :src="item.cover.thumbnail" mode="widthFix" style="width: 100%;"></image>
 			</view>
-			<view class="itemName">
-				{{item.author}}
-			</view>
-			<view class="itemTitle">
+			
+			<view class="titleSty">
 				{{item.title}}
 			</view>
-			<view class="itemPrice">
-				{{item.brief}}
+			<view class="flex justify-between textStyle items-center h-30">
+				<view class="">   <image :src="item.icon" class="w-16 h-16 rounded-full"></image>{{item.author}}</view>
+				<view class="">
+					<image src="/static/waterfalls/like.png" class="w-13 h-13"></image>
+					{{item.likeNum}}
+				</view>
 			</view>
+
 		</view>
 	</view>
 </template>
 
 <script setup>
+	import {
+		distanceOf,
+		formatedDistance
+	} from "@/utils/utils"
+	import {
+		computed,
+		ref,
+		onMounted
+	} from 'vue';
 	const props = defineProps({
 		item: {
 			type: Object,
 			default: {}
 		}
 	})
+	//距离获取
+	const geo_x = ref(null);
+	const geo_y = ref(null);
+	const getGeoLocation = (res) => {
+		uni.getLocation({
+			type: 'gcj02',
+			success: function(res) {
+				geo_x.value = res.longitude
+				geo_y.value = res.latitude
+			}
+		})
+	}
+	onMounted(() => {
+		getGeoLocation()
+	})
+	const computedLocation = computed({
+		get: (x, y) => {
+			return function(x, y) {
+				return geo_x.value != null ? '(距您' + formatedDistance(distanceOf({
+					x: x,
+					y: y
+				}, {
+					x: geo_x.value,
+					y: geo_y.value
+				}), 1) + ')' : ''
+			}
+		}
+	})
+	// console.log(.value );
 	const hanldeToView = (item) => {
 		if (item.cover.itemType == 2) {
 			uni.navigateTo({
@@ -43,7 +87,7 @@
 </script>
 
 <style scoped lang="scss">
-	.imageStyle{
+	.imageStyle {
 		position: absolute;
 		top: 50%;
 		left: 50%;
@@ -53,17 +97,28 @@
 		margin-top: -32rpx;
 		z-index: 99;
 	}
-	.itemTitle {
-		font-size: 24rpx;
+
+	.textStyle {
+		vertical-align: top;
+		line-height: 24rpx;
+		font-size: 25rpx;
+		font-family: Source Han Sans SC;
+		font-weight: 300;
+		color: #999999;
+
+		image {
+			vertical-align: top;
+		}
 	}
 
-	.itemName {
-		font-weight: bold;
-		font-size: 30rpx;
-	}
-
-	.itemPrice {
-		font-size: 30rpx;
-		color: red;
+	.titleSty {
+		overflow: hidden;
+		width: 324rpx;
+		height: 80rpx;
+		font-size: 26rpx;
+		font-family: Source Han Sans SC;
+		font-weight: 400;
+		color: #272A29;
+		line-height: 40rpx;
 	}
 </style>
