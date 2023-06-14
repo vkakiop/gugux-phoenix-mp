@@ -27,7 +27,7 @@
 								<view>{{ item.likeNum }}</view>
 							</debounce>
 							<debounce @debounce="comment(item)" class="button mb-10">
-								<img class="w-36 h-36" src="@/static/video/evaluate.png">
+								<image class="w-36 h-36" src="@/static/video/evaluate.png" />
 								<view>{{ item.commentNum }}</view>
 							</debounce>
 							<debounce @debounce="collection(item)" class="button mb-10">
