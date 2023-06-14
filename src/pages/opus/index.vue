@@ -46,18 +46,20 @@
 </template>
 
 <script setup>
-import { reactive } from "vue"
+import { reactive,watch } from "vue"
 import { opusInfo,opusCollect,opusLike,userFans,userFansRemove } from "@/api/opus/index"
 import { getTokenValue } from "@/utils/utils"
-import {onLoad, onShow} from '@dcloudio/uni-app'
+import {onLoad} from '@dcloudio/uni-app'
 import opusArticle from './components/opusArticle'
+import useLoginTokenStore from '@/store/modules/loginToken'
+const loginTokenStore = useLoginTokenStore()
 
 onLoad((option)=>{
     pageData.id = option.id
-    //getData()
+    getData()
 })
 
-onShow(() => {
+watch(()=>loginTokenStore.get().accessToken,(newVal,oldVal)=>{
   getData()
 })
 

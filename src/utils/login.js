@@ -1,8 +1,11 @@
 import {switchTabPathes,configLoginToken} from '@/config/index'
+import useLoginTokenStore from '@/store/modules/loginToken'
 export function tokenSave(res,returnUrl) {
-    const app = getApp()
+    //const app = getApp()
     if (res.data && res.data.accessToken) {
-        app.globalData.loginToken = res.data
+        //app.globalData.loginToken = res.data
+        const loginTokenStore = useLoginTokenStore()
+        loginTokenStore.set(res.data)
 
         uni.setStorage({
             key: configLoginToken,

@@ -42,7 +42,7 @@
         <rich-text :nodes="content"></rich-text>
       </view>
     </u-modal>
-    
+
   </view>
 </template>
 
@@ -55,7 +55,6 @@
 	} from "@/api/worksSearch/index.js"
 import { ref, onMounted, reactive,watch,computed,getCurrentInstance } from 'vue'
 import { onShow,onReachBottom } from "@dcloudio/uni-app"
-const loginToken = ref({})
 const isShow = ref(true)
 const internalInstance = getCurrentInstance()
 const iconType = ref('bottom')
@@ -145,7 +144,7 @@ function menuClick(item) {
 		immediate: true
 	})
 onShow(() => {
-  loginToken.value = getApp().globalData.loginToken
+
 })
 function drowDown(item) {
   iconType.value = item
@@ -181,7 +180,7 @@ function skipHistory() {
 				waterlist.value = [...res.data.list]
 			})
 		}
-		
+
 	})
 </script>
 
