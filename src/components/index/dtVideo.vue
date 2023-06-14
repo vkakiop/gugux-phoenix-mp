@@ -6,7 +6,7 @@
 					<video autoplay class="w-screen h-screen fixed" :id="'video' + index" :src="item.cover.content" loop :controls="false" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false" @error="videoErrorCallback">
 					</video>
 					<view v-if="pageData.status == 1" class="icon_play w-full h-full absolute w-50 h-50">
-						<image class="w-50 h-50" src="@/static/opus/icon_play.png" />
+						<image class="w-64 h-64" src="@/static/opus/icon_play.png" />
 					</view>
 					<view class="info">
 						<view class="title">@{{ item.title }}</view>
@@ -277,8 +277,8 @@
 
 <style lang="scss" scoped>
 	.icon_play {
-		top: calc(50% - 50rpx);
-		left: calc(50% - 50rpx);
+		top: calc(50% - 64rpx);
+		left: calc(50% - 64rpx);
 	}
 
 	.swiper {
