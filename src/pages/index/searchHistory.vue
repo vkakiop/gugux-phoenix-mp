@@ -1,20 +1,18 @@
 <template>
 	<view class="bg-gray-100">
 		<!-- 搜索框 -->
-		<view class="search">
-			<view style="display: flex;align-items: center;">
-				<text class="iconfont icon-sousuo position-absolute text-muted"></text>
-				<input class="searchInput" v-model="inputValue" @confirm="search" placeholder="搜索" type="text" />
+		<view class="search ">
+			<view class="flex items-center  bg-[#F7F7F7] w-300 rounded-40 border-1 border-[#E3E3E3]">
+				<icon type="search" size="26" class="ml-10" />
+				<input class="bg-[#F7F7F7] ml-10  w-220" v-model="searchvalue" placeholder="请输入搜索关键字" type="text" />
 			</view>
-			<view>取消</view>
+			<view @click="search">搜索</view>
 		</view>
 		<!-- 搜索框 -->
-
 		<!-- 搜索历史 -->
 		<view class="searchHistory">
 			<view style="display: flex;align-items: center;justify-content: space-between;box-sizing: border-box;padding: 0px 5px;">
 				<view>搜索历史:</view>
-
 				<view style="color: red;font-size: 28px;" @click="empty"><uni-icons type="trash" size="30"></uni-icons>
 				</view>
 			</view>
@@ -28,89 +26,186 @@
 		<view>
 			<view class="uni-common-mt">
 				<view style="flex:2">
-					<u-tabs :list="menuList" lineWidth="40" lineColor="#f56c6c" :activeStyle="{
+					<u-tabs :list="computedMenuItems" lineWidth="40" lineColor="#f56c6c" :activeStyle="{
 	            color: '#303133',
 	            fontWeight: 'bold',
 	            transform: 'scale(1.05)'
 	          }" :inactiveStyle="{
 	  color: '#606266',
 	  transform: 'scale(1)'
-	}" itemStyle="padding-left: 15rpx; padding-right: 15rpx; height: 66rpx;" @click="menuClick">
+	}" itemStyle="padding-left: 15rpx; padding-right: 15rpx; height: 66rpx;" @click="(item)=>changeWaterfall(item.index)">
 					</u-tabs>
-				</view>
-				<view class="flex items-center">更多
-					<uni-icons type="bottom" size="26" v-if="iconType == 'bottom'"></uni-icons>
-					<uni-icons type="top" size="26" v-else></uni-icons>
 				</view>
 			</view>
 		</view>
-		<view class="" v-if="isShow">
-			<eimlFlow :list="list" :columnNum="2"></eimlFlow>
+		<view >
+			<view v-for="(waterItem,waterIndex) in pageData.waterfallItems">
+				<view v-show="waterIndex == pageData.currentIndex">
+					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items" :waterIndex="waterIndex">
+					</waterfall>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
 
 <script setup>
-	import eimlFlow from "@/components/eiml-flow-layout/eiml-flow-layout.vue"
+	import waterfall from '@/components/index/waterfall.vue'
 	import {
-		opusSearchNew,
-		opusSearchArticle,
-		opusSearchVideo
+		opusList
+	} from '@/api/opus/list'
+	import {
+		opusSearchNew
 	} from "@/api/worksSearch/index.js"
 	import {
 		ref,
+		onMounted,
 		reactive,
 		watch,
 		computed,
-		getCurrentInstance,
-		onMounted
-	} from 'vue';
+		getCurrentInstance
+	} from 'vue'
 	import {
 		onReachBottom,
-		onLoad
+		onLoad,
+		onPageScroll
 	} from '@dcloudio/uni-app';
 	const internalInstance = getCurrentInstance()
-	const inputValue = ref('')
+	const searchvalue = ref('')
 	const isShowHistory = ref(true)
-	const isShow = ref(false)
-	const iconType = ref('bottom')
-	const menuList = reactive([{
-			name: '综合',
-		}, {
-			name: '文章',
-		}, {
-			name: '视频'
-		},
-		{
-			name: '用户'
-		}
-	])
+	const waterlist = ref([])
+	const pageData = reactive({
+		scrollTop: 0,
+		currentIndex: 0,
+		waterfallItems: [{
+				scrollTop: 0,
+				isComplete: false,
+				isLoading: false,
+				itemType: 'title',
+				name: '综合',
+				items: [],
+				query: {
+					path: {
+						type: 1,
+						pageNum: 1,
+						pageSize: 10,
+						searchTime: "",
+						keyword: ''
+					},
+					data: {
+						passTime: ''
+					}
+				}
+			},
+			{
+				scrollTop: 0,
+				isComplete: false,
+				isLoading: false,
+				itemType: 'title',
+				name: '文章',
+				items: [],
+				query: {
+					path: {
+						type: 2,
+						pageNum: 1,
+						pageSize: 10,
+						searchTime: "",
+						keyword: ''
+					},
+					data: {
+						passTime: ''
+					}
+				}
+			},
+			{
+				scrollTop: 0,
+				isComplete: false,
+				isLoading: false,
+				name: '视频',
+				items: [],
+				query: {
+					path: {
+						type: 3,
+						pageNum: 1,
+						pageSize: 10,
+						searchTime: "",
+						keyword: ''
+					},
+					data: {
+						passTime: ''
+					}
+				}
+			}
+		],
+	})
 	const list = ref([])
-	const paramsForm = ref({
+	const paramsForm = reactive({
 		"keyword": "",
 		"pageNum": 1,
 		"pageSize": 10,
 		"searchTime": "",
 		"type": 0
 	})
-
-	function menuClick(item) {
-	if(paramsForm.type!=item.index){
-		paramsForm.pageSize=10
-		paramsForm.type = item.index
-		getDataApi()
-	}	
+	const changeWaterfall = (waterIndex) => {
+		if (pageData.currentIndex != waterIndex) {
+			//读取滚动条高度
+			pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
+		}
+		pageData.currentIndex = waterIndex
+		if (pageData.waterfallItems[waterIndex].items.length == 0) {
+			getData()
+		} else {
+			//写入滚动条高度
+			uni.pageScrollTo({
+				scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
+				duration: 300
+			});
+		}
 	}
+	const getData = () => {
+		let currentIndex = pageData.currentIndex
+		pageData.waterfallItems[currentIndex].isLoading = true
+		let query = pageData.waterfallItems[currentIndex].query
+		opusSearchNew({
+			...query.path
+		}).then(res => {
+			if (res.data.page == res.data.totalPage) {
+				pageData.waterfallItems[currentIndex].isComplete = true
+			}
+			pageData.waterfallItems[currentIndex].query.path.searchTime = res.data.serviceTime
+			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
+			pageData.waterfallItems[currentIndex].isLoading = false
+		}).catch(e => {
+			pageData.waterfallItems[currentIndex].isLoading = false
+		})
+
+	}
+	onPageScroll((res) => {
+		pageData.scrollTop = res.scrollTop
+	})
 	const search = () => {
-		if (inputValue.value == '') {
+		if (searchvalue.value == '') {
 			uni.showModal({
 				title: '搜索内容不能为空'
 			});
 		} else {
-			paramsForm.value.pageSize=10
-			paramsForm.value.keyword = inputValue.value
-			isShowHistory.value = false
-			getDataApi()
+			if (pageData.waterfallItems[0].query.path.keyword == searchvalue.value) {
+				uni.showModal({
+					title: '请修改搜索内容'
+				});
+			} else {
+				pageData.waterfallItems.forEach((item) => {
+					item.scrollTop = 0
+					item.isComplete = false
+					item.isLoading= false
+					item.items = []
+					item.query.path.keyword = searchvalue.value
+					item.query.path.pageNum = 1
+					item.query.path.searchTime = ''
+				})
+
+				getData()
+			}
 		}
 	}
 	const empty = () => {
@@ -123,55 +218,23 @@
 		searchHistoryList.value = [];
 	}
 	// 数据赋值
-	onMounted(() => {
-		getDataApi()
+
+	const computedMenuItems = computed(() => {
+		return pageData.waterfallItems.map(item => {
+			return {
+				name: item.name
+			}
+		})
 	})
-	const getDataApi = () => {
-		if (paramsForm.value.type == 0) {
-			isShow.value = false
-			opusSearchNew(paramsForm.value).then(res => {
-				isShow.value = true
-				list.value = [...res.data.list]
-			})
-		} else if (paramsForm.value.type == 1) {
-			isShow.value = false
-			opusSearchArticle(paramsForm.value).then(res => {
-				isShow.value = true
-				list.value = [...res.data.list]
-			})
-		} else if (paramsForm.value.type == 2) {
-			isShow.value = false
-			opusSearchVideo(paramsForm.value).then(res => {
-				isShow.value = true
-				list.value = [...res.data.list]
-			})
-		}
-		//操作数据后更新视图
-		internalInstance.ctx.$forceUpdate()
-	}
-	watch(() => paramsForm.value.type, (newV, oldV) => {
-		getDataApi()
-	}, {
-		deep: true,
-		immediate: true
+	onMounted(() => {
+		changeWaterfall(0)
 	})
 	onReachBottom(() => {
-		console.log('触底了')
-		paramsForm.value.pageSize+=10
-		if (paramsForm.value.type == 0) {
-			opusSearchNew(paramsForm.value).then(res => {
-				list.value = [...res.data.list]
-			})
-		} else if (paramsForm.value.type == 1) {
-			opusSearchArticle(paramsForm.value).then(res => {
-				list.value = [...res.data.list]
-			})
-		} else if (paramsForm.value.type == 2) {
-			opusSearchVideo(paramsForm.value).then(res => {
-				list.value = [...res.data.list]
-			})
+		let currentIndex = pageData.currentIndex
+		if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
+			pageData.waterfallItems[currentIndex].query.path.pageNum++
+			getData()
 		}
-		
 	})
 </script>
 
@@ -191,12 +254,6 @@
 		justify-content: space-between;
 		box-sizing: border-box;
 		padding: 0px 15px;
-	}
-
-	.searchInput {
-		background-color: #f8f9fa;
-		width: 220px;
-		margin-left: 5px;
 	}
 
 	.searchHistory {

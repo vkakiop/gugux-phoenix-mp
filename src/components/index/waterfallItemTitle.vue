@@ -4,8 +4,8 @@
 			<view v-if="isVirtualCal" :style="{width:'100%',height:computedHeight(item.cover.width,item.cover.height)+'rpx'}"></view>
 			<image v-else :src="item.cover.itemType == 2 ? item.cover.content : item.cover.thumbnail" :style="{width:'100%',height:computedHeight(item.cover.width,item.cover.height)+'rpx'}" @click="godetail(item)"></image>
 			<image v-if="item.cover.itemType==3" src="/static/video/videoplay.png" mode="" class="absolute w-36 h-36 top-[50%] left-[50%] -ml-18 -mt-18 z-50"></image>
-			<view v-if="item.cover.itemType==2" class="absolute  bottom-10 z-50  px-10 text-white text-12 rounded">
-				<image src="@/static/opus/icon_location_white.png" class="w-9 h-11 mt-3"></image> {{item.cover.name}}{{computedLocation(item.cover.x,item.cover.y)}}
+			<view v-if="item.cover.itemType==2&&item.cover.name" class="absolute  bottom-10 z-50  px-10 text-white text-12 rounded ">
+				<image src="@/static/opus/icon_location_white.png" class="w-9 h-11 -mt-2 align-middle"></image> {{item.cover.name}}{{computedLocation(item.cover.x,item.cover.y)}}
 			</view>
 		</view>
 		<view class=" line-clamp-2 text-14 font-bold text-[#272A29] leading-20">
