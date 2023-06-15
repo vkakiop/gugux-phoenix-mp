@@ -1,16 +1,15 @@
 <template>
   <view :id="'waterDom_'+waterIndex" style="position: absolute;width:100%; visibility: hidden">
     <view v-for="(columnItem,columnIndex) in 1" :key="columnIndex">
-      <view class="w-172" v-for="(item,index) in [data.currentItem]" :key="index">
-        <waterfallItemTitle :item="item"></waterfallItemTitle>
+      <view class="w-172" v-for="(item,index) in [pageData.currentItem]" :key="index">
+        <waterfallItemTitle v-if="itemType == 'title'" :item="item" :isVirtualCal="true"></waterfallItemTitle>
+        <waterfallItemImage v-else :item="item" :isVirtualCal="true"></waterfallItemImage>
       </view>
     </view>
   </view>
   <view class="flex justify-between">
-    <view v-for="(columnItem,columnIndex) in data.column" :key="columnIndex" :id="`waterfalls_flow_column_${waterIndex}_${columnIndex+1}`" :class="['flex-none',columnIndex == 0 ? 'ml-14' : 'mr-14']">
-      <view class="w-172" v-for="(item,index) in data[`column_${columnIndex+1}_values`]" :key="index">
-        <waterfallItemTitle :item="item"></waterfallItemTitle>
-      </view>
+    <view v-for="(columnItem,columnIndex) in 2" :key="columnIndex" :id="`waterfalls_flow_column_${waterIndex}_${columnIndex+1}`" :class="['flex-none',columnIndex == 0 ? 'ml-14' : 'mr-14']">
+      <waterfallGroup v-for="(items,groupIndex) in pageData[`column_values_group_${columnIndex}`]" :waterIndex="waterIndex" :groupIndex="groupIndex" :currentIndex="currentIndex" :itemType="itemType" :items="items" :height="pageData[`column_height_group_${columnIndex}`][groupIndex]"></waterfallGroup>
     </view>
   </view>
   <view v-if="isComplete" class="text-center h-50 leading-50">
@@ -19,68 +18,50 @@
 </template>
 <script setup>
 import { ref, reactive, watch, nextTick, computed, getCurrentInstance, onMounted } from 'vue'
+import _ from 'lodash'
+import waterfallGroup from './waterfallGroup.vue'
 import waterfallItemTitle from './waterfallItemTitle.vue'
-const _this = getCurrentInstance();
-const data = reactive({});
+import waterfallItemImage from './waterfallItemImage.vue'
+
+const _this = getCurrentInstance()
+const pageData = reactive({
+  isLoading:false,
+  list:[],
+  currentItem:{},
+  column_values_0:[],
+  column_values_1:[],
+  column_values_group_0:[],
+  column_values_group_1:[],
+  column_height_0:0,
+  column_height_1:0,
+  column_height_group_0:[],
+  column_height_group_1:[],
+})
+
 const props = defineProps({
   value: Array,
-  column: { // 列的数量
-    type: [String, Number],
-    default: 2
-  },
-  columnSpace: { // 列之间的间距 百分比
-    type: [String, Number],
-    default: 2
-  },
-  imageKey: { // 图片key
-    type: [String],
-    default: 'image'
-  },
-  seat: { // 文本的位置，1图片之上 2图片之下
-    type: [String, Number],
-    default: 2
-  },
-  currentIndex: {
+  waterIndex: {
     type: Number,
     default: 0
   },
-  waterIndex: {
+  currentIndex: {
     type: Number,
     default: 0
   },
   isComplete: {
     type: Boolean,
     default: false
+  },
+  itemType: {
+    type: String,
+    default: 'title'
   }
-});
+})
 
-const emit = defineEmits([])
 // 数据赋值
-data.list = props.value ? props.value : [];
-data.column = props.column < 2 ? 2 : props.column;
-data.columnSpace = props.columnSpace <= 5 ? props.columnSpace : 5;
-data.imageKey = props.imageKey;
-data.seat = props.seat;
-data.isFirstLoad = true;
-data.currentItem = {}
-data.column_1_values = []
-data.column_2_values = []
-data.column_height_1 = 0
-data.column_height_2 = 0
-// 计算列宽
-const w = computed(()=>{
-  const column_rate = `${100 / data.column - (+data.columnSpace)}%`;
-  return column_rate;
-})
-// 计算margin
-const m = computed(()=>{
-  const column_margin = `${(100-(100 / data.column - (+data.columnSpace)).toFixed(5)*data.column)/(data.column-1)}%`;
-  return column_margin;
-})
-// 每列的数据初始化
-for (let i = 1; i <= data.column; i++) {
-  data[`column_${i}_values`] = [];
-}
+//pageData.list = props.value ? props.value : [];
+
+/*
 // 获取最小值的对象
 const getMin = (a, s) => {
   let m = a[0][s];
@@ -97,38 +78,64 @@ const getMin = (a, s) => {
 function getMinColumnHeight() {
   return new Promise(resolve => {
     const heightArr = [];
-    for (let i = 1; i <= data.column; i++) {
+    for (let i = 1; i <= pageData.column; i++) {
       const query = uni.createSelectorQuery().in(_this);
-      query.select(`#waterfalls_flow_column_${props.waterIndex}_${i}`).boundingClientRect(data => {
-        console.log('高度'+`${props.waterIndex}_${i}`,data.height)
-        heightArr.push({ column: i, height: data.height });
+      query.select(`#waterfalls_flow_column_${props.waterIndex}_${i}`).boundingClientRect(pageData => {
+        console.log('高度'+`${props.waterIndex}_${i}`,pageData.height)
+        heightArr.push({ column: i, height: pageData.height });
       }).exec(() => {
-        if (data.column <= heightArr.length) {
+        if (pageData.column <= heightArr.length) {
           resolve(getMin(heightArr, 'height'));
         }
       });
     }
   })
 };
+ */
+
 async function initValue(i) {
-  if (i >= data.list.length) return false;
-  data.currentItem = data.list[i]
+  if (i >= pageData.list.length) return false;
+  pageData.currentItem = pageData.list[i]
   //获取当前dom高度
   nextTick(()=>{
     setTimeout(()=>{
       const query = uni.createSelectorQuery().in(_this);
       query.select(`#waterDom_${props.waterIndex}`).boundingClientRect(res => {
         if (res) {
-          let column = 1
-          if (data['column_height_2']>=data['column_height_1']) {
-            data['column_height_1'] = data['column_height_1'] + res.height
-            column = 1
+          let column = 0
+          let height = res.height
+          if (pageData.column_height_1>=pageData.column_height_0) {
+            pageData.column_height_0 = pageData.column_height_0 + height
+            column = 0
           }
           else {
-            data['column_height_2'] = data['column_height_2'] + res.height
-            column = 2
+            pageData.column_height_1 = pageData.column_height_1 + height
+            column = 1
           }
-          data[`column_${column}_values`].push({ ...data.list[i], index: i });
+
+          //添加到分组中
+          let groupItems = []
+          if (pageData[`column_values_group_${column}`].length > 0) {
+            groupItems = pageData[`column_values_group_${column}`][pageData[`column_values_group_${column}`].length - 1]
+          }
+          if (groupItems.length >= 10) {
+            groupItems = []
+          }
+          groupItems.push({ ...pageData.list[i], index: i, height:height})
+          if (groupItems.length == 1) {
+            pageData[`column_values_group_${column}`].push(groupItems)
+          }
+          else {
+            pageData[`column_values_group_${column}`][pageData[`column_values_group_${column}`].length - 1] = groupItems
+          }
+          //计算最后一列的高度
+          let lastIndex = pageData[`column_values_group_${column}`].length - 1
+          let lastHeight = pageData[`column_values_group_${column}`][lastIndex].map(item=>{
+            return item.height
+          }).reduce((a,b)=>{return a+b})
+          pageData[`column_height_group_${column}`][lastIndex] = lastHeight
+
+          pageData[`column_values_${column}`].push({ ...pageData.list[i], index: i, height:height });
         }
       }).exec(() => {
         init()
@@ -139,49 +146,50 @@ async function initValue(i) {
 
 
   //const minHeightRes = await getMinColumnHeight();
-  //data[`column_${minHeightRes.column}_values`].push({ ...data.list[i], index: i });
-}
-
-
-
-onMounted(() => {
-  //initValue(0);
-})
-const initValueChange = (index)=>{
-  initValue(index)
+  //pageData[`column_${minHeightRes.column}_values`].push({ ...pageData.list[i], index: i });
 }
 
 const init = ()=>{
-  let isAddCount = data[`column_1_values`].length + data[`column_2_values`].length
-  if (isAddCount <= props.value.length) {
+  pageData.isLoading = true
+  let isAddCount = pageData.column_values_0.length + pageData.column_values_1.length
+  if (props.value.length == 0 && isAddCount > 0) {
+    pageData.column_values_0 = []
+    pageData.column_values_1 = []
+    pageData.column_values_group_0 = []
+    pageData.column_values_group_1 = []
+    pageData.isLoading = false
+  }
+  else if (isAddCount <= props.value.length) {
     initValue(isAddCount)
-  }
-  else if (props.value.length == 0 && isAddCount > 0) {
-    data[`column_1_values`] = []
-    data[`column_2_values`] = []
+    if (isAddCount == props.value.length) {
+      pageData.isLoading = false
+      console.log('已加载完成：',isAddCount)
+    }
   }
 }
-defineExpose({initValueChange,init})
+defineExpose({init})
 
-// 图片加载完成
-function imgLoad(item) {
-  const i = item.index;
-  initValue(i + 1);
-}
-// 图片加载失败
-function imgError(item) {
-  const i = item.index;
-  initValue(i + 1);
-  item[data.imageKey] = null;
-}
+// // 图片加载完成
+// function imgLoad(item) {
+//   const i = item.index;
+//   initValue(i + 1);
+// }
+// // 图片加载失败
+// function imgError(item) {
+//   const i = item.index;
+//   initValue(i + 1);
+//   item[pageData.imageKey] = null;
+// }
+
 // 监听数据的变化
 watch(() => props.value, (newValue, oldValue) => {
-  console.log('watch')
   const oldLength = oldValue ? oldValue.length : 0;
-  data.list = newValue;
+  pageData.list = newValue;
   //if (oldLength > 0) initValue(oldLength);
-  init()
-}, { immediate: true });
+  if (!pageData.isLoading) {
+    init()
+  }
+}, { immediate: true })
 </script>
 <style lang="scss" scoped>
 

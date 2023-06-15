@@ -1,24 +1,25 @@
 <template>
-	<view class="">
+	<view v-if="pageData.mineMessage.id">
 		<view class="">
-			<image src="/static/mine/mine-bg.jpg" class="h-160 w-screen"></image>
+			<image src="/static/mine/mine-bg.jpg" class="w-full"  mode="scaleToFill" ></image>
 		</view>
-		<view v-if="pageData.mineMessage.id" class="bg-gray-100 w-screen  px-14 relative -top-20" style="border-radius: 35rpx 35rpx 0px 0px;">
+		<view  class="bg-gray-100 w-screen  px-14 relative -top-20" style="border-radius: 35rpx 35rpx 0px 0px;">
 			<view >
-				<view class="relative bottom-24" @click="skipPerson">
+				<view class="relative bottom-24 border-2 border-[#fff] w-80 rounded-full h-80 iconShadow" @click="skipPerson">
 					<image :src="pageData.mineMessage.icon" class="w-76 h-76 rounded-full "></image>
 				</view>
-				<view class="-mt-10 mb-10 font-bold">{{ pageData.mineMessage.nickname }}
+				<view class="-mt-10 mb-10 font-bold text-21 flex items-center">
+				{{ pageData.mineMessage.nickname }}
 					<image src="/static/mine/vip.png" class="w-47 h-19 mx-5"></image>
 					<image src="/static/mine/dealer.png" class="w-57 h-19"></image>
 				</view>
-				<view class="mb-10 text-sm">
-					<image src="/static/mine/ID.png" class="w-15 h-15"></image>
-					{{ pageData.mineMessage.guguId }}
+				<view class="mb-10 text-14 flex items-center">
+					<image src="/static/mine/ID.png" class="w-15 h-15 "></image>
+				<text class="ml-5 mr-15">{{ pageData.mineMessage.guguId }}</text>	
 					<image src="/static/mine/copy.png" class="w-15 h-15 ml-10" @click.stop="copy(pageData.mineMessage.guguId)"></image>
 				</view>
 			</view>
-			<view class="flex text-sm" style="font-family: Source Han Sans SC;">
+			<view class="flex text-14" >
 				<view class="line relative w-60  flex items-center">
 					<view class="font-bold">{{pageData.mineMessage.fans}}</view>
 					<view class="textStyle">&nbsp;关注</view>
@@ -32,7 +33,7 @@
 				<view class="textStyle">&nbsp;获赞</view></view>
 			</view>
 			<view>
-				<view class="Express text-sm " style="font-family: Source Han Sans SC;">
+				<view class="Express text-14 " style="font-family: Source Han Sans SC;">
 					<view class="info">
 						<view :class="{ hide: !iSinfo }">
 							<view v-if="pageData.mineMessage.introduce">
@@ -212,7 +213,7 @@
 
 	})
 	const pageData = reactive({
-		//数据全部列表
+		//个人信息数据
 		mineMessage: {}
 	})
 
@@ -221,14 +222,15 @@
 			pageData.mineMessage = {
 				...res.data
 			}
-			console.log('个人主页', pageData.mineMessage);
 		})
 	}
 </script>
 
 <style lang="scss" scoped>
+	.iconShadow{
+		box-shadow: 0rpx 1rpx 18rpx 0rpx rgba(0,0,0,0.19);
+	}
 	.textStyle {
-		font-size: 30rpx;
 		font-family: Source Han Sans SC;
 		font-weight: 300;
 		color: #999999;
@@ -236,7 +238,6 @@
 	
 	.Express {
 		line-height: 24rpx;
-		font-size: 30rpx;
 		font-family: Source Han Sans SC;
 		font-weight: 300;
 		color: #999999;

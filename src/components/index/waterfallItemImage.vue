@@ -1,31 +1,22 @@
 <template>
 	<view class="w-172 bg-[#fff]" v-if="item && item.cover">
-		<view class="relative ">
+		<view class="relative">
 			<view v-if="isVirtualCal" :style="{width:'100%',height:computedHeight(item.cover.width,item.cover.height)+'rpx'}"></view>
 			<image v-else :src="item.cover.itemType == 2 ? item.cover.content : item.cover.thumbnail" :style="{width:'100%',height:computedHeight(item.cover.width,item.cover.height)+'rpx'}" @click="godetail(item)"></image>
-			<image v-if="item.cover.itemType==3" src="/static/video/videoplay.png" mode="" class="absolute w-36 h-36 top-[50%] left-[50%] -ml-18 -mt-18 z-50"></image>
-			<view v-if="item.cover.itemType==2" class="absolute  bottom-10 z-50  px-10 text-white text-12 rounded">
-				<image src="@/static/opus/icon_location_white.png" class="w-9 h-11 mt-3"></image> {{item.cover.name}}{{computedLocation(item.cover.x,item.cover.y)}}
-			</view>
-		</view>
-		<view class=" line-clamp-2 text-14 font-bold text-[#272A29] leading-20">
-			<view class="">{{item.title}}</view>
-		</view>
-		<view class="flex justify-between  text-13 items-center h-30  font-light text-[#999]  ">
-			<view class="flex items-center">
-				<image :src="item.icon" class="w-16 h-16 rounded-full"></image>{{item.author}}
-			</view>
+			<image v-if="item.cover.itemType==3"   src="/static/video/videoplay.png" mode="" class="absolute w-36 h-36 top-[50%] left-[50%] -ml-18 -mt-18 z-50"></image>
+<view class="flex justify-end  text-13 items-center h-30  font-light text-[#FFFEFE] absolute  bottom-10 right-10">
 			<view class="">
 				<image src="/static/waterfalls/like.png" class="w-13 h-12"></image>
 				{{item.likeNum}}
 			</view>
+		</view>
 		</view>
 	</view>
 	<view class="h-14"></view>
 </template>
 
 <script setup>
-	import {
+import {
 		distanceOf,
 		formatedDistance
 	} from "@/utils/utils"
@@ -49,7 +40,7 @@
 			})
 		} else if (item.cover.itemType == 3) {
 			uni.navigateTo({
-				url: '/pages/VideoCarousel/VideoCarousel?id=' + item.id
+				url: `/pages/VideoCarousel/VideoCarousel?id=${item.id}`
 			})
 		}
 	}
