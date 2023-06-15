@@ -157,6 +157,8 @@ const init = ()=>{
     pageData.column_values_1 = []
     pageData.column_values_group_0 = []
     pageData.column_values_group_1 = []
+    pageData.column_height_0 = 0
+    pageData.column_height_1 = 0
     pageData.isLoading = false
   }
   else if (isAddCount <= props.value.length) {
