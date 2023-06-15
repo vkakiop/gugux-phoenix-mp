@@ -1,12 +1,14 @@
 <template>
 	<view class="bg-gray-100">
 		<!-- 搜索框 -->
+		  <view class="fixed -top-5 z-50 bg-white w-full py-10 " >
 		<view class="search ">
 			<view class="flex items-center  bg-[#F7F7F7] w-300 rounded-40 border-1 border-[#E3E3E3]">
 				<icon type="search" size="26" class="ml-10" />
 				<input class="bg-[#F7F7F7] ml-10  w-220" v-model="searchvalue" placeholder="请输入搜索关键字" type="text" />
 			</view>
 			<view @click="search">搜索</view>
+		</view>
 		</view>
 		<!-- 搜索框 -->
 		<!-- 搜索历史 -->
@@ -23,7 +25,7 @@
 			</view>
 		</view>
 		<!-- 搜索历史 -->
-		<view>
+	 <view class="fixed top-40 z-50 bg-white w-full">
 			<view class="uni-common-mt">
 				<view style="flex:2">
 					<u-tabs :list="computedMenuItems" lineWidth="40" lineColor="#f56c6c" :activeStyle="{
@@ -38,7 +40,7 @@
 				</view>
 			</view>
 		</view>
-		<view>
+		<view class="pt-70">
 			<view>
 				<view v-for="(waterItem,waterIndex) in pageData.waterfallItems">
 					<view v-show="waterIndex == pageData.currentIndex">
