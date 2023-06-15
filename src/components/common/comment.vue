@@ -57,7 +57,7 @@
                                 </view>
                             </view>
                         </view>
-                        
+
                         <view class="like" v-if="item.isLike == 0" @click="likeChange(item,1)">
                             <image src="/static/img/heart1.png"></image>
                             <view>{{ item.likesNum }}</view>
@@ -107,12 +107,14 @@ const init = (val)=>{
 }
 defineExpose({init})
 onLoad((option)=>{
+  uni.showToast({title:'id'})
     if (option.id) {
+      uni.showToast({title:'id'+option.id})
         pageData.opusId = option.id;
         scrolltolower();
     // getApi();
     //   wx请求获取位置权限
-    
+
   }
   else {
     uni.showToast({
@@ -228,7 +230,7 @@ const expandChange = (item)=>{
         //     }
         //     )
     }
-    
+
 }
 const upChange = (item,type)=>{
     item.isExpand = type;
@@ -416,4 +418,3 @@ image{
     }
 }
 </style>
-  
