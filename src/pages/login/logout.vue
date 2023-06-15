@@ -10,7 +10,7 @@ const loginTokenStore = useLoginTokenStore()
 onLoad((option)=>{
   //const app = getApp()
   //app.globalData.loginToken = {accessToken:'',expireTime:0,}
-  loginTokenStore.set({accessToken:'',expireTime:0})
+  loginTokenStore.set({accessToken:'',expireTime:0,user:{id:''}})
   uni.clearStorageSync(configLoginToken)
 
   let returnUrl = decodeURIComponent(option.url || '')

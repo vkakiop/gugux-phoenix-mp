@@ -8,10 +8,11 @@ export function getUserBase(data) {
     })
 }
 // 个人信息
-export function getUserInfo(data) {
+export function getUserInfo(data,header) {
     return request({
         url: '/gugux-services-user-api/app/user/info',
         method: 'get',
-        params:data
+        params:data,
+        headers:header,
     })
 }

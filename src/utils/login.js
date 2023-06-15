@@ -1,31 +1,37 @@
 import {switchTabPathes,configLoginToken} from '@/config/index'
 import useLoginTokenStore from '@/store/modules/loginToken'
+import {getUserInfo} from '@/api/mine/index'
 export function tokenSave(res,returnUrl) {
     //const app = getApp()
-    if (res.data && res.data.accessToken) {
-        //app.globalData.loginToken = res.data
-        const loginTokenStore = useLoginTokenStore()
-        loginTokenStore.set(res.data)
+    let tokenRes = res.data
+    if (tokenRes && tokenRes.accessToken) {
+        getUserInfo({},{token:tokenRes.accessToken}).then(res=>{
+            //app.globalData.loginToken = res.data
+            const loginTokenStore = useLoginTokenStore()
+            tokenRes['user'] = res.data || {id:''}
+            loginTokenStore.set(tokenRes)
 
-        uni.setStorage({
-            key: configLoginToken,
-            data: JSON.stringify(res.data),
-            success: function () {
-                let url = returnUrl || '/pages/index/index'
-                if (returnUrl) {
-                    let isSwitch = isSwitchTab(url)
-                    if (isSwitch) {
-                        uni.switchTab({url:url})
+            uni.setStorage({
+                key: configLoginToken,
+                data: JSON.stringify(tokenRes),
+                success: function () {
+                    let url = returnUrl || '/pages/index/index'
+                    if (returnUrl) {
+                        let isSwitch = isSwitchTab(url)
+                        if (isSwitch) {
+                            uni.switchTab({url:url})
+                        }
+                        else {
+                            uni.navigateTo({url:url})
+                        }
                     }
                     else {
-                        uni.navigateTo({url:url})
+                        uni.navigateBack({delta: 1})
                     }
                 }
-                else {
-                    uni.navigateBack({delta: 1})
-                }
-            }
-        });
+            });
+        })
+
     }
     else {
         uni.showToast({
