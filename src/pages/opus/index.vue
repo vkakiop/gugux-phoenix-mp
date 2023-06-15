@@ -12,6 +12,7 @@
       </customNav>
       <opus-article :detail="pageData.detail" v-if="pageData.detail.opusType == 1"></opus-article>
       <!--opus-video :detail="pageData.detail" v-else-if="pageData.detail.opusType == 2"></opus-video-->
+      <comment ref="commentRef"></comment>
       <view class="fixed bottom-0 h-50 w-screen bg-white">
         <view class="mx-20 flex justify-between mt-12">
           <view>
@@ -25,7 +26,7 @@
                 <view class="ml-5 mt-2">{{pageData.detail.likeNum}}</view>
               </view>
             </debounce>
-            <debounce @debounce="comment">
+            <debounce @debounce="commentAdd">
               <view class="flex mr-20">
                 <image class="w-24 h-24" src="@/static/opus/icon_comment.png"/>
                 <view class="ml-5 mt-2">{{pageData.detail.commentNum}}</view>
@@ -46,13 +47,15 @@
 </template>
 
 <script setup>
-import { reactive,watch } from "vue"
+import { reactive,ref,watch } from "vue"
 import { opusInfo,opusCollect,opusLike,userFans,userFansRemove } from "@/api/opus/index"
 import { getTokenValue } from "@/utils/utils"
 import {onLoad} from '@dcloudio/uni-app'
 import opusArticle from './components/opusArticle'
+import comment from "@/components/common/comment.vue"
 import useLoginTokenStore from '@/store/modules/loginToken'
 const loginTokenStore = useLoginTokenStore()
+const commentRef = ref()
 
 onLoad((option)=>{
     pageData.id = option.id
@@ -152,12 +155,8 @@ const like = ()=>{
   }
 }
 
-const comment = ()=>{
-  uni.showToast({
-    title: '评论',
-    icon:'none',
-    duration: 2000
-  });
+const commentAdd = ()=>{
+  commentRef.value.init(true)
 }
 
 const gotoBack = ()=>{

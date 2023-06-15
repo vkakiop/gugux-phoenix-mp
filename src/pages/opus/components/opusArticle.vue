@@ -45,7 +45,7 @@
         </view>
         <view class="clear-left"></view>
       </view>
-      <view class="text-center mt-15 pb-100">
+      <view class="text-center mt-15">
         <view class="text-[#666666] text-14 mx-40">本作品著作权归作者所有，如有侵权请联系咕咕行官方删除。</view>
         <!--view class="mt-30">
           <b> - THE  END - </b>
