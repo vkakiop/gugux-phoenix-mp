@@ -99,7 +99,11 @@ const closeShow = () => {
   uni.navigateTo({ url: '/pages/safeguard/safeguarddetail?id=' + encodeURIComponent(123) })
 }
 
-
+	const skipHistory = () => {
+		uni.navigateTo({
+			url: '/pages/index/searchHistory'
+		})
+	}
 onMounted(()=>{
   changeWaterfall(0)
 })
