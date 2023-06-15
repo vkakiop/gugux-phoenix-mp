@@ -39,7 +39,7 @@
         <opus-content-info :content="detail.content" :geo_x="geo_x" :geo_y="geo_y"></opus-content-info>
       </view>
       <view v-if="detail.topics">
-        <view class="float-left mr-5 mb-10 px-10 flex items-center h-28 leading-28 bg-[#f1f3f5] text-14 rounded-full" v-for="item in detail.topics">
+        <view class="float-left mr-5 mb-10 px-10 flex items-center h-28 leading-28 bg-[#f1f3f5] text-14 rounded-full" v-for="(item,index) in detail.topics" :key="index">
           <image class="w-13 h-13 -mt-2" src="@/static/opus/icon_topic.png"></image>
           <view class="ml-4 line-clamp-1">{{item}}</view>
         </view>

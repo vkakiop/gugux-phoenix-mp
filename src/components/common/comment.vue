@@ -74,13 +74,14 @@
     </view>
 </template>
 <script setup>
-import { ref, onMounted, reactive } from 'vue'
+import { ref, onMounted, reactive,watch } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import {formatedCommentDate,isArrayEmpty} from "@/utils/utils"
 import emoji from "@/utils/imconfig/emoji";
 import commentBox from "@/components/common/commentBox.vue"
 import {opuscomment,commentlike,commentlist,subcommentlist} from '@/api/comment/index'
 const emit = defineEmits(['debounce'])
+const props = defineProps(['id'])
 const pageData = reactive({
     index:'',//回复当前子评论
     childindex:'',
@@ -106,12 +107,11 @@ const init = (val)=>{
     commentBoxRef.value.init(val,obj);
 }
 defineExpose({init})
-onLoad((option)=>{
-  uni.showToast({title:'id'})
-    if (option.id) {
-      uni.showToast({title:'id'+option.id})
-        pageData.opusId = option.id;
-        scrolltolower();
+
+watch(()=>props.id,(newVal,oldVal)=>{
+  if (newVal) {
+    pageData.opusId = newVal;
+    scrolltolower();
     // getApi();
     //   wx请求获取位置权限
 
@@ -123,7 +123,8 @@ onLoad((option)=>{
       duration: 2000
     });
   }
-})
+},{immediate:true})
+
 const scrolltolower = () => {
     loadmore()
 }

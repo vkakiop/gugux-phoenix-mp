@@ -12,7 +12,7 @@
       </customNav>
       <opus-article :detail="pageData.detail" v-if="pageData.detail.opusType == 1"></opus-article>
       <!--opus-video :detail="pageData.detail" v-else-if="pageData.detail.opusType == 2"></opus-video-->
-      <comment ref="commentRef"></comment>
+      <comment ref="commentRef" :id="pageData.detail.id"></comment>
       <view class="fixed bottom-0 h-50 w-screen bg-white">
         <view class="mx-20 flex justify-between mt-12">
           <view>
