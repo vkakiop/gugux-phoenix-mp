@@ -35,7 +35,7 @@
     <view>
       <view v-for="(waterItem,waterIndex) in pageData.waterfallItems">
         <view v-show="waterIndex == pageData.currentIndex">
-          <waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items" :waterIndex="waterIndex">
+          <waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
           </waterfall>
         </view>
       </view>
