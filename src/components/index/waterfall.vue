@@ -9,7 +9,7 @@
   </view>
   <view class="flex justify-between">
     <view v-for="(columnItem,columnIndex) in 2" :key="columnIndex" :id="`waterfalls_flow_column_${waterIndex}_${columnIndex+1}`" :class="['flex-none',columnIndex == 0 ? 'ml-14' : 'mr-14']">
-      <view class="w-172" v-for="(item,index) in pageData[`column_${columnIndex+1}_values`]" :key="index">
+      <view class="w-172" v-for="(item,index) in pageData[`column_values_${columnIndex}`]" :key="index">
         <waterfallItemTitle v-if="itemType == 'title'" :item="item"></waterfallItemTitle>
         <waterfallItemImage v-else :item="item"></waterfallItemImage>
       </view>
@@ -28,10 +28,10 @@ const pageData = reactive({
   isLoading:false,
   list:[],
   currentItem:{},
-  column_1_values:[],
-  column_2_values:[],
+  column_values_0:[],
+  column_values_1:[],
+  column_height_0:0,
   column_height_1:0,
-  column_height_2:0,
 });
 const props = defineProps({
   value: Array,
@@ -93,16 +93,16 @@ async function initValue(i) {
       const query = uni.createSelectorQuery().in(_this);
       query.select(`#waterDom_${props.waterIndex}`).boundingClientRect(res => {
         if (res) {
-          let column = 1
-          if (pageData['column_height_2']>=pageData['column_height_1']) {
-            pageData['column_height_1'] = pageData['column_height_1'] + res.height
-            column = 1
+          let column = 0
+          if (pageData.column_height_1>=pageData.column_height_0) {
+            pageData.column_height_0 = pageData.column_height_0 + res.height
+            column = 0
           }
           else {
-            pageData['column_height_2'] = pageData['column_height_2'] + res.height
-            column = 2
+            pageData.column_height_1 = pageData.column_height_1 + res.height
+            column = 1
           }
-          pageData[`column_${column}_values`].push({ ...pageData.list[i], index: i });
+          pageData[`column_values_${column}`].push({ ...pageData.list[i], index: i });
         }
       }).exec(() => {
         init()
@@ -118,16 +118,17 @@ async function initValue(i) {
 
 const init = ()=>{
   pageData.isLoading = true
-  let isAddCount = pageData[`column_1_values`].length + pageData[`column_2_values`].length
+  let isAddCount = pageData.column_values_0.length + pageData.column_values_1.length
   if (props.value.length == 0 && isAddCount > 0) {
-    pageData[`column_1_values`] = []
-    pageData[`column_2_values`] = []
+    pageData.column_values_0 = []
+    pageData.column_values_1 = []
     pageData.isLoading = false
   }
   else if (isAddCount <= props.value.length) {
     initValue(isAddCount)
     if (isAddCount == props.value.length) {
       pageData.isLoading = false
+      console.log('已加载完成：',isAddCount)
     }
   }
 }
