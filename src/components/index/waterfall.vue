@@ -23,7 +23,7 @@
 import { ref, reactive, watch, nextTick, computed, getCurrentInstance, onMounted } from 'vue'
 import waterfallItemTitle from './waterfallItemTitle.vue'
 import waterfallItemImage from './waterfallItemImage.vue'
-const _this = getCurrentInstance();
+const _this = getCurrentInstance()
 const pageData = reactive({
   isLoading:false,
   list:[],
@@ -32,7 +32,7 @@ const pageData = reactive({
   column_values_1:[],
   column_height_0:0,
   column_height_1:0,
-});
+})
 const props = defineProps({
   value: Array,
   waterIndex: {
@@ -47,7 +47,7 @@ const props = defineProps({
     type: String,
     default: 'title'
   }
-});
+})
 
 // 数据赋值
 //pageData.list = props.value ? props.value : [];
@@ -145,6 +145,7 @@ defineExpose({init})
 //   initValue(i + 1);
 //   item[pageData.imageKey] = null;
 // }
+
 // 监听数据的变化
 watch(() => props.value, (newValue, oldValue) => {
   const oldLength = oldValue ? oldValue.length : 0;
@@ -153,7 +154,7 @@ watch(() => props.value, (newValue, oldValue) => {
   if (!pageData.isLoading) {
     init()
   }
-}, { immediate: true });
+}, { immediate: true })
 </script>
 <style lang="scss" scoped>
 
