@@ -38,11 +38,13 @@
 				</view>
 			</view>
 		</view>
-		<view >
-			<view v-for="(waterItem,waterIndex) in pageData.waterfallItems">
-				<view v-show="waterIndex == pageData.currentIndex">
-					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items" :waterIndex="waterIndex">
-					</waterfall>
+		<view>
+			<view>
+				<view v-for="(waterItem,waterIndex) in pageData.waterfallItems">
+					<view v-show="waterIndex == pageData.currentIndex">
+						<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
+						</waterfall>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -51,9 +53,6 @@
 
 <script setup>
 	import waterfall from '@/components/index/waterfall.vue'
-	import {
-		opusList
-	} from '@/api/opus/list'
 	import {
 		opusSearchNew
 	} from "@/api/worksSearch/index.js"
@@ -74,6 +73,9 @@
 	const searchvalue = ref('')
 	const isShowHistory = ref(true)
 	const waterlist = ref([])
+	onMounted(() => {
+		changeWaterfall(0)
+	})
 	const pageData = reactive({
 		scrollTop: 0,
 		currentIndex: 0,
@@ -138,13 +140,12 @@
 			}
 		],
 	})
-	const list = ref([])
-	const paramsForm = reactive({
-		"keyword": "",
-		"pageNum": 1,
-		"pageSize": 10,
-		"searchTime": "",
-		"type": 0
+	const computedMenuItems = computed(() => {
+		return pageData.waterfallItems.map(item => {
+			return {
+				name: item.name
+			}
+		})
 	})
 	const changeWaterfall = (waterIndex) => {
 		if (pageData.currentIndex != waterIndex) {
@@ -189,22 +190,19 @@
 				title: '搜索内容不能为空'
 			});
 		} else {
+			console.log('滚动条高度', pageData.currentIndex);
 			if (pageData.waterfallItems[0].query.path.keyword == searchvalue.value) {
 				uni.showModal({
 					title: '请修改搜索内容'
 				});
 			} else {
-				pageData.waterfallItems.forEach((item) => {
-					item.scrollTop = 0
-					item.isComplete = false
-					item.isLoading= false
-					item.items = []
+				//读取滚动条高度
+				pageData.waterfallItems.forEach(item => {
 					item.query.path.keyword = searchvalue.value
-					item.query.path.pageNum = 1
-					item.query.path.searchTime = ''
+					item.items = []
+					item.scrollTop = 0
 				})
-
-				getData()
+					getData()
 			}
 		}
 	}
@@ -217,18 +215,6 @@
 		});
 		searchHistoryList.value = [];
 	}
-	// 数据赋值
-
-	const computedMenuItems = computed(() => {
-		return pageData.waterfallItems.map(item => {
-			return {
-				name: item.name
-			}
-		})
-	})
-	onMounted(() => {
-		changeWaterfall(0)
-	})
 	onReachBottom(() => {
 		let currentIndex = pageData.currentIndex
 		if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {

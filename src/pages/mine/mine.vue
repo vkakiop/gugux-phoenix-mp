@@ -1,36 +1,38 @@
 <template>
 	<view v-if="pageData.mineMessage.id">
 		<view class="">
-			<image src="/static/mine/mine-bg.jpg" class="w-full"  mode="scaleToFill" ></image>
+			<image src="/static/mine/mine-bg.jpg" class="w-full" mode="scaleToFill"></image>
 		</view>
-		<view  class="bg-gray-100 w-screen  px-14 relative -top-20" style="border-radius: 35rpx 35rpx 0px 0px;">
-			<view >
+		<view class="bg-gray-100 w-screen  px-14 relative -top-20" style="border-radius: 35rpx 35rpx 0px 0px;">
+			<view>
 				<view class="relative bottom-24 border-2 border-[#fff] w-80 rounded-full h-80 iconShadow" @click="skipPerson">
 					<image :src="pageData.mineMessage.icon" class="w-76 h-76 rounded-full "></image>
 				</view>
 				<view class="-mt-10 mb-10 font-bold text-21 flex items-center">
-				{{ pageData.mineMessage.nickname }}
+					{{ pageData.mineMessage.nickname }}
 					<image src="/static/mine/vip.png" class="w-47 h-19 mx-5"></image>
 					<image src="/static/mine/dealer.png" class="w-57 h-19"></image>
 				</view>
 				<view class="mb-10 text-14 flex items-center">
 					<image src="/static/mine/ID.png" class="w-15 h-15 "></image>
-				<text class="ml-5 mr-15">{{ pageData.mineMessage.guguId }}</text>	
+					<text class="ml-5 mr-15">{{ pageData.mineMessage.guguId }}</text>
 					<image src="/static/mine/copy.png" class="w-15 h-15 ml-10" @click.stop="copy(pageData.mineMessage.guguId)"></image>
 				</view>
 			</view>
-			<view class="flex text-14" >
+			<view class="flex text-14">
 				<view class="line relative w-60  flex items-center">
 					<view class="font-bold">{{pageData.mineMessage.fans}}</view>
 					<view class="textStyle">&nbsp;关注</view>
 				</view>
 				<view class="line relative w-60 ml-10 flex items-center">
 					<view class="font-bold">{{pageData.mineMessage.focus}}</view>
-				
-				<view class="textStyle">&nbsp;收藏</view></view>
+
+					<view class="textStyle">&nbsp;收藏</view>
+				</view>
 				<view class="w-60  ml-10 flex items-center">
 					<view class="font-bold">{{pageData.mineMessage.liked}}</view>
-				<view class="textStyle">&nbsp;获赞</view></view>
+					<view class="textStyle">&nbsp;获赞</view>
+				</view>
 			</view>
 			<view>
 				<view class="Express text-14 " style="font-family: Source Han Sans SC;">
@@ -104,22 +106,16 @@
 			fetchData()
 		}
 	})
-	const paramsForm = reactive({
-		"keyword": "",
-		"pageNum": 1,
-		"pageSize": 10,
-		"searchTime": "",
-		"type": 0
-	})
 	const internalInstance = getCurrentInstance()
-	const content = ref('在大多数场景下，并不需要设置 background-color 属性，因为uni-popup的主窗口默认是透明的，在向里面插入内容的时候 ，样式完全交由用户定制，如果设置了背景色 ，例如 uni-popup-dialog 中的圆角就很难去实现，不设置背景色，更适合用户去自由发挥。')
-	const src = 'https://cdn.uviewui.com/uview/album/1.jpg'
-	const TabCur2 = ref('')
 	const isShow = ref(false)
 	const cllectRadio = ref(0)
 	const iSinfo = ref(false)
 	const lableCollect = ref(1)
 	const uReadMore = ref()
+	const pageData = reactive({
+		//个人信息数据
+		mineMessage: {}
+	})
 	const menuList = reactive([{
 		name: '作品(999)',
 	}, {
@@ -127,65 +123,23 @@
 	}, {
 		name: '收藏'
 	}])
-	const waterlist = ref([])
 	const show = ref(false);
-	const click = (item) => {}
-
 	function menuClick(item) {
-		if (paramsForm.type != item.index) {
 			cllectRadio.value = item.index
-			paramsForm.pageSize = 10
-			paramsForm.type = item.index
-			getDataApi()
-		}
+			console.log('item',item);
+	}
 
-	}
 	function copy(value) {
-	  uni.setClipboardData({
-	    data: value,//要被复制的内容
-	    success: () => {//复制成功的回调函数
-	      uni.showToast({//提示
-	        title: '复制成功'
-	      })
-	    }
-	  });
-	  }
+		uni.setClipboardData({
+			data: value, //要被复制的内容
+			success: () => { //复制成功的回调函数
+				uni.showToast({ //提示
+					title: '复制成功'
+				})
+			}
+		});
+	}
 	// 数据赋值
-	onMounted(() => {
-		getDataApi()
-	})
-	const getDataApi = () => {
-		if (paramsForm.type == 0) {
-			isShow.value = false
-			opusSearchNew(paramsForm).then(res => {
-				isShow.value = true
-				waterlist.value = [...res.data.list]
-			})
-		} else if (paramsForm.type == 1) {
-			isShow.value = false
-			opusSearchArticle(paramsForm).then(res => {
-				isShow.value = true
-				waterlist.value = [...res.data.list]
-			})
-		} else if (paramsForm.type == 2) {
-			isShow.value = false
-			opusSearchVideo(paramsForm).then(res => {
-				isShow.value = true
-				waterlist.value = [...res.data.list]
-			})
-		}
-		//操作数据后更新视图
-		internalInstance.ctx.$forceUpdate()
-	}
-	watch(() => paramsForm.type, (newV, oldV) => {
-		getDataApi()
-	}, {
-		deep: true,
-		immediate: true
-	})
-	const load = () => {
-		uReadMore.value.uReadMore.init();
-	}
 	const showinfo = () => {
 		iSinfo.value = !iSinfo.value
 	}
@@ -194,29 +148,7 @@
 			url: '/pages/personCenter/personCenter'
 		})
 	}
-	onReachBottom(() => {
-		console.log('触底了')
-		paramsForm.pageSize += 10
-		if (paramsForm.type == 0) {
-			opusSearchNew(paramsForm).then(res => {
-				waterlist.value = [...res.data.list]
-			})
-		} else if (paramsForm.type == 1) {
-			opusSearchArticle(paramsForm).then(res => {
-				waterlist.value = [...res.data.list]
-			})
-		} else if (paramsForm.type == 2) {
-			opusSearchVideo(paramsForm).then(res => {
-				waterlist.value = [...res.data.list]
-			})
-		}
-
-	})
-	const pageData = reactive({
-		//个人信息数据
-		mineMessage: {}
-	})
-
+	onReachBottom(() => {})
 	const fetchData = () => {
 		getUserBase({}).then(res => {
 			pageData.mineMessage = {
@@ -227,15 +159,16 @@
 </script>
 
 <style lang="scss" scoped>
-	.iconShadow{
-		box-shadow: 0rpx 1rpx 18rpx 0rpx rgba(0,0,0,0.19);
+	.iconShadow {
+		box-shadow: 0rpx 1rpx 18rpx 0rpx rgba(0, 0, 0, 0.19);
 	}
+
 	.textStyle {
 		font-family: Source Han Sans SC;
 		font-weight: 300;
 		color: #999999;
 	}
-	
+
 	.Express {
 		line-height: 24rpx;
 		font-family: Source Han Sans SC;
