@@ -2,14 +2,16 @@
   <view :id="'waterDom_'+waterIndex" style="position: absolute;width:100%; visibility: hidden">
     <view v-for="(columnItem,columnIndex) in 1" :key="columnIndex">
       <view class="w-172" v-for="(item,index) in [data.currentItem]" :key="index">
-        <waterfallItemTitle :item="item"></waterfallItemTitle>
+        <waterfallItemTitle v-if="itemType == 'title'" :item="item" :isVirtualCal="true"></waterfallItemTitle>
+        <waterfallItemImage v-else :item="item" :isVirtualCal="true"></waterfallItemImage>
       </view>
     </view>
   </view>
   <view class="flex justify-between">
-    <view v-for="(columnItem,columnIndex) in data.column" :key="columnIndex" :id="`waterfalls_flow_column_${waterIndex}_${columnIndex+1}`" :class="['flex-none',columnIndex == 0 ? 'ml-14' : 'mr-14']">
+    <view v-for="(columnItem,columnIndex) in 2" :key="columnIndex" :id="`waterfalls_flow_column_${waterIndex}_${columnIndex+1}`" :class="['flex-none',columnIndex == 0 ? 'ml-14' : 'mr-14']">
       <view class="w-172" v-for="(item,index) in data[`column_${columnIndex+1}_values`]" :key="index">
-        <waterfallItemTitle :item="item"></waterfallItemTitle>
+        <waterfallItemTitle v-if="itemType == 'title'" :item="item"></waterfallItemTitle>
+        <waterfallItemImage v-else :item="item"></waterfallItemImage>
       </view>
     </view>
   </view>
@@ -20,30 +22,18 @@
 <script setup>
 import { ref, reactive, watch, nextTick, computed, getCurrentInstance, onMounted } from 'vue'
 import waterfallItemTitle from './waterfallItemTitle.vue'
+import waterfallItemImage from './waterfallItemImage.vue'
 const _this = getCurrentInstance();
-const data = reactive({});
+const data = reactive({
+  list:[],
+  currentItem:{},
+  column_1_values:[],
+  column_2_values:[],
+  column_height_1:0,
+  column_height_2:0,
+});
 const props = defineProps({
   value: Array,
-  column: { // 列的数量
-    type: [String, Number],
-    default: 2
-  },
-  columnSpace: { // 列之间的间距 百分比
-    type: [String, Number],
-    default: 2
-  },
-  imageKey: { // 图片key
-    type: [String],
-    default: 'image'
-  },
-  seat: { // 文本的位置，1图片之上 2图片之下
-    type: [String, Number],
-    default: 2
-  },
-  currentIndex: {
-    type: Number,
-    default: 0
-  },
   waterIndex: {
     type: Number,
     default: 0
@@ -51,36 +41,17 @@ const props = defineProps({
   isComplete: {
     type: Boolean,
     default: false
+  },
+  itemType: {
+    type: String,
+    default: 'title'
   }
 });
 
-const emit = defineEmits([])
 // 数据赋值
-data.list = props.value ? props.value : [];
-data.column = props.column < 2 ? 2 : props.column;
-data.columnSpace = props.columnSpace <= 5 ? props.columnSpace : 5;
-data.imageKey = props.imageKey;
-data.seat = props.seat;
-data.isFirstLoad = true;
-data.currentItem = {}
-data.column_1_values = []
-data.column_2_values = []
-data.column_height_1 = 0
-data.column_height_2 = 0
-// 计算列宽
-const w = computed(()=>{
-  const column_rate = `${100 / data.column - (+data.columnSpace)}%`;
-  return column_rate;
-})
-// 计算margin
-const m = computed(()=>{
-  const column_margin = `${(100-(100 / data.column - (+data.columnSpace)).toFixed(5)*data.column)/(data.column-1)}%`;
-  return column_margin;
-})
-// 每列的数据初始化
-for (let i = 1; i <= data.column; i++) {
-  data[`column_${i}_values`] = [];
-}
+//data.list = props.value ? props.value : [];
+
+/*
 // 获取最小值的对象
 const getMin = (a, s) => {
   let m = a[0][s];
@@ -110,6 +81,8 @@ function getMinColumnHeight() {
     }
   })
 };
+ */
+
 async function initValue(i) {
   if (i >= data.list.length) return false;
   data.currentItem = data.list[i]
@@ -142,15 +115,6 @@ async function initValue(i) {
   //data[`column_${minHeightRes.column}_values`].push({ ...data.list[i], index: i });
 }
 
-
-
-onMounted(() => {
-  //initValue(0);
-})
-const initValueChange = (index)=>{
-  initValue(index)
-}
-
 const init = ()=>{
   let isAddCount = data[`column_1_values`].length + data[`column_2_values`].length
   if (isAddCount <= props.value.length) {
@@ -161,22 +125,21 @@ const init = ()=>{
     data[`column_2_values`] = []
   }
 }
-defineExpose({initValueChange,init})
+defineExpose({init})
 
-// 图片加载完成
-function imgLoad(item) {
-  const i = item.index;
-  initValue(i + 1);
-}
-// 图片加载失败
-function imgError(item) {
-  const i = item.index;
-  initValue(i + 1);
-  item[data.imageKey] = null;
-}
+// // 图片加载完成
+// function imgLoad(item) {
+//   const i = item.index;
+//   initValue(i + 1);
+// }
+// // 图片加载失败
+// function imgError(item) {
+//   const i = item.index;
+//   initValue(i + 1);
+//   item[data.imageKey] = null;
+// }
 // 监听数据的变化
 watch(() => props.value, (newValue, oldValue) => {
-  console.log('watch')
   const oldLength = oldValue ? oldValue.length : 0;
   data.list = newValue;
   //if (oldLength > 0) initValue(oldLength);

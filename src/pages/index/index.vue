@@ -35,7 +35,7 @@
     <view>
       <view v-for="(waterItem,waterIndex) in pageData.waterfallItems">
         <view v-show="waterIndex == pageData.currentIndex">
-          <waterfall :isComplete="waterItem.isComplete" :value="waterItem.items" :column="2" :columnSpace="1" :seat="2" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
+          <waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items" :waterIndex="waterIndex">
           </waterfall>
         </view>
       </view>
@@ -108,22 +108,22 @@ const pageData = reactive({
   scrollTop:0,
   currentIndex:0,
   waterfallItems : [
-    {scrollTop:0,isComplete:false,name:'推荐',items:[],query:{
+    {scrollTop:0,isComplete:false,isLoading:false,itemType:'title',name:'推荐',items:[],query:{
         path:{category:'0',pageNum:1,pageSize:10},
         data:{passTime:''}
       }
     },
-    {scrollTop:0,isComplete:false,name:'徒步',items:[],query:{
+    {scrollTop:0,isComplete:false,isLoading:false,itemType:'image',name:'徒步',items:[],query:{
         path:{category:'2431436580328327949',pageNum:1,pageSize:10},
         data:{passTime:''}
       }
     },
-    {scrollTop:0,isComplete:false,name:'风景',items:[],query:{
+    {scrollTop:0,isComplete:false,isLoading:false,name:'风景',items:[],query:{
         path:{category:'1622581366744965137',pageNum:1,pageSize:10},
         data:{passTime:''}
       }
     },
-    {scrollTop:0,isComplete:false,name:'骑行',items:[],query:{
+    {scrollTop:0,isComplete:false,isLoading:false,name:'骑行',items:[],query:{
         path:{category:'1622581366744965136',pageNum:1,pageSize:10},
         data:{passTime:''}
       }
@@ -154,18 +154,24 @@ const changeWaterfall = (waterIndex)=>{
 }
 
 const getData = () => {
-  let query = pageData.waterfallItems[pageData.currentIndex].query
+  let currentIndex = pageData.currentIndex
+  pageData.waterfallItems[currentIndex].isLoading = true
+  let query = pageData.waterfallItems[currentIndex].query
   opusList(query.path,query.data).then(res => {
     if (res.data.page == res.data.totalPage) {
-      pageData.waterfallItems[pageData.currentIndex].isComplete = true
+      pageData.waterfallItems[currentIndex].isComplete = true
     }
-    pageData.waterfallItems[pageData.currentIndex].items = pageData.waterfallItems[pageData.currentIndex].items.concat(res.data.list)
+    pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
+    pageData.waterfallItems[currentIndex].isLoading = false
+  }).catch(e=>{
+    pageData.waterfallItems[currentIndex].isLoading = false
   })
 }
 
 onReachBottom(() => {
-  if (!pageData.waterfallItems[pageData.currentIndex].isComplete) {
-    pageData.waterfallItems[pageData.currentIndex].query.path.pageNum ++
+  let currentIndex = pageData.currentIndex
+  if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
+    pageData.waterfallItems[currentIndex].query.path.pageNum ++
     getData()
   }
 })
