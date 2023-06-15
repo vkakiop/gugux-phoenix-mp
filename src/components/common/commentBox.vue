@@ -80,20 +80,21 @@ const sendMsg = ()=>{
                 icon: 'none',
                 duration: 2000
             })
+            
+            let str = '';
+            if(pageData.mainCommentId ==''){
+                emits('close',res.data)
+            }
+            else {
+                str = 'child';
+                emits('close',res.data,str)
+            }
             pageData.show = false;
             pageData.content = '';
             pageData.opusId = '';
             pageData.mainCommentId = '';
             pageData. replyId = '';
-            let str = '';
-            if(pageData.replyCommentId == ''){
-                str = 'father';
-            }
-            else if(pageData.replyCommentId != ''){
-                str = 'child';
-            }
             pageData.replyCommentId = '';
-            emits('close',res.data,str)
         }
     })
 }

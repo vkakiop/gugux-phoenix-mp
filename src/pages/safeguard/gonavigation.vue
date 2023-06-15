@@ -16,7 +16,7 @@
             </view>
         </view> -->
         <u-button @click="openBox">打开</u-button>
-        <comment ref="commentRef"></comment>
+        <comment ref="commentRef" :id="pageData.id"></comment>
     </view>
 </template>
 
@@ -26,6 +26,7 @@ import comment from "@/components/common/comment.vue"
 
 import { onLoad } from '@dcloudio/uni-app'
 const pageData = reactive({
+    id:'',
     userLat:'',
     userLon:'',
     latitude:30.909,
@@ -37,19 +38,20 @@ const pageData = reactive({
     }]
 })
 onLoad((option)=>{
-//   if (option.id) {
-//     console.log(option)
-//     // getApi();
-//     //   wx请求获取位置权限
+  if (option.id) {
+    pageData.id = option.id
+    console.log(option)
+    // getApi();
+    //   wx请求获取位置权限
     
-//   }
-//   else {
-//     uni.showToast({
-//       title: '协议code参数有误！',
-//       icon:'none',
-//       duration: 2000
-//     });
-//   }
+  }
+  else {
+    // uni.showToast({
+    //   title: '协议code参数有误！',
+    //   icon:'none',
+    //   duration: 2000
+    // });
+  }
 })
 
 const commentRef = ref();

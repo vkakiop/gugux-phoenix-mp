@@ -91,7 +91,7 @@ const confirmShow = () => {
   show.value = false;
   console.log('去导航');
   // uni.navigateTo({ url: '/pages/emergencycontact/index?id=' + encodeURIComponent(13333333333) })
-  uni.navigateTo({ url: '/pages/safeguard/gonavigation?id=' + encodeURIComponent(123) })
+  uni.navigateTo({ url: '/pages/safeguard/gonavigation?id=' + encodeURIComponent('1622360605426032996') })
 }
 const closeShow = () => {
   show.value = false;

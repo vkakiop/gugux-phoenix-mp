@@ -91,7 +91,7 @@ const pageData = reactive({
     replyCommentId:'',
     lastCommentId:0,
     childlastCommentId:0,
-    pageSize:10,
+    pageSize:12,
     total:-1,
     indexList:[],
     content:''
@@ -130,10 +130,12 @@ const loadmore = () =>{
                     isExpand:0
                 })
             })
+            pageData.indexList.push(...list);
+            pageData.lastCommentId = pageData.indexList[pageData.indexList.length-1].id;
+        }else{
+            pageData.indexList = [];
         }
-        pageData.indexList.push(...list);
-        pageData.lastCommentId = pageData.indexList[pageData.indexList.length-1].id;
-        pageData.total = res.data.totalCount;
+        pageData.total = res.data.totalCount || 0;
     })
     // for (let i = 0; i < 2; i++) {
     //     // pageData.indexList.push({
@@ -264,19 +266,23 @@ const renderTxt =(txt = "") => {
 
 const commentClose = (data,str)=>{
 //将评论内容插入数据中
-    if(str == 'father'){
+    if(!str){
+        console.log(data);
         pageData.indexList.unshift({
             ...data,
             childcomMent:[],
             isExpand:0
         })
+        pageData.total += 1;
     }else if(str == 'child'){
         pageData.indexList[pageData.index].childcomMent.unshift({
             ...data
         })
         pageData.indexList[pageData.index].subCommentNum += 1;
-        console.log(pageData.indexList[pageData.index])
     }
+    pageData.mainCommentId = '';
+    pageData. replyId = '';
+    pageData.replyCommentId = '';
 }
 
 const fatherReply = (item,index) =>{
@@ -318,6 +324,7 @@ image{
             font-family: Microsoft YaHei;
             font-weight: 400;
             color: #272A29;
+            margin:20rpx 0;
         }
         .reply{
             display: flex;
