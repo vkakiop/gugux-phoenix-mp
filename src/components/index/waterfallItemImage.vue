@@ -8,7 +8,7 @@
 
 <script setup>
 import {computed} from 'vue'
-const props = defineProps(['item'])
+const props = defineProps(['item','isVirtualCal'])
 const computedHeight = computed({
   get: (w, h) => {
     return function(w, h) {
