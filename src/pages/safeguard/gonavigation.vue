@@ -16,15 +16,14 @@
             </view>
         </view> -->
         <u-button @click="openBox">打开</u-button>
-        <comment></comment>
-        <commentBox ref="commentBoxRef"></commentBox>
+        <comment ref="commentRef"></comment>
     </view>
 </template>
 
 <script setup>
 import { ref, onMounted, reactive } from 'vue'
 import comment from "@/components/common/comment.vue"
-import commentBox from "@/components/common/commentBox.vue"
+
 import { onLoad } from '@dcloudio/uni-app'
 const pageData = reactive({
     userLat:'',
@@ -52,10 +51,12 @@ onLoad((option)=>{
 //     });
 //   }
 })
-const commentBoxRef = ref();
+
+const commentRef = ref();
 const openBox = () =>{
-    commentBoxRef.value.init(true);
+    commentRef.value.init(true);
 }
+
 const  openMap = (lon,lat) => {
     console.log("获取经纬度ssssfff",  lat,lon);
     //打开地图，并将门店位置传入

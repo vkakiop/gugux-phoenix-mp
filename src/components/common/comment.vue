@@ -1,6 +1,6 @@
 <template>
     <view class="comment">
-        <view v-if="pageData.total == 0">
+        <view v-if="pageData.total == -1 || pageData.total == 0">
             <u-empty
                     mode="data"
                     icon="http://cdn.uviewui.com/uview/empty/car.png"
@@ -16,7 +16,7 @@
                     v-for="(item, index) in pageData.indexList"
                     :key="index"
                 >
-                    <view class="reply" v-for="(item,index) in pageData.indexList" :key="index">
+                    <view class="reply">
                         <view class="head">
                             <image :src="item.userIcon"></image>
                         </view>
@@ -24,7 +24,7 @@
                             <view class="name">{{ item.userName }}</view>
                             <rich-text class="content" v-html="renderTxt(item.content)"></rich-text>
                             <view class="time">
-                                {{formatedCommentDate(item.createTime) }}<text class="replys">　回复</text>
+                                {{formatedCommentDate(item.createTime) }}<text class="replys" @click="fatherReply(item,index)">　回复</text>
                                 <view class="contain-reply" v-if="item.isExpand < 2">
                                     <view class="contain-row" v-for="(row,indexs) in item.childcomMent" :key="indexs">
                                         <view class="contain-head">
@@ -34,7 +34,7 @@
                                             <view class="name">{{ row.userName }} <image src="/static/img/right.png"></image> {{ row.replyName }}</view>
                                             <rich-text class="content" v-html="renderTxt(row.content)"></rich-text>
                                             <view class="time">
-                                                {{formatedCommentDate(row.createTime) }}<text class="replys">　回复</text>
+                                                {{formatedCommentDate(row.createTime) }}<text class="replys" @click="childReply(item,row,index)">　回复</text>
                                             </view>
                                         </view>
                                         <view class="contain-like like">
@@ -58,15 +58,19 @@
                             </view>
                         </view>
                         
-                        <view class="like">
-                            <image @click="likeChange(item,1)" v-if="item.isLike == 0" src="/static/img/heart1.png"></image>
-                            <image @click="likeChange(item,0)" v-else-if="item.isLike == 1" src="/static/img/heart2.png"></image>
+                        <view class="like" v-if="item.isLike == 0" @click="likeChange(item,1)">
+                            <image src="/static/img/heart1.png"></image>
+                            <view>{{ item.likesNum }}</view>
+                        </view>
+                        <view class="like" v-else-if="item.isLike == 1" @click="likeChange(item,0)">
+                            <image src="/static/img/heart2.png"></image>
                             <view>{{ item.likesNum }}</view>
                         </view>
                     </view>
                 </u-list-item>
             </u-list>
         </view>
+        <commentBox ref="commentBoxRef" @close="commentClose"></commentBox>
     </view>
 </template>
 <script setup>
@@ -74,95 +78,157 @@ import { ref, onMounted, reactive } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import {formatedCommentDate,isArrayEmpty} from "@/utils/utils"
 import emoji from "@/utils/imconfig/emoji";
+import commentBox from "@/components/common/commentBox.vue"
 import {opuscomment,commentlike,commentlist,subcommentlist} from '@/api/comment/index'
 const emit = defineEmits(['debounce'])
 const pageData = reactive({
-    total:1,
+    index:'',//回复当前子评论
+    childindex:'',
+    opusId:'',
+    mainCommentId:0,
+    replyId:'',
+    replyCommentId:'',
+    lastCommentId:0,
+    childlastCommentId:0,
+    pageSize:10,
+    total:-1,
     indexList:[],
-    urls: [
-        'https://cdn.uviewui.com/uview/album/1.jpg',
-        'https://cdn.uviewui.com/uview/album/2.jpg',
-        'https://cdn.uviewui.com/uview/album/3.jpg',
-        'https://cdn.uviewui.com/uview/album/4.jpg',
-        'https://cdn.uviewui.com/uview/album/5.jpg',
-        'https://cdn.uviewui.com/uview/album/6.jpg',
-        'https://cdn.uviewui.com/uview/album/7.jpg',
-        'https://cdn.uviewui.com/uview/album/8.jpg',
-        'https://cdn.uviewui.com/uview/album/9.jpg',
-        'https://cdn.uviewui.com/uview/album/10.jpg',
-    ],
     content:''
 })
-
+const commentBoxRef = ref();
+const init = (val)=>{
+    let obj = {
+        opusId:pageData.opusId,
+        mainCommentId:pageData.mainCommentId,
+        replyId:pageData.replyId,
+        replyCommentId:pageData.replyCommentId,
+    }
+    commentBoxRef.value.init(val,obj);
+}
+defineExpose({init})
 onLoad((option)=>{
-    scrolltolower();
-//   if (option.id) {
-//     console.log(option)
-//     // getApi();
-//     //   wx请求获取位置权限
+    if (option.id) {
+        pageData.opusId = option.id;
+        scrolltolower();
+    // getApi();
+    //   wx请求获取位置权限
     
-//   }
-//   else {
-//     uni.showToast({
-//       title: '协议code参数有误！',
-//       icon:'none',
-//       duration: 2000
-//     });
-//   }
+  }
+  else {
+    uni.showToast({
+      title: '协议code参数有误！',
+      icon:'none',
+      duration: 2000
+    });
+  }
 })
 const scrolltolower = () => {
     loadmore()
 }
 const loadmore = () =>{
-    for (let i = 0; i < 2; i++) {
-        // console.log(i);
-        console.log(i%2 == 1);
-        pageData.indexList.push({
-            id:i,
-            userIcon: i%2 == 1 ? 'https://cdn.uviewui.com/uview/album/1.jpg' :'https://cdn.uviewui.com/uview/album/2.jpg',
-            userName:'咕咕'+i,
-            content:'好震撼的地方，[花痴]作者用心了！已经设置成手机壁纸了[大笑]'+i,
-            likesNum:13+i,
-            isLike: i%2 == 1 ? 0:1,
-            createTime:'2022-02-03 12:21:12',
-            childcomMent:[
-                // {
-                //     id:i,
-                //     userIcon: i%2 == 1 ? 'https://cdn.uviewui.com/uview/album/1.jpg' :'https://cdn.uviewui.com/uview/album/2.jpg',
-                //     userName:'子咕咕'+i,
-                //     content:'好震撼的地方，作者用心了！已经设置成手机壁纸了'+i,
-                //     likesNum:13+i,
-                //     isLike: i%2 == 1 ? 0:1,
-                //     createTime:'2022-02-03 12:21:12',
-                //     replyName:'子被回复'+i,
-                // }
-            ],
-            subCommentNum:2,
-            isExpand:0
-        })
+    let obj = {
+        opusId:pageData.opusId,
+        lastCommentId:pageData.lastCommentId == 0 ? 0 :pageData.lastCommentId,
+        pageSize:pageData.pageSize,
     }
+    if(pageData.total == pageData.indexList.length){
+        return
+    }
+    commentlist(obj).then((res)=>{
+        let list = [];
+        if(!isArrayEmpty(res.data.list)){
+            res.data.list.forEach((item)=>{
+                list.push({
+                    ...item,
+                    childcomMent:[],
+                    isExpand:0
+                })
+            })
+        }
+        pageData.indexList.push(...list);
+        pageData.lastCommentId = pageData.indexList[pageData.indexList.length-1].id;
+        pageData.total = res.data.totalCount;
+    })
+    // for (let i = 0; i < 2; i++) {
+    //     // pageData.indexList.push({
+    //     //     id:i,
+    //     //     userIcon: i%2 == 1 ? 'https://cdn.uviewui.com/uview/album/1.jpg' :'https://cdn.uviewui.com/uview/album/2.jpg',
+    //     //     userName:'咕咕'+i,
+    //     //     content:'好震撼的地方，[花痴]作者用心了！已经设置成手机壁纸了[大笑]'+i,
+    //     //     likesNum:13+i,
+    //     //     isLike: i%2 == 1 ? 0:1,
+    //     //     createTime:'2022-02-03 12:21:12',
+    //     //     childcomMent:[
+    //     //         // {
+    //     //         //     id:i,
+    //     //         //     userIcon: i%2 == 1 ? 'https://cdn.uviewui.com/uview/album/1.jpg' :'https://cdn.uviewui.com/uview/album/2.jpg',
+    //     //         //     userName:'子咕咕'+i,
+    //     //         //     content:'好震撼的地方，作者用心了！已经设置成手机壁纸了'+i,
+    //     //         //     likesNum:13+i,
+    //     //         //     isLike: i%2 == 1 ? 0:1,
+    //     //         //     createTime:'2022-02-03 12:21:12',
+    //     //         //     replyName:'子被回复'+i,
+    //     //         // }
+    //     //     ],
+    //     //     subCommentNum:2,
+    //     //     isExpand:0
+    //     // })
+    // }
 }
 
 const likeChange = (item,type)=>{
     item.isLike = type;
+    let obj = {
+        commentId:item.id,
+        mainCommentId:pageData.mainCommentId == 0 ? 0 :1,
+        action:type,
+    }
+    commentlike(obj).then((res)=>{
+        item.likesNum = type == 0 ? item.likesNum - 1 : item.likesNum + 1;
+        uni.showToast({
+            title: type == 0 ? '取消成功！': '点赞成功！',
+            icon: 'none',
+            duration: 2000
+        })
+    })
 }
 const expandChange = (item)=>{
+    console.log(item);
     if(item.isExpand == 0){
-        let i = 1;
-        item.childcomMent.push(
-            {
-                id:i,
-                userIcon: i%2 == 1 ? 'https://cdn.uviewui.com/uview/album/1.jpg' :'https://cdn.uviewui.com/uview/album/2.jpg',
-                userName:'子咕咕咕咕咕咕咕咕咕咕咕咕咕咕'+i,
-                content:'好震撼的地方，作者用心了！已经设置成手机壁纸了'+i,
-                likesNum:13+i,
-                isLike: i%2 == 1 ? 0:1,
-                createTime:'2022-02-03 12:21:12',
-                replyName:'子被回复咕咕咕咕咕咕咕咕咕咕咕咕'+i,
+        let obj = {
+            commentId:item.id,
+            lastCommentId:item.childlastCommentId||0,
+            pageSize:pageData.pageSize,
+        }
+        subcommentlist(obj).then((res)=>{
+            let list = [];
+            if(!isArrayEmpty(res.data.list)){
+                res.data.list.forEach((item)=>{
+                    list.push({
+                        ...item,
+                        childlastCommentId:0
+                    })
+                })
             }
-            )
+            item.childcomMent.push(...list);
+            item.childlastCommentId = item.childcomMent[item.childcomMent.length-1].id;
+            item.isExpand = item.subCommentNum == item.childcomMent.length ? 1 : 0;
+        })
+        // let i = 1;
+        // item.childcomMent.push(
+        //     {
+        //         id:i,
+        //         userIcon: i%2 == 1 ? 'https://cdn.uviewui.com/uview/album/1.jpg' :'https://cdn.uviewui.com/uview/album/2.jpg',
+        //         userName:'子咕咕咕咕咕咕咕咕咕咕咕咕咕咕'+i,
+        //         content:'好震撼的地方，作者用心了！已经设置成手机壁纸了'+i,
+        //         likesNum:13+i,
+        //         isLike: i%2 == 1 ? 0:1,
+        //         createTime:'2022-02-03 12:21:12',
+        //         replyName:'子被回复咕咕咕咕咕咕咕咕咕咕咕咕'+i,
+        //     }
+        //     )
     }
-    item.isExpand = item.subCommentNum == item.childcomMent.length ? 1 : 0;
+    
 }
 const upChange = (item,type)=>{
     item.isExpand = type;
@@ -171,27 +237,70 @@ const customEmoji=(value) =>{
     return `<img src="${value}" style="width:25px;height:25px;" />`;
 }
 const renderTxt =(txt = "") => {
-      let rnTxt = [];
-      let match = null;
-      const regex = /(\[.*?\])/g;
-      let start = 0;
-      let index = 0;
-      while ((match = regex.exec(txt))) {
-        index = match.index;
-        if (index > start) {
-          rnTxt.push(txt.substring(start, index));
-        }
-        if (match[1] in emoji.obj) {
-          const v = emoji.obj[match[1]];
-          rnTxt.push(customEmoji(v));
-        } else {
-          rnTxt.push(match[1]);
-        }
-        start = index + match[1].length;
-      }
-      rnTxt.push(txt.substring(start, txt.length));
-      return rnTxt.toString().replace(/,/g, "");
+    let rnTxt = [];
+    let match = null;
+    const regex = /(\[.*?\])/g;
+    let start = 0;
+    let index = 0;
+    while ((match = regex.exec(txt))) {
+    index = match.index;
+    if (index > start) {
+        rnTxt.push(txt.substring(start, index));
     }
+    if (match[1] in emoji.obj) {
+        const v = emoji.obj[match[1]];
+        rnTxt.push(customEmoji(v));
+    } else {
+        rnTxt.push(match[1]);
+    }
+    start = index + match[1].length;
+    }
+    rnTxt.push(txt.substring(start, txt.length));
+    return rnTxt.toString().replace(/,/g, "");
+}
+
+const commentClose = (data,str)=>{
+//将评论内容插入数据中
+    if(str == 'father'){
+        pageData.indexList.unshift({
+            ...data,
+            childcomMent:[],
+            isExpand:0
+        })
+    }else if(str == 'child'){
+        pageData.indexList[pageData.index].childcomMent.unshift({
+            ...data
+        })
+        pageData.indexList[pageData.index].subCommentNum += 1;
+        console.log(pageData.indexList[pageData.index])
+    }
+}
+
+const fatherReply = (item,index) =>{
+    pageData.index = index;
+    pageData.mainCommentId = item.id;
+    pageData.replyId = item.userId;
+    let obj = {
+        opusId:pageData.opusId,
+        mainCommentId:pageData.mainCommentId,
+        replyId:pageData.replyId,
+        replyCommentId:pageData.replyCommentId,
+    }
+    commentBoxRef.value.init(true,obj);
+}
+const childReply = (item,row,index) =>{
+    pageData.index = index;
+    pageData.mainCommentId = item.id;
+    pageData.replyId = item.userId;
+    pageData.replyCommentId = row.id;
+    let obj = {
+        opusId:pageData.opusId,
+        mainCommentId:pageData.mainCommentId,
+        replyId:pageData.replyId,
+        replyCommentId:pageData.replyCommentId,
+    }
+    commentBoxRef.value.init(true,obj);
+}
 </script>
 <style lang="scss" scoped>
 image{
@@ -237,6 +346,7 @@ image{
                     font-weight: 400;
                     color: #272A29;
                     padding:10rpx 0 15rpx 0;
+                    word-break   : break-all;
                 }
                 .time{
                     font-size: 26rpx;

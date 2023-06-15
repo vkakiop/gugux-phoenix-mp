@@ -18,9 +18,9 @@ export function commentlike(data) {
 // 获取评论
 export function commentlist(data) {
     return request({
-        url: '/gugux-services-opus-api/app/opus/comment/list/'+data.opusI+'/'+data.lastCommentId+'/'+data.pageSize,
-        method: 'post',
-        data:data
+        url: '/gugux-services-opus-api/app/opus/comment/list/'+data.opusId+'/'+data.lastCommentId+'/'+data.pageSize,
+        method: 'get',
+        // params:data
     })
 }
 // 获取子评论
