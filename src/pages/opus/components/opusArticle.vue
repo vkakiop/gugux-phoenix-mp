@@ -62,7 +62,7 @@
 
 <script setup>
 import {computed, onMounted, ref} from "vue"
-import {numberAdd,copyToClip,jumpAppStore} from "@/utils/utils"
+import {numberAdd,copyToClip,jumpAppStore,distanceOf,formatedDistance} from "@/utils/utils"
 import OpusContentInfo from "./opusContentInfo.vue"
 const props = defineProps({
   detail:{
