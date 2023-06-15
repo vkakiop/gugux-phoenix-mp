@@ -108,23 +108,6 @@ const init = (val)=>{
 }
 defineExpose({init})
 
-watch(()=>props.id,(newVal,oldVal)=>{
-  if (newVal) {
-    pageData.opusId = newVal;
-    scrolltolower();
-    // getApi();
-    //   wx请求获取位置权限
-
-  }
-  else {
-    uni.showToast({
-      title: '协议code参数有误！',
-      icon:'none',
-      duration: 2000
-    });
-  }
-},{immediate:true})
-
 const scrolltolower = () => {
     loadmore()
 }
@@ -178,6 +161,23 @@ const loadmore = () =>{
     //     // })
     // }
 }
+
+watch(()=>props.id,(newVal,oldVal)=>{
+  if (newVal) {
+    pageData.opusId = newVal;
+    scrolltolower();
+    // getApi();
+    //   wx请求获取位置权限
+
+  }
+  else {
+    uni.showToast({
+      title: '协议code参数有误！',
+      icon:'none',
+      duration: 2000
+    });
+  }
+},{immediate:true})
 
 const likeChange = (item,type)=>{
     item.isLike = type;
