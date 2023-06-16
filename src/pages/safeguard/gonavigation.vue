@@ -16,7 +16,12 @@
             </view>
         </view> -->
         <u-button @click="openBox">打开</u-button>
-        <comment ref="commentRef" :id="pageData.id"></comment>
+        <u-popup :show="pageData.show" @close="close">
+            <view class="container">
+                <comment ref="commentRef" :id="pageData.id" :articleType="2"></comment>
+            </view>
+            <u-button @click="open">打开评论</u-button>
+        </u-popup>
     </view>
 </template>
 
@@ -53,12 +58,17 @@ onLoad((option)=>{
     // });
   }
 })
-
 const commentRef = ref();
 const openBox = () =>{
+    pageData.show = true;
+    // commentRef.value.init(true);
+}
+const close = () =>{
+    pageData.show = false;
+}
+const open = () =>{
     commentRef.value.init(true);
 }
-
 const  openMap = (lon,lat) => {
     console.log("获取经纬度ssssfff",  lat,lon);
     //打开地图，并将门店位置传入
@@ -213,5 +223,9 @@ const rejectGetLocation = () => {
             justify-content: space-around;
         }
     }
+}
+.container{
+    height: 600rpx;
+    overflow: auto;
 }
 </style>

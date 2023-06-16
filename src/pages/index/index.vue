@@ -70,7 +70,7 @@ const confirmShow = () => {
   show.value = false;
   console.log('去导航');
   // uni.navigateTo({ url: '/pages/emergencycontact/index?id=' + encodeURIComponent(13333333333) })
-  uni.navigateTo({ url: '/pages/safeguard/gonavigation?id=' + encodeURIComponent(123) })
+  uni.navigateTo({ url: '/pages/safeguard/gonavigation?id=' + encodeURIComponent('1601683533353328702') })
 }
 const closeShow = () => {
   show.value = false;

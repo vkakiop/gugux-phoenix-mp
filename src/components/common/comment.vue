@@ -7,12 +7,12 @@
             >
             </u-empty>
         </view>
-        <view v-else class="comment-list">
+        <view v-else-if="articleType == 2" class="comment-list">
             <view class="total">共 {{pageData.total}} 条评论</view>
-            <u-list
+            <u-list :scrollable="false" :height="pageData.height"  
                 @scrolltolower="scrolltolower"
             >
-                <u-list-item
+                <u-list-item 
                     v-for="(item, index) in pageData.indexList"
                     :key="index"
                 >
@@ -51,7 +51,7 @@
                                     <image src="/static/img/down.png"></image>
                                 </view>
                                 <view v-else-if="item.isExpand == 0 && item.childcomMent.length<item.subCommentNum" @click="expandChange(item)">展开更多回复</view>
-                                <view v-else-if="item.isExpand == 2" @click="upChange(item,1)">展开更多回复</view>
+                                <view v-else-if="item.isExpand == 2" @click="upChange(item,1)">展开全部回复</view>
                                 <view v-else-if="item.isExpand == 1" @click="upChange(item,2)">
                                     <view>收起</view><image src="/static/img/up.png"></image>
                                 </view>
@@ -70,18 +70,87 @@
                 </u-list-item>
             </u-list>
         </view>
+        <view v-else-if="articleType == 1" class="comment-list">
+            <view class="total">共 {{pageData.total}} 条评论</view>
+            
+            <view 
+                    v-for="(item, index) in pageData.indexList"
+                    :key="index"
+                >
+                    <view class="reply">
+                        <view class="head">
+                            <image :src="item.userIcon"></image>
+                        </view>
+                        <view class="contain">
+                            <view class="name">{{ item.userName }}</view>
+                            <rich-text class="content" v-html="renderTxt(item.content)"></rich-text>
+                            <view class="time">
+                                {{formatedCommentDate(item.createTime) }}<text class="replys" @click="fatherReply(item,index)">　回复</text>
+                                <view class="contain-reply" v-if="item.isExpand < 2">
+                                    <view class="contain-row" v-for="(row,indexs) in item.childcomMent" :key="indexs">
+                                        <view class="contain-head">
+                                            <image :src="row.userIcon"></image>
+                                        </view>
+                                        <view class="contain-contain">
+                                            <view class="name">{{ row.userName }} <image src="/static/img/right.png"></image> {{ row.replyName }}</view>
+                                            <rich-text class="content" v-html="renderTxt(row.content)"></rich-text>
+                                            <view class="time">
+                                                {{formatedCommentDate(row.createTime) }}<text class="replys" @click="childReply(item,row,index)">　回复</text>
+                                            </view>
+                                        </view>
+                                        <view class="contain-like like">
+                                            <image @click="likeChange(row,1)" v-if="row.isLike == 0" src="/static/img/heart1.png"></image>
+                                            <image @click="likeChange(row,0)" v-else-if="row.isLike == 1" src="/static/img/heart2.png"></image>
+                                            <view>{{ row.likesNum }}</view>
+                                        </view>
+                                    </view>
+                                </view>
+                            </view>
+                            <view class="expand" v-if="item.subCommentNum > 0">
+                                <view v-if="item.isExpand == 0 && isArrayEmpty(item.childcomMent)" @click="expandChange(item)">
+                                    <view>展开 {{ item.subCommentNum }} 条回复 </view>
+                                    <image src="/static/img/down.png"></image>
+                                </view>
+                                <view v-else-if="item.isExpand == 0 && item.childcomMent.length<item.subCommentNum" @click="expandChange(item)">展开更多回复</view>
+                                <view v-else-if="item.isExpand == 2" @click="upChange(item,1)">展开全部回复</view>
+                                <view v-else-if="item.isExpand == 1" @click="upChange(item,2)">
+                                    <view>收起</view><image src="/static/img/up.png"></image>
+                                </view>
+                            </view>
+                        </view>
+
+                        <view class="like" v-if="item.isLike == 0" @click="likeChange(item,1)">
+                            <image src="/static/img/heart1.png"></image>
+                            <view>{{ item.likesNum }}</view>
+                        </view>
+                        <view class="like" v-else-if="item.isLike == 1" @click="likeChange(item,0)">
+                            <image src="/static/img/heart2.png"></image>
+                            <view>{{ item.likesNum }}</view>
+                        </view>
+                    </view>
+                </view>
+        </view>
         <commentBox ref="commentBoxRef" @close="commentClose"></commentBox>
     </view>
 </template>
 <script setup>
 import { ref, onMounted, reactive,watch } from 'vue'
-import { onLoad } from '@dcloudio/uni-app'
+import { onLoad ,onReachBottom} from '@dcloudio/uni-app'
 import {formatedCommentDate,isArrayEmpty} from "@/utils/utils"
 import emoji from "@/utils/imconfig/emoji";
 import commentBox from "@/components/common/commentBox.vue"
 import {opuscomment,commentlike,commentlist,subcommentlist} from '@/api/comment/index'
 const emit = defineEmits(['debounce'])
-const props = defineProps(['id'])
+const props = defineProps({
+    id:{
+        type:String,
+        default:''
+    },
+    articleType:{
+        type:Number,
+        default:1    // 1 文章  2 视频
+    },
+})
 const pageData = reactive({
     index:'',//回复当前子评论
     childindex:'',
@@ -94,7 +163,8 @@ const pageData = reactive({
     pageSize:12,
     total:-1,
     indexList:[],
-    content:''
+    content:'',
+    height:'500rpx'
 })
 const commentBoxRef = ref();
 const init = (val)=>{
@@ -107,9 +177,11 @@ const init = (val)=>{
     commentBoxRef.value.init(val,obj);
 }
 defineExpose({init})
-
+onReachBottom(()=>{
+    props.articleType == 2 && loadmore();
+})
 const scrolltolower = () => {
-    loadmore()
+    loadmore();
 }
 const loadmore = () =>{
     let obj = {
@@ -173,11 +245,11 @@ watch(()=>props.id,(newVal,oldVal)=>{
 
   }
   else {
-    uni.showToast({
-      title: '协议code参数有误！',
-      icon:'none',
-      duration: 2000
-    });
+    // uni.showToast({
+    //   title: '协议code参数有误！',
+    //   icon:'none',
+    //   duration: 2000
+    // });
   }
 },{immediate:true})
 
