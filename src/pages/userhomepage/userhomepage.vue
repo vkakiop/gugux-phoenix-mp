@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view v-if="pageInfo.mineMessage.guguId">
 		<view class="">
 			<image :src="pageInfo.mineMessage.background" class="w-full" mode="scaleToFill"></image>
 		</view>
@@ -77,38 +77,11 @@
 
 <script setup>
 	import waterfall from '@/components/index/waterfall.vue'
-	import {
-		getUserBase,
-		userhomepage,
-		homepagelike,
-		homepageopus,
-		homepagecollection
-	} from "@/api/mine/index.js"
-	import {
-		ref,
-		onMounted,
-		reactive,
-		watch,
-		computed,
-		getCurrentInstance
-	} from 'vue'
-	import {
-		onShow,
-		onReachBottom,
-		onPageScroll
-		onLoad
-	} from "@dcloudio/uni-app"
-	import {
-		needLogin
-	} from "@/utils/utils"
+	import { userhomepage, homepageopus } from "@/api/mine/index.js"
+	import { ref, onMounted, reactive, watch, computed, getCurrentInstance } from 'vue'
+	import { onShow, onReachBottom, onPageScroll, onLoad } from "@dcloudio/uni-app"
+	import { needLogin } from "@/utils/utils"
 	const waterlist = ref([])
-	onLoad((option) => {
-		userhomepage({
-			masterId: option.id
-		}).then(reslove => {
-			pageInfo.mineMessage = reslove.data.userInfo
-		})
-	})
 	const pageData = reactive({
 		masterId: '',
 		scrollTop: 0,
@@ -130,6 +103,15 @@
 				}
 			}
 		}],
+	})
+	onLoad((option) => {
+		pageData.masterId = option.id
+		userhomepage({
+			masterId: option.id
+		}).then(reslove => {
+			pageInfo.mineMessage = reslove.data.userInfo
+			changeWaterfall(0)
+		})
 	})
 	const internalInstance = getCurrentInstance()
 	const iSinfo = ref(false)
@@ -181,33 +163,6 @@
 			getData()
 		}
 	})
-	const gettolcount = () => {
-		pageData.waterfallItems.forEach((item, index) => {
-			if (index === 0) {
-				homepageopus({
-					masterId: pageData.masterId,
-					pageNum: 1,
-					pageSize: 10
-				}).then(res => {
-					pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
-				})
-			} else if (index === 1) {
-				homepagelike({
-					pageNum: 1,
-					pageSize: 10
-				}).then(res => {
-					pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
-				})
-			} else if (index === 2) {
-				homepagecollection({
-					pageNum: 1,
-					pageSize: 10
-				}).then(res => {
-					pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
-				})
-			}
-		})
-	}
 
 	function copy(value) {
 		uni.setClipboardData({
@@ -226,18 +181,6 @@
 	const skipPerson = () => {
 		uni.navigateTo({
 			url: '/pages/personCenter/personCenter'
-		})
-	}
-	const fetchData = () => {
-		getUserBase({}).then(res => {
-			pageData.masterId = res.data.id
-			gettolcount()
-			changeWaterfall(0)
-			userhomepage({
-				masterId: res.data.id
-			}).then(reslove => {
-				pageInfo.mineMessage = reslove.data.userInfo
-			})
 		})
 	}
 </script>

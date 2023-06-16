@@ -12,7 +12,7 @@
 			<view class="">{{item.title}}</view>
 		</view>
 		<view class="flex justify-between  text-13 items-center h-30  font-light text-[#999]  ">
-			<view class="flex items-center">
+			<view class="flex items-center" @click="gohomepage(item)">
 				<image :src="item.icon" class="w-16 h-16 rounded-full"></image>{{item.author}}
 			</view>
 			<view class="" @click="like(item)">
@@ -27,27 +27,15 @@
 </template>
 
 <script setup>
-	import {
-		getTokenValue
-	} from "@/utils/utils"
-	import {
-		opusLike,
-	} from "@/api/opus/index"
-	import {
-		distanceOf,
-		formatedDistance
-	} from "@/utils/utils"
-	import {
-		computed,
-		ref,
-		onMounted,
-		reactive
-	} from 'vue';
+	import {getTokenValue} from "@/utils/utils"
+	import {	opusLike,} from "@/api/opus/index"
+	import {distanceOf,formatedDistance} from "@/utils/utils"
+	import {computed,ref,onMounted,reactive} from 'vue';
 	const pageData = reactive({
 		id: '',
 		isShowLoginPop: false,
 	})
-	const props = defineProps(['item', 'itemKey', 'isVirtualCal'])
+	const props = defineProps(['item', 'isVirtualCal'])
 	const computedHeight = computed({
 		get: (w, h) => {
 			return function(w, h) {
@@ -55,6 +43,11 @@
 			}
 		}
 	})
+	const gohomepage=(item)=>{
+		uni.navigateTo({
+			url:'/pages/userhomepage/userhomepage?id='+item.createdBy
+		})
+	}
 	const godetail = (item) => {
 		if (item.cover.itemType == 2) {
 			uni.navigateTo({
