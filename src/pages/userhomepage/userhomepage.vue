@@ -66,6 +66,13 @@
 		<!-- 菜单 -->
 		<view>
 			<view v-for="(waterItem,waterIndex) in pageData.waterfallItems">
+				<view  v-if="!waterItem.items.length&&waterIndex == pageData.currentIndex">
+				    <u-empty
+				            mode="list"
+				            icon="http://cdn.uviewui.com/uview/empty/car.png"
+				    >
+				    </u-empty>
+				</view>
 				<view v-show="waterIndex == pageData.currentIndex">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
 					</waterfall>

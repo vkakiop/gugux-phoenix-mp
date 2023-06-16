@@ -1,4 +1,3 @@
-搜索历史
 <template>
 	<view class="bg-gray-100">
 		<view class="fixed -top-5 py-10 bg-[#fff] z-50">
@@ -15,16 +14,23 @@
 			<!-- 搜索框 -->
 			<!-- 搜索历史 -->
 			<view class="searchHistory" v-if="isShowHistory">
-				<view style="display: flex;align-items: center;justify-content: space-between;box-sizing: border-box;padding: 0px 5px;">
-					<view>搜索历史:</view>
-					<view style="color: red;font-size: 28px;" @click="empty"><uni-icons type="trash" size="30"></uni-icons>
+				<view v-if="pageData.searchHistoryList.length">
+					<view style="display: flex;align-items: center;justify-content: space-between;box-sizing: border-box;padding: 0px 5px;">
+						<view>搜索历史:</view>
+						<view style="color: red;font-size: 28px;" @click="empty"><uni-icons type="trash" size="30"></uni-icons>
+						</view>
+					</view>
+					<view class="searchHistoryItem">
+						<view v-for="(item, index) in pageData.searchHistoryList" :key="index">
+							<text>{{ item }}</text>
+						</view>
 					</view>
 				</view>
-				<view class="searchHistoryItem">
-					<view v-for="(item, index) in searchHistoryList" :key="index">
-						<text>{{ item }}</text>
-					</view>
-				</view>
+
+			</view>
+			<view v-if="!pageData.searchHistoryList.length">
+				<u-empty mode="history"  icon="http://cdn.uviewui.com/uview/empty/history.png">
+				</u-empty>
 			</view>
 			<!-- 搜索历史 -->
 			<!-- 菜单 -->
@@ -37,11 +43,19 @@
 						</view>
 					</view>
 				</view>
+
 			</view>
 			<!-- 菜单 -->
 		</view>
 		<view class="pt-100" v-show="!isShowHistory">
 			<view v-for="(waterItem,waterIndex) in pageData.waterfallItems">
+				<view  v-if="!waterItem.items.length&&waterIndex == pageData.currentIndex">
+				    <u-empty
+				            mode="search"
+				            icon="http://cdn.uviewui.com/uview/empty/search.png"
+				    >
+				    </u-empty>
+				</view>
 				<view v-show="waterIndex == pageData.currentIndex">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
 					</waterfall>
@@ -75,8 +89,18 @@
 	const waterlist = ref([])
 	onMounted(() => {
 		changeWaterfall(0)
+		uni.getStorage({
+			key: 'gugusearchList',
+			success: function(res) {
+				pageData.searchHistoryList = JSON.parse(res.data)
+			}
+		})
+	})
+	onLoad(() => {
+
 	})
 	const pageData = reactive({
+		searchHistoryList: [],
 		scrollTop: 0,
 		currentIndex: 0,
 		waterfallItems: [{
@@ -178,6 +202,22 @@
 		pageData.scrollTop = res.scrollTop
 	})
 	const search = () => {
+		//将搜索记录存在本地
+		if (!pageData.searchHistoryList.includes(searchvalue.value)) {
+			pageData.searchHistoryList.unshift(searchvalue.value);
+			uni.setStorage({
+				key: 'gugusearchList',
+				data: JSON.stringify(pageData.searchHistoryList)
+			})
+		} else {
+			let i = pageData.searchHistoryList.indexOf(searchvalue.value);
+			pageData.searchHistoryList.splice(i, 1);
+			pageData.searchHistoryList.unshift(searchvalue.value);
+			uni.setStorage({
+				key: 'gugusearchList',
+				data: JSON.stringify(pageData.searchHistoryList)
+			})
+		}
 		isShowHistory.value = false
 		pageData.waterfallItems.forEach(item => {
 			item.query.path.keyword = searchvalue.value
@@ -191,9 +231,9 @@
 			title: '已清空'
 		});
 		uni.removeStorage({
-			key: 'searchList'
+			key: "gugusearchList"
 		});
-		searchHistoryList.value = [];
+		pageData.searchHistoryList = [];
 	}
 	onReachBottom(() => {
 		let currentIndex = pageData.currentIndex
