@@ -6,13 +6,13 @@
 			<image class="w-64 h-64" src="@/static/opus/icon_play.png" />
 		</view>
 		<view class="info">
-			<view class="title">@{{ pageData.opusdetail.title }}</view>
+			<view class="title">@{{ pageData.opusdetail.author }}</view>
 			<view class="desc">{{ pageData.opusdetail.brief }}</view>
 		</view>
 		<cover-view>
 			<view class="buttons text-sm">
 				<debounce  class="header_group">
-					<image class="header" :src="pageData.opusdetail.icon"></image>
+					<image class="header" :src="pageData.opusdetail.icon" @click="gohomepage(pageData.opusdetail)"></image>
 					<view class="add" v-if="!pageData.opusdetail.isFollow" @click="attention(pageData.opusdetail)">
 						<image src="@/static/video/attention.png" class="w-19 h-19" ></image>
 					</view>
@@ -82,10 +82,14 @@
 				opusId: option.id
 			}).then(res => {
 				pageData.opusdetail = res.data
-				console.log('pageData.opusdetail', pageData.opusdetail);
 			})
 		}
 	})
+	const gohomepage=(item)=>{
+		uni.navigateTo({
+			url:'/pages/userhomepage/userhomepage?id='+item.createdBy
+		})
+	}
 	const playVideo = () => {
 		let currentId = 'video0'; // 获取当前视频id
 		uni.createVideoContext(currentId, ctx).play();

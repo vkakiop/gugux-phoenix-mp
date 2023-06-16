@@ -9,16 +9,15 @@
 						<image class="w-64 h-64" src="@/static/opus/icon_play.png" />
 					</view>
 					<view class="info">
-						<view class="title">@{{ item.title }}</view>
+						<view class="title">@{{ item.author }}</view>
 						<view class="desc">{{ item.brief }}</view>
 					</view>
 					<cover-view>
 						<view class="buttons text-sm">
-							<debounce @debounce="attention(item)" class="header_group">
-								<image class="header" :src="item.icon"></image>
-								<view class="add">
-									<image src="@/static/video/attention.png" class="w-19 h-19" v-if="!item.isFollow"></image>
-									<image src="@/static/video/reture.png" class="w-19 h-19" v-else></image>
+							<debounce  class="header_group">
+								<image class="header" :src="item.icon"  @click="gohomepage(item)"></image>
+								<view class="add" v-if="!item.isFollow" @click="attention(item)">
+									<image src="@/static/video/attention.png" class="w-19 h-19" ></image>
 								</view>
 							</debounce>
 							<debounce @debounce="like(item)" class="button mb-10">
@@ -103,6 +102,11 @@
 	const {
 		ctx
 	} = getCurrentInstance()
+	const gohomepage=(item)=>{
+		uni.navigateTo({
+			url:'/pages/userhomepage/userhomepage?id='+item.createdBy
+		})
+	}
 	watch(() => props.lastVideoId, (newV, oldV) => {
 		if (newV) {
 			pageData.lastVideoId = newV
@@ -157,29 +161,47 @@
 	}
 	//关注
 	const attention = (item) => {
-		let action = item.isFollow ? 0 : 1
-		if (getTokenValue()) {
-			let opusAttention = action ? userFans : userFansRemove
-			opusAttention({
-				id: item.createdBy
-			}).then(res => {
-				if (action) {
+			if (getTokenValue()){
+				userFans({
+					id: item.createdBy
+				}).then(res => {
 					item.isFollow = true
-				} else {
-					item.isFollow = false
-				}
-				uni.showToast({
-					title: (action ? '' : '取消') + '关注成功',
-					icon: 'none',
-					duration: 2000
+					uni.showToast({
+						title:  '关注成功',
+						icon: 'none',
+						duration: 2000
+					})
 				})
-			})
-		} else {
-			pageData.isShowLoginPop = true
-			isShare.value = false
-		}
-
+			}else{
+						pageData.isShowLoginPop = true
+						isShare.value = false
+			}
+			
 	}
+	// const attention = (item) => {
+	// 	let action = item.isFollow ? 0 : 1
+	// 	if (getTokenValue()) {
+	// 		let opusAttention = action ? userFans : userFansRemove
+	// 		opusAttention({
+	// 			id: item.createdBy
+	// 		}).then(res => {
+	// 			if (action) {
+	// 				item.isFollow = true
+	// 			} else {
+	// 				item.isFollow = false
+	// 			}
+	// 			uni.showToast({
+	// 				title: (action ? '' : '取消') + '关注成功',
+	// 				icon: 'none',
+	// 				duration: 2000
+	// 			})
+	// 		})
+	// 	} else {
+	// 		pageData.isShowLoginPop = true
+	// 		isShare.value = false
+	// 	}
+
+	// }
 	//收藏
 	const collection = (item) => {
 		let action = item.isCollection ? 0 : 1
