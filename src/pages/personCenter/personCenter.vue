@@ -79,7 +79,7 @@
 					<view class="mr-8">
 						<image :src="pageData.userInfo.card" class="w-40 h-40 rounded-full"> </image>
 					</view>
-					<view class=""> <uni-icons type="right" size="20"></uni-icons></view>
+					<view class="" @click="skipQRcode"> <uni-icons type="right" size="20"></uni-icons></view>
 				</view>
 			</view>
 		</view>

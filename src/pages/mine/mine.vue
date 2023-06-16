@@ -70,7 +70,7 @@
 				<view  v-if="!waterItem.items.length&&waterIndex == pageData.currentIndex">
 				    <u-empty
 				            mode="list"
-				            icon="http://cdn.uviewui.com/uview/empty/car.png"
+				            icon="http://cdn.uviewui.com/uview/empty/list.png"
 				    >
 				    </u-empty>
 				</view>
