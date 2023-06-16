@@ -38,7 +38,7 @@ import {
 		id: '',
 		isShowLoginPop: false,
 	})
-	const props = defineProps(['item', 'isVirtualCal'])
+	const props = defineProps(['item', 'itemKey', 'isVirtualCal'])
 	const computedHeight = computed({
 		get: (w, h) => {
 			return function(w, h) {

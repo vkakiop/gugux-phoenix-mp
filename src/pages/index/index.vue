@@ -20,12 +20,12 @@
 	   <!-- 菜单 -->
 	  </view>
     </view>
-    
+
     <view class="pt-80">
       <view>
         <view v-for="(waterItem, waterIndex) in pageData.waterfallItems">
           <view v-show="waterIndex == pageData.currentIndex">
-            <waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
+            <waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :itemKey="waterItem.itemKey" :value="waterItem.items"
               :waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
             </waterfall>
           </view>
@@ -78,7 +78,7 @@ const pageData = reactive({
   currentIndex: 0,
   waterfallItems: [
     {
-      scrollTop: 0, isComplete: false, isLoading: false, itemType: 'title', name: '推荐', items: [], query: {
+      scrollTop: 0, isComplete: false, isLoading: false, itemKey:'testestse', itemType: 'title', name: '推荐', items: [], query: {
         path: { category: '0', pageNum: 1, pageSize: 10 },
         data: { passTime: '' }
       }
@@ -161,14 +161,14 @@ onPageScroll((res) => {
 		font-weight: bold;
 		color: #272A29;
 	}
-	
+
 	.inactive {
 		font-size: 15px;
 		font-family: Source Han Sans SC;
 		font-weight: 400;
 		color: #999999;
 	}
-	
+
 
 .uni-common-mt {
   display: flex;
