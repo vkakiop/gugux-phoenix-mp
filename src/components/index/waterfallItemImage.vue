@@ -52,6 +52,9 @@ import {
 				url: `/pages/opus/index?id=${item.id}`
 			})
 		} else if (item.cover.itemType == 3) {
+			// uni.navigateTo({
+			// 	url: `/components/mine/minevideo?id=${item.id}`
+			// })
 			uni.navigateTo({
 				url: `/pages/VideoCarousel/VideoCarousel?id=${item.id}`
 			})
