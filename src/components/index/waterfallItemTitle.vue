@@ -15,16 +15,24 @@
 			<view class="flex items-center">
 				<image :src="item.icon" class="w-16 h-16 rounded-full"></image>{{item.author}}
 			</view>
-			<view class="">
-				<image src="/static/waterfalls/like.png" class="w-13 h-12"></image>
+			<view class="" @click="like(item)">
+				<image src="/static/waterfalls/like.png" class="w-13 h-12" v-if="!item.isLike"></image>
+				<image src="/static/waterfalls/likefill.png" class="w-13 h-12" v-if="item.isLike"></image>
 				{{item.likeNum}}
 			</view>
 		</view>
 	</view>
 	<view class="h-14"></view>
+		<loginPop :isShow="pageData.isShowLoginPop" @close="pageData.isShowLoginPop = false"></loginPop>
 </template>
 
 <script setup>
+	import {
+		getTokenValue
+	} from "@/utils/utils"
+	import {
+		opusLike,
+	} from "@/api/opus/index"
 	import {
 		distanceOf,
 		formatedDistance
@@ -32,8 +40,13 @@
 	import {
 		computed,
 		ref,
-		onMounted
+		onMounted,
+		reactive
 	} from 'vue';
+	const pageData = reactive({
+		id: '',
+		isShowLoginPop: false,
+	})
 	const props = defineProps(['item', 'isVirtualCal'])
 	const computedHeight = computed({
 		get: (w, h) => {
@@ -68,6 +81,33 @@
 	onMounted(() => {
 		getGeoLocation()
 	})
+//点赞
+	const like = (item) => {
+		let action = item.isLike ? 0 : 1
+		if (getTokenValue()) {
+			opusLike({
+				opusId: item.id,
+				action: action
+			}).then(res => {
+				if (action) {
+					item.isLike = true
+					item.likeNum++
+				} else {
+					item.isLike = false
+					if (item.likeNum > 0) {
+						item.likeNum--
+					}
+				}
+				uni.showToast({
+					title: (action ? '' : '取消') + '点赞成功',
+					icon: 'none',
+					duration: 2000
+				})
+			})
+		} else {
+			pageData.isShowLoginPop = true
+		}
+	}
 	const computedLocation = computed({
 		get: (x, y) => {
 			return function(x, y) {

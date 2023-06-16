@@ -30,7 +30,7 @@
 			<!-- 菜单 -->
 			<view class="w-full bg-[#fff] py-10" v-show="!isShowHistory">
 				<view class="flex ml-10">
-					<view v-for="(waterItem, index) in pageData.waterfallItems" class="mr-28 w-36 " @click="changeWaterfall(index)">
+					<view v-for="(waterItem, index) in pageData.waterfallItems" class="mr-28 " @click="changeWaterfall(index)">
 						<view :class="pageData.currentIndex == index?'active':'inactive'">{{waterItem.name}}</view>
 						<view class=" h-4 relative -top-5 ">
 							<image src="/static/mine/line.png" class="w-30 h-4 " v-show="pageData.currentIndex == index" />

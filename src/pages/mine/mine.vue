@@ -55,7 +55,7 @@
 		<!-- 菜单 -->
 		<view class="sticky -top-5 z-50 bg-white ml-10 w-full pb-10  -mt-25">
 			<view class="flex bg-white py-10">
-				<view v-for="(waterItem, index) in pageData.waterfallItems" class="mr-25 w-64 " @click="changeWaterfall(index)">
+				<view v-for="(waterItem, index) in pageData.waterfallItems" class="mr-26" @click="changeWaterfall(index)">
 					<view :class="pageData.currentIndex == index?'active':'inactive'">{{waterItem.name}} <text v-if="waterItem.query.data.totalCount">({{waterItem.query.data.totalCount}})</text></view>
 					<view class="w-30 h-4 relative -top-5 ">
 						<image src="/static/mine/line.png" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
@@ -251,7 +251,6 @@
 			 		pageNum:1,
 					pageSize:10
 			 	}).then(res => {
-			 		console.log('res0', res);
 			 		pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
 			 	})
 			 } else if (index === 1) {
