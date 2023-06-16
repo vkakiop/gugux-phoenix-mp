@@ -47,9 +47,7 @@ import { ref, onMounted, reactive, watch, computed, getCurrentInstance } from 'v
 import { opusList } from '@/api/opus/list'
 import waterfall from '@/components/index/waterfall.vue'
 import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
-const isShow = ref(true)
 const internalInstance = getCurrentInstance()
-const iconType = ref('bottom')
 const waterlist = ref([])
 const show = ref(false);
 const content = ref('');

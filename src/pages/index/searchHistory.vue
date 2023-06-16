@@ -140,13 +140,6 @@
 			}
 		],
 	})
-	const computedMenuItems = computed(() => {
-		return pageData.waterfallItems.map(item => {
-			return {
-				name: item.name
-			}
-		})
-	})
 	const changeWaterfall = (waterIndex) => {
 		if (pageData.currentIndex != waterIndex) {
 			//读取滚动条高度

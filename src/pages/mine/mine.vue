@@ -50,15 +50,15 @@
 					<!-- <text @tap="showinfo" v-if="iSinfo" class="hidebtn">收起</text> -->
 				</view>
 			</view>
-		
+
 		</view>
 		<!-- 菜单 -->
-		<view class="sticky -top-5 z-50 bg-white ml-10 w-full py-10  -mt-25">
+		<view class="sticky -top-5 z-50 bg-white ml-10 w-full pb-10  -mt-25">
 			<view class="flex bg-white py-10">
-				<view v-for="(waterItem, index) in pageData.waterfallItems" class="mr-26 w-61 " @click="changeWaterfall(index)">
-					<view :class="pageData.currentIndex == index?'active':'inactive'">{{waterItem.name}}</view>
-					<view class="w-30 h-4 relative -top-5">
-						<image src="/static/mine/line.png" class="w-30 h-4 " v-show="pageData.currentIndex == index" />
+				<view v-for="(waterItem, index) in pageData.waterfallItems" class="mr-25 w-64 " @click="changeWaterfall(index)">
+					<view :class="pageData.currentIndex == index?'active':'inactive'">{{waterItem.name}} <text v-if="waterItem.query.data.totalCount">({{waterItem.query.data.totalCount}})</text></view>
+					<view class="w-30 h-4 relative -top-5 ">
+						<image src="/static/mine/line.png" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
 					</view>
 				</view>
 			</view>
@@ -76,9 +76,6 @@
 </template>
 
 <script setup>
-	import {
-		opusList
-	} from '@/api/opus/list'
 	import waterfall from '@/components/index/waterfall.vue'
 	import {
 		getUserBase,
@@ -96,9 +93,6 @@
 		getCurrentInstance
 	} from 'vue'
 	import {
-		opusSearchNew,
-	} from "@/api/worksSearch/index.js"
-	import {
 		onShow,
 		onReachBottom,
 		onPageScroll
@@ -107,15 +101,13 @@
 		needLogin
 	} from "@/utils/utils"
 	const waterlist = ref([])
-	onMounted(() => {
-		changeWaterfall(0)
-	})
 	onShow(() => {
 		if (needLogin()) {
 			fetchData()
 		}
 	})
 	const pageData = reactive({
+		masterId: '',
 		scrollTop: 0,
 		currentIndex: 0,
 		waterfallItems: [{
@@ -127,14 +119,11 @@
 				items: [],
 				query: {
 					path: {
-						type: 1,
 						pageNum: 1,
 						pageSize: 10,
-						searchTime: "",
-						keyword: ''
 					},
 					data: {
-						passTime: ''
+						totalCount: ''
 					}
 				}
 			},
@@ -147,14 +136,11 @@
 				items: [],
 				query: {
 					path: {
-						type: 2,
 						pageNum: 1,
 						pageSize: 10,
-						searchTime: "",
-						keyword: ''
 					},
 					data: {
-						passTime: ''
+						totalCount: ''
 					}
 				}
 			},
@@ -166,14 +152,11 @@
 				items: [],
 				query: {
 					path: {
-						type: 3,
 						pageNum: 1,
 						pageSize: 10,
-						searchTime: "",
-						keyword: ''
 					},
 					data: {
-						passTime: ''
+						totalCount: ''
 					}
 				}
 			}
@@ -184,13 +167,6 @@
 	const pageInfo = reactive({
 		//个人信息数据
 		mineMessage: {}
-	})
-	const computedMenuItems = computed(() => {
-		return pageData.waterfallItems.map(item => {
-			return {
-				name: item.name
-			}
-		})
 	})
 	const changeWaterfall = (waterIndex) => {
 		if (pageData.currentIndex != waterIndex) {
@@ -212,19 +188,50 @@
 		let currentIndex = pageData.currentIndex
 		pageData.waterfallItems[currentIndex].isLoading = true
 		let query = pageData.waterfallItems[currentIndex].query
-		opusSearchNew({
-			...query.path
-		}).then(res => {
-			if (res.data.page == res.data.totalPage) {
-				pageData.waterfallItems[currentIndex].isComplete = true
-			}
-			pageData.waterfallItems[currentIndex].query.path.searchTime = res.data.serviceTime
-			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
-			pageData.waterfallItems[currentIndex].isLoading = false
-		}).catch(e => {
-			pageData.waterfallItems[currentIndex].isLoading = false
-		})
-
+		if (currentIndex === 0) {
+			homepageopus({
+				masterId: pageData.masterId,
+				...query.path
+			}).then(res => {
+				console.log('res0', res);
+				if (res.data.page == res.data.totalPage) {
+					pageData.waterfallItems[currentIndex].isComplete = true
+				}
+				pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount
+				pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
+				pageData.waterfallItems[currentIndex].isLoading = false
+			}).catch(e => {
+				pageData.waterfallItems[currentIndex].isLoading = false
+			})
+		} else if (currentIndex === 1) {
+			homepagelike({
+				...query.path
+			}).then(res => {
+					console.log('res1', res);
+				if (res.data.page == res.data.totalPage) {
+					pageData.waterfallItems[currentIndex].isComplete = true
+				}
+				pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount
+				pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
+				pageData.waterfallItems[currentIndex].isLoading = false
+			}).catch(e => {
+				pageData.waterfallItems[currentIndex].isLoading = false
+			})
+		} else if (currentIndex === 2) {
+			homepagecollection({
+				...query.path
+			}).then(res => {
+					console.log('res2', res);
+				if (res.data.page == res.data.totalPage) {
+					pageData.waterfallItems[currentIndex].isComplete = true
+				}
+			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount
+				pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
+				pageData.waterfallItems[currentIndex].isLoading = false
+			}).catch(e => {
+				pageData.waterfallItems[currentIndex].isLoading = false
+			})
+		}
 	}
 	onPageScroll((res) => {
 		pageData.scrollTop = res.scrollTop
@@ -236,7 +243,32 @@
 			getData()
 		}
 	})
-
+     const gettolcount=()=>{
+		 pageData.waterfallItems.forEach((item,index)=>{
+			 if (index === 0) {
+			 	homepageopus({
+			 		masterId: pageData.masterId,
+			 		pageNum:1,
+					pageSize:10
+			 	}).then(res => {
+			 		console.log('res0', res);
+			 		pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
+			 	})
+			 } else if (index === 1) {
+			 	homepagelike({
+			 		pageNum:1,
+			 		pageSize:10
+			 	}).then(res => {
+			 		pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
+			 	})
+			 } else if (index === 2) {
+			 	homepagecollection({pageNum:1,
+					pageSize:10}).then(res => {
+			 	pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
+			 	})
+			 }
+		 })
+	 }
 	function copy(value) {
 		uni.setClipboardData({
 			data: value, //要被复制的内容
@@ -258,6 +290,9 @@
 	}
 	const fetchData = () => {
 		getUserBase({}).then(res => {
+			pageData.masterId = res.data.id
+			gettolcount()
+			changeWaterfall(0)
 			userhomepage({
 				masterId: res.data.id
 			}).then(reslove => {
