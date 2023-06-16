@@ -1,7 +1,7 @@
 <template>
   <view class="w-full">
     <template v-for="(element,index) in content" :key="index">
-          <view class="items text-left pb-20">
+          <view class="text-left pb-20">
             <p v-if="element.itemType == 1" class="text-16 text-[#272a29]">{{element.content}}</p>
             <view v-if="element.itemType == 2">
               <view class="relative">
@@ -10,7 +10,6 @@
                   <uni-icons type="location-filled" size="16"></uni-icons>{{element.name}} {{computedLocation(element.x,element.y)}}<!--(距您 {{element.name}})-->
                 </view>
               </view>
-
             </view>
             <view v-if="element.itemType == 3">
               <view class="relative" @click="previewMedia(element.content)">
@@ -18,7 +17,7 @@
                 <view v-if="element.name" class="bg-[rgba(0,0,0,0.5)] absolute left-5 bottom-5 px-10 text-white text-12 rounded">
                   <uni-icons type="location-filled" size="16"></uni-icons>{{element.name}} {{computedLocation(element.x,element.y)}}<!--(距您 {{element.name}})-->
                 </view>
-                <view class="icon_play top-[calc(50% - 64rpx)] left-[calc(50% - 64rpx)] w-full h-full absolute w-50 h-50"><image class="w-64 h-64" src="@/static/opus/icon_play.png"/></view>
+                <view class="top-[calc(50%-64rpx)] left-[calc(50%-64rpx)] w-full h-full absolute w-50 h-50"><image class="w-64 h-64" src="@/static/opus/icon_play.png"/></view>
               </view>
             </view>
             <view v-if="element.itemType == 4">
@@ -83,10 +82,4 @@ const computedLocation = computed({
 })
 </script>
 <style scoped lang="scss">
-.items {
-  .icon_play {
-    top:calc(50% - 64rpx);
-    left:calc(50% - 64rpx);
-  }
-}
 </style>

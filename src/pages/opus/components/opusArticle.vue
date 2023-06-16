@@ -14,12 +14,12 @@
         </view>
       </view>
     </view>
-    <view class="mx-18">
+    <view class="mx-18 mt-20">
       <view class="flex justify-between">
         <view>
-          <h1 class="text-[#272a29] text-21 mt-20 font-bold">{{detail.title}}</h1>
+          <view class="text-[#272a29] text-21 font-bold">{{detail.title}}</view>
           <view class="inline-block">
-            <view class="flex px-10 h-24 justify-center items-center mt-19 bg-[#f4f5f6] rounded-full" v-if="detail.recommendedCity">
+            <view class="flex px-10 h-24 justify-center items-center mt-19 bg-[#f4f5f6] rounded-full" v-if="detail.cover.name">
               <image class="w-9 h-11" src="@/static/opus/icon_location_black.png"></image>
               <view class="ml-5 text-13 line-clamp-1">{{detail.cover.name}} {{ computedLocation(detail.cover.x, detail.cover.y) }}</view>
             </view>
