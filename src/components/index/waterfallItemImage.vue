@@ -18,27 +18,15 @@
 </template>
 
 <script setup>
-	import {
-		getTokenValue
-	} from "@/utils/utils"
-	import {
-		opusLike,
-	} from "@/api/opus/index"
-import {
-		distanceOf,
-		formatedDistance
-	} from "@/utils/utils"
-	import {
-		computed,
-		ref,
-		onMounted,
-		reactive
-	} from 'vue';
-	const pageData = reactive({
+	import {getTokenValue} from "@/utils/utils"
+	import {opusLike} from "@/api/opus/index"
+import {distanceOf,formatedDistance} from "@/utils/utils"
+	import {computed,ref,onMounted,reactive} from 'vue';
+		const pageData = reactive({
 		id: '',
 		isShowLoginPop: false,
 	})
-	const props = defineProps(['item', 'itemKey', 'isVirtualCal'])
+	const props = defineProps(['item', 'itemKey', 'isVirtualCal','itemKey'])
 	const computedHeight = computed({
 		get: (w, h) => {
 			return function(w, h) {
@@ -52,12 +40,15 @@ import {
 				url: `/pages/opus/index?id=${item.id}`
 			})
 		} else if (item.cover.itemType == 3) {
-			// uni.navigateTo({
-			// 	url: `/components/mine/minevideo?id=${item.id}`
-			// })
-			uni.navigateTo({
-				url: `/pages/VideoCarousel/VideoCarousel?id=${item.id}`
-			})
+			if(props["itemKey"]=='mine'){
+				uni.navigateTo({
+					url: `/components/mine/minevideo?id=${item.id}`
+				})
+			}else{
+				uni.navigateTo({
+					url: `/pages/VideoCarousel/VideoCarousel?id=${item.id}`
+				})
+			}
 		}
 	}
 	//距离获取

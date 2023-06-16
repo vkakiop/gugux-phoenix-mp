@@ -67,7 +67,7 @@
 		<view>
 			<view v-for="(waterItem,waterIndex) in pageData.waterfallItems">
 				<view v-show="waterIndex == pageData.currentIndex">
-					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
+					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex" itemKey="mine">
 					</waterfall>
 				</view>
 			</view>
@@ -77,29 +77,10 @@
 
 <script setup>
 	import waterfall from '@/components/index/waterfall.vue'
-	import {
-		getUserBase,
-		userhomepage,
-		homepagelike,
-		homepageopus,
-		homepagecollection
-	} from "@/api/mine/index.js"
-	import {
-		ref,
-		onMounted,
-		reactive,
-		watch,
-		computed,
-		getCurrentInstance
-	} from 'vue'
-	import {
-		onShow,
-		onReachBottom,
-		onPageScroll
-	} from "@dcloudio/uni-app"
-	import {
-		needLogin
-	} from "@/utils/utils"
+	import {getUserBase,userhomepage,homepagelike,homepageopus,homepagecollection} from "@/api/mine/index.js"
+	import {ref,onMounted,reactive,watch,computed,getCurrentInstance} from 'vue'
+	import {onShow,onReachBottom,onPageScroll} from "@dcloudio/uni-app"
+	import {needLogin} from "@/utils/utils"
 	const waterlist = ref([])
 	onShow(() => {
 		if (needLogin()) {
@@ -193,7 +174,6 @@
 				masterId: pageData.masterId,
 				...query.path
 			}).then(res => {
-				console.log('res0', res);
 				if (res.data.page == res.data.totalPage) {
 					pageData.waterfallItems[currentIndex].isComplete = true
 				}
@@ -207,7 +187,6 @@
 			homepagelike({
 				...query.path
 			}).then(res => {
-					console.log('res1', res);
 				if (res.data.page == res.data.totalPage) {
 					pageData.waterfallItems[currentIndex].isComplete = true
 				}
@@ -221,11 +200,10 @@
 			homepagecollection({
 				...query.path
 			}).then(res => {
-					console.log('res2', res);
 				if (res.data.page == res.data.totalPage) {
 					pageData.waterfallItems[currentIndex].isComplete = true
 				}
-			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount
+				pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount
 				pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
 				pageData.waterfallItems[currentIndex].isLoading = false
 			}).catch(e => {
@@ -243,31 +221,34 @@
 			getData()
 		}
 	})
-     const gettolcount=()=>{
-		 pageData.waterfallItems.forEach((item,index)=>{
-			 if (index === 0) {
-			 	homepageopus({
-			 		masterId: pageData.masterId,
-			 		pageNum:1,
-					pageSize:10
-			 	}).then(res => {
-			 		pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
-			 	})
-			 } else if (index === 1) {
-			 	homepagelike({
-			 		pageNum:1,
-			 		pageSize:10
-			 	}).then(res => {
-			 		pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
-			 	})
-			 } else if (index === 2) {
-			 	homepagecollection({pageNum:1,
-					pageSize:10}).then(res => {
-			 	pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
-			 	})
-			 }
-		 })
-	 }
+	const gettolcount = () => {
+		pageData.waterfallItems.forEach((item, index) => {
+			if (index === 0) {
+				homepageopus({
+					masterId: pageData.masterId,
+					pageNum: 1,
+					pageSize: 10
+				}).then(res => {
+					pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
+				})
+			} else if (index === 1) {
+				homepagelike({
+					pageNum: 1,
+					pageSize: 10
+				}).then(res => {
+					pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
+				})
+			} else if (index === 2) {
+				homepagecollection({
+					pageNum: 1,
+					pageSize: 10
+				}).then(res => {
+					pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
+				})
+			}
+		})
+	}
+
 	function copy(value) {
 		uni.setClipboardData({
 			data: value, //要被复制的内容

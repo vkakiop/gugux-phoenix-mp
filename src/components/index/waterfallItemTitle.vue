@@ -35,7 +35,7 @@
 		id: '',
 		isShowLoginPop: false,
 	})
-	const props = defineProps(['item', 'isVirtualCal'])
+	const props = defineProps(['item', 'isVirtualCal','itemKey'])
 	const computedHeight = computed({
 		get: (w, h) => {
 			return function(w, h) {
@@ -54,12 +54,15 @@
 				url: `/pages/opus/index?id=${item.id}`
 			})
 		} else if (item.cover.itemType == 3) {
-			// uni.navigateTo({
-			// 	url: `/components/mine/minevideo?id=${item.id}`
-			// })
-			uni.navigateTo({
-				url: '/pages/VideoCarousel/VideoCarousel?id=' + item.id
-			})
+			if(props["itemKey"]=='mine'){
+				uni.navigateTo({
+					url: `/components/mine/minevideo?id=${item.id}`
+				})
+			}else{
+				uni.navigateTo({
+					url: `/pages/VideoCarousel/VideoCarousel?id=${item.id}`
+				})
+			}
 		}
 	}
 	//距离获取
