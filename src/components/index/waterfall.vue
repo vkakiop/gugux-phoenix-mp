@@ -2,14 +2,14 @@
   <view :id="'waterDom_'+waterIndex" style="position: absolute;width:100%; visibility: hidden">
     <view v-for="(columnItem,columnIndex) in 1" :key="columnIndex">
       <view class="w-172" v-for="(item,index) in [pageData.currentItem]" :key="index">
-        <waterfallItemTitle v-if="itemType == 'title'" :item="item" :isVirtualCal="true"></waterfallItemTitle>
-        <waterfallItemImage v-else :item="item" :isVirtualCal="true"></waterfallItemImage>
+        <waterfallItemTitle v-if="itemType == 'title'" :item="item" :itemKey="itemKey" :isVirtualCal="true"></waterfallItemTitle>
+        <waterfallItemImage v-else :item="item" :itemKey="itemKey" :isVirtualCal="true"></waterfallItemImage>
       </view>
     </view>
   </view>
   <view class="flex justify-between">
     <view v-for="(columnItem,columnIndex) in 2" :key="columnIndex" :id="`waterfalls_flow_column_${waterIndex}_${columnIndex+1}`" :class="['flex-none',columnIndex == 0 ? 'ml-14' : 'mr-14']">
-      <waterfallGroup v-for="(items,groupIndex) in pageData[`column_values_group_${columnIndex}`]" :waterIndex="waterIndex" :groupIndex="groupIndex" :currentIndex="currentIndex" :itemType="itemType" :items="items" :height="pageData[`column_height_group_${columnIndex}`][groupIndex]"></waterfallGroup>
+      <waterfallGroup v-for="(items,groupIndex) in pageData[`column_values_group_${columnIndex}`]" :waterIndex="waterIndex" :groupIndex="groupIndex" :currentIndex="currentIndex" :itemType="itemType" :itemKey="itemKey" :items="items" :height="pageData[`column_height_group_${columnIndex}`][groupIndex]"></waterfallGroup>
     </view>
   </view>
   <view v-if="isComplete" class="text-center h-50 leading-50">
@@ -55,6 +55,10 @@ const props = defineProps({
   itemType: {
     type: String,
     default: 'title'
+  },
+  itemKey: {
+    type: String,
+    default: ''
   }
 })
 

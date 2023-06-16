@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view v-if="pageInfo.mineMessage.guguId">
 		<view class="">
 			<image :src="pageInfo.mineMessage.background" class="w-full" mode="scaleToFill"></image>
 		</view>
@@ -77,90 +77,41 @@
 
 <script setup>
 	import waterfall from '@/components/index/waterfall.vue'
-	import {
-		getUserBase,
-		userhomepage,
-		homepagelike,
-		homepageopus,
-		homepagecollection
-	} from "@/api/mine/index.js"
-	import {
-		ref,
-		onMounted,
-		reactive,
-		watch,
-		computed,
-		getCurrentInstance
-	} from 'vue'
-	import {
-		onShow,
-		onReachBottom,
-		onPageScroll
-	} from "@dcloudio/uni-app"
-	import {
-		needLogin
-	} from "@/utils/utils"
+	import { userhomepage, homepageopus } from "@/api/mine/index.js"
+	import { ref, onMounted, reactive, watch, computed, getCurrentInstance } from 'vue'
+	import { onShow, onReachBottom, onPageScroll, onLoad } from "@dcloudio/uni-app"
+	import { needLogin } from "@/utils/utils"
 	const waterlist = ref([])
-	onShow(() => {
-		if (needLogin()) {
-			fetchData()
-		}
-	})
 	const pageData = reactive({
 		masterId: '',
 		scrollTop: 0,
 		currentIndex: 0,
 		waterfallItems: [{
-				scrollTop: 0,
-				isComplete: false,
-				isLoading: false,
-				itemType: 'title',
-				name: '作品',
-				items: [],
-				query: {
-					path: {
-						pageNum: 1,
-						pageSize: 10,
-					},
-					data: {
-						totalCount: ''
-					}
-				}
-			},
-			{
-				scrollTop: 0,
-				isComplete: false,
-				isLoading: false,
-				itemType: 'title',
-				name: '喜欢',
-				items: [],
-				query: {
-					path: {
-						pageNum: 1,
-						pageSize: 10,
-					},
-					data: {
-						totalCount: ''
-					}
-				}
-			},
-			{
-				scrollTop: 0,
-				isComplete: false,
-				isLoading: false,
-				name: '收藏',
-				items: [],
-				query: {
-					path: {
-						pageNum: 1,
-						pageSize: 10,
-					},
-					data: {
-						totalCount: ''
-					}
+			scrollTop: 0,
+			isComplete: false,
+			isLoading: false,
+			itemType: 'title',
+			name: '作品',
+			items: [],
+			query: {
+				path: {
+					pageNum: 1,
+					pageSize: 10,
+				},
+				data: {
+					totalCount: ''
 				}
 			}
-		],
+		}],
+	})
+	onLoad((option) => {
+		pageData.masterId = option.id
+		userhomepage({
+			masterId: option.id
+		}).then(reslove => {
+			pageInfo.mineMessage = reslove.data.userInfo
+			changeWaterfall(0)
+		})
 	})
 	const internalInstance = getCurrentInstance()
 	const iSinfo = ref(false)
@@ -188,50 +139,19 @@
 		let currentIndex = pageData.currentIndex
 		pageData.waterfallItems[currentIndex].isLoading = true
 		let query = pageData.waterfallItems[currentIndex].query
-		if (currentIndex === 0) {
-			homepageopus({
-				masterId: pageData.masterId,
-				...query.path
-			}).then(res => {
-				console.log('res0', res);
-				if (res.data.page == res.data.totalPage) {
-					pageData.waterfallItems[currentIndex].isComplete = true
-				}
-				pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount
-				pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
-				pageData.waterfallItems[currentIndex].isLoading = false
-			}).catch(e => {
-				pageData.waterfallItems[currentIndex].isLoading = false
-			})
-		} else if (currentIndex === 1) {
-			homepagelike({
-				...query.path
-			}).then(res => {
-					console.log('res1', res);
-				if (res.data.page == res.data.totalPage) {
-					pageData.waterfallItems[currentIndex].isComplete = true
-				}
-				pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount
-				pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
-				pageData.waterfallItems[currentIndex].isLoading = false
-			}).catch(e => {
-				pageData.waterfallItems[currentIndex].isLoading = false
-			})
-		} else if (currentIndex === 2) {
-			homepagecollection({
-				...query.path
-			}).then(res => {
-					console.log('res2', res);
-				if (res.data.page == res.data.totalPage) {
-					pageData.waterfallItems[currentIndex].isComplete = true
-				}
+		homepageopus({
+			masterId: pageData.masterId,
+			...query.path
+		}).then(res => {
+			if (res.data.page == res.data.totalPage) {
+				pageData.waterfallItems[currentIndex].isComplete = true
+			}
 			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount
-				pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
-				pageData.waterfallItems[currentIndex].isLoading = false
-			}).catch(e => {
-				pageData.waterfallItems[currentIndex].isLoading = false
-			})
-		}
+			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
+			pageData.waterfallItems[currentIndex].isLoading = false
+		}).catch(e => {
+			pageData.waterfallItems[currentIndex].isLoading = false
+		})
 	}
 	onPageScroll((res) => {
 		pageData.scrollTop = res.scrollTop
@@ -243,31 +163,7 @@
 			getData()
 		}
 	})
-     const gettolcount=()=>{
-		 pageData.waterfallItems.forEach((item,index)=>{
-			 if (index === 0) {
-			 	homepageopus({
-			 		masterId: pageData.masterId,
-			 		pageNum:1,
-					pageSize:10
-			 	}).then(res => {
-			 		pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
-			 	})
-			 } else if (index === 1) {
-			 	homepagelike({
-			 		pageNum:1,
-			 		pageSize:10
-			 	}).then(res => {
-			 		pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
-			 	})
-			 } else if (index === 2) {
-			 	homepagecollection({pageNum:1,
-					pageSize:10}).then(res => {
-			 	pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
-			 	})
-			 }
-		 })
-	 }
+
 	function copy(value) {
 		uni.setClipboardData({
 			data: value, //要被复制的内容
@@ -285,18 +181,6 @@
 	const skipPerson = () => {
 		uni.navigateTo({
 			url: '/pages/personCenter/personCenter'
-		})
-	}
-	const fetchData = () => {
-		getUserBase({}).then(res => {
-			pageData.masterId = res.data.id
-			gettolcount()
-			changeWaterfall(0)
-			userhomepage({
-				masterId: res.data.id
-			}).then(reslove => {
-				pageInfo.mineMessage = reslove.data.userInfo
-			})
 		})
 	}
 </script>

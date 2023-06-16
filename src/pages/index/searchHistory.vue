@@ -1,52 +1,50 @@
+搜索历史
 <template>
 	<view class="bg-gray-100">
-		<!-- 搜索框 -->
-		  <view class="fixed -top-5 z-50 bg-white w-full py-10 " >
-		<view class="search ">
-			<view class="flex items-center  bg-[#F7F7F7] w-300 rounded-40 border-1 border-[#E3E3E3]">
-				<icon type="search" size="26" class="ml-10" />
-				<input class="bg-[#F7F7F7] ml-10  w-220" v-model="searchvalue" placeholder="请输入搜索关键字" type="text" />
-			</view>
-			<view @click="search">搜索</view>
-		</view>
-		</view>
-		<!-- 搜索框 -->
-		<!-- 搜索历史 -->
-		<view class="searchHistory">
-			<view style="display: flex;align-items: center;justify-content: space-between;box-sizing: border-box;padding: 0px 5px;">
-				<view>搜索历史:</view>
-				<view style="color: red;font-size: 28px;" @click="empty"><uni-icons type="trash" size="30"></uni-icons>
-				</view>
-			</view>
-			<view class="searchHistoryItem">
-				<view v-for="(item, index) in searchHistoryList" :key="index">
-					<text>{{ item }}</text>
-				</view>
-			</view>
-		</view>
-		<!-- 搜索历史 -->
-	 <view class="fixed top-40 z-50 bg-white w-full">
-			<view class="uni-common-mt">
-				<view style="flex:2">
-					<u-tabs :list="computedMenuItems" lineWidth="40" lineColor="#f56c6c" :activeStyle="{
-	            color: '#303133',
-	            fontWeight: 'bold',
-	            transform: 'scale(1.05)'
-	          }" :inactiveStyle="{
-	  color: '#606266',
-	  transform: 'scale(1)'
-	}" itemStyle="padding-left: 15rpx; padding-right: 15rpx; height: 66rpx;" @click="(item)=>changeWaterfall(item.index)">
-					</u-tabs>
-				</view>
-			</view>
-		</view>
-		<view class="pt-70">
-			<view>
-				<view v-for="(waterItem,waterIndex) in pageData.waterfallItems">
-					<view v-show="waterIndex == pageData.currentIndex">
-						<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
-						</waterfall>
+		<view class="fixed -top-5 py-10 bg-[#fff] z-50">
+			<!-- 搜索框 -->
+			<view class="bg-white w-full pt-10 ">
+				<view class="search ">
+					<view class="flex items-center  bg-[#F7F7F7] w-300 rounded-40 border-1 border-[#E3E3E3]">
+						<icon type="search" size="15" class="ml-10" />
+						<input class="bg-[#F7F7F7] ml-10  w-220" v-model="searchvalue" placeholder="请输入搜索关键字" type="text" />
 					</view>
+					<view @click="search">搜索</view>
+				</view>
+			</view>
+			<!-- 搜索框 -->
+			<!-- 搜索历史 -->
+			<view class="searchHistory" v-if="isShowHistory">
+				<view style="display: flex;align-items: center;justify-content: space-between;box-sizing: border-box;padding: 0px 5px;">
+					<view>搜索历史:</view>
+					<view style="color: red;font-size: 28px;" @click="empty"><uni-icons type="trash" size="30"></uni-icons>
+					</view>
+				</view>
+				<view class="searchHistoryItem">
+					<view v-for="(item, index) in searchHistoryList" :key="index">
+						<text>{{ item }}</text>
+					</view>
+				</view>
+			</view>
+			<!-- 搜索历史 -->
+			<!-- 菜单 -->
+			<view class="w-full bg-[#fff] py-10" v-show="!isShowHistory">
+				<view class="flex ml-10">
+					<view v-for="(waterItem, index) in pageData.waterfallItems" class="mr-28 " @click="changeWaterfall(index)">
+						<view :class="pageData.currentIndex == index?'active':'inactive'">{{waterItem.name}}</view>
+						<view class=" h-4 relative -top-5 ">
+							<image src="/static/mine/line.png" class="w-30 h-4 " v-show="pageData.currentIndex == index" />
+						</view>
+					</view>
+				</view>
+			</view>
+			<!-- 菜单 -->
+		</view>
+		<view class="pt-100" v-show="!isShowHistory">
+			<view v-for="(waterItem,waterIndex) in pageData.waterfallItems">
+				<view v-show="waterIndex == pageData.currentIndex">
+					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
+					</waterfall>
 				</view>
 			</view>
 		</view>
@@ -142,13 +140,6 @@
 			}
 		],
 	})
-	const computedMenuItems = computed(() => {
-		return pageData.waterfallItems.map(item => {
-			return {
-				name: item.name
-			}
-		})
-	})
 	const changeWaterfall = (waterIndex) => {
 		if (pageData.currentIndex != waterIndex) {
 			//读取滚动条高度
@@ -187,26 +178,13 @@
 		pageData.scrollTop = res.scrollTop
 	})
 	const search = () => {
-		if (searchvalue.value == '') {
-			uni.showModal({
-				title: '搜索内容不能为空'
-			});
-		} else {
-			console.log('滚动条高度', pageData.currentIndex);
-			if (pageData.waterfallItems[0].query.path.keyword == searchvalue.value) {
-				uni.showModal({
-					title: '请修改搜索内容'
-				});
-			} else {
-				//读取滚动条高度
-				pageData.waterfallItems.forEach(item => {
-					item.query.path.keyword = searchvalue.value
-					item.items = []
-					item.scrollTop = 0
-				})
-					getData()
-			}
-		}
+		isShowHistory.value = false
+		pageData.waterfallItems.forEach(item => {
+			item.query.path.keyword = searchvalue.value
+			item.items = []
+			item.scrollTop = 0
+		})
+		getData()
 	}
 	const empty = () => {
 		uni.showToast({
@@ -228,7 +206,6 @@
 
 <style scoped lang="scss">
 	.uni-common-mt {
-		margin-top: 30rpx;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;

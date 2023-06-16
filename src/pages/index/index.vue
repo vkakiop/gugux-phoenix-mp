@@ -1,43 +1,31 @@
 <template>
   <view class="bg-gray-100">
-    <view class="fixed -top-5 z-50 bg-white w-full py-10 " @click="gohistory">
-      <view>
-        <view class="flex items-center  bg-[#F7F7F7] w-300 rounded-40 border-1 border-[#E3E3E3]">
-          <icon type="search" size="26" class="ml-10" />
-          <input class="bg-[#F7F7F7] ml-10  w-660 " v-model="searchvalue" placeholder="搜索" type="text"  disabled/>
+    <view class="fixed -top-5 z-50 bg-white w-full py-10 " >
+      <view class="py-10">
+        <view class="flex items-center ml-6  bg-[#F7F7F7] w-360 rounded-40 border-1 border-[#E3E3E3]" @click="gohistory">
+          <icon type="search" size="15" class="ml-10" />
+          <input class="bg-[#F7F7F7] ml-10 " v-model="searchvalue" placeholder="搜索" type="text"  disabled/>
         </view>
       </view>
+	  <view class="bg-white w-full">
+	   <!-- 菜单 -->
+	   <view class="flex ml-10">
+	   	<view v-for="(waterItem, index) in pageData.waterfallItems" class="mr-28 " @click="changeWaterfall(index)">
+	   		<view :class="pageData.currentIndex == index?'active':'inactive'">{{waterItem.name}}</view>
+	   		<view class=" h-4 relative -top-5 ">
+	   			<image src="/static/mine/line.png" class="w-30 h-4 " v-show="pageData.currentIndex == index" />
+	   		</view>
+	   	</view>
+	   </view>
+	   <!-- 菜单 -->
+	  </view>
     </view>
-    <view class="fixed top-40 z-50 bg-white w-full">
-      <view class="uni-common-mt">
-        <view style="flex:2">
-          <u-tabs :list="computedMenuItems" lineWidth="40" lineColor="#f56c6c" :activeStyle="{
-            color: '#303133',
-            fontWeight: 'bold',
-            transform: 'scale(1.05)'
-          }" :inactiveStyle="{
-  color: '#606266',
-  transform: 'scale(1)'
-}" itemStyle="padding-left: 15rpx; padding-right: 15rpx; height: 66rpx;"
-            @click="(item) => changeWaterfall(item.index)">
-          </u-tabs>
-        </view>
-      </view>
-    </view>
-    <view class="gridBox" v-if="iconType == 'top'">
-      <uni-grid :column="3" :show-border="false" :square="false" @change="change">
-        <uni-grid-item v-for="(item, index) in list" :index="index" :key="index">
-          <view class="grid-item-box  ">
-            <text class="text">{{ item.text }}</text>
-          </view>
-        </uni-grid-item>
-      </uni-grid>
-    </view>
+
     <view class="pt-80">
       <view>
         <view v-for="(waterItem, waterIndex) in pageData.waterfallItems">
           <view v-show="waterIndex == pageData.currentIndex">
-            <waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
+            <waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :itemKey="waterItem.itemKey" :value="waterItem.items"
               :waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
             </waterfall>
           </view>
@@ -59,9 +47,7 @@ import { ref, onMounted, reactive, watch, computed, getCurrentInstance } from 'v
 import { opusList } from '@/api/opus/list'
 import waterfall from '@/components/index/waterfall.vue'
 import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
-const isShow = ref(true)
 const internalInstance = getCurrentInstance()
-const iconType = ref('bottom')
 const waterlist = ref([])
 const show = ref(false);
 const content = ref('');
@@ -92,7 +78,7 @@ const pageData = reactive({
   currentIndex: 0,
   waterfallItems: [
     {
-      scrollTop: 0, isComplete: false, isLoading: false, itemType: 'title', name: '推荐', items: [], query: {
+      scrollTop: 0, isComplete: false, isLoading: false, itemKey:'testestse', itemType: 'title', name: '推荐', items: [], query: {
         path: { category: '0', pageNum: 1, pageSize: 10 },
         data: { passTime: '' }
       }
@@ -169,6 +155,20 @@ onPageScroll((res) => {
 </script>
 
 <style lang="scss" scoped>
+	.active {
+		font-size: 16px;
+		font-family: Source Han Sans SC;
+		font-weight: bold;
+		color: #272A29;
+	}
+
+	.inactive {
+		font-size: 15px;
+		font-family: Source Han Sans SC;
+		font-weight: 400;
+		color: #999999;
+	}
+
 
 .uni-common-mt {
   display: flex;
