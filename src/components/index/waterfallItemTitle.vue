@@ -81,7 +81,7 @@ onMounted(() => {
 })
 //点赞
 const like = (item) => {
-  console.log('item.islike',item.isLike);
+  //console.log('item.islike',item.isLike);
   let action = item.isLike ? 0 : 1
   if (getTokenValue()) {
     opusLike({

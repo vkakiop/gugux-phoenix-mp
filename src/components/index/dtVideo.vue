@@ -90,7 +90,7 @@
 		}).then(res => {
 			pageData.list = [...pageData.list, ...res.data]
 			pageData.lastVideoId = res.data[res.data.length - 1].id
-			console.log(pageData.list);
+			//console.log(pageData.list);
 		})
 	}
 	const {
@@ -253,7 +253,7 @@
 		}
 	}
 	const openBox = (item) => {
-		console.log('itemid',item.id);
+		//console.log('itemid',item.id);
 		pageData.commentid=item.id
 		pageData.show = true;
 		// uni.showToast({

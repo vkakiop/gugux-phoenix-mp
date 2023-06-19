@@ -169,7 +169,7 @@ const init = ()=>{
     initValue(isAddCount)
     if (isAddCount == props.value.length) {
       pageData.isLoading = false
-      console.log('已加载完成：',isAddCount)
+      //console.log('已加载完成：',isAddCount)
     }
   }
 }

@@ -57,7 +57,7 @@ const observePage = () => {
   IntersectionObserver.relativeToViewport({ top: pageData.observeDistance, bottom: pageData.observeDistance })
       .observe(`#waterfallgroup_${props.waterIndex}_${props.groupIndex}`, ({ intersectionRatio }) => {
         pageData.isShow = intersectionRatio > 0
-        console.log('isShow_'+props.groupIndex,pageData.isShow)
+        //console.log('isShow_'+props.groupIndex,pageData.isShow)
       })
 }
 
@@ -65,13 +65,13 @@ watch(()=>props.currentIndex == props.waterIndex,(newVal,oldVal)=>{
   if (newVal) {
     pageData.isShow = true
     observePage()
-    console.log('开始监听',props.waterIndex)
+    //console.log('开始监听',props.waterIndex)
   }
   else {
     pageData.isShow = false
     let IntersectionObserver = uni.createIntersectionObserver(_this)
     IntersectionObserver.disconnect()
-    console.log('结束监听',props.waterIndex)
+    //console.log('结束监听',props.waterIndex)
   }
 },{immediate:true})
 </script>
