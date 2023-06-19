@@ -63,7 +63,7 @@
 				</view>
 			</view>
 		</view>
-	
+
 		<!-- 菜单 -->
 		<view>
 			<view v-for="(waterItem,waterIndex) in pageData.waterfallItems">
@@ -100,7 +100,7 @@
 		scrollTop: 0,
 		currentIndex: 0,
 		waterfallItems: [{
-				scrollTop: 0,
+				scrollTop: -1,
 				isComplete: false,
 				isLoading: false,
 				itemType: 'title',
@@ -117,7 +117,7 @@
 				}
 			},
 			{
-				scrollTop: 0,
+				scrollTop: -1,
 				isComplete: false,
 				isLoading: false,
 				itemType: 'title',
@@ -134,7 +134,7 @@
 				}
 			},
 			{
-				scrollTop: 0,
+				scrollTop: -1,
 				isComplete: false,
 				isLoading: false,
 				name: '收藏',
@@ -167,10 +167,12 @@
 			getData()
 		} else {
 			//写入滚动条高度
-			uni.pageScrollTo({
-				scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
-				duration: 300
-			});
+      if (pageData.waterfallItems[waterIndex].scrollTop != -1) {
+        uni.pageScrollTo({
+          scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
+          duration: 300
+        });
+      }
 		}
 	}
 	const getData = () => {
