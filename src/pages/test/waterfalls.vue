@@ -4,7 +4,7 @@
     <view class="flex fixed z-[200]">
       <view class="mr-10" v-for="(waterItem,waterIndex) in pageData.waterfallItems" @click="changeWaterfall(waterIndex)">{{waterItem.name}}</view>
     </view>
-    <view v-for="(waterItem,waterIndex) in pageData.waterfallItems">
+    <view v-for="(waterItem,waterIndex) in pageData.waterfallItems" :key="waterIndex">
         <view v-show="waterIndex == pageData.currentIndex">
           <waterfalls ref="waterItems" :value="waterItem.list" :column="2" :columnSpace="1" :seat="2" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex" @initValue="initValue">
           </waterfalls>

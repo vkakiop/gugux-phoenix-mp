@@ -48,7 +48,7 @@
 			<!-- 菜单 -->
 		</view>
 		<view class="pt-100" v-show="!isShowHistory">
-			<view v-for="(waterItem,waterIndex) in pageData.waterfallItems">
+			<view v-for="(waterItem,waterIndex) in pageData.waterfallItems" :key="waterIndex">
 				<view v-if="!waterItem.items.length&&waterIndex == pageData.currentIndex">
 					<u-empty mode="search" icon="http://cdn.uviewui.com/uview/empty/search.png">
 					</u-empty>

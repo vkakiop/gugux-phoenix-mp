@@ -65,7 +65,7 @@
 		</view>
 		<!-- 菜单 -->
 		<view>
-			<view v-for="(waterItem,waterIndex) in pageData.waterfallItems">
+			<view v-for="(waterItem,waterIndex) in pageData.waterfallItems" :key="waterIndex">
 				<view  v-if="!waterItem.items.length&&waterIndex == pageData.currentIndex">
 				    <u-empty
 				            mode="list"
