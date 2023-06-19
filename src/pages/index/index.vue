@@ -84,7 +84,7 @@ const pageData = reactive({
       }
     },
     {
-      scrollTop: -1, isComplete: false, isLoading: false, itemType: 'image', name: '徒步', items: [], query: {
+      scrollTop: -1, isComplete: false, isLoading: false, name: '徒步', items: [], query: {
         path: { category: '2431436580328327949', pageNum: 1, pageSize: 10 },
         data: { passTime: '' }
       }

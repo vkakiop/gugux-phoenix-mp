@@ -9,8 +9,9 @@
 						<image class="w-64 h-64" src="@/static/opus/icon_play.png" />
 					</view>
 					<view class="info">
-						<view class="title">@{{ item.author }}</view>
-						<view class="desc">{{ item.brief }}</view>
+						<view class="font-bold h-17 leading-16 text-17">@{{ item.author }}</view>
+						<view class="text-14 leading-16">发布时间：{{item.createdTime}}</view>
+						<view class="text-16 leading-25">{{ item.brief }}</view>
 					</view>
 						<view class="buttons text-sm">
 							<debounce class="header_group">

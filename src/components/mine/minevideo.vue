@@ -7,6 +7,7 @@
 		</view>
 		<view class="info text-17">
 			<view class="font-bold h-17 leading-16">@{{ pageData.opusdetail.author }}</view>
+			<view class="text-14 leading-16">发布时间：{{pageData.opusdetail.createdTime}}</view>
 			<view class="text-16 leading-25">{{ pageData.opusdetail.brief }}</view>
 		</view>
 		<view class="buttons text-sm">
@@ -77,6 +78,7 @@
 			opusdetails({
 				opusId: pageData.id
 			}).then(res => {
+				console.log('res',res.data);
 				pageData.opusdetail = res.data
 			})
 		}
