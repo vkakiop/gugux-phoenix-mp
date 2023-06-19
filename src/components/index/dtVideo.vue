@@ -44,15 +44,15 @@
 							</view>
 						</view>
 					</cover-view>
-					<u-popup :show="pageData.show" @close="pageData.show = false">
-						<view class="container">
-							<comment ref="commentRef" :id="item.id" :articleType="2"></comment>
-						</view>
-						<u-button @click="open">打开评论</u-button>
-					</u-popup>
 				</view>
 			</swiper-item>
 		</swiper>
+		<u-popup :show="pageData.show" @close="pageData.show = false">
+			<view class="container">
+				<comment ref="commentRef" :id="pageData.commentid" :articleType="2"></comment>
+			</view>
+			<u-button @click="open">打开评论</u-button>
+		</u-popup>
 		<loginPop :isShow="pageData.isShowLoginPop" @close="pageData.isShowLoginPop = false"></loginPop>
 	</view>
 </template>
@@ -76,6 +76,7 @@
 	}
 	const isShare = ref(false)
 	const pageData = reactive({
+		commentid:'',
 		id: '',
 		isShowLoginPop: false,
 		lastVideoId: '',
@@ -252,6 +253,8 @@
 		}
 	}
 	const openBox = (item) => {
+		console.log('itemid',item.id);
+		pageData.commentid=item.id
 		pageData.show = true;
 		// uni.showToast({
 		// 	title: '评论',

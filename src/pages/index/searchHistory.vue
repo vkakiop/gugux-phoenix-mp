@@ -66,12 +66,12 @@
 	import waterfall from '@/components/index/waterfall.vue'
 	import { opusSearchNew } from "@/api/worksSearch/index.js"
 	import { ref, onMounted, reactive, watch, computed, getCurrentInstance } from 'vue'
-	import { onReachBottom, onLoad, onPageScroll } from '@dcloudio/uni-app';
+	import { onReachBottom, onLoad, onPageScroll,onShow } from '@dcloudio/uni-app';
 	const internalInstance = getCurrentInstance()
 	const searchvalue = ref('')
 	const isShowHistory = ref(true)
 	const waterlist = ref([])
-	onMounted(() => {
+	onShow(() => {
 		changeWaterfall(0)
 		uni.getStorage({
 			key: 'gugusearchList',
