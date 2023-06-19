@@ -14,10 +14,10 @@
 					</view>
 					<cover-view>
 						<view class="buttons text-sm">
-							<debounce  class="header_group">
-								<image class="header" :src="item.icon"  @click="gohomepage(item)"></image>
+							<debounce class="header_group">
+								<image class="header" :src="item.icon" @click="gohomepage(item)"></image>
 								<view class="add" v-if="!item.isFollow" @click="attention(item)">
-									<image src="@/static/video/attention.png" class="w-19 h-19" ></image>
+									<image src="@/static/video/attention.png" class="w-19 h-19"></image>
 								</view>
 							</debounce>
 							<debounce @debounce="like(item)" class="button mb-10">
@@ -30,11 +30,11 @@
 								<view>{{ item.commentNum }}</view>
 							</debounce>
 							<debounce @debounce="collection(item)" class="button mb-10">
-							<view class="button mb-10">
-								<image v-if="item.isCollection" class="w-36 h-36" src="@/static/video/collectfill.png" />
-								<image v-else class="w-36 h-36" src="@/static/video/collect.png" />
-								<view>{{ item.collectionNum }}</view>
-							</view>
+								<view class="button mb-10">
+									<image v-if="item.isCollection" class="w-36 h-36" src="@/static/video/collectfill.png" />
+									<image v-else class="w-36 h-36" src="@/static/video/collect.png" />
+									<view>{{ item.collectionNum }}</view>
+								</view>
 							</debounce>
 							<view class="button mb-10" @click='handleShare'>
 								<button open-type="share" style="background-color: transparent;">
@@ -102,9 +102,9 @@
 	const {
 		ctx
 	} = getCurrentInstance()
-	const gohomepage=(item)=>{
+	const gohomepage = (item) => {
 		uni.navigateTo({
-			url:'/pages/userhomepage/userhomepage?id='+item.createdBy
+			url: '/pages/userhomepage/userhomepage?id=' + item.createdBy
 		})
 	}
 	watch(() => props.lastVideoId, (newV, oldV) => {
@@ -161,22 +161,22 @@
 	}
 	//关注
 	const attention = (item) => {
-			if (getTokenValue()){
-				userFans({
-					id: item.createdBy
-				}).then(res => {
-					item.isFollow = true
-					uni.showToast({
-						title:  '关注成功',
-						icon: 'none',
-						duration: 2000
-					})
+		if (getTokenValue()) {
+			userFans({
+				id: item.createdBy
+			}).then(res => {
+				item.isFollow = true
+				uni.showToast({
+					title: '关注成功',
+					icon: 'none',
+					duration: 2000
 				})
-			}else{
-						pageData.isShowLoginPop = true
-						isShare.value = false
-			}
-			
+			})
+		} else {
+			pageData.isShowLoginPop = true
+			isShare.value = false
+		}
+
 	}
 	// const attention = (item) => {
 	// 	let action = item.isFollow ? 0 : 1
@@ -332,6 +332,7 @@
 				height: 90upx;
 				width: 90upx;
 				position: relative;
+
 				.header {
 					border: 2px solid white;
 					margin: 0 auto;

@@ -18,6 +18,14 @@
 			}
 		},
 		{
+		    "path" : "pages/index/searchHistory",
+		    "style" :
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		},
+		{
 			"path": "pages/mine/mine",
 			"style": {
 				"navigationBarTitleText": "uni-app"
@@ -55,14 +63,6 @@
 			}
 		}
 		,
-		{
-		    "path" : "pages/index/searchHistory",
-		    "style" :
-		    {
-		        "navigationBarTitleText": "",
-		        "enablePullDownRefresh": false
-		    }
-		},
 		{
             "path" : "pages/VideoCarousel/VideoCarousel",
             "style" :
@@ -146,16 +146,6 @@
 			"style": {
 				"navigationBarTitleText": "咕咕行"
 			}
-		},
-		{
-		    "path" : "pages/friendDetail/friendDetail",
-		    "style" :
-		    {
-				"navigationStyle": "custom",
-		        "navigationBarTitleText": "",
-		        "enablePullDownRefresh": false
-		    }
-
 		}
         ,{
             "path" : "pages/userhomepage/userhomepage",

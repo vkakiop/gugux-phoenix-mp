@@ -6,7 +6,7 @@
 				<view class="search ">
 					<view class="flex items-center  bg-[#F7F7F7] w-300 rounded-40 border-1 border-[#E3E3E3]">
 						<icon type="search" size="15" class="ml-10" />
-						<input class="bg-[#F7F7F7] ml-10  w-220" v-model="searchvalue" placeholder="请输入搜索关键字" type="text" />
+						<input class="bg-[#F7F7F7] ml-10  w-220" v-model="searchvalue" @confirm="search" placeholder="请输入搜索关键字" type="text" />
 					</view>
 					<view @click="search">搜索</view>
 				</view>
@@ -22,14 +22,14 @@
 					</view>
 					<view class="searchHistoryItem">
 						<view v-for="(item, index) in pageData.searchHistoryList" :key="index">
-							<text>{{ item }}</text>
+							<text @click='handlehistory(item)' class="bg-gray-200 px-10 py-5 rounded-20">{{ item }}</text>
 						</view>
 					</view>
 				</view>
 
 			</view>
 			<view v-if="!pageData.searchHistoryList.length">
-				<u-empty mode="history"  icon="http://cdn.uviewui.com/uview/empty/history.png">
+				<u-empty mode="history" icon="http://cdn.uviewui.com/uview/empty/history.png">
 				</u-empty>
 			</view>
 			<!-- 搜索历史 -->
@@ -49,12 +49,9 @@
 		</view>
 		<view class="pt-100" v-show="!isShowHistory">
 			<view v-for="(waterItem,waterIndex) in pageData.waterfallItems">
-				<view  v-if="!waterItem.items.length&&waterIndex == pageData.currentIndex">
-				    <u-empty
-				            mode="search"
-				            icon="http://cdn.uviewui.com/uview/empty/search.png"
-				    >
-				    </u-empty>
+				<view v-if="!waterItem.items.length&&waterIndex == pageData.currentIndex">
+					<u-empty mode="search" icon="http://cdn.uviewui.com/uview/empty/search.png">
+					</u-empty>
 				</view>
 				<view v-show="waterIndex == pageData.currentIndex">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
@@ -67,22 +64,9 @@
 
 <script setup>
 	import waterfall from '@/components/index/waterfall.vue'
-	import {
-		opusSearchNew
-	} from "@/api/worksSearch/index.js"
-	import {
-		ref,
-		onMounted,
-		reactive,
-		watch,
-		computed,
-		getCurrentInstance
-	} from 'vue'
-	import {
-		onReachBottom,
-		onLoad,
-		onPageScroll
-	} from '@dcloudio/uni-app';
+	import { opusSearchNew } from "@/api/worksSearch/index.js"
+	import { ref, onMounted, reactive, watch, computed, getCurrentInstance } from 'vue'
+	import { onReachBottom, onLoad, onPageScroll } from '@dcloudio/uni-app';
 	const internalInstance = getCurrentInstance()
 	const searchvalue = ref('')
 	const isShowHistory = ref(true)
@@ -95,9 +79,6 @@
 				pageData.searchHistoryList = JSON.parse(res.data)
 			}
 		})
-	})
-	onLoad(() => {
-
 	})
 	const pageData = reactive({
 		searchHistoryList: [],
@@ -201,30 +182,37 @@
 	onPageScroll((res) => {
 		pageData.scrollTop = res.scrollTop
 	})
+	const handlehistory = (item) => {
+		console.log('item', item);
+		searchvalue.value=item
+		search()
+	}
 	const search = () => {
 		//将搜索记录存在本地
-		if (!pageData.searchHistoryList.includes(searchvalue.value)) {
-			pageData.searchHistoryList.unshift(searchvalue.value);
-			uni.setStorage({
-				key: 'gugusearchList',
-				data: JSON.stringify(pageData.searchHistoryList)
+		if (searchvalue.value != '') {
+			if (!pageData.searchHistoryList.includes(searchvalue.value)) {
+				pageData.searchHistoryList.unshift(searchvalue.value);
+				uni.setStorage({
+					key: 'gugusearchList',
+					data: JSON.stringify(pageData.searchHistoryList)
+				})
+			} else {
+				let i = pageData.searchHistoryList.indexOf(searchvalue.value);
+				pageData.searchHistoryList.splice(i, 1);
+				pageData.searchHistoryList.unshift(searchvalue.value);
+				uni.setStorage({
+					key: 'gugusearchList',
+					data: JSON.stringify(pageData.searchHistoryList)
+				})
+			}
+			isShowHistory.value = false
+			pageData.waterfallItems.forEach(item => {
+				item.query.path.keyword = searchvalue.value
+				item.items = []
+				item.scrollTop = 0
 			})
-		} else {
-			let i = pageData.searchHistoryList.indexOf(searchvalue.value);
-			pageData.searchHistoryList.splice(i, 1);
-			pageData.searchHistoryList.unshift(searchvalue.value);
-			uni.setStorage({
-				key: 'gugusearchList',
-				data: JSON.stringify(pageData.searchHistoryList)
-			})
+			getData()
 		}
-		isShowHistory.value = false
-		pageData.waterfallItems.forEach(item => {
-			item.query.path.keyword = searchvalue.value
-			item.items = []
-			item.scrollTop = 0
-		})
-		getData()
 	}
 	const empty = () => {
 		uni.showToast({
