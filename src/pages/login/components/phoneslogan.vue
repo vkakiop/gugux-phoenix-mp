@@ -1,10 +1,10 @@
 <template>
   <view class="text-[#272a29]">
-    <view class="font-['Arial'] font-bold">
-      <text class="text-50">Hi</text><text class="text-[#429bf4] text-50">,</text>
+    <view>
+      <image src="@/static/login/slogan.png" class="w-54 h-39"></image>
     </view>
-    <view class="font-bold text-26 mt-20">欢迎加入咕咕行</view>
-    <view class="mt-16">同行，一路有我</view>
+    <view class="font-bold text-22 text-[#333333] mt-14">欢迎加入咕咕行</view>
+    <view class="mt-16 text-16">同行，一路有我</view>
   </view>
 </template>
 

@@ -15,7 +15,7 @@
         <input class="w-3/5 ml-10 h-48" v-model="pageData.phone" placeholder="请输入手机号码" maxlength="11"/>
         <view class="w-80 h-22 leading-22 absolute right-15 top-11">
           <debounce v-if="!pageData.isReget" @debounce="getCode">
-            <button class=" text-10 rounded-full bg-[#4ba1f8] active:bg-[#3194f9] text-white">
+            <button class=" text-10 rounded-full bg-[#f8cf01] active:bg-[#f0c801] text-[#333333]">
               获取验证码
             </button>
           </debounce>
@@ -28,25 +28,25 @@
         <!--image v-if="pageData.code" class="w-18 h-18 absolute right-15 top-14" src="@/static/login/eye.png" @click="pageData.code = '';"></image-->
       </view>
       <debounce @debounce="onLogin">
-        <button :class="['mt-25','h-48','leading-48','rounded-full','bg-[#4ba1f8]',pageData.code.length < 6 ? '' : 'active:bg-[#3194f9]',pageData.code.length < 6 ? 'text-[#ddd]' : 'text-white']">登录</button>
+        <button :class="['mt-25','h-48','leading-48','rounded-full','bg-[#f8cf01]',pageData.code.length < 6 ? '' : 'active:bg-[#f0c801]',pageData.code.length < 6 ? 'text-[#666666]' : 'text-[#333333]']">登录</button>
       </debounce>
       <!--view class="mt-18 text-center" @click="gotoLoginPhone">验证码登录</view-->
       <view class="mt-58 text-13 flex items-center">
         <u-checkbox-group v-model="pageData.isAgreeItems">
-          <u-checkbox shape="circle" activeColor="#4ba1f8" label=""></u-checkbox>
+          <u-checkbox shape="circle" activeColor="#f8cf01" label="" iconColor="#333333"></u-checkbox>
         </u-checkbox-group>
         <view>
-          我已阅读并同意<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>
+          我已阅读并同意<text class="text-[#f0c801]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#f0c801]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>
         </view>
       </view>
       <u-popup :show="pageData.isDialogShow" mode="center" round="10" :customStyle="{marginLeft:'60rpx',marginRight:'60rpx'}">
         <view class="m-22">
           <view class="text-center font-bold">同意隐私条款</view>
-          <view class="my-28">登录注册需要您阅读并同意我们的<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>
+          <view class="my-28">登录注册需要您阅读并同意我们的<text class="text-[#f0c801]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#f0c801]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>
           </view>
           <view class="flex justify-center items-center">
-            <button class="w-115 h-40 leading-40 rounded-full bg-[#f4f5f6] active:bg-[#eeeff0] text-black" @click="pageData.isDialogShow=false">不同意</button>
-            <button class="w-115 h-40 leading-40 rounded-full bg-[#4ba1f8] active:bg-[#3194f9] text-white" @click="pageData.isDialogShow=false;pageData.isAgreeItems=[''];onLogin();">我同意</button>
+            <button class="w-115 h-40 leading-40 rounded-full bg-[#282A29] active:bg-[#222423] text-[#f8Cf01]" @click="pageData.isDialogShow=false">不同意</button>
+            <button class="w-115 h-40 leading-40 rounded-full bg-[#f8cf01] active:bg-[#f0c801] text-[#333333]" @click="pageData.isDialogShow=false;pageData.isAgreeItems=[''];onLogin();">我同意</button>
           </view>
         </view>
       </u-popup>
