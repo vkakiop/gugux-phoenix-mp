@@ -161,7 +161,6 @@ const getData = () => {
   pageData.waterfallItems[currentIndex].isLoading = true
   let query = pageData.waterfallItems[currentIndex].query
   opusList(query.path, query.data).then(res => {
-	  console.log('opusList',res.data);
     if (res.data.page == res.data.totalPage) {
       pageData.waterfallItems[currentIndex].isComplete = true
     }
