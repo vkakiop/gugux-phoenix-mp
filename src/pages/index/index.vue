@@ -1,27 +1,25 @@
 <template>
   <view class="bg-gray-100">
-    <view class="fixed -top-5 z-50 bg-white w-full py-10 " >
-      <view class="py-10">
-        <view class="flex items-center ml-6  bg-[#F7F7F7] w-360 rounded-40 border-1 border-[#E3E3E3]" @click="gohistory">
-          <icon type="search" size="15" class="ml-10" />
-          <input class="bg-[#F7F7F7] ml-10 " v-model="searchvalue" placeholder="搜索" type="text"  disabled/>
+    <view class="fixed -top-5 z-50 bg-white w-full py-10 mb-14" >
+      <view class="py-15">
+        <view class="flex items-center ml-14  bg-[#fff] ml-10 h-39 w-302 rounded-40 border-1 border-[#E3E3E3] text-14" @click="gohistory">
+          <icon type="search" size="11" class="mx-10" />
+          <input class="bg-[#fff]" v-model="searchvalue" placeholder="搜索" type="text"  disabled/>
         </view>
       </view>
-	  <view class="bg-white w-full">
+	  <view class="bg-white w-full pt-7 pb-5 ml-14 flex">
 	   <!-- 菜单 -->
-	   <view class="flex ml-10">
-	   	<view v-for="(waterItem, index) in pageData.waterfallItems" class="mr-28 " @click="changeWaterfall(index)">
+	   	<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index"  class="mr-28 " @click="changeWaterfall(index)">
 	   		<view :class="pageData.currentIndex == index?'active':'inactive'">{{waterItem.name}}</view>
 	   		<view class=" h-4 relative -top-5 ">
 	   			<image src="/static/mine/line.png" class="w-30 h-4 " v-show="pageData.currentIndex == index" />
 	   		</view>
 	   	</view>
-	   </view>
 	   <!-- 菜单 -->
 	  </view>
     </view>
 
-    <view class="pt-80">
+    <view class="pt-140 bg-gray-100">
       <view>
         <view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
           <view v-show="waterIndex == pageData.currentIndex">
@@ -38,7 +36,6 @@
         <rich-text :nodes="content"></rich-text>
       </view>
     </u-modal>
-
   </view>
 </template>
 
@@ -69,7 +66,7 @@ const gohistory = () => {
     url: '/pages/index/searchHistory'
   })
 }
-onShow(() => {
+onMounted(() => {
   changeWaterfall(0)
 })
 

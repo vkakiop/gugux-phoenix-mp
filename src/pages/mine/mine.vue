@@ -1,9 +1,9 @@
 <template>
-	<view>
+	<view >
 		<view class="">
 			<image :src="pageInfo.mineMessage.background" class="w-full" mode="scaleToFill"></image>
 		</view>
-		<view class="bg-gray-100 w-screen  px-14 relative -top-20" style="border-radius: 35rpx 35rpx 0px 0px;">
+		<view class="bg-[#fff] w-screen  px-14 relative -top-20" style="border-radius: 35rpx 35rpx 0px 0px;">
 			<view>
 				<view class="relative bottom-24 border-2 border-[#fff] w-80 rounded-full h-80 iconShadow" @click="skipPerson">
 					<image :src="pageInfo.mineMessage.icon" class="w-76 h-76 rounded-full "></image>
@@ -53,11 +53,11 @@
 
 		</view>
 		<!-- 菜单 -->
-		<view class="sticky -top-5 z-50 bg-white ml-10 w-full pb-10  -mt-25">
-			<view class="flex bg-white py-10">
-				<view v-for="(waterItem, index) in pageData.waterfallItems" class="mr-26" @click="changeWaterfall(index)">
+		<view class="sticky -top-5 z-50 bg-[#fff] ml-14 w-full  -mt-25 pt-16">
+			<view class="flex ">
+				<view v-for="(waterItem, index) in pageData.waterfallItems"  :key="index"   class="mr-26" @click="changeWaterfall(index)">
 					<view :class="pageData.currentIndex == index?'active':'inactive'">{{waterItem.name}} <text v-if="waterItem.query.data.totalCount">({{waterItem.query.data.totalCount}})</text></view>
-					<view class="w-30 h-4 relative -top-5 ">
+					<view class="-mt-5">
 						<image src="/static/mine/line.png" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
 					</view>
 				</view>
@@ -65,7 +65,7 @@
 		</view>
 
 		<!-- 菜单 -->
-		<view>
+		<view  class="pt-13 bg-gray-100">
 			<view v-for="(waterItem,waterIndex) in pageData.waterfallItems" :key="waterIndex">
 				<view  v-if="!waterItem.items.length&&waterIndex == pageData.currentIndex">
 				    <u-empty
