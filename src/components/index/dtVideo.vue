@@ -12,7 +12,6 @@
 						<view class="title">@{{ item.author }}</view>
 						<view class="desc">{{ item.brief }}</view>
 					</view>
-					<cover-view>
 						<view class="buttons text-sm">
 							<debounce class="header_group">
 								<image class="header" :src="item.icon" @click="gohomepage(item)"></image>
@@ -40,14 +39,12 @@
 								<button open-type="share" style="background-color: transparent;">
 									<image class="w-36 h-36" src="@/static/video/share.png" />
 								</button>
-								<view>分享</view>
 							</view>
 						</view>
-					</cover-view>
 				</view>
 			</swiper-item>
 		</swiper>
-		<u-popup :show="pageData.show" @close="pageData.show = false;fetch()">
+		<u-popup :show="pageData.show" @close="pageData.show = false;getDataApi()">
 			<view class="container">
 				<comment ref="commentRef" :id="pageData.commentid" :articleType="2"></comment>
 			</view>
@@ -317,7 +314,7 @@
 			display: flex;
 			flex-direction: column;
 			position: absolute;
-			right: 5vw;
+			right: 0vw;
 			bottom: 12vh;
 			color: white;
 			text-align: center;
@@ -337,7 +334,7 @@
 					height: 90upx;
 					width: 90upx;
 					position: relative;
-					left: -5rpx;
+					left: 15rpx;
 				}
 
 				.add {

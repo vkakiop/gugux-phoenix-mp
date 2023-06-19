@@ -4,7 +4,7 @@
       <view class="py-15">
         <view class="flex items-center ml-14  bg-[#fff] ml-10 h-39 w-302 rounded-40 border-1 border-[#E3E3E3] text-14" @click="gohistory">
           <icon type="search" size="11" class="mx-10" />
-          <input class="bg-[#fff]" v-model="searchvalue" placeholder="搜索" type="text"  disabled/>
+          <input class="bg-[#fff]"  placeholder="搜索" type="text"  disabled/>
         </view>
       </view>
 	  <view class="bg-white w-full pt-7 pb-5 ml-14 flex">
@@ -44,6 +44,8 @@ import { ref, onMounted, reactive, watch, computed, getCurrentInstance } from 'v
 import { opusList } from '@/api/opus/list'
 import waterfall from '@/components/index/waterfall.vue'
 import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
+import useLoginTokenStore from '@/store/modules/loginToken'
+const loginTokenStore = useLoginTokenStore()
 const internalInstance = getCurrentInstance()
 const waterlist = ref([])
 const show = ref(false);
@@ -66,6 +68,7 @@ const gohistory = () => {
     url: '/pages/index/searchHistory'
   })
 }
+
 onMounted(() => {
   changeWaterfall(0)
 })
@@ -75,32 +78,60 @@ const pageData = reactive({
   currentIndex: 0,
   waterfallItems: [
     {
-      scrollTop: 0, isComplete: false, isLoading: false, itemKey:'testestse', itemType: 'title', name: '推荐', items: [], query: {
+     scrollTop: -1, isComplete: false, isLoading: false, itemKey:'testestse', itemType: 'title', name: '推荐', items: [], query: {
         path: { category: '0', pageNum: 1, pageSize: 10 },
         data: { passTime: '' }
       }
     },
     {
-      scrollTop: 0, isComplete: false, isLoading: false, itemType: 'image', name: '徒步', items: [], query: {
+      scrollTop: -1, isComplete: false, isLoading: false, itemType: 'image', name: '徒步', items: [], query: {
         path: { category: '2431436580328327949', pageNum: 1, pageSize: 10 },
         data: { passTime: '' }
       }
     },
     {
-      scrollTop: 0, isComplete: false, isLoading: false, name: '风景', items: [], query: {
+      scrollTop: -1, isComplete: false, isLoading: false, name: '风景', items: [], query: {
         path: { category: '1622581366744965137', pageNum: 1, pageSize: 10 },
         data: { passTime: '' }
       }
     },
     {
-      scrollTop: 0, isComplete: false, isLoading: false, name: '骑行', items: [], query: {
+      scrollTop: -1, isComplete: false, isLoading: false, name: '骑行', items: [], query: {
         path: { category: '1622581366744965136', pageNum: 1, pageSize: 10 },
         data: { passTime: '' }
       }
     },
   ],
 })
-
+watch(()=>loginTokenStore.get().accessToken,(newVal,oldVal)=>{
+  pageData.waterfallItems=[
+    {
+     scrollTop: -1, isComplete: false, isLoading: false, itemKey:'testestse', itemType: 'title', name: '推荐', items: [], query: {
+        path: { category: '0', pageNum: 1, pageSize: 10 },
+        data: { passTime: '' }
+      }
+    },
+    {
+      scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '徒步', items: [], query: {
+        path: { category: '2431436580328327949', pageNum: 1, pageSize: 10 },
+        data: { passTime: '' }
+      }
+    },
+    {
+      scrollTop: -1, isComplete: false, isLoading: false, name: '风景', items: [], query: {
+        path: { category: '1622581366744965137', pageNum: 1, pageSize: 10 },
+        data: { passTime: '' }
+      }
+    },
+    {
+      scrollTop: -1, isComplete: false, isLoading: false, name: '骑行', items: [], query: {
+        path: { category: '1622581366744965136', pageNum: 1, pageSize: 10 },
+        data: { passTime: '' }
+      }
+    },
+  ]
+    changeWaterfall(0)
+})
 const computedMenuItems = computed(() => {
   return pageData.waterfallItems.map(item => { return { name: item.name } })
 })
@@ -116,10 +147,12 @@ const changeWaterfall = (waterIndex) => {
   }
   else {
     //写入滚动条高度
-    uni.pageScrollTo({
-      scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
-      duration: 300
-    });
+    if (pageData.waterfallItems[waterIndex].scrollTop != -1) {
+      uni.pageScrollTo({
+        scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
+        duration: 300
+      });
+    }
   }
 }
 

@@ -2,45 +2,42 @@
 	<view @click="handleVideo(0)" class="w-screen h-screen relative" v-if="pageData.opusdetail.cover">
 		<video autoplay class="w-screen h-screen fixed" id='video0' :src="pageData.opusdetail.cover.content" loop :controls="false" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false" @error="videoErrorCallback">
 		</video>
-		<view v-if="pageData.status == 1" class="icon_play w-full h-full absolute w-50 h-50">
+		<view v-if="pageData.status == 1" class="icon_play w-full h-full fixed w-50 h-50">
 			<image class="w-64 h-64" src="@/static/opus/icon_play.png" />
 		</view>
-		<view class="info">
-			<view class="title">@{{ pageData.opusdetail.author }}</view>
-			<view class="desc">{{ pageData.opusdetail.brief }}</view>
+		<view class="info text-17">
+			<view class="font-bold h-17 leading-16">@{{ pageData.opusdetail.author }}</view>
+			<view class="text-16 leading-25">{{ pageData.opusdetail.brief }}</view>
 		</view>
-		<cover-view>
-			<view class="buttons text-sm">
-				<debounce class="header_group">
-					<image class="header" :src="pageData.opusdetail.icon" @click="gohomepage(pageData.opusdetail)"></image>
-					<view class="add" v-if="!pageData.opusdetail.isFollow" @click="attention(pageData.opusdetail)">
-						<image src="@/static/video/attention.png" class="w-19 h-19"></image>
-					</view>
-				</debounce>
-				<debounce @debounce="like(pageData.opusdetail)" class="button mb-10">
-					<image v-if="pageData.opusdetail.isLike" class="w-36 h-36" src="@/static/video/likefill.png" />
-					<image v-else class="w-36 h-36" src="@/static/video/like.png" />
-					<view>{{ pageData.opusdetail.likeNum }}</view>
-				</debounce>
-				<debounce @debounce="openBox(pageData.opusdetail)" class="button mb-10">
-					<image class="w-36 h-36" src="@/static/video/evaluate.png" />
-					<view>{{ pageData.opusdetail.commentNum }}</view>
-				</debounce>
-				<debounce @debounce="collection(pageData.opusdetail)" class="button mb-10">
-					<view class="button mb-10">
-						<image v-if="pageData.opusdetail.isCollection" class="w-36 h-36" src="@/static/video/collectfill.png" />
-						<image v-else class="w-36 h-36" src="@/static/video/collect.png" />
-						<view>{{ pageData.opusdetail.collectionNum }}</view>
-					</view>
-				</debounce>
-				<view class="button mb-10" @click='handleShare'>
-					<button open-type="share" style="background-color: transparent;">
-						<image class="w-36 h-36" src="@/static/video/share.png" />
-					</button>
-					<view>分享</view>
+		<view class="buttons text-sm">
+			<debounce class="header_group">
+				<image class="header" :src="pageData.opusdetail.icon" @click="gohomepage(pageData.opusdetail)"></image>
+				<view class="add" v-if="!pageData.opusdetail.isFollow" @click="attention(pageData.opusdetail)">
+					<image src="@/static/video/attention.png" class="w-19 h-19"></image>
 				</view>
+			</debounce>
+			<debounce @debounce="like(pageData.opusdetail)" class="button mb-10">
+				<image v-if="pageData.opusdetail.isLike" class="w-36 h-36" src="@/static/video/likefill.png" />
+				<image v-else class="w-36 h-36" src="@/static/video/like.png" />
+				<view>{{ pageData.opusdetail.likeNum }}</view>
+			</debounce>
+			<debounce @debounce="openBox(pageData.opusdetail)" class="button mb-10">
+				<image class="w-36 h-36" src="@/static/video/evaluate.png" />
+				<view>{{ pageData.opusdetail.commentNum }}</view>
+			</debounce>
+			<debounce @debounce="collection(pageData.opusdetail)" class="button mb-10">
+				<view class="button mb-10">
+					<image v-if="pageData.opusdetail.isCollection" class="w-36 h-36" src="@/static/video/collectfill.png" />
+					<image v-else class="w-36 h-36" src="@/static/video/collect.png" />
+					<view>{{ pageData.opusdetail.collectionNum }}</view>
+				</view>
+			</debounce>
+			<view class="button mb-10" @click='handleShare'>
+				<button open-type="share" style="background-color: transparent;">
+					<image class="w-36 h-36" src="@/static/video/share.png" />
+				</button>
 			</view>
-		</cover-view>
+		</view>
 		<u-popup :show="pageData.show" @close="pageData.show = false;fetchData()">
 			<view class="container">
 				<comment ref="commentRef" :id="pageData.opusdetail.id" :articleType="2"></comment>
@@ -222,17 +219,18 @@
 
 	.info {
 		z-index: 1;
-		position: absolute;
-		bottom: 200upx;
+		position: fixed;
+		bottom: 150upx;
 		color: white;
+		width: 80vw;
 		text-indent: 1em;
 	}
 
 	.buttons {
 		display: flex;
 		flex-direction: column;
-		position: absolute;
-		right: 5vw;
+		position: fixed;
+		right: 0vw;
 		bottom: 12vh;
 		color: white;
 		text-align: center;
@@ -244,7 +242,7 @@
 			height: 90upx;
 			width: 90upx;
 			position: relative;
-
+			
 			.header {
 				border: 2px solid white;
 				margin: 0 auto;
@@ -252,7 +250,7 @@
 				height: 90upx;
 				width: 90upx;
 				position: relative;
-				left: -5rpx;
+				left: 15rpx;
 			}
 
 			.add {

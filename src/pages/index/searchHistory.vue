@@ -36,7 +36,7 @@
 			<!-- 菜单 -->
 			<view class="w-full bg-[#fff] py-10" v-show="!isShowHistory">
 				<view class="flex ml-10">
-					<view v-for="(waterItem, index) in pageData.waterfallItems" class="mr-28 " @click="changeWaterfall(index)">
+					<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index"   class="mr-28 " @click="changeWaterfall(index)">
 						<view :class="pageData.currentIndex == index?'active':'inactive'">{{waterItem.name}}</view>
 						<view class=" h-4 relative -top-5 ">
 							<image src="/static/mine/line.png" class="w-30 h-4 " v-show="pageData.currentIndex == index" />
@@ -66,16 +66,14 @@
 	import waterfall from '@/components/index/waterfall.vue'
 	import { opusSearchNew } from "@/api/worksSearch/index.js"
 	import { ref, onMounted, reactive, watch, computed, getCurrentInstance } from 'vue'
-	import { onReachBottom, onLoad, onPageScroll,onShow } from '@dcloudio/uni-app';
+	import { onReachBottom, onLoad, onPageScroll, onShow } from '@dcloudio/uni-app';
+	import useLoginTokenStore from '@/store/modules/loginToken'
+	const loginTokenStore = useLoginTokenStore()
 	const internalInstance = getCurrentInstance()
 	const searchvalue = ref('')
 	const isShowHistory = ref(true)
 	const waterlist = ref([])
-	onShow(()=>{
-		console.log('执行了onSHow');
-	})
-	onLoad(() => {
-		console.log('执行了onLoad');
+	onMounted(() => {
 		changeWaterfall(0)
 		uni.getStorage({
 			key: 'gugusearchList',
@@ -89,7 +87,7 @@
 		scrollTop: 0,
 		currentIndex: 0,
 		waterfallItems: [{
-				scrollTop: 0,
+				scrollTop: -1,
 				isComplete: false,
 				isLoading: false,
 				itemType: 'title',
@@ -109,7 +107,7 @@
 				}
 			},
 			{
-				scrollTop: 0,
+				scrollTop: -1,
 				isComplete: false,
 				isLoading: false,
 				itemType: 'title',
@@ -129,7 +127,7 @@
 				}
 			},
 			{
-				scrollTop: 0,
+				scrollTop: -1,
 				isComplete: false,
 				isLoading: false,
 				name: '视频',
@@ -159,19 +157,33 @@
 			getData()
 		} else {
 			//写入滚动条高度
-			uni.pageScrollTo({
-				scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
-				duration: 300
-			});
+			if (pageData.waterfallItems[waterIndex].scrollTop != -1) {
+				uni.pageScrollTo({
+					scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
+					duration: 300
+				});
+			}
 		}
 	}
+	watch(() => loginTokenStore.get().accessToken, (newVal, oldVal) => {
+		pageData.waterfallItems.forEach(item => {
+			item.items = []
+			item.scrollTop = -1
+		})
+		changeWaterfall(0)
+		uni.getStorage({
+			key: 'gugusearchList',
+			success: function(res) {
+				pageData.searchHistoryList = JSON.parse(res.data)
+			}
+		})
+		console.log(pageData.searchHistoryList);
+	})
 	const getData = () => {
 		let currentIndex = pageData.currentIndex
 		pageData.waterfallItems[currentIndex].isLoading = true
 		let query = pageData.waterfallItems[currentIndex].query
-		opusSearchNew({
-			...query.path
-		}).then(res => {
+		opusSearchNew({ ...query.path }).then(res => {
 			if (res.data.page == res.data.totalPage) {
 				pageData.waterfallItems[currentIndex].isComplete = true
 			}
@@ -188,7 +200,7 @@
 	})
 	const handlehistory = (item) => {
 		console.log('item', item);
-		searchvalue.value=item
+		searchvalue.value = item
 		search()
 	}
 	const search = () => {
@@ -213,19 +225,22 @@
 			pageData.waterfallItems.forEach(item => {
 				item.query.path.keyword = searchvalue.value
 				item.items = []
-				item.scrollTop = 0
+				item.scrollTop = -1
 			})
 			getData()
 		}
 	}
 	const empty = () => {
-		uni.showToast({
-			title: '已清空'
-		});
 		uni.removeStorage({
-			key: "gugusearchList"
+			key: "gugusearchList",
+			success: (res) => {
+				pageData.searchHistoryList = [];
+				uni.showToast({
+					title: '已清空'
+				});
+			}
 		});
-		pageData.searchHistoryList = [];
+		
 	}
 	onReachBottom(() => {
 		let currentIndex = pageData.currentIndex

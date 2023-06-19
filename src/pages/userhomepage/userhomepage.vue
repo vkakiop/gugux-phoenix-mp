@@ -1,9 +1,9 @@
 <template>
-	<view v-if="pageInfo.mineMessage.guguId">
+	<view >
 		<view class="">
 			<image :src="pageInfo.mineMessage.background" class="w-full" mode="scaleToFill"></image>
 		</view>
-		<view class="bg-gray-100 w-screen  px-14 relative -top-20" style="border-radius: 35rpx 35rpx 0px 0px;">
+		<view class="bg-[#fff] w-screen  px-14 relative -top-20" style="border-radius: 35rpx 35rpx 0px 0px;">
 			<view>
 				<view class="relative bottom-24 border-2 border-[#fff] w-80 rounded-full h-80 iconShadow" @click="skipPerson">
 					<image :src="pageInfo.mineMessage.icon" class="w-76 h-76 rounded-full "></image>
@@ -53,28 +53,29 @@
 
 		</view>
 		<!-- 菜单 -->
-		<view class="sticky -top-5 z-50 bg-white ml-10 w-full pb-10  -mt-25">
-			<view class="flex bg-white py-10">
-				<view v-for="(waterItem, index) in pageData.waterfallItems" class="mr-26" @click="changeWaterfall(index)">
+		<view class="sticky -top-5 z-50 bg-[#fff] ml-14 w-full  -mt-25 pt-16">
+			<view class="flex ">
+				<view v-for="(waterItem, index) in pageData.waterfallItems"  :key="index"   class="mr-26" @click="changeWaterfall(index)">
 					<view :class="pageData.currentIndex == index?'active':'inactive'">{{waterItem.name}} <text v-if="waterItem.query.data.totalCount">({{waterItem.query.data.totalCount}})</text></view>
-					<view class="w-30 h-4 relative -top-5 ">
+					<view class="-mt-5">
 						<image src="/static/mine/line.png" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
 					</view>
 				</view>
 			</view>
 		</view>
+
 		<!-- 菜单 -->
-		<view>
+		<view  class="pt-13 bg-gray-100">
 			<view v-for="(waterItem,waterIndex) in pageData.waterfallItems" :key="waterIndex">
 				<view  v-if="!waterItem.items.length&&waterIndex == pageData.currentIndex">
 				    <u-empty
 				            mode="list"
-				            icon="http://cdn.uviewui.com/uview/empty/car.png"
+				            icon="http://cdn.uviewui.com/uview/empty/list.png"
 				    >
 				    </u-empty>
 				</view>
 				<view v-show="waterIndex == pageData.currentIndex">
-					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
+					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex" itemKey="mine">
 					</waterfall>
 				</view>
 			</view>
@@ -88,13 +89,15 @@
 	import { ref, onMounted, reactive, watch, computed, getCurrentInstance } from 'vue'
 	import { onShow, onReachBottom, onPageScroll, onLoad } from "@dcloudio/uni-app"
 	import { needLogin } from "@/utils/utils"
+	import useLoginTokenStore from '@/store/modules/loginToken'
+	const loginTokenStore = useLoginTokenStore()
 	const waterlist = ref([])
 	const pageData = reactive({
 		masterId: '',
 		scrollTop: 0,
 		currentIndex: 0,
 		waterfallItems: [{
-			scrollTop: 0,
+			scrollTop: -1,
 			isComplete: false,
 			isLoading: false,
 			itemType: 'title',
@@ -114,7 +117,32 @@
 	onLoad((option) => {
 		pageData.masterId = option.id
 		userhomepage({
-			masterId: option.id
+			masterId: pageData.masterId
+		}).then(reslove => {
+			pageInfo.mineMessage = reslove.data.userInfo
+			changeWaterfall(0)
+		})
+	})
+	watch(() => loginTokenStore.get().accessToken, (newVal, oldVal) => {
+		pageData.waterfallItems=[{
+			scrollTop: -1,
+			isComplete: false,
+			isLoading: false,
+			itemType: 'title',
+			name: '作品',
+			items: [],
+			query: {
+				path: {
+					pageNum: 1,
+					pageSize: 10,
+				},
+				data: {
+					totalCount: ''
+				}
+			}
+		}]
+		userhomepage({
+			masterId: pageData.masterId
 		}).then(reslove => {
 			pageInfo.mineMessage = reslove.data.userInfo
 			changeWaterfall(0)
@@ -136,10 +164,12 @@
 			getData()
 		} else {
 			//写入滚动条高度
-			uni.pageScrollTo({
-				scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
-				duration: 300
-			});
+			if (pageData.waterfallItems[waterIndex].scrollTop != -1) {
+			  uni.pageScrollTo({
+			    scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
+			    duration: 300
+			  });
+			}
 		}
 	}
 	const getData = () => {
