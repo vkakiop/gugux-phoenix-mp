@@ -47,7 +47,7 @@
 				</view>
 			</swiper-item>
 		</swiper>
-		<u-popup :show="pageData.show" @close="pageData.show = false">
+		<u-popup :show="pageData.show" @close="pageData.show = false;fetch()">
 			<view class="container">
 				<comment ref="commentRef" :id="pageData.commentid" :articleType="2"></comment>
 			</view>

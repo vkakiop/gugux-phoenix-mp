@@ -71,7 +71,11 @@
 	const searchvalue = ref('')
 	const isShowHistory = ref(true)
 	const waterlist = ref([])
-	onShow(() => {
+	onShow(()=>{
+		console.log('执行了onSHow');
+	})
+	onLoad(() => {
+		console.log('执行了onLoad');
 		changeWaterfall(0)
 		uni.getStorage({
 			key: 'gugusearchList',

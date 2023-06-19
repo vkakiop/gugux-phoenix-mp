@@ -11,10 +11,10 @@
 		</view>
 		<cover-view>
 			<view class="buttons text-sm">
-				<debounce  class="header_group">
+				<debounce class="header_group">
 					<image class="header" :src="pageData.opusdetail.icon" @click="gohomepage(pageData.opusdetail)"></image>
 					<view class="add" v-if="!pageData.opusdetail.isFollow" @click="attention(pageData.opusdetail)">
-						<image src="@/static/video/attention.png" class="w-19 h-19" ></image>
+						<image src="@/static/video/attention.png" class="w-19 h-19"></image>
 					</view>
 				</debounce>
 				<debounce @debounce="like(pageData.opusdetail)" class="button mb-10">
@@ -22,16 +22,16 @@
 					<image v-else class="w-36 h-36" src="@/static/video/like.png" />
 					<view>{{ pageData.opusdetail.likeNum }}</view>
 				</debounce>
-				<debounce @debounce="comment(pageData.opusdetail)" class="button mb-10">
+				<debounce @debounce="openBox(pageData.opusdetail)" class="button mb-10">
 					<image class="w-36 h-36" src="@/static/video/evaluate.png" />
 					<view>{{ pageData.opusdetail.commentNum }}</view>
 				</debounce>
 				<debounce @debounce="collection(pageData.opusdetail)" class="button mb-10">
-				<view class="button mb-10">
-					<image v-if="pageData.opusdetail.isCollection" class="w-36 h-36" src="@/static/video/collectfill.png" />
-					<image v-else class="w-36 h-36" src="@/static/video/collect.png" />
-					<view>{{ pageData.opusdetail.collectionNum }}</view>
-				</view>
+					<view class="button mb-10">
+						<image v-if="pageData.opusdetail.isCollection" class="w-36 h-36" src="@/static/video/collectfill.png" />
+						<image v-else class="w-36 h-36" src="@/static/video/collect.png" />
+						<view>{{ pageData.opusdetail.collectionNum }}</view>
+					</view>
 				</debounce>
 				<view class="button mb-10" @click='handleShare'>
 					<button open-type="share" style="background-color: transparent;">
@@ -41,53 +41,52 @@
 				</view>
 			</view>
 		</cover-view>
+		<u-popup :show="pageData.show" @close="pageData.show = false;fetchData()">
+			<view class="container">
+				<comment ref="commentRef" :id="pageData.opusdetail.id" :articleType="2"></comment>
+			</view>
+			<u-button @click="open">打开评论</u-button>
+		</u-popup>
+		<loginPop :isShow="pageData.isShowLoginPop" @close="pageData.isShowLoginPop = false"></loginPop>
 	</view>
 </template>
 
 <script setup>
-	import {
-		opusdetails
-	} from "@/api/mine/index"
-	import {
-		getTokenValue
-	} from "@/utils/utils"
-	import {
-		opusInfo,
-		opusCollect,
-		opusLike,
-		userFans,
-		userFansRemove
-	} from "@/api/opus/index"
-	import {
-		getCurrentInstance,
-		reactive,
-		watch,
-		ref
-	} from 'vue'
-	import {
-		onLoad,
-		onShow
-	} from '@dcloudio/uni-app'
+	import comment from "@/components/common/comment.vue"
+	import { opusdetails } from "@/api/mine/index"
+	import { getTokenValue } from "@/utils/utils"
+	import { opusInfo, opusCollect, opusLike, userFans, userFansRemove } from "@/api/opus/index"
+	import { getCurrentInstance, reactive, watch, ref } from 'vue'
+	import { onLoad, onShow } from '@dcloudio/uni-app'
 	const isShare = ref(false)
 	const pageData = reactive({
+		id: '',
 		opusdetail: {},
 		status: 0, //0播放 1暂停
 	})
 	const {
 		ctx
 	} = getCurrentInstance()
+	const commentRef = ref();
+	const open = () => {
+		commentRef.value.init(true);
+	}
 	onLoad((option) => {
+		pageData.id = option.id
+		fetchData()
+	})
+	const fetchData = () => {
 		if (!isShare.value) {
 			opusdetails({
-				opusId: option.id
+				opusId: pageData.id
 			}).then(res => {
 				pageData.opusdetail = res.data
 			})
 		}
-	})
-	const gohomepage=(item)=>{
+	}
+	const gohomepage = (item) => {
 		uni.navigateTo({
-			url:'/pages/userhomepage/userhomepage?id='+item.createdBy
+			url: '/pages/userhomepage/userhomepage?id=' + item.createdBy
 		})
 	}
 	const playVideo = () => {
@@ -120,16 +119,16 @@
 	}
 	//关注
 	const attention = (item) => {
-			userFans({
-				id: item.createdBy
-			}).then(res => {
-				item.isFollow = true
-				uni.showToast({
-					title:  '关注成功',
-					icon: 'none',
-					duration: 2000
-				})
+		userFans({
+			id: item.createdBy
+		}).then(res => {
+			item.isFollow = true
+			uni.showToast({
+				title: '关注成功',
+				icon: 'none',
+				duration: 2000
 			})
+		})
 	}
 	//收藏
 	const collection = (item) => {
@@ -187,12 +186,13 @@
 			isShare.value = false
 		}
 	}
-	const comment = () => {
-		uni.showToast({
-			title: '评论',
-			icon: 'none',
-			duration: 2000
-		});
+	const openBox = (item) => {
+		pageData.show = true;
+		// uni.showToast({
+		// 	title: '评论',
+		// 	icon: 'none',
+		// 	duration: 2000
+		// });
 	}
 	//分享
 	const onShareAppMessage = () => {
