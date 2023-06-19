@@ -213,3 +213,33 @@ export function formatedCommentDate(datestr) {
 	}
 	return result;
 }
+
+/*图片缩略
+lfit（默认值）：等比缩放，缩放图限制为指定w与h的矩形内的最大图片。
+mfit：等比缩放，缩放图为延伸出指定w与h的矩形框外的最小图片。
+fill：将原图等比缩放为延伸出指定w与h的矩形框外的最小图片，之后将超出的部分进行居中裁剪。
+pad：将原图缩放为指定w与h的矩形内的最大图片，之后使用指定颜色居中填充空白部分。
+fixed：固定宽高，强制缩放。
+* */
+export function imageThumb(url,width,height,model) {
+	if (url.indexOf('.caigetuxun.com/') == -1) {
+		return url
+	}
+	if (!model) {
+		model = 'mfit'
+	}
+	let param = ''
+	if (width) {
+		param += ',w_'+width
+	}
+	if (height) {
+		param += ',h_'+height
+	}
+	if (model) {
+		param += ',m_'+model
+	}
+	else {
+		param += ',m_lfit'
+	}
+	return url + ((url+'').indexOf('?') == -1 ? '?' : '&') + 'x-oss-process=image/resize' + param
+}
