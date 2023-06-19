@@ -239,6 +239,13 @@ const loadmore = () =>{
 watch(()=>props.id,(newVal,oldVal)=>{
   if (newVal) {
     pageData.opusId = newVal;
+    pageData.mainCommentId = 0;
+    pageData.replyId = '';
+    pageData.replyCommentId = '';
+    pageData.lastCommentId=0;
+    pageData.childlastCommentId=0;
+    pageData.total = -1;
+    pageData.indexList = [];
     scrolltolower();
     // getApi();
     //   wx请求获取位置权限
