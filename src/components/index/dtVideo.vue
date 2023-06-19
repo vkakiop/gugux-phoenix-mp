@@ -25,7 +25,7 @@
 								<image v-else class="w-36 h-36" src="@/static/video/like.png" />
 								<view>{{ item.likeNum }}</view>
 							</debounce>
-							<debounce @debounce="comment(item)" class="button mb-10">
+							<debounce @debounce="openBox(item)" class="button mb-10">
 								<image class="w-36 h-36" src="@/static/video/evaluate.png" />
 								<view>{{ item.commentNum }}</view>
 							</debounce>
@@ -44,6 +44,12 @@
 							</view>
 						</view>
 					</cover-view>
+					<u-popup :show="pageData.show" @close="pageData.show = false">
+						<view class="container">
+							<comment ref="commentRef" :id="item.id" :articleType="2"></comment>
+						</view>
+						<u-button @click="open">打开评论</u-button>
+					</u-popup>
 				</view>
 			</swiper-item>
 		</swiper>
@@ -52,35 +58,22 @@
 </template>
 
 <script setup>
-	import {
-		postVideorecommend
-	} from "@/api/workList/work"
-	import {
-		getTokenValue
-	} from "@/utils/utils"
-	import {
-		opusInfo,
-		opusCollect,
-		opusLike,
-		userFans,
-		userFansRemove
-	} from "@/api/opus/index"
-	import {
-		getCurrentInstance,
-		reactive,
-		watch,
-		ref
-	} from 'vue'
-	import {
-		onLoad,
-		onShow
-	} from '@dcloudio/uni-app'
+	import comment from "@/components/common/comment.vue"
+	import { postVideorecommend } from "@/api/workList/work"
+	import { getTokenValue } from "@/utils/utils"
+	import { opusInfo, opusCollect, opusLike, userFans, userFansRemove } from "@/api/opus/index"
+	import { getCurrentInstance, reactive, watch, ref } from 'vue'
+	import { onLoad, onShow } from '@dcloudio/uni-app'
 	const props = defineProps({
 		lastVideoId: {
 			type: String,
 			default: ''
 		}
 	})
+	const commentRef = ref();
+	const open = () =>{
+	    commentRef.value.init(true);
+	}
 	const isShare = ref(false)
 	const pageData = reactive({
 		id: '',
@@ -258,12 +251,13 @@
 			isShare.value = false
 		}
 	}
-	const comment = () => {
-		uni.showToast({
-			title: '评论',
-			icon: 'none',
-			duration: 2000
-		});
+	const openBox = (item) => {
+		pageData.show = true;
+		// uni.showToast({
+		// 	title: '评论',
+		// 	icon: 'none',
+		// 	duration: 2000
+		// });
 	}
 	//分享
 	const onShareAppMessage = () => {
@@ -362,5 +356,9 @@
 			}
 		}
 
+	}
+	.container{
+	    height: 600rpx;
+	    overflow: auto;
 	}
 </style>
