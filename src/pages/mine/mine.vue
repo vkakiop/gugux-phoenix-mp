@@ -284,7 +284,12 @@ const fetchData = () => {
 	userhomepage({
 		masterId: pageData.masterId
 	}).then(reslove => {
+		console.log('info',reslove);
 		pageInfo.mineMessage = reslove.data.userInfo
+	}).catch((e)=>{
+		uni.redirectTo({
+			url: '/pages/login/logout'
+		})
 	})
 }
 </script>
