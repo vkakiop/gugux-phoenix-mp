@@ -97,8 +97,7 @@ onShow(() => {
 	if (getTokenValue()) {
 		pageData.masterId = useLoginTokenStore().get().user.id
 		fetchData()
-	}
-	else {
+	} else {
 		useRouterStore().routerTo('/pages/mine/mine')
 		// if (useRouterStore().getRouter('/pages/mine/mine')) {
 		//   uni.switchTab({url:'/pages/index/index'})
@@ -163,7 +162,7 @@ const pageData = reactive({
 	masterId: '',
 	scrollTop: 0,
 	currentIndex: 0,
-	waterfallItems:waterfallItems,
+	waterfallItems: waterfallItems,
 })
 const iSinfo = ref(false)
 const pageInfo = reactive({
@@ -249,7 +248,8 @@ const gettolcount = () => {
 			})
 		} else if (index === 2) {
 			homepagecollection({
-				pageNum: 1, pageSize: 10
+				pageNum: 1,
+				pageSize: 10
 			}).then(res => {
 				pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
 			})

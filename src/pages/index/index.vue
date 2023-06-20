@@ -1,30 +1,32 @@
 <template>
-  <view >
-    <view class="fixed -top-5 z-50 bg-white w-full py-10 mb-14" >
+  <view>
+    <view class="fixed -top-5 z-50 bg-white w-full py-10 mb-14">
       <view class="py-15">
-        <view class="flex items-center ml-14  bg-[#fff] ml-10 h-39 w-302 rounded-40 border-1 border-[#E3E3E3] text-14" @click="gohistory">
+        <view class="flex items-center ml-14  bg-[#fff] ml-10 h-39 w-302 rounded-40 border-1 border-[#E3E3E3] text-14"
+          @click="gohistory">
           <icon type="search" size="11" class="mx-10" />
-         <input class="bg-[#fff]"  placeholder="搜索" type="text"  disabled/>
+          <input class="bg-[#fff]" placeholder="搜索" type="text" disabled />
         </view>
       </view>
-	  <view class="bg-white w-full pt-7 pb-5 ml-14 flex">
-	   <!-- 菜单 -->
-	   	<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index"  class="mr-28 " @click="changeWaterfall(index)">
-	   		<view :class="pageData.currentIndex == index?'active':'inactive'">{{waterItem.name}}</view>
-	   		<view class=" h-4 relative -top-5 ">
-	   			<image src="/static/mine/line.png" class="w-30 h-4 " v-show="pageData.currentIndex == index" />
-	   		</view>
-	   	</view>
-	   <!-- 菜单 -->
-	  </view>
+      <view class="bg-white w-full pt-7 pb-5 ml-14 flex">
+        <!-- 菜单 -->
+        <view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-28 "
+          @click="changeWaterfall(index)">
+          <view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }}</view>
+          <view class=" h-4 relative -top-5 ">
+            <image src="/static/mine/line.png" class="w-30 h-4 " v-show="pageData.currentIndex == index" />
+          </view>
+        </view>
+        <!-- 菜单 -->
+      </view>
     </view>
 
     <view class="pt-140">
       <view>
         <view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
           <view v-show="waterIndex == pageData.currentIndex">
-            <waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :itemKey="waterItem.itemKey" :value="waterItem.items"
-              :waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
+            <waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :itemKey="waterItem.itemKey"
+              :value="waterItem.items" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
             </waterfall>
           </view>
         </view>
@@ -73,25 +75,25 @@ onMounted(() => {
 
 const waterfallItems = [
   {
-    scrollTop: 0, isComplete: false, isLoading: false, itemKey:'testestse', itemType: 'title', name: '推荐', items: [], query: {
+    scrollTop: -1, isComplete: false, isLoading: false, itemKey: 'testestse', itemType: 'title', name: '推荐', items: [], query: {
       path: { category: '0', pageNum: 1, pageSize: 10 },
       data: { passTime: '' }
     }
   },
   {
-    scrollTop: 0, isComplete: false, isLoading: false, itemType: 'title', name: '徒步', items: [], query: {
+    scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '徒步', items: [], query: {
       path: { category: '2431436580328327949', pageNum: 1, pageSize: 10 },
       data: { passTime: '' }
     }
   },
   {
-    scrollTop: 0, isComplete: false, isLoading: false, name: '风景', items: [], query: {
+    scrollTop: -1, isComplete: false, isLoading: false, name: '风景', items: [], query: {
       path: { category: '1622581366744965137', pageNum: 1, pageSize: 10 },
       data: { passTime: '' }
     }
   },
   {
-    scrollTop: 0, isComplete: false, isLoading: false, name: '骑行', items: [], query: {
+    scrollTop: -1, isComplete: false, isLoading: false, name: '骑行', items: [], query: {
       path: { category: '1622581366744965136', pageNum: 1, pageSize: 10 },
       data: { passTime: '' }
     }
@@ -103,7 +105,7 @@ const pageData = reactive({
   currentIndex: 0,
   waterfallItems: _.cloneDeep(waterfallItems),
 })
-watch(()=>useLoginTokenStore().get().accessToken,(newVal,oldVal)=>{
+watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
   pageData.waterfallItems = _.cloneDeep(waterfallItems)
   changeWaterfall(pageData.currentIndex)
 })
@@ -119,10 +121,12 @@ const changeWaterfall = (waterIndex) => {
   }
   else {
     //写入滚动条高度
-    uni.pageScrollTo({
-      scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
-      duration: 300
-    });
+    if (pageData.waterfallItems[waterIndex].scrollTop != -1) {
+      uni.pageScrollTo({
+        scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
+        duration: 300
+      });
+    }
   }
 }
 
@@ -155,19 +159,19 @@ onPageScroll((res) => {
 </script>
 
 <style lang="scss" scoped>
-	.active {
-		font-size: 16px;
-		font-family: Source Han Sans SC;
-		font-weight: bold;
-		color: #272A29;
-	}
+.active {
+  font-size: 16px;
+  font-family: Source Han Sans SC;
+  font-weight: bold;
+  color: #272A29;
+}
 
-	.inactive {
-		font-size: 15px;
-		font-family: Source Han Sans SC;
-		font-weight: 400;
-		color: #999999;
-	}
+.inactive {
+  font-size: 15px;
+  font-family: Source Han Sans SC;
+  font-weight: 400;
+  color: #999999;
+}
 
 
 .uni-common-mt {
