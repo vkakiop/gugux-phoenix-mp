@@ -1,5 +1,5 @@
 <template>
-	<view v-if="pageInfo.mineMessage.id">
+	<view v-if="pageInfo.mineMessage.guguId">
 		<view class="">
 			<image :src="pageInfo.mineMessage.background" class="w-full" mode="scaleToFill"></image>
 		</view>
@@ -283,7 +283,6 @@ const fetchData = () => {
 	userhomepage({
 		masterId: pageData.masterId
 	}).then(reslove => {
-		console.log('info',reslove);
 		pageInfo.mineMessage = reslove.data.userInfo
 	}).catch((e)=>{
 		uni.redirectTo({
