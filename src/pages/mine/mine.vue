@@ -95,6 +95,7 @@ import useLoginTokenStore from '@/store/modules/loginToken'
 import useRouterStore from '@/store/modules/router'
 onShow(() => {
 	if (getTokenValue()) {
+		pageData.masterId = useLoginTokenStore().get().user.id
 		fetchData()
 	}
 	else {
@@ -164,7 +165,6 @@ const pageData = reactive({
 	currentIndex: 0,
 	waterfallItems:waterfallItems,
 })
-pageData.masterId = useLoginTokenStore().get().user.id
 const iSinfo = ref(false)
 const pageInfo = reactive({
 	//个人信息数据
