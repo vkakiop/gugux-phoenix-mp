@@ -19,8 +19,7 @@
 					<view
 						style="display: flex;align-items: center;justify-content: space-between;box-sizing: border-box;padding: 0px 5px;">
 						<view>搜索历史:</view>
-						<view style="color: red;font-size: 28px;" @click="empty"><uni-icons type="trash"
-								size="30"></uni-icons>
+						<view style="color: red;font-size: 28px;" @click="empty"><uni-icons type="trash" size="30"></uni-icons>
 						</view>
 					</view>
 					<view class="w-full flex flex-wrap">
@@ -51,9 +50,9 @@
 			</view>
 			<!-- 菜单 -->
 		</view>
-		<view class="pt-100" v-show="!isShowHistory">
+		<view class="mt-100" v-show="!isShowHistory">
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
-				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex" class="h-500 flex items-center justify-center">
+				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex" class="h-screen flex items-center justify-center">
 					<u-empty mode="search" icon="http://cdn.uviewui.com/uview/empty/search.png">
 					</u-empty>
 				</view>
