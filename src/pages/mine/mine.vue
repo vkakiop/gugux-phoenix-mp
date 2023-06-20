@@ -277,6 +277,7 @@ const skipPerson = () => {
 	})
 }
 const fetchData = () => {
+	console.log('fetch');
 	gettolcount()
 	changeWaterfall(0)
 	userhomepage({

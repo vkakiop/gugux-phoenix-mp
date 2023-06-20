@@ -4,7 +4,7 @@
       <view class="py-15">
         <view class="flex items-center ml-14  bg-[#fff] ml-10 h-39 w-302 rounded-40 border-1 border-[#E3E3E3] text-14" @click="gohistory">
           <icon type="search" size="11" class="mx-10" />
-          <input class="bg-[#fff]" v-model="searchvalue" placeholder="搜索" type="text"  disabled/>
+         <input class="bg-[#fff]"  placeholder="搜索" type="text"  disabled/>
         </view>
       </view>
 	  <view class="bg-white w-full pt-7 pb-5 ml-14 flex">
