@@ -1,6 +1,6 @@
 <template>
 	<view class="bg-gray-100">
-		<view class="fixed -top-5 py-10 bg-[#fff] z-50">
+		<view class="fixed -top-5 py-10 bg-[#fff] z-50 w-full">
 			<!-- 搜索框 -->
 			<view class="bg-white w-full py-10 ">
 				<view class="search">
