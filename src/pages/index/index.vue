@@ -114,7 +114,6 @@ const changeWaterfall = (waterIndex) => {
     pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
   }
   pageData.currentIndex = waterIndex
-  console.log('items length:',pageData.waterfallItems[waterIndex].items.length)
   if (pageData.waterfallItems[waterIndex].items.length == 0) {
     getData()
   }
