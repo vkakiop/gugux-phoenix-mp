@@ -71,7 +71,7 @@
 		<!-- 菜单 -->
 		<view class="pt-13 bg-gray-100">
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
-				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex">
+				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex" class="h-500 flex items-center justify-center">
 					<u-empty mode="list" icon="http://cdn.uviewui.com/uview/empty/list.png">
 					</u-empty>
 				</view>
@@ -145,7 +145,6 @@ const changeWaterfall = (waterIndex) => {
 	if (pageData.currentIndex != waterIndex) {
 		//读取滚动条高度
 		pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
-		// console.log('pageData.waterfallItems[pageData.currentIndex]',pageData.waterfallItems[pageData.currentIndex].scrollTop)
 	}
 	pageData.currentIndex = waterIndex
 	if (pageData.waterfallItems[waterIndex].items.length == 0) {
@@ -201,7 +200,6 @@ const getData = () => {
 }
 onPageScroll((res) => {
 	pageData.scrollTop = res.scrollTop
-	// console.log('res:',res)
 })
 onReachBottom(() => {
 	let currentIndex = pageData.currentIndex
