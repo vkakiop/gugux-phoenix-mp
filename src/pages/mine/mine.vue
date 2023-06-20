@@ -1,5 +1,5 @@
 <template>
-	<view >
+	<view  v-if="pageInfo.mineMessage.id">
 		<view class="">
 			<image :src="pageInfo.mineMessage.background" class="w-full" mode="scaleToFill"></image>
 		</view>
@@ -190,10 +190,7 @@
 		pageData.waterfallItems[currentIndex].isLoading = true
 		let query = pageData.waterfallItems[currentIndex].query
 		if (currentIndex === 0) {
-			homepageopus({
-				masterId: pageData.masterId,
-				...query.path
-			}).then(res => {
+			homepageopus({masterId: pageData.masterId,...query.path}).then(res => {
 				if (res.data.page == res.data.totalPage) {
 					pageData.waterfallItems[currentIndex].isComplete = true
 				}
@@ -204,9 +201,7 @@
 				pageData.waterfallItems[currentIndex].isLoading = false
 			})
 		} else if (currentIndex === 1) {
-			homepagelike({
-				...query.path
-			}).then(res => {
+			homepagelike({...query.path}).then(res => {
 				if (res.data.page == res.data.totalPage) {
 					pageData.waterfallItems[currentIndex].isComplete = true
 				}
@@ -217,9 +212,7 @@
 				pageData.waterfallItems[currentIndex].isLoading = false
 			})
 		} else if (currentIndex === 2) {
-			homepagecollection({
-				...query.path
-			}).then(res => {
+			homepagecollection({...query.path}).then(res => {
 				if (res.data.page == res.data.totalPage) {
 					pageData.waterfallItems[currentIndex].isComplete = true
 				}
@@ -244,24 +237,15 @@
 	const gettolcount = () => {
 		pageData.waterfallItems.forEach((item, index) => {
 			if (index === 0) {
-				homepageopus({
-					masterId: pageData.masterId,
-					pageNum: 1,
-					pageSize: 10
-				}).then(res => {
+				homepageopus({masterId: pageData.masterId,pageNum: 1,pageSize: 10}).then(res => {
 					pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
 				})
 			} else if (index === 1) {
-				homepagelike({
-					pageNum: 1,
-					pageSize: 10
-				}).then(res => {
+		homepagelike({pageNum: 1,pageSize: 10}).then(res => {
 					pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
 				})
 			} else if (index === 2) {
-				homepagecollection({
-					pageNum: 1,
-					pageSize: 10
+				homepagecollection({pageNum: 1,pageSize: 10
 				}).then(res => {
 					pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
 				})

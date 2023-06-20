@@ -74,7 +74,7 @@
 	const isShowHistory = ref(true)
 	const waterlist = ref([])
 	onMounted(() => {
-		changeWaterfall(0)
+				changeWaterfall(0)
 		uni.getStorage({
 			key: 'gugusearchList',
 			success: function(res) {
@@ -177,13 +177,14 @@
 				pageData.searchHistoryList = JSON.parse(res.data)
 			}
 		})
-		console.log(pageData.searchHistoryList);
 	})
 	const getData = () => {
 		let currentIndex = pageData.currentIndex
 		pageData.waterfallItems[currentIndex].isLoading = true
 		let query = pageData.waterfallItems[currentIndex].query
+		console.log('query',query);
 		opusSearchNew({ ...query.path }).then(res => {
+			console.log('opusSearchNew',res);
 			if (res.data.page == res.data.totalPage) {
 				pageData.waterfallItems[currentIndex].isComplete = true
 			}
@@ -199,7 +200,6 @@
 		pageData.scrollTop = res.scrollTop
 	})
 	const handlehistory = (item) => {
-		console.log('item', item);
 		searchvalue.value = item
 		search()
 	}
