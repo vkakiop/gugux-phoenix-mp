@@ -57,6 +57,7 @@
 
 <script setup>
 	import comment from "@/components/common/comment.vue"
+	import { opusdetails } from "@/api/mine/index"
 	import { postVideorecommend } from "@/api/workList/work"
 	import { getTokenValue } from "@/utils/utils"
 	import { opusInfo, opusCollect, opusLike, userFans, userFansRemove } from "@/api/opus/index"
@@ -88,12 +89,10 @@
 		}).then(res => {
 			pageData.list = [...pageData.list, ...res.data]
 			pageData.lastVideoId = res.data[res.data.length - 1].id
-			//console.log(pageData.list);
+			// pageData.id=pageData.list[pageData.current].id
 		})
 	}
-	const {
-		ctx
-	} = getCurrentInstance()
+	const {ctx} = getCurrentInstance()
 	const gohomepage = (item) => {
 		uni.navigateTo({
 			url: '/pages/userhomepage/userhomepage?id=' + item.createdBy
@@ -112,15 +111,7 @@
 		if (newV == pageData.list.length - 1) {
 			getDataApi()
 		}
-	}, {
-		deep: true,
-		immediate: true
-	})
-	const playVideo = () => {
-		let currentId = 'video' + pageData.current; // 获取当前视频id
-		pageData.videoContent = uni.createVideoContext(currentId, ctx).play();
-		pageData.status = 0;
-	}
+	}, {deep: true,immediate: true})
 	//点击视频播放或者暂停
 	const handleVideo = (index) => {
 		let currentId = 'video' + index
@@ -135,13 +126,15 @@
 
 	const animationfinish = (e) => {
 		pageData.current = e.detail.current;
-		playVideo()
+		let currentId = 'video' + pageData.current; // 获取当前视频id
+		pageData.videoContent = uni.createVideoContext(currentId, ctx).play();
+		pageData.status = 0;
 	}
 	const handleChange = () => {
-		pageData.id = pageData.list[pageData.current].id
 		let currentId = 'video' + pageData.current
 		uni.createVideoContext(currentId, ctx).pause()
 		pageData.status = 1
+		pageData.id=pageData.list[pageData.current].id
 	}
 
 	const videoErrorCallback = () => {
@@ -257,11 +250,10 @@
 	const closeBox=()=>{
 		pageData.show = false
 		isShare.value=true
-		postVideorecommend({
-			"lastVideoId": pageData.lastVideoId
+		opusdetails({
+			opusId: pageData.list[pageData.current].id
 		}).then(res => {
-			pageData.list[pageData.current].commentNum = [...pageData.list, ...res.data][pageData.current].commentNum
-		   console.log('pageData.list[pageData.current]',pageData.list[pageData.current])
+			pageData.list[pageData.current]=res.data
 		})
 	}
 	//分享
