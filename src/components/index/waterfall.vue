@@ -26,6 +26,7 @@ import waterfallItemImage from './waterfallItemImage.vue'
 const _this = getCurrentInstance()
 const pageData = reactive({
   isLoading:false,
+  timer:null,
   list:[],
   currentItem:{},
   column_values_0:[],
@@ -102,7 +103,7 @@ async function initValue(i) {
   pageData.currentItem = pageData.list[i]
   //获取当前dom高度
   nextTick(()=>{
-    setTimeout(()=>{
+    pageData.timer = setTimeout(()=>{
       const query = uni.createSelectorQuery().in(_this);
       query.select(`#waterDom_${props.waterIndex}`).boundingClientRect(res => {
         if (res) {
@@ -140,9 +141,16 @@ async function initValue(i) {
           pageData[`column_height_group_${column}`][lastIndex] = lastHeight
 
           pageData[`column_values_${column}`].push({ ...pageData.list[i], index: i, height:height });
+
+          if (props.currentIndex == props.waterIndex) {
+            init()
+          }
+          else {
+            pageData.isLoading = false
+          }
         }
+
       }).exec(() => {
-        init()
       });
     },10)
 
@@ -196,6 +204,17 @@ watch(() => props.value, (newValue, oldValue) => {
     init()
   }
 }, { immediate: true })
+
+watch (() => props.currentIndex == props.waterIndex,(newVal,oldValue)=>{
+  if (!pageData.isLoading && newVal) {
+    init()
+  }
+  if (!newVal) {
+    clearTimeout(pageData.timer)
+    pageData.timer = null
+    pageData.isLoading = false
+  }
+})
 </script>
 <style lang="scss" scoped>
 
