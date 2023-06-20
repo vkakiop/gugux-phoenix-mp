@@ -46,6 +46,7 @@ import waterfall from '@/components/index/waterfall.vue'
 import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
 import useRouterStore from '@/store/modules/router'
 import useLoginTokenStore from '@/store/modules/loginToken'
+import _ from 'lodash'
 const show = ref(false);
 const content = ref('');
 content.value = '您的好友等第十三月(1511837394)在重庆市四川商会触发了紧急通知，请点击电话联系或导航前往。'
@@ -100,11 +101,11 @@ const waterfallItems = [
 const pageData = reactive({
   scrollTop: 0,
   currentIndex: 0,
-  waterfallItems: waterfallItems,
+  waterfallItems: _.cloneDeep(waterfallItems),
 })
 watch(()=>useLoginTokenStore().get().accessToken,(newVal,oldVal)=>{
-  pageData.waterfallItems = waterfallItems
-    changeWaterfall(pageData.currentIndex)
+  pageData.waterfallItems = _.cloneDeep(waterfallItems)
+  changeWaterfall(pageData.currentIndex)
 })
 
 const changeWaterfall = (waterIndex) => {
@@ -113,6 +114,7 @@ const changeWaterfall = (waterIndex) => {
     pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
   }
   pageData.currentIndex = waterIndex
+  console.log('items length:',pageData.waterfallItems[waterIndex].items.length)
   if (pageData.waterfallItems[waterIndex].items.length == 0) {
     getData()
   }
