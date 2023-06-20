@@ -45,7 +45,11 @@
 			<view class="container">
 				<comment ref="commentRef" :id="pageData.opusdetail.id" :articleType="2"></comment>
 			</view>
-			<u-button @click="open">打开评论</u-button>
+			<view class="flex items-center ml-14  mb-14 bg-[#f5f6f8]  h-39 w-350 rounded-19 border-1 border-[#E3E3E3] text-14"
+				@click="open">
+				<icon type="search" size="11" class="mx-10" />
+				<input class="bg-[#f5f6f8]" placeholder="说点什么..." type="text" disabled />
+			</view>
 		</u-popup>
 		<loginPop :isShow="pageData.isShowLoginPop" @close="pageData.isShowLoginPop = false"></loginPop>
 	</view>
