@@ -87,13 +87,12 @@
 
 <script setup>
 import waterfall from '@/components/index/waterfall.vue'
-import { getUserBase, userhomepage, homepagelike, homepageopus, homepagecollection } from "@/api/mine/index.js"
+import { userhomepage, homepagelike, homepageopus, homepagecollection } from "@/api/mine/index.js"
 import { ref, onMounted, reactive, watch, computed, getCurrentInstance } from 'vue'
 import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
 import { getTokenValue } from "@/utils/utils"
 import useLoginTokenStore from '@/store/modules/loginToken'
 import useRouterStore from '@/store/modules/router'
-const waterlist = ref([])
 onShow(() => {
 	if (getTokenValue()) {
 		fetchData()
@@ -108,64 +107,64 @@ onShow(() => {
 		// }
 	}
 })
+const waterfallItems = [{
+	scrollTop: -1,
+	isComplete: false,
+	isLoading: false,
+	itemType: 'title',
+	name: '作品',
+	items: [],
+	query: {
+		path: {
+			pageNum: 1,
+			pageSize: 10,
+		},
+		data: {
+			totalCount: ''
+		}
+	}
+},
+{
+	scrollTop: -1,
+	isComplete: false,
+	isLoading: false,
+	itemType: 'title',
+	name: '喜欢',
+	items: [],
+	query: {
+		path: {
+			pageNum: 1,
+			pageSize: 10,
+		},
+		data: {
+			totalCount: ''
+		}
+	}
+},
+{
+	scrollTop: -1,
+	isComplete: false,
+	isLoading: false,
+	name: '收藏',
+	items: [],
+	query: {
+		path: {
+			pageNum: 1,
+			pageSize: 10,
+		},
+		data: {
+			totalCount: ''
+		}
+	}
+}
+]
 const pageData = reactive({
 	masterId: '',
 	scrollTop: 0,
 	currentIndex: 0,
-	waterfallItems: [{
-		scrollTop: -1,
-		isComplete: false,
-		isLoading: false,
-		itemType: 'title',
-		name: '作品',
-		items: [],
-		query: {
-			path: {
-				pageNum: 1,
-				pageSize: 10,
-			},
-			data: {
-				totalCount: ''
-			}
-		}
-	},
-	{
-		scrollTop: -1,
-		isComplete: false,
-		isLoading: false,
-		itemType: 'title',
-		name: '喜欢',
-		items: [],
-		query: {
-			path: {
-				pageNum: 1,
-				pageSize: 10,
-			},
-			data: {
-				totalCount: ''
-			}
-		}
-	},
-	{
-		scrollTop: -1,
-		isComplete: false,
-		isLoading: false,
-		name: '收藏',
-		items: [],
-		query: {
-			path: {
-				pageNum: 1,
-				pageSize: 10,
-			},
-			data: {
-				totalCount: ''
-			}
-		}
-	}
-	],
+	waterfallItems:waterfallItems,
 })
-pageData.masterId=useLoginTokenStore().get().user.id
-const internalInstance = getCurrentInstance()
+pageData.masterId = useLoginTokenStore().get().user.id
 const iSinfo = ref(false)
 const pageInfo = reactive({
 	//个人信息数据
@@ -284,7 +283,7 @@ const fetchData = () => {
 		masterId: pageData.masterId
 	}).then(reslove => {
 		pageInfo.mineMessage = reslove.data.userInfo
-	}).catch((e)=>{
+	}).catch((e) => {
 		uni.redirectTo({
 			url: '/pages/login/logout'
 		})
@@ -387,4 +386,5 @@ const fetchData = () => {
 	border-right: 1px solid gray;
 	transform: scale(0.5);
 	transform-origin: left bottom;
-}</style>
+}
+</style>

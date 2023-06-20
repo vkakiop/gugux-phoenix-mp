@@ -46,9 +46,6 @@ import waterfall from '@/components/index/waterfall.vue'
 import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
 import useRouterStore from '@/store/modules/router'
 import useLoginTokenStore from '@/store/modules/loginToken'
-const loginTokenStore = useLoginTokenStore()
-const internalInstance = getCurrentInstance()
-const waterlist = ref([])
 const show = ref(false);
 const content = ref('');
 content.value = '您的好友等第十三月(1511837394)在重庆市四川商会触发了紧急通知，请点击电话联系或导航前往。'
@@ -81,7 +78,7 @@ const waterfallItems = [
     }
   },
   {
-    scrollTop: 0, isComplete: false, isLoading: false, itemType: 'image', name: '徒步', items: [], query: {
+    scrollTop: 0, isComplete: false, isLoading: false, itemType: 'title', name: '徒步', items: [], query: {
       path: { category: '2431436580328327949', pageNum: 1, pageSize: 10 },
       data: { passTime: '' }
     }
@@ -105,13 +102,9 @@ const pageData = reactive({
   currentIndex: 0,
   waterfallItems: waterfallItems,
 })
-watch(()=>loginTokenStore.get().accessToken,(newVal,oldVal)=>{
+watch(()=>useLoginTokenStore().get().accessToken,(newVal,oldVal)=>{
   pageData.waterfallItems = waterfallItems
     changeWaterfall(pageData.currentIndex)
-})
-
-const computedMenuItems = computed(() => {
-  return pageData.waterfallItems.map(item => { return { name: item.name } })
 })
 
 const changeWaterfall = (waterIndex) => {
