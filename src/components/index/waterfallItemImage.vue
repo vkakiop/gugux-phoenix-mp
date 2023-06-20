@@ -5,7 +5,7 @@
 			<image v-else :src="imageThumb(item.cover.itemType == 2 ? item.cover.content : item.cover.thumbnail,400,400)" :style="{width:'100%',height:computedHeight(item.cover.width,item.cover.height)+'rpx'}" @click="godetail(item)" class="rounded-5"></image>
 			<image v-if="item.cover.itemType==3"   src="/static/video/videoplay.png" mode="" class="absolute w-36 h-36 top-[50%] left-[50%] -ml-18 -mt-18 z-40" @click="godetail(item)"></image>
 <view class="flex justify-end  text-13 items-center h-30  font-light text-[#FFFEFE] absolute  bottom-10 right-10">
-			<view class="" @click="like(item)">
+			<view class="flex items-center" @click="like(item)">
 				<image src="/static/waterfalls/like.png" class="w-13 h-12" v-if="!item.isLike" ></image>
 				<image src="/static/waterfalls/likefill.png" class="w-13 h-12" v-if="item.isLike"></image>
 				{{item.likeNum}}

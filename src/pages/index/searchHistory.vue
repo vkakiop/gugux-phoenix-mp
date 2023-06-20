@@ -3,10 +3,10 @@
 		<view class="fixed -top-5 py-10 bg-[#fff] z-50 w-full">
 			<!-- 搜索框 -->
 			<view class="bg-white w-full py-10 ">
-				<view class="search">
-					<view class="flex items-center mx-14  bg-[#fff]  h-39 w-260 rounded-40 border-1 border-[#E3E3E3] text-14">
+				<view class="w-full flex items-center">
+					<view class="flex items-center mx-14  bg-[#fff]  h-39 w-302 rounded-40 border-1 border-[#E3E3E3] text-14">
 						<icon type="search" size="11" class="mx-10" />
-						<input class="bg-[#fff]   w-220" v-model="searchvalue" @confirm="search"
+						<input class="bg-[#fff]" v-model="searchvalue" @confirm="search"
 							placeholder="请输入搜索关键字" type="text" />
 					</view>
 					<view @click="search">搜索</view>
@@ -213,11 +213,16 @@ onReachBottom(() => {
 </script>
 
 <style scoped lang="scss">
-.search {
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	box-sizing: border-box;
+.active {
+  font-size: 16px;
+  font-family: Source Han Sans SC;
+  font-weight: bold;
+  color: #272A29;
+}
+.inactive {
+  font-size: 15px;
+  font-family: Source Han Sans SC;
+  font-weight: 400;
+  color: #999999;
 }
 </style>

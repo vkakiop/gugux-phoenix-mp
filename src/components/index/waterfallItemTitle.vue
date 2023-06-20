@@ -15,9 +15,9 @@
 			<view class="flex items-center " @click="gohomepage(item)">
 				<image :src="item.icon" class="w-16 h-16 rounded-full mr-4"></image>{{item.author}}
 			</view>
-			<view class="" @click="like(item)">
-				<image src="/static/waterfalls/like.png" class="w-13 h-12" v-if="!item.isLike"></image>
-				<image src="/static/waterfalls/likefill.png" class="w-13 h-12" v-if="item.isLike"></image>
+			<view class="flex items-center" @click="like(item)">
+				<image src="/static/waterfalls/like.png" class="w-13 h-12 mr-4" v-if="!item.isLike"></image>
+				<image src="/static/waterfalls/likefill.png" class="w-13 h-12 mr-4" v-if="item.isLike"></image>
 				{{item.likeNum}}
 			</view>
 		</view>
