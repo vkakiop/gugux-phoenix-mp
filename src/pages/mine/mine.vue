@@ -93,7 +93,6 @@ import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
 import { getTokenValue } from "@/utils/utils"
 import useLoginTokenStore from '@/store/modules/loginToken'
 import useRouterStore from '@/store/modules/router'
-const loginTokenStore = useLoginTokenStore()
 const waterlist = ref([])
 onShow(() => {
 	if (getTokenValue()) {
@@ -165,7 +164,7 @@ const pageData = reactive({
 	}
 	],
 })
-
+pageData.masterId=useLoginTokenStore().get().user.id
 const internalInstance = getCurrentInstance()
 const iSinfo = ref(false)
 const pageInfo = reactive({
