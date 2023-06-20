@@ -107,56 +107,28 @@ onShow(() => {
 		// }
 	}
 })
-const waterfallItems = [{
-	scrollTop: -1,
-	isComplete: false,
-	isLoading: false,
-	itemType: 'title',
-	name: '作品',
-	items: [],
-	query: {
-		path: {
-			pageNum: 1,
-			pageSize: 10,
-		},
-		data: {
-			totalCount: ''
+const waterfallItems = [
+	{
+		scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '作品', items: [],
+		query: {
+			path: { pageNum: 1, pageSize: 10, },
+			data: { totalCount: '' }
+		}
+	},
+	{
+		scrollTop: -1,isComplete: false,isLoading: false,itemType: 'title',name: '喜欢',items: [],
+		query: {
+			path: {pageNum: 1,pageSize: 10,},
+			data: {totalCount: ''}
+		}
+	},
+	{
+		scrollTop: -1,isComplete: false,isLoading: false,name: '收藏',items: [],
+		query: {
+			path: {pageNum: 1,pageSize: 10,},
+			data: {totalCount: ''}
 		}
 	}
-},
-{
-	scrollTop: -1,
-	isComplete: false,
-	isLoading: false,
-	itemType: 'title',
-	name: '喜欢',
-	items: [],
-	query: {
-		path: {
-			pageNum: 1,
-			pageSize: 10,
-		},
-		data: {
-			totalCount: ''
-		}
-	}
-},
-{
-	scrollTop: -1,
-	isComplete: false,
-	isLoading: false,
-	name: '收藏',
-	items: [],
-	query: {
-		path: {
-			pageNum: 1,
-			pageSize: 10,
-		},
-		data: {
-			totalCount: ''
-		}
-	}
-}
 ]
 const pageData = reactive({
 	masterId: '',
@@ -173,6 +145,7 @@ const changeWaterfall = (waterIndex) => {
 	if (pageData.currentIndex != waterIndex) {
 		//读取滚动条高度
 		pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
+		// console.log('pageData.waterfallItems[pageData.currentIndex]',pageData.waterfallItems[pageData.currentIndex].scrollTop)
 	}
 	pageData.currentIndex = waterIndex
 	if (pageData.waterfallItems[waterIndex].items.length == 0) {
@@ -228,6 +201,7 @@ const getData = () => {
 }
 onPageScroll((res) => {
 	pageData.scrollTop = res.scrollTop
+	// console.log('res:',res)
 })
 onReachBottom(() => {
 	let currentIndex = pageData.currentIndex

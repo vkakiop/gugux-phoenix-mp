@@ -1,13 +1,15 @@
 <template>
 	<view @click="handleVideo(0)" class="w-screen h-screen relative" v-if="pageData.opusdetail.cover">
-		<video autoplay class="w-screen h-screen fixed" id='video0' :src="pageData.opusdetail.cover.content" loop :controls="false" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false" @error="videoErrorCallback">
+		<video autoplay class="w-screen h-screen fixed" id='video0' :src="pageData.opusdetail.cover.content" loop
+			:controls="false" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false"
+			@error="videoErrorCallback">
 		</video>
 		<view v-if="pageData.status == 1" class="icon_play w-full h-full fixed w-50 h-50">
 			<image class="w-64 h-64" src="@/static/opus/icon_play.png" />
 		</view>
 		<view class="info text-17">
 			<view class="font-bold h-17 leading-16">@{{ pageData.opusdetail.author }}</view>
-			<view class="text-14 leading-16">发布时间：{{pageData.opusdetail.createdTime}}</view>
+			<view class="text-14 leading-16">发布时间：{{ pageData.opusdetail.createdTime }}</view>
 			<view class="text-16 leading-25">{{ pageData.opusdetail.brief }}</view>
 		</view>
 		<view class="buttons text-sm">
@@ -39,7 +41,7 @@
 				</button>
 			</view>
 		</view>
-		<u-popup :show="pageData.show" @close="pageData.show = false;fetchData()">
+		<u-popup :show="pageData.show" @close="pageData.show = false; fetchData()">
 			<view class="container">
 				<comment ref="commentRef" :id="pageData.opusdetail.id" :articleType="2"></comment>
 			</view>
@@ -50,226 +52,218 @@
 </template>
 
 <script setup>
-	import comment from "@/components/common/comment.vue"
-	import { opusdetails } from "@/api/mine/index"
-	import { getTokenValue } from "@/utils/utils"
-	import { opusInfo, opusCollect, opusLike, userFans, userFansRemove } from "@/api/opus/index"
-	import { getCurrentInstance, reactive, watch, ref } from 'vue'
-	import { onLoad, onShow } from '@dcloudio/uni-app'
-	const isShare = ref(false)
-	const pageData = reactive({
-		id: '',
-		opusdetail: {},
-		status: 0, //0播放 1暂停
-	})
-	const {
-		ctx
-	} = getCurrentInstance()
-	const commentRef = ref();
-	const open = () => {
-		commentRef.value.init(true);
-	}
-	onLoad((option) => {
-		pageData.id = option.id
-		fetchData()
-	})
-	const fetchData = () => {
-		if (!isShare.value) {
-			opusdetails({
-				opusId: pageData.id
-			}).then(res => {
-				console.log('res',res.data);
-				pageData.opusdetail = res.data
-			})
-		}
-	}
-	const gohomepage = (item) => {
-		uni.navigateTo({
-			url: '/pages/userhomepage/userhomepage?id=' + item.createdBy
+import comment from "@/components/common/comment.vue"
+import { opusdetails } from "@/api/mine/index"
+import { getTokenValue } from "@/utils/utils"
+import { opusInfo, opusCollect, opusLike, userFans, userFansRemove } from "@/api/opus/index"
+import { getCurrentInstance, reactive, watch, ref } from 'vue'
+import { onLoad, onShow } from '@dcloudio/uni-app'
+const isShare = ref(false)
+const pageData = reactive({
+	id: '',
+	opusdetail: {},
+	status: 0, //0播放 1暂停
+})
+const { ctx } = getCurrentInstance()
+const commentRef = ref();
+const open = () => {
+	commentRef.value.init(true);
+}
+onLoad((option) => {
+	pageData.id = option.id
+	fetchData()
+})
+const fetchData = () => {
+	if (!isShare.value) {
+		opusdetails({
+			opusId: pageData.id
+		}).then(res => {
+			pageData.opusdetail = res.data
 		})
 	}
-	const playVideo = () => {
-		let currentId = 'video0'; // 获取当前视频id
-		uni.createVideoContext(currentId, ctx).play();
-		pageData.status = 0;
+}
+const gohomepage = (item) => {
+	uni.navigateTo({
+		url: '/pages/userhomepage/userhomepage?id=' + item.createdBy
+	})
+}
+const playVideo = () => {
+	let currentId = 'video0'; // 获取当前视频id
+	uni.createVideoContext(currentId, ctx).play();
+	pageData.status = 0;
+}
+//点击视频播放或者暂停
+const handleVideo = (index) => {
+	let currentId = 'video' + index
+	if (pageData.status == 1) {
+		uni.createVideoContext(currentId, ctx).play()
+		pageData.status = 0
+	} else {
+		uni.createVideoContext(currentId, ctx).pause()
+		pageData.status = 1
 	}
-	//点击视频播放或者暂停
-	const handleVideo = (index) => {
-		let currentId = 'video' + index
-		if (pageData.status == 1) {
-			uni.createVideoContext(currentId, ctx).play()
-			pageData.status = 0
-		} else {
-			uni.createVideoContext(currentId, ctx).pause()
-			pageData.status = 1
-		}
-	}
-
-	const animationfinish = (e) => {
-		playVideo()
-	}
-
-	const videoErrorCallback = () => {
+}
+const videoErrorCallback = () => {
+	uni.showToast({
+		title: '视频播放错误',
+		icon: 'none',
+		duration: 2000
+	});
+}
+//关注
+const attention = (item) => {
+	userFans({
+		id: item.createdBy
+	}).then(res => {
+		item.isFollow = true
 		uni.showToast({
-			title: '视频播放错误',
+			title: '关注成功',
 			icon: 'none',
 			duration: 2000
-		});
-	}
-	//关注
-	const attention = (item) => {
-		userFans({
-			id: item.createdBy
+		})
+	})
+}
+//收藏
+const collection = (item) => {
+	let action = item.isCollection ? 0 : 1
+	if (getTokenValue()) {
+		opusCollect({
+			opusId: item.id,
+			action: action
 		}).then(res => {
-			item.isFollow = true
+			if (action) {
+				item.isCollection = true
+				item.collectionNum++
+			} else {
+				item.isCollection = false
+				if (item.collectionNum > 0) {
+					item.collectionNum--
+				}
+			}
 			uni.showToast({
-				title: '关注成功',
+				title: (action ? '' : '取消') + '收藏成功',
 				icon: 'none',
 				duration: 2000
 			})
 		})
+	} else {
+		pageData.isShowLoginPop = true
+		isShare.value = false
 	}
-	//收藏
-	const collection = (item) => {
-		let action = item.isCollection ? 0 : 1
-		if (getTokenValue()) {
-			opusCollect({
-				opusId: item.id,
-				action: action
-			}).then(res => {
-				if (action) {
-					item.isCollection = true
-					item.collectionNum++
-				} else {
-					item.isCollection = false
-					if (item.collectionNum > 0) {
-						item.collectionNum--
-					}
+}
+//点赞
+const like = (item) => {
+	let action = item.isLike ? 0 : 1
+	if (getTokenValue()) {
+		opusLike({
+			opusId: item.id,
+			action: action
+		}).then(res => {
+			if (action) {
+				item.isLike = true
+				item.likeNum++
+			} else {
+				item.isLike = false
+				if (item.likeNum > 0) {
+					item.likeNum--
 				}
-				uni.showToast({
-					title: (action ? '' : '取消') + '收藏成功',
-					icon: 'none',
-					duration: 2000
-				})
+			}
+			uni.showToast({
+				title: (action ? '' : '取消') + '点赞成功',
+				icon: 'none',
+				duration: 2000
 			})
-		} else {
-			pageData.isShowLoginPop = true
-			isShare.value = false
-		}
+		})
+	} else {
+		pageData.isShowLoginPop = true
+		isShare.value = false
 	}
-	//点赞
-	const like = (item) => {
-		let action = item.isLike ? 0 : 1
-		if (getTokenValue()) {
-			opusLike({
-				opusId: item.id,
-				action: action
-			}).then(res => {
-				if (action) {
-					item.isLike = true
-					item.likeNum++
-				} else {
-					item.isLike = false
-					if (item.likeNum > 0) {
-						item.likeNum--
-					}
-				}
-				uni.showToast({
-					title: (action ? '' : '取消') + '点赞成功',
-					icon: 'none',
-					duration: 2000
-				})
-			})
-		} else {
-			pageData.isShowLoginPop = true
-			isShare.value = false
-		}
+}
+const openBox = (item) => {
+	pageData.show = true;
+	// uni.showToast({
+	// 	title: '评论',
+	// 	icon: 'none',
+	// 	duration: 2000
+	// });
+}
+//分享
+const onShareAppMessage = () => {
+	return {
+		title: pageData.opusdetail.brief,
+		path: '/pages/opus/index?id=' + pageData.opusdetail.id,
+		imageUrl: pageData.opusdetail.thumbnail
 	}
-	const openBox = (item) => {
-		pageData.show = true;
-		// uni.showToast({
-		// 	title: '评论',
-		// 	icon: 'none',
-		// 	duration: 2000
-		// });
-	}
-	//分享
-	const onShareAppMessage = () => {
-		return {
-			title: pageData.opusdetail.brief,
-			path: '/pages/opus/index?id=' + pageData.opusdetail.id,
-			imageUrl: pageData.opusdetail.thumbnail
-		}
-	}
+}
 
-	const handleShare = () => {
-		isShare.value = true
-		uni.createVideoContext('video0', ctx).pause()
-		pageData.status = 1
-	}
-	const onShareTimeline = () => {
-		return onShareAppMessage()
-	}
+const handleShare = () => {
+	isShare.value = true
+	uni.createVideoContext('video0', ctx).pause()
+	pageData.status = 1
+}
+const onShareTimeline = () => {
+	return onShareAppMessage()
+}
 </script>
 
 <style lang="scss" scoped>
-	.icon_play {
-		top: calc(50% - 64rpx);
-		left: calc(50% - 64rpx);
-	}
+.icon_play {
+	top: calc(50% - 64rpx);
+	left: calc(50% - 64rpx);
+}
 
 
-	.info {
-		z-index: 1;
-		position: fixed;
-		bottom: 150upx;
-		color: white;
-		width: 80vw;
-		text-indent: 1em;
-	}
+.info {
+	z-index: 1;
+	position: fixed;
+	bottom: 150upx;
+	color: white;
+	width: 80vw;
+	text-indent: 1em;
+}
 
-	.buttons {
-		display: flex;
-		flex-direction: column;
-		position: fixed;
-		right: 0vw;
-		bottom: 12vh;
-		color: white;
-		text-align: center;
-		justify-content: center;
-		z-index: 999;
+.buttons {
+	display: flex;
+	flex-direction: column;
+	position: fixed;
+	right: 0vw;
+	bottom: 12vh;
+	color: white;
+	text-align: center;
+	justify-content: center;
+	z-index: 999;
 
-		.header_group {
-			margin-bottom: 50upx;
+	.header_group {
+		margin-bottom: 50upx;
+		height: 90upx;
+		width: 90upx;
+		position: relative;
+
+		.header {
+			border: 2px solid white;
+			margin: 0 auto;
+			border-radius: 90upx;
 			height: 90upx;
 			width: 90upx;
 			position: relative;
-			
-			.header {
-				border: 2px solid white;
-				margin: 0 auto;
-				border-radius: 90upx;
-				height: 90upx;
-				width: 90upx;
-				position: relative;
-				left: 15rpx;
-			}
-
-			.add {
-				position: absolute;
-				bottom: -30upx;
-				margin: 0 auto;
-				right: 0upx;
-				left: 0upx;
-				width: 50upx;
-				height: 50upx;
-				line-height: 50upx;
-				border-radius: 50upx;
-			}
+			left: 15rpx;
 		}
 
-		.button {
-			text-align: center;
+		.add {
+			position: absolute;
+			bottom: -30upx;
+			margin: 0 auto;
+			right: 0upx;
+			left: 0upx;
+			width: 50upx;
+			height: 50upx;
+			line-height: 50upx;
+			border-radius: 50upx;
 		}
 	}
+
+	.button {
+		text-align: center;
+	}
+}
 </style>

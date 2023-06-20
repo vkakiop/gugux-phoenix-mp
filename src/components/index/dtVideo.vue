@@ -45,7 +45,7 @@
 				</view>
 			</swiper-item>
 		</swiper>
-		<u-popup :show="pageData.show" @close="pageData.show = false;getDataApi()">
+		<u-popup :show="pageData.show" @close="closeBox">
 			<view class="container">
 				<comment ref="commentRef" :id="pageData.commentid" :articleType="2"></comment>
 			</view>
@@ -251,14 +251,18 @@
 		}
 	}
 	const openBox = (item) => {
-		//console.log('itemid',item.id);
 		pageData.commentid=item.id
 		pageData.show = true;
-		// uni.showToast({
-		// 	title: '评论',
-		// 	icon: 'none',
-		// 	duration: 2000
-		// });
+	}
+	const closeBox=()=>{
+		pageData.show = false
+		isShare.value=true
+		postVideorecommend({
+			"lastVideoId": pageData.lastVideoId
+		}).then(res => {
+			pageData.list[pageData.current].commentNum = [...pageData.list, ...res.data][pageData.current].commentNum
+		   console.log('pageData.list[pageData.current]',pageData.list[pageData.current])
+		})
 	}
 	//分享
 	const onShareAppMessage = () => {
