@@ -14,28 +14,28 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "咕咕行"
 			}
 		},
 		{
 		    "path" : "pages/index/searchHistory",
 		    "style" :
 		    {
-		        "navigationBarTitleText": "",
+		        "navigationBarTitleText": "咕咕行",
 		        "enablePullDownRefresh": false
 		    }
 		},
 		{
 			"path": "pages/mine/mine",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "咕咕行"
 			}
 		},
 		{
 		    "path" : "components/mine/minevideo",
 		    "style" :                                                                                    
 		    {
-		        "navigationBarTitleText": "",
+		        "navigationBarTitleText": "咕咕行",
 		        "enablePullDownRefresh": false
 		    }
 		    
@@ -59,7 +59,7 @@
 		{
 			"path": "pages/test/waterfalls",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "咕咕行"
 			}
 		}
 		,
@@ -67,7 +67,7 @@
             "path" : "pages/VideoCarousel/VideoCarousel",
             "style" :
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "咕咕行",
                 "enablePullDownRefresh": false
             }
 
@@ -75,7 +75,7 @@
 		{
 			"path": "pages/opus/index",
 			"style": {
-				"navigationBarTitleText": "uni-app",
+				"navigationBarTitleText": "咕咕行",
 				"navigationStyle": "custom"
 			}
 		},
@@ -151,7 +151,7 @@
             "path" : "pages/userhomepage/userhomepage",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "咕咕行",
                 "enablePullDownRefresh": false
             }
             
