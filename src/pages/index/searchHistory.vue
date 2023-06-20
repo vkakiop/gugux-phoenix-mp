@@ -14,7 +14,7 @@
 			</view>
 			<!-- 搜索框 -->
 			<!-- 搜索历史 -->
-			<view class="searchHistory" v-if="isShowHistory">
+			<view class="w-full mt-5" v-if="isShowHistory">
 				<view v-if="pageData.searchHistoryList.length">
 					<view
 						style="display: flex;align-items: center;justify-content: space-between;box-sizing: border-box;padding: 0px 5px;">
@@ -23,8 +23,8 @@
 								size="30"></uni-icons>
 						</view>
 					</view>
-					<view class="searchHistoryItem">
-						<view v-for="(item, index) in pageData.searchHistoryList" :key="index">
+					<view class="w-full flex flex-wrap">
+						<view v-for="(item, index) in pageData.searchHistoryList" :key="index" class="h-20 mx-5">
 							<text @click='handlehistory(item)' class="bg-gray-200 px-10 py-5 rounded-20">{{ item }}</text>
 						</view>
 					</view>
@@ -37,7 +37,7 @@
 			</view>
 			<!-- 搜索历史 -->
 			<!-- 菜单 -->
-			<view class="w-full bg-[#fff] py-10" v-show="!isShowHistory">
+			<view class="w-full bg-white py-10" v-show="!isShowHistory">
 				<view class="flex ml-10">
 					<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-28 "
 						@click="changeWaterfall(index)">
@@ -53,7 +53,7 @@
 		</view>
 		<view class="pt-100" v-show="!isShowHistory">
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
-				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex" class="h-490 flex items-center justify-center">
+				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex" class="h-500 flex items-center justify-center">
 					<u-empty mode="search" icon="http://cdn.uviewui.com/uview/empty/search.png">
 					</u-empty>
 				</view>
@@ -213,37 +213,11 @@ onReachBottom(() => {
 </script>
 
 <style scoped lang="scss">
-.uni-common-mt {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-
 .search {
 	width: 100%;
-	height: 30px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	box-sizing: border-box;
-	padding: 0px 15px;
-}
-
-.searchHistory {
-	width: 100%;
-	margin-top: 5px;
-}
-
-.searchHistoryItem {
-	width: 100%;
-	display: flex;
-	flex-wrap: wrap;
-}
-
-.searchHistoryItem view {
-	/* width: 50px; */
-	height: 20px;
-	border: 1px solid #eee;
-	margin: 0px 5px;
 }
 </style>

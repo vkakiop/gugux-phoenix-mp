@@ -248,7 +248,6 @@ const skipPerson = () => {
 	}
 
 }
-
 .hidebtn {
 	display: flex;
 	flex: 1;
@@ -265,13 +264,6 @@ const skipPerson = () => {
 	-webkit-line-clamp: 2; //此处为上限行数
 	-webkit-box-orient: vertical;
 }
-
-.collectView {
-	view {
-		border-radius: 20%;
-	}
-}
-
 .line::after {
 	position: absolute;
 	left: 40%;

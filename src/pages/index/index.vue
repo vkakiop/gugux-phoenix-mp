@@ -165,47 +165,11 @@ onPageScroll((res) => {
   font-weight: bold;
   color: #272A29;
 }
-
 .inactive {
   font-size: 15px;
   font-family: Source Han Sans SC;
   font-weight: 400;
   color: #999999;
-}
-
-
-.uni-common-mt {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.gridBox {
-  border: 1px solid #838383;
-  background-color: white;
-  width: 100vw;
-  position: absolute;
-  top: 24vw;
-  z-index: 999;
-
-  .grid-item-box {
-    padding: 20rpx 0;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    .text {
-      border: 1px solid blue;
-      display: inline;
-      width: 100rpx;
-      text-align: center;
-      border-radius: 8px;
-      padding: 14px;
-    }
-
-  }
 }
 </style>
 

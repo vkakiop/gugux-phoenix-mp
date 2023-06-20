@@ -26,14 +26,8 @@
 </template>
 
 <script setup>
-	import {
-		ref
-	} from 'vue'
-	import {
-		onLoad,
-		onShareAppMessage,
-		onShareTimeline
-	} from "@dcloudio/uni-app"
+	import {ref} from 'vue'
+	import {onLoad,onShareAppMessage,onShareTimeline} from "@dcloudio/uni-app"
 	//二维码
 	const codeId = ref('')
 	onLoad((option) => {		codeId.value = option.id

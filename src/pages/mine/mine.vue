@@ -55,7 +55,7 @@
 
 		</view>
 		<!-- 菜单 -->
-		<view class="sticky -top-5 z-50 bg-[#fff] ml-14 w-full  -mt-25 pt-16">
+		<view class="sticky -top-5 z-50 bg-white ml-14 w-full  -mt-25 pt-16">
 			<view class="flex ">
 				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
 					@click="changeWaterfall(index)">
@@ -340,13 +340,6 @@ const fetchData = () => {
 	-webkit-line-clamp: 2; //此处为上限行数
 	-webkit-box-orient: vertical;
 }
-
-.collectView {
-	view {
-		border-radius: 20%;
-	}
-}
-
 .line::after {
 	position: absolute;
 	left: 40%;
