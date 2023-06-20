@@ -71,7 +71,7 @@
 		<!-- 菜单 -->
 		<view class="pt-13 bg-gray-100">
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
-				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex">
+				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex" class="h-500 flex items-center justify-center">
 					<u-empty mode="list" icon="http://cdn.uviewui.com/uview/empty/list.png">
 					</u-empty>
 				</view>
