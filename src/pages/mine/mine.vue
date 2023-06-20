@@ -88,12 +88,22 @@
 	import {getUserBase,userhomepage,homepagelike,homepageopus,homepagecollection} from "@/api/mine/index.js"
 	import {ref,onMounted,reactive,watch,computed,getCurrentInstance} from 'vue'
 	import {onShow,onReachBottom,onPageScroll} from "@dcloudio/uni-app"
-	import {needLogin} from "@/utils/utils"
+	import {getTokenValue} from "@/utils/utils"
+  import useRouterStore from '@/store/modules/router'
 	const waterlist = ref([])
 	onShow(() => {
-		if (needLogin()) {
+		if (getTokenValue()) {
 			fetchData()
 		}
+		else {
+      useRouterStore().routerTo('/pages/mine/mine')
+      // if (useRouterStore().getRouter('/pages/mine/mine')) {
+      //   uni.switchTab({url:'/pages/index/index'})
+      // }
+      // else {
+      //   needLogin()
+      // }
+    }
 	})
 	const pageData = reactive({
 		masterId: '',
