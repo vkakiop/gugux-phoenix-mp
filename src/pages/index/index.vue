@@ -44,6 +44,9 @@ import { ref, onMounted, reactive, watch, computed, getCurrentInstance } from 'v
 import { opusList } from '@/api/opus/list'
 import waterfall from '@/components/index/waterfall.vue'
 import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
+import useRouterStore from '@/store/modules/router'
+import useLoginTokenStore from '@/store/modules/loginToken'
+const loginTokenStore = useLoginTokenStore()
 const internalInstance = getCurrentInstance()
 const waterlist = ref([])
 const show = ref(false);
