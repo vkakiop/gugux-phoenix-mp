@@ -2,11 +2,11 @@
 	<view class="bg-gray-100">
 		<view class="fixed -top-5 py-10 bg-[#fff] z-50">
 			<!-- 搜索框 -->
-			<view class="bg-white w-full pt-10 ">
-				<view class="search ">
-					<view class="flex items-center  bg-[#F7F7F7] w-300 rounded-40 border-1 border-[#E3E3E3]">
-						<icon type="search" size="15" class="ml-10" />
-						<input class="bg-[#F7F7F7] ml-10  w-220" v-model="searchvalue" @confirm="search"
+			<view class="bg-white w-full py-10 ">
+				<view class="search">
+					<view class="flex items-center mx-14  bg-[#fff]  h-39 w-260 rounded-40 border-1 border-[#E3E3E3] text-14">
+						<icon type="search" size="11" class="mx-10" />
+						<input class="bg-[#fff]   w-220" v-model="searchvalue" @confirm="search"
 							placeholder="请输入搜索关键字" type="text" />
 					</view>
 					<view @click="search">搜索</view>
@@ -53,7 +53,7 @@
 		</view>
 		<view class="pt-100" v-show="!isShowHistory">
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
-				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex" class="h-480 flex items-center justify-center">
+				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex" class="h-490 flex items-center justify-center">
 					<u-empty mode="search" icon="http://cdn.uviewui.com/uview/empty/search.png">
 					</u-empty>
 				</view>

@@ -2,7 +2,7 @@
   <view>
     <view class="fixed -top-5 z-50 bg-white w-full py-10 mb-14">
       <view class="py-15">
-        <view class="flex items-center ml-14  bg-[#fff] ml-10 h-39 w-302 rounded-40 border-1 border-[#E3E3E3] text-14"
+        <view class="flex items-center ml-14  bg-[#fff]  h-39 w-302 rounded-40 border-1 border-[#E3E3E3] text-14"
           @click="gohistory">
           <icon type="search" size="11" class="mx-10" />
           <input class="bg-[#fff]" placeholder="搜索" type="text" disabled />
