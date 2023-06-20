@@ -71,7 +71,8 @@
 		<!-- 菜单 -->
 		<view class="pt-13 bg-gray-100">
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
-				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex" class="h-500 flex items-center justify-center">
+				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
+					class="h-500 flex items-center justify-center">
 					<u-empty mode="list" icon="http://cdn.uviewui.com/uview/empty/list.png">
 					</u-empty>
 				</view>
@@ -93,7 +94,7 @@ import { onShow, onReachBottom, onPageScroll, onLoad } from "@dcloudio/uni-app"
 import useLoginTokenStore from '@/store/modules/loginToken'
 import _ from 'lodash'
 const waterfallItems = [{
-	scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '作品', items: [],
+	scrollTop: -1, isComplete: false, isLoading: false, itemType: 'image', name: '作品', items: [],
 	query: {
 		path: { pageNum: 1, pageSize: 10, },
 		data: { totalCount: '' }
@@ -248,6 +249,7 @@ const skipPerson = () => {
 	}
 
 }
+
 .hidebtn {
 	display: flex;
 	flex: 1;
@@ -264,6 +266,7 @@ const skipPerson = () => {
 	-webkit-line-clamp: 2; //此处为上限行数
 	-webkit-box-orient: vertical;
 }
+
 .line::after {
 	position: absolute;
 	left: 40%;
@@ -276,5 +279,4 @@ const skipPerson = () => {
 	border-right: 1px solid gray;
 	transform: scale(0.5);
 	transform-origin: left bottom;
-}
-</style>
+}</style>

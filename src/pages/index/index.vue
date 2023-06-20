@@ -1,27 +1,24 @@
 <template>
   <view>
     <view class="fixed -top-5 z-50 bg-white w-full py-10 mb-14">
-      <view class="py-15">
-        <view class="flex items-center ml-14  bg-[#fff]  h-39 w-302 rounded-40 border-1 border-[#E3E3E3] text-14"
-          @click="gohistory">
-          <icon type="search" size="11" class="mx-10" />
-          <input class="bg-[#fff]" placeholder="搜索" type="text" disabled />
-        </view>
-      </view>
-      <view class="bg-white w-full pt-7 pb-5 ml-14 flex">
+      <view class="bg-white w-full pt-7 pb-5 pl-14  pr-22 flex justify-between">
         <!-- 菜单 -->
-        <view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-28 "
-          @click="changeWaterfall(index)">
-          <view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }}</view>
-          <view class=" h-4 relative -top-5 ">
-            <image src="/static/mine/line.png" class="w-30 h-4 " v-show="pageData.currentIndex == index" />
+        <view class="flex ">
+          <view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-29"
+            @click="changeWaterfall(index)">
+            <view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }}</view>
+            <view class=" h-4 relative -top-5 ">
+              <image src="/static/mine/line.png" class="w-30 h-4 " v-show="pageData.currentIndex == index" />
+            </view>
           </view>
+        </view>
+        <view class="flex items-center">
+          <image src="/static/mine/search.png" class="w-17 h-17" @click="gohistory"></image>
         </view>
         <!-- 菜单 -->
       </view>
     </view>
-
-    <view class="pt-140">
+    <view class="pt-60">
       <view>
         <view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
           <view v-show="waterIndex == pageData.currentIndex">
@@ -165,6 +162,7 @@ onPageScroll((res) => {
   font-weight: bold;
   color: #272A29;
 }
+
 .inactive {
   font-size: 15px;
   font-family: Source Han Sans SC;

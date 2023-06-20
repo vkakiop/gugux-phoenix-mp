@@ -4,27 +4,27 @@
 			<!-- 搜索框 -->
 			<view class="bg-white w-full py-10 ">
 				<view class="w-full flex items-center">
-					<view class="flex items-center mx-14  bg-[#fff]  h-39 w-302 rounded-40 border-1 border-[#E3E3E3] text-14">
-						<icon type="search" size="11" class="mx-10" />
-						<input class="bg-[#fff]" v-model="searchvalue" @confirm="search"
-							placeholder="请输入搜索关键字" type="text" />
+					<view
+						class="flex items-center mx-14  bg-[#F5F6F8]  h-30 w-175 rounded-40 border-1 border-[#E3E3E3] text-15 text-[#333]">
+						<input class="ml-15" v-model="searchvalue" placeholder="搜索" type="text" />
+						<image src="/static/mine/searchhistory.png" class="w-16 h-16 mr-12" @confirm="search" />
 					</view>
-					<view @click="search">搜索</view>
 				</view>
 			</view>
 			<!-- 搜索框 -->
 			<!-- 搜索历史 -->
 			<view class="w-full mt-5" v-if="isShowHistory">
 				<view v-if="pageData.searchHistoryList.length">
-					<view
-						style="display: flex;align-items: center;justify-content: space-between;box-sizing: border-box;padding: 0px 5px;">
+					<view class="flex px-15 justify-between">
 						<view>搜索历史:</view>
-						<view style="color: red;font-size: 28px;" @click="empty"><uni-icons type="trash" size="30"></uni-icons>
+						<view @click="empty">
+							<image src="/static/mine/ashbin.png" class="w-20 h-20" />
 						</view>
 					</view>
-					<view class="w-full flex flex-wrap">
-						<view v-for="(item, index) in pageData.searchHistoryList" :key="index" class="h-20 mx-5">
-							<text @click='handlehistory(item)' class="bg-gray-200 px-10 py-5 rounded-20">{{ item }}</text>
+					<view class="w-full flex flex-wrap px-15">
+						<view v-for="(item, index) in pageData.searchHistoryList" :key="index"
+							class="bg-[#F5F6F8] w-76 h-38 my-5 mr-14 rounded-10 text-center leading-38">
+							<text @click='handlehistory(item)'>{{ item }}</text>
 						</view>
 					</view>
 				</view>
@@ -52,7 +52,8 @@
 		</view>
 		<view class="mt-100" v-show="!isShowHistory">
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
-				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex" class="h-screen flex items-center justify-center">
+				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
+					class="h-screen flex items-center justify-center">
 					<u-empty mode="search" icon="http://cdn.uviewui.com/uview/empty/search.png">
 					</u-empty>
 				</view>
@@ -115,12 +116,12 @@ const pageData = reactive({
 	currentIndex: 0,
 	waterfallItems: _.cloneDeep(waterfallItems),
 })
-watch(()=>useLoginTokenStore().get().accessToken,(newVal,oldVal)=>{
-  pageData.waterfallItems = _.cloneDeep(waterfallItems)
-  pageData.waterfallItems.forEach((item,index)=>{
-	item.query.path.keyword=searchvalue.value
-  })
-  changeWaterfall(pageData.currentIndex)
+watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
+	pageData.waterfallItems = _.cloneDeep(waterfallItems)
+	pageData.waterfallItems.forEach((item, index) => {
+		item.query.path.keyword = searchvalue.value
+	})
+	changeWaterfall(pageData.currentIndex)
 })
 const changeWaterfall = (waterIndex) => {
 	if (pageData.currentIndex != waterIndex) {
@@ -213,15 +214,16 @@ onReachBottom(() => {
 
 <style scoped lang="scss">
 .active {
-  font-size: 16px;
-  font-family: Source Han Sans SC;
-  font-weight: bold;
-  color: #272A29;
+	font-size: 16px;
+	font-family: Source Han Sans SC;
+	font-weight: bold;
+	color: #272A29;
 }
+
 .inactive {
-  font-size: 15px;
-  font-family: Source Han Sans SC;
-  font-weight: 400;
-  color: #999999;
+	font-size: 15px;
+	font-family: Source Han Sans SC;
+	font-weight: 400;
+	color: #999999;
 }
 </style>

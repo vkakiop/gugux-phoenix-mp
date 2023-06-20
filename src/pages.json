@@ -18,27 +18,24 @@
 			}
 		},
 		{
-		    "path" : "pages/index/searchHistory",
-		    "style" :
-		    {
-		        "navigationBarTitleText": "咕咕行",
-		        "enablePullDownRefresh": false
-		    }
-		},
-		{
 			"path": "pages/mine/mine",
 			"style": {
 				"navigationBarTitleText": "咕咕行"
 			}
 		},
 		{
-		    "path" : "components/mine/minevideo",
-		    "style" :                                                                                    
-		    {
-		        "navigationBarTitleText": "咕咕行",
-		        "enablePullDownRefresh": false
-		    }
-		    
+			"path": "pages/index/searchHistory",
+			"style": {
+				"navigationBarTitleText": "咕咕行",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "components/mine/minevideo",
+			"style": {
+				"navigationBarTitleText": "咕咕行",
+				"enablePullDownRefresh": false
+			}
 		},
 		{
 			"path": "pages/personCenter/personCenter",
@@ -48,30 +45,25 @@
 			}
 		},
 		{
-		    "path" : "pages/personCenter/personQRcode",
-		    "style" :
-		    {
-		        "navigationBarTitleText": "二维码名片",
-		        "enablePullDownRefresh": false
-		    }
+			"path": "pages/personCenter/personQRcode",
+			"style": {
+				"navigationBarTitleText": "二维码名片",
+				"enablePullDownRefresh": false
+			}
 		},
-
 		{
 			"path": "pages/test/waterfalls",
 			"style": {
 				"navigationBarTitleText": "咕咕行"
 			}
-		}
-		,
+		},
 		{
-            "path" : "pages/VideoCarousel/VideoCarousel",
-            "style" :
-            {
-                "navigationBarTitleText": "咕咕行",
-                "enablePullDownRefresh": false
-            }
-
-        },
+			"path": "pages/VideoCarousel/VideoCarousel",
+			"style": {
+				"navigationBarTitleText": "咕咕行",
+				"enablePullDownRefresh": false
+			}
+		},
 		{
 			"path": "pages/opus/index",
 			"style": {
@@ -121,8 +113,7 @@
 			"style": {
 				"navigationBarTitleText": "咕咕行"
 			}
-		}
-	    ,
+		},
 		{
 			"path": "pages/safeguard/safeguarddetail",
 			"style": {
@@ -146,26 +137,24 @@
 			"style": {
 				"navigationBarTitleText": "咕咕行"
 			}
+		},
+		{
+			"path": "pages/userhomepage/userhomepage",
+			"style": {
+				"navigationBarTitleText": "咕咕行",
+				"enablePullDownRefresh": false
+			}
 		}
-        ,{
-            "path" : "pages/userhomepage/userhomepage",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "咕咕行",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "咕咕行",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F6F6F6"
 	},
 	"tabBar": {
 		"color": "#000",
-		"selectedColor":"#C3011F",
+		"selectedColor": "#C3011F",
 		"backgroundColor": "#fff",
 		"list": [
 			{

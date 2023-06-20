@@ -1,24 +1,19 @@
 <template>
 	<view v-if="pageInfo.mineMessage.guguId">
-		<view class="">
-			<image :src="pageInfo.mineMessage.background" class="w-full" mode="scaleToFill"></image>
-		</view>
-		<view class="bg-[#fff] w-screen  px-14 relative -top-20" style="border-radius: 35rpx 35rpx 0px 0px;">
-			<view>
-				<view class="relative bottom-24 border-2 border-[#fff] w-80 rounded-full h-80 iconShadow"
-					@click="skipPerson">
-					<image :src="pageInfo.mineMessage.icon" class="w-76 h-76 rounded-full "></image>
+		<view class="bg-[#fff] w-screen py-20 px-14">
+			<view class="flex items-center ">
+				<view class=" border-2 border-[#fff] w-80 rounded-full h-80 iconShadow" @click="skipPerson">
+					<image :src="pageInfo.mineMessage.icon" class="w-76 h-76 rounded-full" />
 				</view>
-				<view class="-mt-10 mb-10 font-bold text-21 flex items-center">
-					{{ pageInfo.mineMessage.nickname }}
-					<image src="/static/mine/vip.png" class="w-47 h-19 mx-5"></image>
-					<image src="/static/mine/dealer.png" class="w-57 h-19"></image>
-				</view>
-				<view class="mb-10 text-14 flex items-center">
-					<image src="/static/mine/ID.png" class="w-15 h-15 "></image>
-					<text class="ml-5 mr-15">{{ pageInfo.mineMessage.guguId }}</text>
-					<image src="/static/mine/copy.png" class="w-15 h-15 ml-10"
-						@click.stop="copy(pageInfo.mineMessage.guguId)"></image>
+				<view class="mx-10">
+					<view class="-mt-10 mb-10 font-bold text-21 flex items-center">
+						{{ pageInfo.mineMessage.nickname }}
+					</view>
+					<view class="mb-10 text-14 flex items-center">
+						<image src="/static/mine/ID.png" class="w-15 h-15 " />
+						<text class="ml-5 mr-15">{{ pageInfo.mineMessage.guguId }}</text>
+						<!-- 	<image src="/static/mine/copy.png" class="w-15 h-15 ml-10" @click.stop="copy(pageInfo.mineMessage.guguId)" /> -->
+					</view>
 				</view>
 			</view>
 			<view class="flex text-14">
@@ -71,7 +66,8 @@
 		<!-- 菜单 -->
 		<view class="pt-13 bg-gray-100">
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
-				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex" class="h-500 flex items-center justify-center">
+				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
+					class="h-500 flex items-center justify-center">
 					<u-empty mode="list" icon="http://cdn.uviewui.com/uview/empty/list.png">
 					</u-empty>
 				</view>
@@ -107,28 +103,41 @@ onShow(() => {
 		// }
 	}
 })
-const waterfallItems = [
-	{
-		scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '作品', items: [],
-		query: {
-			path: { pageNum: 1, pageSize: 10, },
-			data: { totalCount: '' }
-		}
-	},
-	{
-		scrollTop: -1,isComplete: false,isLoading: false,itemType: 'title',name: '喜欢',items: [],
-		query: {
-			path: {pageNum: 1,pageSize: 10,},
-			data: {totalCount: ''}
-		}
-	},
-	{
-		scrollTop: -1,isComplete: false,isLoading: false,name: '收藏',items: [],
-		query: {
-			path: {pageNum: 1,pageSize: 10,},
-			data: {totalCount: ''}
-		}
+const waterfallItems = [{
+	scrollTop: -1,
+	isComplete: false,
+	isLoading: false,
+	itemType: 'image',
+	name: '作品',
+	items: [],
+	query: {
+		path: { pageNum: 1, pageSize: 10, },
+		data: { totalCount: '' }
 	}
+},
+{
+	scrollTop: -1,
+	isComplete: false,
+	isLoading: false,
+	itemType: 'title',
+	name: '喜欢',
+	items: [],
+	query: {
+		path: { pageNum: 1, pageSize: 10, },
+		data: { totalCount: '' }
+	}
+},
+{
+	scrollTop: -1,
+	isComplete: false,
+	isLoading: false,
+	name: '收藏',
+	items: [],
+	query: {
+		path: { pageNum: 1, pageSize: 10, },
+		data: { totalCount: '' }
+	}
+}
 ]
 const pageData = reactive({
 	masterId: '',
@@ -340,6 +349,7 @@ const fetchData = () => {
 	-webkit-line-clamp: 2; //此处为上限行数
 	-webkit-box-orient: vertical;
 }
+
 .line::after {
 	position: absolute;
 	left: 40%;
@@ -352,5 +362,4 @@ const fetchData = () => {
 	border-right: 1px solid gray;
 	transform: scale(0.5);
 	transform-origin: left bottom;
-}
-</style>
+}</style>
