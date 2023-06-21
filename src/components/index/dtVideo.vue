@@ -106,7 +106,7 @@ opusDetail()
 const getDataApi = () => {
 	console.log('发请求');
 	postVideorecommend({}).then(res => {
-		console.log('视频',res);
+		console.log('视频', res);
 		pageData.list = [...pageData.list, ...res.data]
 		// pageData.lastVideoId = res.data[res.data.length - 1].id
 	})
@@ -117,12 +117,12 @@ const gohomepage = (item) => {
 		url: '/pages/userhomepage/userhomepage?id=' + item.createdBy
 	})
 }
-// watch(() => props.lastVideoId, (newV, oldV) => {
-// 	if (newV) {
-// 		pageData.lastVideoId = newV
-// 		getDataApi()
-// 	}
-// }, { deep: true, immediate: true })
+watch(() => props.lastVideoId, (newV, oldV) => {
+	if (newV) {
+		pageData.lastVideoId = newV
+		getDataApi()
+	}
+}, { deep: true, immediate: true })
 watch(() => pageData.current, (newV, oldV) => {
 	if (newV == pageData.list.length - 1) {
 		getDataApi()
