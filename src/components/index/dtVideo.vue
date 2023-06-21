@@ -11,9 +11,9 @@
 					<view v-if="pageData.status == 1" class="icon_play w-full h-full absolute w-50 h-50">
 						<image class="w-64 h-64" src="@/static/opus/icon_play.png" />
 					</view>
-					<view class="info">
+					<view class="info w-275 pl-16">
 						<view class="font-bold h-17 leading-16 text-17">@{{ item.author }}</view>
-						<view class="text-14 leading-16">发布时间：{{ item.createdTime }}</view>
+						<view class="text-14 leading-16 my-11">发布于：{{ item.createdTime }}</view>
 						<view class="text-16 leading-25">{{ item.brief }}</view>
 					</view>
 					<view class="buttons text-sm">
@@ -286,9 +286,8 @@ const onShareTimeline = () => {
 	.info {
 		z-index: 1;
 		position: absolute;
-		bottom: 200upx;
+		bottom: 140upx;
 		color: white;
-		text-indent: 1em;
 	}
 
 	.buttons {
@@ -296,7 +295,7 @@ const onShareTimeline = () => {
 		flex-direction: column;
 		position: absolute;
 		right: 0vw;
-		bottom: 12vh;
+		bottom: 140upx;
 		color: white;
 		text-align: center;
 		justify-content: center;
