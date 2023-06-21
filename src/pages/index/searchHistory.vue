@@ -7,9 +7,8 @@
 				<view class="w-full flex items-center">
 					<view	class="flex items-center ml-5  bg-[#F5F6F8]  h-30 w-175 rounded-40 border-1 border-[#E3E3E3] text-15 text-[#333]">
 						<input class="ml-15" v-model="searchvalue" placeholder="搜索" type="text" @confirm="search" />
-						<view class="px-12 relative z-50 flex items-center">
-							<image src="/static/mine/searchhistory.png" class="w-16 h-16"
-								@click="search" />
+						<view class="px-12 relative z-50 flex items-center" @click="search">
+							<image src="/static/mine/searchhistory.png" class="w-16 h-16" />
 						</view>
 					</view>
 				</view>
