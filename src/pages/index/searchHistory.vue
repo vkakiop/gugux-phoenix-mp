@@ -17,7 +17,7 @@
 		</customNav>
 		<view class="fixed top-70 pt-10 bg-[#fff] z-50 w-full">
 			<!-- 搜索历史 -->
-			<view class="w-full mt-5" v-if="isShowHistory">
+			<view class="w-full mt-5 py-15" v-if="isShowHistory">
 				<view v-if="pageData.searchHistoryList.length">
 					<view class="flex px-15 justify-between mb-10">
 						<view class="text-17 font-bold">历史搜索:</view>
@@ -40,7 +40,7 @@
 			</view>
 			<!-- 搜索历史 -->
 			<!-- 菜单 -->
-			<view class="w-full bg-white pb-15" v-show="!isShowHistory">
+			<view class="w-full bg-white py-15" v-show="!isShowHistory">
 				<view class="flex ml-10">
 					<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-28 "
 						@click="changeWaterfall(index)">

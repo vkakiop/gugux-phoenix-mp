@@ -7,9 +7,9 @@
 		<view v-if="pageData.status == 1" class="icon_play w-full h-full fixed w-50 h-50">
 			<image class="w-64 h-64" src="@/static/opus/icon_play.png" />
 		</view>
-		<view class="info text-17">
-			<view class="font-bold h-17 leading-16">@{{ pageData.opusdetail.author }}</view>
-			<view class="text-14 leading-16">发布时间：{{ pageData.opusdetail.createdTime }}</view>
+		<view class="info w-275 pl-16">
+			<view class="font-bold h-17 leading-16 text-17">@{{ pageData.opusdetail.author }}</view>
+			<view class="text-14 leading-16 my-11">发布时间：{{ pageData.opusdetail.createdTime }}</view>
 			<view class="text-16 leading-25">{{ pageData.opusdetail.brief }}</view>
 		</view>
 		<view class="buttons text-sm">
@@ -215,11 +215,9 @@ const onShareTimeline = () => {
 
 .info {
 	z-index: 1;
-	position: fixed;
-	bottom: 150upx;
+	position: absolute;
+	bottom: 140upx;
 	color: white;
-	width: 80vw;
-	text-indent: 1em;
 }
 
 .buttons {
@@ -227,7 +225,7 @@ const onShareTimeline = () => {
 	flex-direction: column;
 	position: fixed;
 	right: 0vw;
-	bottom: 12vh;
+	bottom: 140upx;
 	color: white;
 	text-align: center;
 	justify-content: center;
