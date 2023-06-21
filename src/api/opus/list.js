@@ -1,11 +1,14 @@
 import request from '@/utils/request'
 
 // 作品列表
-export function opusList(path,data) {
+export function opusList(data) {
     return request({
-        url: `/gugux-services-opus-api/app/opus/list/${path.category}/${path.pageNum}/${path.pageSize}`,
+        url: `/gugux-services-opus-api/app/opus/list/rec`,
         method: 'get',
-        params: data
+        params: data,
+        headers: {
+            isToken: true
+        },
     })
 }
 

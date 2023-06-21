@@ -116,23 +116,21 @@ const pageData = reactive({
 })
 watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
 	pageData.waterfallItems = _.cloneDeep(waterfallItems)
-	userhomepage({
-		masterId: pageData.masterId
-	}).then(reslove => {
-		pageInfo.mineMessage = reslove.data.userInfo
-	})
+	fetchInfo()
 	changeWaterfall(pageData.currentIndex)
 })
 onLoad((option) => {
 	pageData.masterId = option.id
+	fetchInfo()
+})
+const fetchInfo=()=>{
 	userhomepage({
 		masterId: pageData.masterId
 	}).then(reslove => {
 		pageInfo.mineMessage = reslove.data.userInfo
 		changeWaterfall(0)
 	})
-})
-
+}
 const iSinfo = ref(false)
 const pageInfo = reactive({
 	//个人信息数据

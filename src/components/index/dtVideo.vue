@@ -62,7 +62,7 @@
 <script setup>
 	import comment from "@/components/common/comment.vue"
 	import { opusdetails } from "@/api/mine/index"
-	import { postVideorecommend } from "@/api/workList/work"
+	import { postVideorecommend } from "@/api/recvideo/index"
 	import { getTokenValue } from "@/utils/utils"
 	import { opusInfo, opusCollect, opusLike, userFans, userFansRemove } from "@/api/opus/index"
 	import { getCurrentInstance, reactive, watch, ref } from 'vue'

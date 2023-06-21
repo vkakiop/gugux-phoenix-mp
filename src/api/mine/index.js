@@ -8,12 +8,14 @@ export function getUserBase(data) {
 	})
 }
 // 个人信息
-export function getUserInfo(data, header) {
+export function getUserInfo(data) {
 	return request({
 		url: '/gugux-services-user-api/app/user/info',
 		method: 'get',
 		params: data,
-		headers: header,
+		headers: {
+            isToken: true
+        },
 	})
 }
 // 用户主页个人信息

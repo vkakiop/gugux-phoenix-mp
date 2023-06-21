@@ -73,26 +73,22 @@ onMounted(() => {
 const waterfallItems = [
   {
     scrollTop: -1, isComplete: false, isLoading: false, itemKey: 'testestse', itemType: 'title', name: '推荐', items: [], query: {
-      path: { category: '0', pageNum: 1, pageSize: 10 },
-      data: { passTime: '' }
+      path: { category: '1', pageNum: 1, getNum: 10 },
     }
   },
   {
     scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '徒步', items: [], query: {
-      path: { category: '2431436580328327949', pageNum: 1, pageSize: 10 },
-      data: { passTime: '' }
+      path: { category: '2431436580328327949', pageNum: 1, getNum: 10 },
     }
   },
   {
     scrollTop: -1, isComplete: false, isLoading: false, name: '风景', items: [], query: {
-      path: { category: '1622581366744965137', pageNum: 1, pageSize: 10 },
-      data: { passTime: '' }
+      path: { category: '1622581366744965137', pageNum: 1, getNum: 10 },
     }
   },
   {
     scrollTop: -1, isComplete: false, isLoading: false, name: '骑行', items: [], query: {
-      path: { category: '1622581366744965136', pageNum: 1, pageSize: 10 },
-      data: { passTime: '' }
+      path: { category: '1622581366744965136', pageNum: 1, getNum: 10 },
     }
   },
 ]
@@ -131,11 +127,11 @@ const getData = () => {
   let currentIndex = pageData.currentIndex
   pageData.waterfallItems[currentIndex].isLoading = true
   let query = pageData.waterfallItems[currentIndex].query
-  opusList(query.path, query.data).then(res => {
-    if (res.data.page == res.data.totalPage) {
+  opusList(query.path).then(res => {
+    if (res.data.length<10) {
       pageData.waterfallItems[currentIndex].isComplete = true
     }
-    pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
+    pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data)
     pageData.waterfallItems[currentIndex].isLoading = false
   }).catch(e => {
     pageData.waterfallItems[currentIndex].isLoading = false
@@ -145,7 +141,7 @@ const getData = () => {
 onReachBottom(() => {
   let currentIndex = pageData.currentIndex
   if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
-    pageData.waterfallItems[currentIndex].query.path.pageNum++
+    // pageData.waterfallItems[currentIndex].query.path.pageNum++
     getData()
   }
 })
