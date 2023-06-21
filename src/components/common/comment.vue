@@ -136,10 +136,11 @@
 <script setup>
 import { ref, onMounted, reactive,watch } from 'vue'
 import { onLoad ,onReachBottom} from '@dcloudio/uni-app'
-import {formatedCommentDate,isArrayEmpty} from "@/utils/utils"
+import {formatedCommentDate,isArrayEmpty,getTokenValue} from "@/utils/utils"
 import emoji from "@/utils/imconfig/emoji";
 import commentBox from "@/components/common/commentBox.vue"
 import {opuscomment,commentlike,commentlist,subcommentlist} from '@/api/comment/index'
+import useRouterStore from '@/store/modules/router'
 const emit = defineEmits(['debounce'])
 const props = defineProps({
     id:{
@@ -168,12 +169,16 @@ const pageData = reactive({
 })
 const commentBoxRef = ref();
 const init = (val)=>{
+    if(!isLogin()){
+        return
+    }
     let obj = {
         opusId:pageData.opusId,
         mainCommentId:pageData.mainCommentId,
         replyId:pageData.replyId,
         replyCommentId:pageData.replyCommentId,
     }
+    
     commentBoxRef.value.init(val,obj);
 }
 defineExpose({init})
@@ -260,7 +265,20 @@ watch(()=>props.id,(newVal,oldVal)=>{
   }
 },{immediate:true})
 
+
+const isLogin = ()=>{
+    if (getTokenValue()) {
+		// scrolltolower();
+        return true;
+	} else {
+		uni.navigateTo({url:'/pages/login/index'});
+	}
+}
+
 const likeChange = (item,type)=>{
+    if(!isLogin()){
+        return
+    }
     item.isLike = type;
     let obj = {
         commentId:item.id,
@@ -277,7 +295,7 @@ const likeChange = (item,type)=>{
     })
 }
 const expandChange = (item)=>{
-    console.log(item);
+    // console.log(item);
     if(item.isExpand == 0){
         let obj = {
             commentId:item.id,
@@ -365,6 +383,9 @@ const commentClose = (data,str)=>{
 }
 
 const fatherReply = (item,index) =>{
+    if(!isLogin()){
+        return
+    }
     pageData.index = index;
     pageData.mainCommentId = item.id;
     pageData.replyId = item.userId;
@@ -377,6 +398,9 @@ const fatherReply = (item,index) =>{
     commentBoxRef.value.init(true,obj);
 }
 const childReply = (item,row,index) =>{
+    if(!isLogin()){
+        return
+    }
     pageData.index = index;
     pageData.mainCommentId = item.id;
     pageData.replyId = item.userId;
