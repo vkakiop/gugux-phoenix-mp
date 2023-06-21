@@ -45,7 +45,8 @@
 			<view class="container">
 				<comment ref="commentRef" :id="pageData.opusdetail.id" :articleType="2"></comment>
 			</view>
-			<view class="flex items-center ml-14  mb-14 bg-[#f5f6f8]  h-39 w-350 rounded-19 border-1 border-[#E3E3E3] text-14"
+			<view
+				class="flex items-center ml-14  mb-14 bg-[#f5f6f8]  h-39 w-350 rounded-19 border-1 border-[#E3E3E3] text-14"
 				@click="open">
 				<icon type="search" size="11" class="mx-10" />
 				<input class="bg-[#f5f6f8]" placeholder="说点什么..." type="text" disabled />
@@ -185,11 +186,6 @@ const like = (item) => {
 }
 const openBox = (item) => {
 	pageData.show = true;
-	// uni.showToast({
-	// 	title: '评论',
-	// 	icon: 'none',
-	// 	duration: 2000
-	// });
 }
 //分享
 const onShareAppMessage = () => {
@@ -238,7 +234,7 @@ const onShareTimeline = () => {
 	z-index: 999;
 
 	.header_group {
-		margin-bottom: 50upx;
+		margin-bottom: 70upx;
 		height: 90upx;
 		width: 90upx;
 		position: relative;
@@ -250,19 +246,16 @@ const onShareTimeline = () => {
 			height: 90upx;
 			width: 90upx;
 			position: relative;
-			left: 15rpx;
+			left: 18rpx;
 		}
 
 		.add {
 			position: absolute;
-			bottom: -30upx;
-			margin: 0 auto;
-			right: 0upx;
-			left: 0upx;
+			bottom: -37upx;
+			left: 46upx;
 			width: 50upx;
 			height: 50upx;
 			line-height: 50upx;
-			border-radius: 50upx;
 		}
 	}
 

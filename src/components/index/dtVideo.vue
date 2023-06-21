@@ -1,47 +1,50 @@
 <template>
 	<view class="bg-black">
-		<swiper class="swiper w-screen h-screen" vertical :current="pageData.current" :interval="2000" :duration="600" @animationfinish="animationfinish" @change="handleChange" :circular="false">
+		<swiper class="swiper w-screen h-screen" vertical :current="pageData.current" :interval="2000" :duration="600"
+			@animationfinish="animationfinish" @change="handleChange" :circular="false">
 			<swiper-item v-for="(item, index) in pageData.list" :key="index">
 				<view v-if="index == pageData.current" @click="handleVideo(index)" class="w-screen h-screen">
-					<video autoplay class="w-screen h-screen fixed" :id="'video' + index" :src="item.cover.content" loop :controls="false" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false" @error="videoErrorCallback">
+					<video autoplay class="w-screen h-screen fixed" :id="'video' + index" :src="item.cover.content" loop
+						:controls="false" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false"
+						@error="videoErrorCallback">
 					</video>
 					<view v-if="pageData.status == 1" class="icon_play w-full h-full absolute w-50 h-50">
 						<image class="w-64 h-64" src="@/static/opus/icon_play.png" />
 					</view>
 					<view class="info">
 						<view class="font-bold h-17 leading-16 text-17">@{{ item.author }}</view>
-						<view class="text-14 leading-16">发布时间：{{item.createdTime}}</view>
+						<view class="text-14 leading-16">发布时间：{{ item.createdTime }}</view>
 						<view class="text-16 leading-25">{{ item.brief }}</view>
 					</view>
-						<view class="buttons text-sm">
-							<debounce class="header_group">
-								<image class="header" :src="item.icon" @click="gohomepage(item)"></image>
-								<view class="add" v-if="!item.isFollow" @click="attention(item)">
-									<image src="@/static/video/attention.png" class="w-19 h-19"></image>
-								</view>
-							</debounce>
-							<debounce @debounce="like(item)" class="button mb-10">
-								<image v-if="item.isLike" class="w-36 h-36" src="@/static/video/likefill.png" />
-								<image v-else class="w-36 h-36" src="@/static/video/like.png" />
-								<view>{{ item.likeNum }}</view>
-							</debounce>
-							<debounce @debounce="openBox(item)" class="button mb-10">
-								<image class="w-36 h-36" src="@/static/video/evaluate.png" />
-								<view>{{ item.commentNum }}</view>
-							</debounce>
-							<debounce @debounce="collection(item)" class="button mb-10">
-								<view class="button mb-10">
-									<image v-if="item.isCollection" class="w-36 h-36" src="@/static/video/collectfill.png" />
-									<image v-else class="w-36 h-36" src="@/static/video/collect.png" />
-									<view>{{ item.collectionNum }}</view>
-								</view>
-							</debounce>
-							<view class="button mb-10" @click='handleShare'>
-								<button open-type="share" style="background-color: transparent;">
-									<image class="w-36 h-36" src="@/static/video/share.png" />
-								</button>
+					<view class="buttons text-sm">
+						<debounce class="header_group">
+							<image class="header" :src="item.icon" @click="gohomepage(item)"></image>
+							<view class="add" v-if="!item.isFollow" @click="attention(item)">
+								<image src="@/static/video/attention.png" class="w-19 h-19"></image>
 							</view>
+						</debounce>
+						<debounce @debounce="like(item)" class="button mb-10">
+							<image v-if="item.isLike" class="w-36 h-36" src="@/static/video/likefill.png" />
+							<image v-else class="w-36 h-36" src="@/static/video/like.png" />
+							<view>{{ item.likeNum }}</view>
+						</debounce>
+						<debounce @debounce="openBox(item)" class="button mb-10">
+							<image class="w-36 h-36" src="@/static/video/evaluate.png" />
+							<view>{{ item.commentNum }}</view>
+						</debounce>
+						<debounce @debounce="collection(item)" class="button mb-10">
+							<view class="button mb-10">
+								<image v-if="item.isCollection" class="w-36 h-36" src="@/static/video/collectfill.png" />
+								<image v-else class="w-36 h-36" src="@/static/video/collect.png" />
+								<view>{{ item.collectionNum }}</view>
+							</view>
+						</debounce>
+						<view class="button mb-10" @click='handleShare'>
+							<button open-type="share" style="background-color: transparent;">
+								<image class="w-36 h-36" src="@/static/video/share.png" />
+							</button>
 						</view>
+					</view>
 				</view>
 			</swiper-item>
 		</swiper>
@@ -49,7 +52,8 @@
 			<view class="container">
 				<comment ref="commentRef" :id="pageData.commentid" :articleType="2"></comment>
 			</view>
-			<view class="flex items-center ml-14  mb-14 bg-[#f5f6f8]  h-39 w-350 rounded-19 border-1 border-[#E3E3E3] text-14"
+			<view
+				class="flex items-center ml-14  mb-14 bg-[#f5f6f8]  h-39 w-350 rounded-19 border-1 border-[#E3E3E3] text-14"
 				@click="open">
 				<icon type="search" size="11" class="mx-10" />
 				<input class="bg-[#f5f6f8]" placeholder="说点什么..." type="text" disabled />
@@ -60,306 +64,279 @@
 </template>
 
 <script setup>
-	import comment from "@/components/common/comment.vue"
-	import { opusdetails } from "@/api/mine/index"
-	import { postVideorecommend } from "@/api/recvideo/index"
-	import { getTokenValue } from "@/utils/utils"
-	import { opusInfo, opusCollect, opusLike, userFans, userFansRemove } from "@/api/opus/index"
-	import { getCurrentInstance, reactive, watch, ref } from 'vue'
-	import { onLoad, onShow } from '@dcloudio/uni-app'
-	const props = defineProps({
-		lastVideoId: {
-			type: String,
-			default: ''
-		}
+import comment from "@/components/common/comment.vue"
+import { opusdetails } from "@/api/mine/index"
+import { postVideorecommend } from "@/api/recvideo/index"
+import { getTokenValue } from "@/utils/utils"
+import { opusInfo, opusCollect, opusLike, userFans, userFansRemove } from "@/api/opus/index"
+import { getCurrentInstance, reactive, watch, ref } from 'vue'
+import { onLoad, onShow } from '@dcloudio/uni-app'
+const props = defineProps({
+	lastVideoId: {
+		type: String,
+		default: ''
+	},
+	opusid: {
+		type: String,
+		default: ''
+	}
+})
+const commentRef = ref();
+const open = () => {
+	commentRef.value.init(true);
+}
+const isShare = ref(false)
+const pageData = reactive({
+	commentid: '',
+	id: '',
+	isShowLoginPop: false,
+	lastVideoId: '',
+	list: [],
+	current: 0,
+	status: 0, //0播放 1暂停
+})
+const opusDetail = () => {
+	opusdetails({
+		opusId: props.opusid
+	}).then(res => {
+		pageData.list.unshift(res.data)
 	})
-	const commentRef = ref();
-	const open = () =>{
-	    commentRef.value.init(true);
-	}
-	const isShare = ref(false)
-	const pageData = reactive({
-		commentid:'',
-		id: '',
-		isShowLoginPop: false,
-		lastVideoId: '',
-		list: [],
-		current: 0,
-		status: 0, //0播放 1暂停
+}
+opusDetail()
+const getDataApi = () => {
+	postVideorecommend({
+		"lastVideoId": pageData.lastVideoId
+	}).then(res => {
+		pageData.list = [...pageData.list, ...res.data]
+		pageData.lastVideoId = res.data[res.data.length - 1].id
 	})
-	const getDataApi = () => {
-		postVideorecommend({
-			"lastVideoId": pageData.lastVideoId
-		}).then(res => {
-			pageData.list = [...pageData.list, ...res.data]
-			pageData.lastVideoId = res.data[res.data.length - 1].id
-			// pageData.id=pageData.list[pageData.current].id
-		})
-	}
-	const {ctx} = getCurrentInstance()
-	const gohomepage = (item) => {
-		uni.navigateTo({
-			url: '/pages/userhomepage/userhomepage?id=' + item.createdBy
-		})
-	}
-	watch(() => props.lastVideoId, (newV, oldV) => {
-		if (newV) {
-			pageData.lastVideoId = newV
-			getDataApi()
-		}
-	}, {
-		deep: true,
-		immediate: true
+}
+const { ctx } = getCurrentInstance()
+const gohomepage = (item) => {
+	uni.navigateTo({
+		url: '/pages/userhomepage/userhomepage?id=' + item.createdBy
 	})
-	watch(() => pageData.current, (newV, oldV) => {
-		if (newV == pageData.list.length - 1) {
-			getDataApi()
-		}
-	}, {deep: true,immediate: true})
-	//点击视频播放或者暂停
-	const handleVideo = (index) => {
-		let currentId = 'video' + index
-		if (pageData.status == 1) {
-			uni.createVideoContext(currentId, ctx).play()
-			pageData.status = 0
-		} else {
-			uni.createVideoContext(currentId, ctx).pause()
-			pageData.status = 1
-		}
+}
+watch(() => props.lastVideoId, (newV, oldV) => {
+	if (newV) {
+		pageData.lastVideoId = newV
+		getDataApi()
 	}
-
-	const animationfinish = (e) => {
-		pageData.current = e.detail.current;
-		let currentId = 'video' + pageData.current; // 获取当前视频id
-		pageData.videoContent = uni.createVideoContext(currentId, ctx).play();
-		pageData.status = 0;
+}, { deep: true, immediate: true })
+watch(() => pageData.current, (newV, oldV) => {
+	if (newV == pageData.list.length - 1) {
+		getDataApi()
 	}
-	const handleChange = () => {
-		let currentId = 'video' + pageData.current
+}, { deep: true, immediate: true })
+//点击视频播放或者暂停
+const handleVideo = (index) => {
+	let currentId = 'video' + index
+	if (pageData.status == 1) {
+		uni.createVideoContext(currentId, ctx).play()
+		pageData.status = 0
+	} else {
 		uni.createVideoContext(currentId, ctx).pause()
 		pageData.status = 1
-		pageData.id=pageData.list[pageData.current].id
 	}
+}
 
-	const videoErrorCallback = () => {
-		uni.showToast({
-			title: '视频播放错误',
-			icon: 'none',
-			duration: 2000
-		});
-	}
-	//关注
-	const attention = (item) => {
-		if (getTokenValue()) {
-			userFans({
-				id: item.createdBy
-			}).then(res => {
-				item.isFollow = true
-				uni.showToast({
-					title: '关注成功',
-					icon: 'none',
-					duration: 2000
-				})
-			})
-		} else {
-			pageData.isShowLoginPop = true
-			isShare.value = false
-		}
+const animationfinish = (e) => {
+	pageData.current = e.detail.current;
+	let currentId = 'video' + pageData.current; // 获取当前视频id
+	pageData.videoContent = uni.createVideoContext(currentId, ctx).play();
+	pageData.status = 0;
+}
+const handleChange = () => {
+	let currentId = 'video' + pageData.current
+	uni.createVideoContext(currentId, ctx).pause()
+	pageData.status = 1
+	// pageData.id = pageData.list[pageData.current].id
+}
 
-	}
-	// const attention = (item) => {
-	// 	let action = item.isFollow ? 0 : 1
-	// 	if (getTokenValue()) {
-	// 		let opusAttention = action ? userFans : userFansRemove
-	// 		opusAttention({
-	// 			id: item.createdBy
-	// 		}).then(res => {
-	// 			if (action) {
-	// 				item.isFollow = true
-	// 			} else {
-	// 				item.isFollow = false
-	// 			}
-	// 			uni.showToast({
-	// 				title: (action ? '' : '取消') + '关注成功',
-	// 				icon: 'none',
-	// 				duration: 2000
-	// 			})
-	// 		})
-	// 	} else {
-	// 		pageData.isShowLoginPop = true
-	// 		isShare.value = false
-	// 	}
-
-	// }
-	//收藏
-	const collection = (item) => {
-		let action = item.isCollection ? 0 : 1
-		if (getTokenValue()) {
-			opusCollect({
-				opusId: item.id,
-				action: action
-			}).then(res => {
-				if (action) {
-					item.isCollection = true
-					item.collectionNum++
-				} else {
-					item.isCollection = false
-					if (item.collectionNum > 0) {
-						item.collectionNum--
-					}
-				}
-				uni.showToast({
-					title: (action ? '' : '取消') + '收藏成功',
-					icon: 'none',
-					duration: 2000
-				})
-			})
-		} else {
-			pageData.isShowLoginPop = true
-			isShare.value = false
-		}
-	}
-	//点赞
-	const like = (item) => {
-		let action = item.isLike ? 0 : 1
-		if (getTokenValue()) {
-			opusLike({
-				opusId: item.id,
-				action: action
-			}).then(res => {
-				if (action) {
-					item.isLike = true
-					item.likeNum++
-				} else {
-					item.isLike = false
-					if (item.likeNum > 0) {
-						item.likeNum--
-					}
-				}
-				uni.showToast({
-					title: (action ? '' : '取消') + '点赞成功',
-					icon: 'none',
-					duration: 2000
-				})
-			})
-		} else {
-			pageData.isShowLoginPop = true
-			isShare.value = false
-		}
-	}
-	const openBox = (item) => {
-		pageData.commentid=item.id
-		pageData.show = true;
-	}
-	const closeBox=()=>{
-		pageData.show = false
-		isShare.value=true
-		opusdetails({
-			opusId: pageData.list[pageData.current].id
+const videoErrorCallback = () => {
+	uni.showToast({
+		title: '视频播放错误',
+		icon: 'none',
+		duration: 2000
+	});
+}
+//关注
+const attention = (item) => {
+	if (getTokenValue()) {
+		userFans({
+			id: item.createdBy
 		}).then(res => {
-			pageData.list[pageData.current]=res.data
+			item.isFollow = true
+			uni.showToast({
+				title: '关注成功',
+				icon: 'none',
+				duration: 2000
+			})
 		})
-	}
-	//分享
-	const onShareAppMessage = () => {
-		return {
-			title: pageData.list[pageData.current].brief,
-			path: '/pages/opus/index?id=' + pageData.list[pageData.current].id,
-			imageUrl: pageData.list[pageData.current].thumbnail
-		}
+	} else {
+		pageData.isShowLoginPop = true
+		isShare.value = false
 	}
 
-	const fetch = () => {
-		postVideorecommend({
-			"lastVideoId": pageData.list[pageData.current].id
-		}).then(res2 => {
-			pageData.list = res2.data
-			pageData.status = 0;
-			pageData.current = 0
-			pageData.lastVideoId = res2.data[res2.data.length - 1].id
+}
+//收藏
+const collection = (item) => {
+	let action = item.isCollection ? 0 : 1
+	if (getTokenValue()) {
+		opusCollect({
+			opusId: item.id,
+			action: action
+		}).then(res => {
+			if (action) {
+				item.isCollection = true
+				item.collectionNum++
+			} else {
+				item.isCollection = false
+				if (item.collectionNum > 0) {
+					item.collectionNum--
+				}
+			}
+			uni.showToast({
+				title: (action ? '' : '取消') + '收藏成功',
+				icon: 'none',
+				duration: 2000
+			})
 		})
+	} else {
+		pageData.isShowLoginPop = true
+		isShare.value = false
 	}
-	const handleShare = () => {
-		isShare.value = true
+}
+//点赞
+const like = (item) => {
+	let action = item.isLike ? 0 : 1
+	if (getTokenValue()) {
+		opusLike({
+			opusId: item.id,
+			action: action
+		}).then(res => {
+			if (action) {
+				item.isLike = true
+				item.likeNum++
+			} else {
+				item.isLike = false
+				if (item.likeNum > 0) {
+					item.likeNum--
+				}
+			}
+			uni.showToast({
+				title: (action ? '' : '取消') + '点赞成功',
+				icon: 'none',
+				duration: 2000
+			})
+		})
+	} else {
+		pageData.isShowLoginPop = true
+		isShare.value = false
 	}
-	onShow(() => {
-		if (!isShare.value) {
-			fetch()
-		}
+}
+const openBox = (item) => {
+	pageData.commentid = item.id
+	pageData.show = true;
+}
+const closeBox = () => {
+	pageData.show = false
+	isShare.value = true
+	fetch()
+}
+//分享
+const onShareAppMessage = () => {
+	return {
+		title: pageData.list[pageData.current].brief,
+		path: '/pages/opus/index?id=' + pageData.list[pageData.current].id,
+		imageUrl: pageData.list[pageData.current].thumbnail
+	}
+}
+const fetch = () => {
+	opusdetails({
+		opusId: pageData.list[pageData.current].id
+	}).then(res => {
+		pageData.list[pageData.current] = res.data
 	})
-	const onShareTimeline = () => {
-		return onShareAppMessage()
+}
+const handleShare = () => {
+	isShare.value = true
+}
+onShow(() => {
+	if (!isShare.value) {
+		fetch()
 	}
+})
+const onShareTimeline = () => {
+	return onShareAppMessage()
+}
 </script>
 
 <style lang="scss" scoped>
-	.icon_play {
-		top: calc(50% - 64rpx);
-		left: calc(50% - 64rpx);
+.icon_play {
+	top: calc(50% - 64rpx);
+	left: calc(50% - 64rpx);
+}
+
+.swiper {
+	position: relative;
+	width: 100%;
+	height: 100vh;
+
+	.info {
+		z-index: 1;
+		position: absolute;
+		bottom: 200upx;
+		color: white;
+		text-indent: 1em;
 	}
 
-	.swiper {
-		position: relative;
-		width: 100%;
-		height: 100vh;
+	.buttons {
+		display: flex;
+		flex-direction: column;
+		position: absolute;
+		right: 0vw;
+		bottom: 12vh;
+		color: white;
+		text-align: center;
+		justify-content: center;
+		z-index: 999;
 
-		.info {
-			z-index: 1;
-			position: absolute;
-			bottom: 200upx;
-			color: white;
-			text-indent: 1em;
-		}
+		.header_group {
+			margin-bottom: 70upx;
+			height: 90upx;
+			width: 90upx;
+			position: relative;
 
-		.buttons {
-			display: flex;
-			flex-direction: column;
-			position: absolute;
-			right: 0vw;
-			bottom: 12vh;
-			color: white;
-			text-align: center;
-			justify-content: center;
-			z-index: 999;
-
-			.header_group {
-				margin-bottom: 50upx;
+			.header {
+				border: 2px solid white;
+				margin: 0 auto;
+				border-radius: 90upx;
 				height: 90upx;
 				width: 90upx;
 				position: relative;
-
-				.header {
-					border: 2px solid white;
-					margin: 0 auto;
-					border-radius: 90upx;
-					height: 90upx;
-					width: 90upx;
-					position: relative;
-					left: 15rpx;
-				}
-
-				.add {
-					position: absolute;
-					bottom: -30upx;
-					margin: 0 auto;
-					right: 0upx;
-					background-color: #f15b6c;
-					left: 0upx;
-					width: 50upx;
-					height: 50upx;
-					line-height: 50upx;
-					border-radius: 50upx;
-				}
+				left: 18rpx;
 			}
 
-			.button {
-				text-align: center;
+			.add {
+				position: absolute;
+				bottom: -37upx;
+				left: 46upx;
+				width: 50upx;
+				height: 50upx;
+				line-height: 50upx;
 			}
 		}
 
+		.button {
+			text-align: center;
+		}
 	}
-	.container{
-	    height: 600rpx;
-	    overflow: auto;
-	}
+
+}
+
+.container {
+	height: 600rpx;
+	overflow: auto;
+}
 </style>
