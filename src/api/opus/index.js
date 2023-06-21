@@ -3,8 +3,9 @@ import request from '@/utils/request'
 // 推送列表
 export function opusInfo(data) {
     return request({
-      url: '/gugux-services-opus-api/app/opus/details/'+data.id,
-      method: 'get',
+      url: '/gugux-services-opus-api/app/opus/rec/details',
+      params:data,
+      method: 'get'
     })
   }
 

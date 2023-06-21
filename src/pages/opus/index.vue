@@ -175,7 +175,7 @@ const gotoMine = ()=>{
 }
 
 const getData = ()=>{
-  getDataApi({id:pageData.id})
+  getDataApi({opusId:pageData.id})
 }
 
 const getDataApi = (params)=>{
