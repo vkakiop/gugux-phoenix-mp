@@ -5,10 +5,12 @@
 			<!-- 搜索框 -->
 			<view class="bg-white w-full py-10 ">
 				<view class="w-full flex items-center">
-					<view
-						class="flex items-center ml-5  bg-[#F5F6F8]  h-30 w-175 rounded-40 border-1 border-[#E3E3E3] text-15 text-[#333]">
+					<view	class="flex items-center ml-5  bg-[#F5F6F8]  h-30 w-175 rounded-40 border-1 border-[#E3E3E3] text-15 text-[#333]">
 						<input class="ml-15" v-model="searchvalue" placeholder="搜索" type="text" @confirm="search" />
-						<image src="/static/mine/searchhistory.png" class="w-16 h-16 px-12 relative z-50" @click="search" />
+						<view class="px-12 relative z-50 flex items-center">
+							<image src="/static/mine/searchhistory.png" class="w-16 h-16"
+								@click="search" />
+						</view>
 					</view>
 				</view>
 			</view>
@@ -237,5 +239,4 @@ onReachBottom(() => {
 	font-family: Source Han Sans SC;
 	font-weight: 400;
 	color: #999999;
-}
-</style>
+}</style>

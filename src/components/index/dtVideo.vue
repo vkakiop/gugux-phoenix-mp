@@ -262,11 +262,11 @@ const fetch = () => {
 const handleShare = () => {
 	isShare.value = true
 }
-onShow(() => {
-	if (!isShare.value) {
-		fetch()
-	}
-})
+// onShow(() => {
+// 	if (!isShare.value) {
+// 		fetch()
+// 	}
+// })
 const onShareTimeline = () => {
 	return onShareAppMessage()
 }
