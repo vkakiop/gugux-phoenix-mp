@@ -18,16 +18,16 @@
 			}
 		},
 		{
+			"path": "pages/mine/mine",
+			"style": {
+				"navigationBarTitleText": "咕咕行"
+			}
+		},
+		{
 			"path": "pages/index/searchHistory",
 			"style": {
 				"navigationStyle": "custom",
 				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/mine/mine",
-			"style": {
-				"navigationBarTitleText": "咕咕行"
 			}
 		},
 		{
@@ -40,7 +40,7 @@
 		{
 			"path": "pages/personCenter/personCenter",
 			"style": {
-				"navigationBarTitleText": "个人信息",
+				"navigationStyle": "custom",
 				"enablePullDownRefresh": false
 			}
 		},

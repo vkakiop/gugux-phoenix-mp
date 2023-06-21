@@ -3,11 +3,11 @@
 		<customNav>
 			<view @click="gotoBack" class="ml-3 mt-5"><uni-icons type="back" size="24"></uni-icons></view>
 			<view>咕咕行</view>
-      </customNav>
+		</customNav>
 		<view class="bg-[#fff] w-screen py-20 px-14">
 			<view class="flex  pb-15 items-center justify-between">
 				<view class="flex">
-					<view class="border-2 border-[#fff] w-80 rounded-full h-80 iconShadow" @click="skipPerson">
+					<view class="border-2 border-[#fff] w-80 rounded-full h-80 iconShadow">
 						<image :src="pageInfo.mineMessage.icon" class="w-76 h-76 rounded-full" />
 					</view>
 					<view class="mx-11 pt-10">
@@ -219,19 +219,14 @@ function copy(value) {
 const showinfo = () => {
 	iSinfo.value = !iSinfo.value
 }
-const skipPerson = () => {
-	uni.navigateTo({
-		url: '/pages/personCenter/personCenter'
-	})
-}
-const gotoBack = ()=>{
-  let pages = getCurrentPages()
-  if (pages.length == 1) {
-    uni.switchTab({url:'/pages/index/index'})
-  }
-  else {
-    uni.navigateBack({delta: 1})
-  }
+const gotoBack = () => {
+	let pages = getCurrentPages()
+	if (pages.length == 1) {
+		uni.switchTab({ url: '/pages/index/index' })
+	}
+	else {
+		uni.navigateBack({ delta: 1 })
+	}
 }
 </script>
 
