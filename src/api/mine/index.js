@@ -67,7 +67,7 @@ export function opusdetails(data) {
 		method: 'get',
 		params: data,
 		headers: {
-			isToken: true
+			isToken: false
 		},
 	})
 }

@@ -90,6 +90,7 @@ onShow(() => {
 	if (getTokenValue()) {
 		pageData.masterId = useLoginTokenStore().get().user.id
 		fetchData()
+		gettolcount()
 	} else {
 		useRouterStore().routerTo('/pages/mine/mine')
 		// if (useRouterStore().getRouter('/pages/mine/mine')) {
@@ -225,10 +226,7 @@ const gettolcount = () => {
 				pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
 			})
 		} else if (index === 2) {
-			homepagecollection({
-				pageNum: 1,
-				pageSize: 10
-			}).then(res => {
+			homepagecollection({pageNum: 1,pageSize: 10}).then(res => {
 				pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
 			})
 		}
@@ -255,8 +253,6 @@ const skipPerson = () => {
 	})
 }
 const fetchData = () => {
-	console.log('fetch');
-	gettolcount()
 	changeWaterfall(0)
 	userhomepage({
 		masterId: pageData.masterId
