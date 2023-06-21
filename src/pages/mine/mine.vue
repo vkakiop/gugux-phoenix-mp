@@ -1,15 +1,15 @@
 <template>
 	<view v-if="pageInfo.mineMessage.guguId">
 		<view class="bg-[#fff] w-screen py-20 px-14">
-			<view class="flex items-center ">
+			<view class="flex  pb-15">
 				<view class=" border-2 border-[#fff] w-80 rounded-full h-80 iconShadow" @click="skipPerson">
 					<image :src="pageInfo.mineMessage.icon" class="w-76 h-76 rounded-full" />
 				</view>
-				<view class="mx-10">
-					<view class="-mt-10 mb-10 font-bold text-21 flex items-center">
+				<view class="mx-11 pt-14">
+					<view class="text-21 flex items-center">
 						{{ pageInfo.mineMessage.nickname }}
 					</view>
-					<view class="mb-10 text-14 flex items-center">
+					<view class=" text-14 flex items-center pt-18">
 						<image src="/static/mine/ID.png" class="w-15 h-15 " />
 						<text class="ml-5 mr-15">{{ pageInfo.mineMessage.guguId }}</text>
 						<!-- 	<image src="/static/mine/copy.png" class="w-15 h-15 ml-10" @click.stop="copy(pageInfo.mineMessage.guguId)" /> -->
@@ -31,26 +31,24 @@
 					<view class="textStyle">&nbsp;获赞</view>
 				</view>
 			</view>
-			<view>
-				<view class="Express text-14 " style="font-family: Source Han Sans SC;">
-					<view class="info">
-						<view :class="{ hide: !iSinfo }">
-							<view v-if="pageInfo.mineMessage.introduce">
-								{{ pageInfo.mineMessage.introduce }}
-							</view>
-							<view v-else>
-								这家伙很懒，连介绍都没写~~
-							</view>
+			<view class="Express text-14">
+				<view class="info">
+					<view :class="{ hide: !iSinfo }">
+						<view v-if="pageInfo.mineMessage.introduce">
+							{{ pageInfo.mineMessage.introduce }}
 						</view>
-						<!-- <text @tap="showinfo" v-if="!iSinfo">展开</text> -->
+						<view v-else>
+							这家伙很懒，连介绍都没写~~
+						</view>
 					</view>
-					<!-- <text @tap="showinfo" v-if="iSinfo" class="hidebtn">收起</text> -->
+					<!-- <text @tap="showinfo" v-if="!iSinfo">展开</text> -->
 				</view>
+				<!-- <text @tap="showinfo" v-if="iSinfo" class="hidebtn">收起</text> -->
 			</view>
 
 		</view>
 		<!-- 菜单 -->
-		<view class="sticky -top-5 z-50 bg-white ml-14 w-full  -mt-25 pt-16">
+		<view class="sticky -top-5 z-50 bg-white ml-14 w-full  -mt-25 pt-10">
 			<view class="flex ">
 				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
 					@click="changeWaterfall(index)">
@@ -62,7 +60,6 @@
 				</view>
 			</view>
 		</view>
-
 		<!-- 菜单 -->
 		<view class="pt-13 bg-gray-100">
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
@@ -300,12 +297,11 @@ const fetchData = () => {
 
 .Express {
 	line-height: 24rpx;
-	font-family: Source Han Sans SC;
 	font-weight: 300;
 	color: #999999;
 	display: flex;
 	flex-direction: column;
-	padding: 30upx 0;
+	padding: 30upx 0 40upx;
 	position: relative;
 
 	.info {
@@ -362,4 +358,5 @@ const fetchData = () => {
 	border-right: 1px solid gray;
 	transform: scale(0.5);
 	transform-origin: left bottom;
-}</style>
+}
+</style>

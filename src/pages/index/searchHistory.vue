@@ -1,22 +1,25 @@
 <template>
-	<view class="bg-gray-100">
-		<view class="fixed -top-5 py-10 bg-[#fff] z-50 w-full">
+	<view>
+		<customNav>
+			<view @click="gotoBack" class="ml-3"><uni-icons type="back" size="24"></uni-icons></view>
 			<!-- 搜索框 -->
 			<view class="bg-white w-full py-10 ">
 				<view class="w-full flex items-center">
 					<view
-						class="flex items-center mx-14  bg-[#F5F6F8]  h-30 w-175 rounded-40 border-1 border-[#E3E3E3] text-15 text-[#333]">
-						<input class="ml-15" v-model="searchvalue" placeholder="搜索" type="text" />
-						<image src="/static/mine/searchhistory.png" class="w-16 h-16 mr-12" @confirm="search" />
+						class="flex items-center ml-5  bg-[#F5F6F8]  h-30 w-175 rounded-40 border-1 border-[#E3E3E3] text-15 text-[#333]">
+						<input class="ml-15" v-model="searchvalue" placeholder="搜索" type="text" @confirm="search" />
+						<image src="/static/mine/searchhistory.png" class="w-16 h-16 mr-12 reactive z-10" @click="search" />
 					</view>
 				</view>
 			</view>
 			<!-- 搜索框 -->
+		</customNav>
+		<view class="fixed top-70 py-10 bg-[#fff] z-50 w-full">
 			<!-- 搜索历史 -->
 			<view class="w-full mt-5" v-if="isShowHistory">
 				<view v-if="pageData.searchHistoryList.length">
-					<view class="flex px-15 justify-between">
-						<view>搜索历史:</view>
+					<view class="flex px-15 justify-between mb-10">
+						<view class="text-17 font-bold">历史搜索:</view>
 						<view @click="empty">
 							<image src="/static/mine/ashbin.png" class="w-20 h-20" />
 						</view>
@@ -50,7 +53,7 @@
 			</view>
 			<!-- 菜单 -->
 		</view>
-		<view class="mt-100" v-show="!isShowHistory">
+		<view class="mt-90" v-show="!isShowHistory">
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
 				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
 					class="h-screen flex items-center justify-center">
@@ -202,6 +205,15 @@ const empty = () => {
 		}
 	});
 
+}
+const gotoBack = ()=>{
+  let pages = getCurrentPages()
+  if (pages.length == 1) {
+    uni.switchTab({url:'/pages/index/index'})
+  }
+  else {
+    uni.navigateBack({delta: 1})
+  }
 }
 onReachBottom(() => {
 	let currentIndex = pageData.currentIndex

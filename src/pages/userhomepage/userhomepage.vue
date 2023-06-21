@@ -1,24 +1,31 @@
 <template>
 	<view v-if="pageInfo.mineMessage.guguId">
-		<view class="">
-			<image :src="pageInfo.mineMessage.background" class="w-full" mode="scaleToFill"></image>
-		</view>
-		<view class="bg-[#fff] w-screen  px-14 relative -top-20" style="border-radius: 35rpx 35rpx 0px 0px;">
-			<view>
-				<view class="relative bottom-24 border-2 border-[#fff] w-80 rounded-full h-80 iconShadow"
-					@click="skipPerson">
-					<image :src="pageInfo.mineMessage.icon" class="w-76 h-76 rounded-full "></image>
+		<customNav>
+			<view @click="gotoBack" class="ml-3 mt-5"><uni-icons type="back" size="24"></uni-icons></view>
+			<view>咕咕行</view>
+      </customNav>
+		<view class="bg-[#fff] w-screen py-20 px-14">
+			<view class="flex  pb-15 items-center justify-between">
+				<view class="flex">
+					<view class="border-2 border-[#fff] w-80 rounded-full h-80 iconShadow" @click="skipPerson">
+						<image :src="pageInfo.mineMessage.icon" class="w-76 h-76 rounded-full" />
+					</view>
+					<view class="mx-11 pt-10">
+						<view class="text-21 flex items-center">
+							{{ pageInfo.mineMessage.nickname }}
+						</view>
+						<view class=" text-14 flex items-center pt-18">
+							<image src="/static/mine/ID.png" class="w-15 h-15 " />
+							<text class="ml-5 mr-15">{{ pageInfo.mineMessage.guguId }}</text>
+							<!-- 	<image src="/static/mine/copy.png" class="w-15 h-15 ml-10" @click.stop="copy(pageInfo.mineMessage.guguId)" /> -->
+						</view>
+					</view>
 				</view>
-				<view class="-mt-10 mb-10 font-bold text-21 flex items-center">
-					{{ pageInfo.mineMessage.nickname }}
-					<image src="/static/mine/vip.png" class="w-47 h-19 mx-5"></image>
-					<image src="/static/mine/dealer.png" class="w-57 h-19"></image>
-				</view>
-				<view class="mb-10 text-14 flex items-center">
-					<image src="/static/mine/ID.png" class="w-15 h-15 "></image>
-					<text class="ml-5 mr-15">{{ pageInfo.mineMessage.guguId }}</text>
-					<image src="/static/mine/copy.png" class="w-15 h-15 ml-10"
-						@click.stop="copy(pageInfo.mineMessage.guguId)"></image>
+				<view>
+					<view class="bg-[#F8CF01] h-28 w-69 rounded-14 leading-28 text-center text-[#333] text-13"
+						@click="attention">
+						{{ pageInfo.mineMessage.isFocus ? '已关注' : '关注ta' }}
+					</view>
 				</view>
 			</view>
 			<view class="flex text-14">
@@ -36,26 +43,24 @@
 					<view class="textStyle">&nbsp;获赞</view>
 				</view>
 			</view>
-			<view>
-				<view class="Express text-14 " style="font-family: Source Han Sans SC;">
-					<view class="info">
-						<view :class="{ hide: !iSinfo }">
-							<view v-if="pageInfo.mineMessage.introduce">
-								{{ pageInfo.mineMessage.introduce }}
-							</view>
-							<view v-else>
-								这家伙很懒，连介绍都没写~~
-							</view>
+			<view class="Express text-14">
+				<view class="info">
+					<view :class="{ hide: !iSinfo }">
+						<view v-if="pageInfo.mineMessage.introduce">
+							{{ pageInfo.mineMessage.introduce }}
 						</view>
-						<!-- <text @tap="showinfo" v-if="!iSinfo">展开</text> -->
+						<view v-else>
+							这家伙很懒，连介绍都没写~~
+						</view>
 					</view>
-					<!-- <text @tap="showinfo" v-if="iSinfo" class="hidebtn">收起</text> -->
+					<!-- <text @tap="showinfo" v-if="!iSinfo">展开</text> -->
 				</view>
+				<!-- <text @tap="showinfo" v-if="iSinfo" class="hidebtn">收起</text> -->
 			</view>
 
 		</view>
 		<!-- 菜单 -->
-		<view class="sticky -top-5 z-50 bg-[#fff] ml-14 w-full  -mt-25 pt-16">
+		<view class="sticky -top-5 z-50 bg-white ml-14 w-full  -mt-25 pt-10">
 			<view class="flex ">
 				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
 					@click="changeWaterfall(index)">
@@ -67,7 +72,6 @@
 				</view>
 			</view>
 		</view>
-
 		<!-- 菜单 -->
 		<view class="pt-13 bg-gray-100">
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
@@ -83,14 +87,17 @@
 				</view>
 			</view>
 		</view>
+		<loginPop :isShow="pageData.isShowLoginPop" @close="pageData.isShowLoginPop = false"></loginPop>
 	</view>
 </template>
 
 <script setup>
+import { getTokenValue } from "@/utils/utils"
 import waterfall from '@/components/index/waterfall.vue'
+import { userFans, userFansRemove } from "@/api/opus/index"
 import { userhomepage, homepageopus } from "@/api/mine/index.js"
-import { ref, onMounted, reactive, watch, computed, getCurrentInstance } from 'vue'
-import { onShow, onReachBottom, onPageScroll, onLoad } from "@dcloudio/uni-app"
+import { ref, reactive, watch } from 'vue'
+import { onReachBottom, onPageScroll, onLoad } from "@dcloudio/uni-app"
 import useLoginTokenStore from '@/store/modules/loginToken'
 import _ from 'lodash'
 const waterfallItems = [{
@@ -101,6 +108,7 @@ const waterfallItems = [{
 	}
 }]
 const pageData = reactive({
+	isShowLoginPop: false,
 	masterId: '',
 	scrollTop: 0,
 	currentIndex: 0,
@@ -108,6 +116,11 @@ const pageData = reactive({
 })
 watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
 	pageData.waterfallItems = _.cloneDeep(waterfallItems)
+	userhomepage({
+		masterId: pageData.masterId
+	}).then(reslove => {
+		pageInfo.mineMessage = reslove.data.userInfo
+	})
 	changeWaterfall(pageData.currentIndex)
 })
 onLoad((option) => {
@@ -169,6 +182,29 @@ onReachBottom(() => {
 	}
 })
 
+const attention = () => {
+	let action = pageInfo.mineMessage.isFocus ? 0 : 1
+	if (getTokenValue()) {
+		let opusAttention = action ? userFans : userFansRemove
+		opusAttention({ id: pageInfo.mineMessage.userId }).then(res => {
+			if (action) {
+				pageInfo.mineMessage.isFocus = true
+
+			} else {
+				pageInfo.mineMessage.isFocus = false
+			}
+			uni.showToast({
+				title: (action ? '' : '取消') + '关注成功',
+				icon: 'none',
+				duration: 2000
+			})
+		})
+	}
+	else {
+		pageData.isShowLoginPop = true
+	}
+
+}
 function copy(value) {
 	uni.setClipboardData({
 		data: value, //要被复制的内容
@@ -187,6 +223,15 @@ const skipPerson = () => {
 	uni.navigateTo({
 		url: '/pages/personCenter/personCenter'
 	})
+}
+const gotoBack = ()=>{
+  let pages = getCurrentPages()
+  if (pages.length == 1) {
+    uni.switchTab({url:'/pages/index/index'})
+  }
+  else {
+    uni.navigateBack({delta: 1})
+  }
 }
 </script>
 
@@ -217,12 +262,11 @@ const skipPerson = () => {
 
 .Express {
 	line-height: 24rpx;
-	font-family: Source Han Sans SC;
 	font-weight: 300;
 	color: #999999;
 	display: flex;
 	flex-direction: column;
-	padding: 30upx 0;
+	padding: 30upx 0 40upx;
 	position: relative;
 
 	.info {
@@ -279,4 +323,5 @@ const skipPerson = () => {
 	border-right: 1px solid gray;
 	transform: scale(0.5);
 	transform-origin: left bottom;
-}</style>
+}
+</style>
