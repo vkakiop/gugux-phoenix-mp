@@ -5,7 +5,7 @@
 			<swiper-item v-for="(item, index) in pageData.list" :key="index">
 				<view v-if="index == pageData.current" @click="handleVideo(index)" class="w-screen h-screen">
 					<video autoplay class="w-screen h-screen fixed" :id="'video' + index" :src="item.cover.content" loop
-						:controls="false" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false"
+						:controls="true" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false"
 						@error="videoErrorCallback">
 					</video>
 					<view v-if="pageData.status == 1" class="icon_play w-full h-full absolute w-50 h-50">
