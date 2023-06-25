@@ -12,7 +12,7 @@
       </customNav>
       <opus-article :detail="pageData.detail" v-if="pageData.detail.opusType == 1"></opus-article>
       <!--opus-video :detail="pageData.detail" v-else-if="pageData.detail.opusType == 2"></opus-video-->
-      <view id="comment_list"><comment ref="commentRef" :id="pageData.detail.id" @reply-finish="getData()"></comment></view>
+      <view id="comment_list"><comment ref="commentRef" :id="pageData.detail.id" :createdBy="pageData.detail.createdBy" @reply-finish="getData()"></comment></view>
       <view class="h-50"></view>
       <view class="fixed bottom-0 h-50 w-screen bg-[#f7f7f7]">
         <view class="mx-20 flex justify-between mt-12">
@@ -56,6 +56,12 @@
       </u-popup>
       <loginPop :isShow="pageData.isShowLoginPop" @close="pageData.isShowLoginPop = false"></loginPop>
     </view>
+    <view v-else-if="pageData.isLoadError">
+      <u-empty
+          mode="data" text="获取文章错误"
+          icon="/static/img/nodata.png"
+      />
+    </view>
 </template>
 
 <script setup>
@@ -85,6 +91,7 @@ watch(()=>loginTokenStore.get().accessToken,(newVal,oldVal)=>{
 const pageData = reactive({
   //id: '1601683533353328803',
   id:'',
+  isLoadError:false,
   traceInfo:'',
   isShowLoginPop:false,
   isShowCommentPage:true,

@@ -51,7 +51,7 @@
 		</swiper>
 		<u-popup :show="pageData.show" @close="closeBox">
 			<view class="container">
-				<comment ref="commentRef" :id="pageData.commentid" :articleType="2"></comment>
+				<comment ref="commentRef" :id="pageData.commentid" :articleType="2"   :createdBy="pageData.createdBy" ></comment>
 			</view>
 			<view
 				class="flex items-center ml-14  mb-14 bg-[#f5f6f8]  h-39 w-350 rounded-19 border-1 border-[#E3E3E3] text-14"
@@ -88,6 +88,7 @@ const open = () => {
 }
 const isShare = ref(false)
 const pageData = reactive({
+	createdBy:'',
 	commentid: '',
 	id: '',
 	isShowLoginPop: false,
@@ -237,6 +238,7 @@ const like = (item) => {
 	}
 }
 const openBox = (item) => {
+	pageData.createdBy=item.createdBy
 	pageData.commentid = item.id
 	pageData.show = true;
 }
