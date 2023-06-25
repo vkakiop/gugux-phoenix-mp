@@ -1,6 +1,6 @@
 <template>
     <view class="comment">
-        <view v-if="pageData.total == -1 || pageData.total == 0">
+        <view class="empty" v-if="pageData.total == -1 || pageData.total == 0">
             <u-empty
                     mode="data" text="暂时没有评论"
                     icon="/static/img/nodata.png"
@@ -21,7 +21,7 @@
                             <image :src="item.userIcon"></image>
                         </view>
                         <view class="contain">
-                            <view class="name">{{ item.userName }}</view>
+                            <view class="name">{{ item.userName }} <view v-if="createdBy == item.userId" class="createdBy">作者</view></view>
                             <rich-text class="content" v-html="renderTxt(item.content)"></rich-text>
                             <view class="time">
                                 {{formatedCommentDate(item.createTime) }}<text class="replys" @click="fatherReply(item,index)">　回复</text>
@@ -31,7 +31,7 @@
                                             <image :src="row.userIcon"></image>
                                         </view>
                                         <view class="contain-contain">
-                                            <view class="name">{{ row.userName }} <image src="/static/img/right.png"></image> {{ row.replyName }}</view>
+                                            <view class="name">{{ row.userName }} <view v-if="createdBy == row.userId"  class="createdBy">作者</view><image src="/static/img/right.png"></image> {{ row.replyName }} <view v-if="createdBy == row.replyId" class="createdBy">作者</view></view>
                                             <rich-text class="content" v-html="renderTxt(row.content)"></rich-text>
                                             <view class="time">
                                                 {{formatedCommentDate(row.createTime) }}<text class="replys" @click="childReply(item,row,index)">　回复</text>
@@ -82,7 +82,7 @@
                             <image :src="item.userIcon"></image>
                         </view>
                         <view class="contain">
-                            <view class="name">{{ item.userName }}</view>
+                            <view class="name">{{ item.userName }} <view v-if="createdBy == item.userId"  class="createdBy">作者</view></view>
                             <rich-text class="content" v-html="renderTxt(item.content)"></rich-text>
                             <view class="time">
                                 {{formatedCommentDate(item.createTime) }}<text class="replys" @click="fatherReply(item,index)">　回复</text>
@@ -92,7 +92,7 @@
                                             <image :src="row.userIcon"></image>
                                         </view>
                                         <view class="contain-contain">
-                                            <view class="name">{{ row.userName }} <image src="/static/img/right.png"></image> {{ row.replyName }}</view>
+                                            <view class="name">{{ row.userName }} <view v-if="createdBy == row.userId" class="createdBy">作者</view> <image src="/static/img/right.png"></image> {{ row.replyName }}<view v-if="createdBy == row.replyId" class="createdBy">作者</view></view>
                                             <rich-text class="content" v-html="renderTxt(row.content)"></rich-text>
                                             <view class="time">
                                                 {{formatedCommentDate(row.createTime) }}<text class="replys" @click="childReply(item,row,index)">　回复</text>
@@ -146,6 +146,10 @@ const props = defineProps({
     id:{
         type:String,
         default:''
+    },
+    createdBy:{
+        type:String,
+        default:'' //作者id
     },
     articleType:{
         type:Number,
@@ -420,7 +424,21 @@ image{
     width:100%;
     height: 100%;
 }
+.createdBy{
+    background: #F8CF01;
+    border-radius: 7rpx;
+    font-size: 19rpx;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    color: #272A29;
+    display: inline-block;
+    padding:2rpx 5rpx;
+    margin:0 5rpx;
+}
 .comment{
+    .empty{
+        margin:30rpx 0;
+    }
     .comment-list{
         padding:0 20rpx;
         .total{
@@ -449,6 +467,9 @@ image{
                     font-family: Microsoft YaHei;
                     font-weight: 400;
                     color: #999999;
+                    display: flex;
+                    align-items: center;
+                    flex-wrap: wrap;
                     image{
                         width:16rpx;
                         height: 25rpx;
