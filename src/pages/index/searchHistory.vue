@@ -25,7 +25,7 @@
 							<image src="/static/mine/ashbin.png" class="w-20 h-20" />
 						</view>
 					</view>
-					<view class="w-full flex flex-wrap px-15">
+					<view class="w-full flex flex-wrap px-12">
 						<view v-for="(item, index) in pageData.searchHistoryList" :key="index"
 							class="bg-[#F5F6F8] w-76 h-38 my-5 mr-14 rounded-10 text-center leading-38">
 							<text @click='handlehistory(item)'>{{ item }}</text>
