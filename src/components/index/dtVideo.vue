@@ -12,7 +12,7 @@
 						<image class="w-64 h-64" src="@/static/opus/icon_play.png" />
 					</view>
 					<view class="info w-275 pl-14">
-						<view v-if="item.recommendedCity"   class="flex items-center text-13 mb-15 bg-[#838383]  rounded-9 w-80  justify-center  h-19  bg-opacity-5" ><image src="@/static/opus/icon_location_white.png" class="w-9 h-11 mr-4" />{{ item.recommendedCity }}</view>
+						<view v-if="item.recommendedCity"   class="flex items-center text-13 mb-15 bg-[#838383]  rounded-9 w-90  justify-center  h-19  bg-opacity-5" ><image src="@/static/opus/icon_location_white.png" class="w-9 h-11 mr-4" />{{ item.recommendedCity }}</view>
 						<view class="font-bold h-17 leading-16 text-17">@{{ item.author }} <image src="/static/mine/shop.png" class="w-19 h-19" v-if="item.hasShop"></image></view>
 						<view class="text-14 leading-16 my-11">发布于：{{ item.createdTime }}</view>
 						<view class="text-16 leading-25">{{ item.brief }}</view>
@@ -67,7 +67,7 @@
 <script setup>
 import comment from "@/components/common/comment.vue"
 import { opusdetails } from "@/api/mine/index"
-import { postVideorecommend } from "@/api/recvideo/index"
+import { opusrecommend } from "@/api/recvideo/index"
 import { getTokenValue } from "@/utils/utils"
 import { opusInfo, opusCollect, opusLike, userFans, userFansRemove } from "@/api/opus/index"
 import { getCurrentInstance, reactive, watch, ref } from 'vue'
@@ -106,7 +106,7 @@ const opusDetail = () => {
 opusDetail()
 const getDataApi = () => {
 	console.log('发请求');
-	postVideorecommend({}).then(res => {
+	opusrecommend({}).then(res => {
 		console.log('视频', res);
 		pageData.list = [...pageData.list, ...res.data]
 		// pageData.lastVideoId = res.data[res.data.length - 1].id

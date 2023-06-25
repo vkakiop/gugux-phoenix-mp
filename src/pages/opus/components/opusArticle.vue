@@ -7,10 +7,10 @@
              :src="detail.cover.itemType == 2 ? detail.cover.content : detail.cover.thumbnail"
              @click="previewCover(detail.cover)"
       />
-      <view class="absolute left-0 bottom-0 h-42 w-full text-white text-13">
+      <view v-if="detail.cover && detail.cover.name" class="absolute left-0 bottom-0 h-42 w-full text-white text-13">
         <view class="flex ml-14 mt-10">
           <image class="w-9 h-11 mt-3" src="@/static/opus/icon_location_white.png"></image>
-          <view class="ml-5">{{detail.cover.name}} {{ computedLocation(detail.cover.x, detail.cover.y) }}</view>
+          <view class="ml-5 line-clamp-1">{{detail.cover.name}} {{ computedLocation(detail.cover.x, detail.cover.y) }}</view>
         </view>
       </view>
     </view>

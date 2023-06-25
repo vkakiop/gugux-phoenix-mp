@@ -12,12 +12,12 @@
       </customNav>
       <opus-article :detail="pageData.detail" v-if="pageData.detail.opusType == 1"></opus-article>
       <!--opus-video :detail="pageData.detail" v-else-if="pageData.detail.opusType == 2"></opus-video-->
-      <view id="comment_list"><comment ref="commentRef" :id="pageData.detail.id" :articleType="pageData.isShowCommentPage ? 2 : 1"></comment></view>
+      <view id="comment_list"><comment ref="commentRef" :id="pageData.detail.id" @reply-finish="getData()"></comment></view>
       <view class="h-50"></view>
-      <view class="fixed bottom-0 h-50 w-screen bg-white">
+      <view class="fixed bottom-0 h-50 w-screen bg-[#f7f7f7]">
         <view class="mx-20 flex justify-between mt-12">
           <view>
-            <button class="bg-white" open-type="share"><img class="w-24 h-24 mb-5" src="@/static/opus/icon_share.png"></button>
+            <button class="bg-[#f7f7f7]" open-type="share"><img class="w-24 h-24 mb-5" src="@/static/opus/icon_share.png"></button>
           </view>
           <view class="flex">
             <debounce @debounce="like">
@@ -62,7 +62,7 @@
 import {reactive, ref, watch, getCurrentInstance, nextTick} from "vue"
 import { opusInfo,opusCollect,opusLike,userFans,userFansRemove } from "@/api/opus/index"
 import { getTokenValue } from "@/utils/utils"
-import {onLoad} from '@dcloudio/uni-app'
+import {onLoad,onPageScroll} from '@dcloudio/uni-app'
 import opusArticle from './components/opusArticle'
 import comment from "@/components/common/comment.vue"
 import useLoginTokenStore from '@/store/modules/loginToken'
@@ -90,6 +90,7 @@ const pageData = reactive({
   isShowCommentPage:true,
   isShowCommentPop:false,
   observeDistance:0,
+  scrollTop:0,
   detail: {
     cover: {},
     opusType: 1,
@@ -97,6 +98,10 @@ const pageData = reactive({
     recommendedCity: [],
     topics:[],
   }
+})
+
+onPageScroll((res) => {
+  pageData.scrollTop = res.scrollTop
 })
 
 const attention = ()=>{
@@ -176,12 +181,25 @@ const like = ()=>{
 }
 
 const commentAdd = ()=>{
-  if (pageData.isShowCommentPage) {
-    commentRef.value.init(true)
-  }
-  else {
-    pageData.isShowCommentPop = true
-  }
+  commentRef.value.init(true)
+  uni.createSelectorQuery().select('#comment_list').boundingClientRect(res=>{
+    console.log('res:',res)
+
+    let systemInfo = uni.getSystemInfoSync()
+    console.log('systemInfo',systemInfo)
+
+    uni.pageScrollTo({
+      scrollTop: pageData.scrollTop + res.top - res.height + 50,
+      duration: 300
+    })
+  }).exec(res=>{
+  })
+  // if (pageData.isShowCommentPage) {
+  //   commentRef.value.init(true)
+  // }
+  // else {
+  //   pageData.isShowCommentPop = true
+  // }
 }
 
 const comment2Add = ()=>{
