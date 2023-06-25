@@ -50,7 +50,7 @@ const gohomepage=(item)=>{
 const godetail = (item) => {
   if (item.cover.itemType == 2) {
     uni.navigateTo({
-      url: `/pages/opus/index?id=${item.id}`
+      url: `/pages/opus/index?id=${item.id}?traceInfo=${encodeURIComponent(item.traceInfo)}`
     })
   } else if (item.cover.itemType == 3) {
     if(props["itemKey"]=='mine'){
