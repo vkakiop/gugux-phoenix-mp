@@ -1,6 +1,6 @@
 <template>
     <view class="emergencycontact">
-        <image src="/static/emergencycontact/bg.png" alt=""></image>
+        <image src="/static/emergencycontact/bg.jpg" alt=""></image>
         <view class="contain">
             <view>您的好友{{pageData.data.name}}({{ pageData.data.phone }})邀请您
             成为他的紧急联系人</view>
@@ -103,6 +103,8 @@ const getMessage = ()=>{
     }
 }
 const saveForm = ()=>{
+    uni.navigateTo({ url: '/pages/emergencycontact/success?id=' + encodeURIComponent(pageData.id) +'&redirect='+encodeURIComponent(JSON.stringify(pageData.redirect))})
+    return
     let rlt = vaildPhone();
     if(!rlt){
         return
@@ -122,7 +124,7 @@ const saveForm = ()=>{
             name:pageData.data.name,
         }
         emergencysign(obj).then((res)=>{
-            uni.navigateTo({ url: '/pages/emergencycontact/success?id=' + encodeURIComponent(123) +'&redirect='+encodeURIComponent(JSON.stringify(pageData.redirect))})
+            uni.navigateTo({ url: '/pages/emergencycontact/success?id=' + encodeURIComponent(pageData.id) +'&redirect='+encodeURIComponent(JSON.stringify(pageData.redirect))})
         })
     }
 }
@@ -190,7 +192,7 @@ const  doLoop = ()=>{
             .num{
                 width:420rpx;
                 .input{
-                    width:100%;
+                    width:80%;
                     color:#929292;
                     background: #E9EBEF;
                     border-radius: 150rpx;
@@ -199,12 +201,12 @@ const  doLoop = ()=>{
             }
             .vaid{
                 width:260rpx;
-                background: #4BA1F8;
+                background: #333333;
                 border-radius: 150rpx;
                 padding:20rpx 40rpx;
                 text-align: center;
                 font-weight: 400;
-                color: #FFFFFF;
+                color: #F8CF01;
             }
             .forbid{
                 background: #929292;
@@ -218,8 +220,8 @@ const  doLoop = ()=>{
             line-height: 80rpx;
             font-weight: 400;
             text-align: center;
-            color:#fff;
-            background: #4BA1F8;
+            color:#000000;
+            background: #F8CF01;
         }
     }
 }

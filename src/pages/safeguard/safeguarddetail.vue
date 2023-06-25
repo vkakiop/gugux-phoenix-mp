@@ -8,45 +8,50 @@
       <view>
         <view>电话：<text>{{ pageData.data.phone }}</text>
         </view>
-        <view @click="callPhone(pageData.data.phone)">拨打电话</view>
+        <view @click="callPhone(pageData.data.phone)">
+          <image class="phone" @click="playAudio(1,item)" src="/static/img/phone.png"  mode="widthFix"/></view>
       </view>
-      <view>
+      <view class="red">
         <view>现场地址：</view>
-        <view @click="goNav">去导航</view>
+        <view  @click="goNav"><image class="phone" src="/static/img/location.png"  mode="widthFix"/></view>
       </view>
-      <view>{{ pageData.data.address }}</view>
+      <view class="red">{{ pageData.data.address }}</view>
     </view>
     <view class="page-section page-section-gap" style="width: 100%; background: #ddd; height: 300rpx;">
       <!-- <map style="width: 100%; height: 100vh;" :latitude="pageData.data.latitude" :longitude="pageData.data.longitude" :markers="pageData.data.covers"> -->
       <!-- </map> -->
     </view>
     <view class="box">
-      <text>现场图片：</text>
+      <view>现场图片：</view>
       <view class="scroll">
           <image v-for="(item,index) in pageData.data.imgs" @click="previewImage(pageData.data.imgs,index)" :key="index" :src="item" alt=""></image>
       </view>
     </view>
     <view class="box">
-      <text>现场视频：</text>
+      <view>现场视频：</view>
       <view class="relative" v-for="(item,index) in pageData.data.video" :key="index" @click="previewMedia(item.address)">
         <image :src="item.cover" class="rounded-8 iconplayphoto" mode="widthFix"/>
         <view class="icon_play w-full h-full absolute w-50 h-50"><image class="w-64 h-64" src="@/static/opus/icon_play.png"/></view>
       </view>
     </view>
-    <view class="box">
-      <text>现场录音：</text>
+    <view class="box last">
+      <view>现场录音：</view>
       <view class="audio-box">
         <view class="audio-row" v-for="(item,index) in pageData.data.audio" :key="index">
           <view class="audio-left">
             <view>{{ item.name }}</view>
-            <text>{{ item.time }}</text>
+            <text class="time">{{ item.time }}</text>
           </view>
           <view class="audio-right">
-            <image @click="playAudio(0,item)" v-if="item.play == 0 ||item.play == undefined" src="/static/img/s1.svg" class="rounded-8 iconplayphoto" mode="widthFix"/>
-            <image @click="playAudio(1,item)" v-else-if="item.play == 1" src="/static/img/s2.svg" class="rounded-8 iconplayphoto" mode="widthFix"/>
+            <image @click="playAudio(0,item)" v-if="item.play == 0 ||item.play == undefined" src="/static/img/p1.png" class="rounded-8 iconplayphoto" mode="widthFix"/>
+            <image @click="playAudio(1,item)" v-else-if="item.play == 1" src="/static/img/p2.png" class="rounded-8 iconplayphoto" mode="widthFix"/>
           </view>
         </view>
       </view>
+    </view>
+    <view class="alarm">
+      <view v-if="true">您的好友已主动取消安全守护报警</view>
+      <view v-else>当前事件已结束</view>
     </view>
   </view>
 </template>
@@ -166,21 +171,52 @@ const playAudio = (type,item) =>{
 <style lang="scss" scoped>
 .navi {
   padding: 20rpx;
+  background-color: #F5F5F5;
+  position: relative;
   .userinfo{
+    background-color: #fff;
+    border-radius: 21rpx;
+    padding: 20rpx;
     >view{
       width: 100%;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      font-size: 29rpx;
+      font-weight: 400;
+      color: #000000;
+      >view{
+        margin:10rpx 0;
+      }
+      .phone{
+        width:40rpx;
+        height: 40rpx;
+      }
+    }
+    .red{
+      color:#FF5555;
     }
   }
   .box{
+    background-color: #fff;
+    border-radius: 21rpx;
+    padding: 20rpx;
+    margin:40rpx 0;
+    color:#000000;
+    font-size: 31rpx;
+    font-family: Source Han Sans SC;
+    font-weight: 400;
+    >view{
+      padding-bottom: 20rpx;
+    }
     .scroll{
       overflow: scroll;
      white-space: nowrap;
       image{
         width:150rpx;
         height: 150rpx;
-        margin-right: 30rpx;
+        margin-right: 25rpx;
+        border-radius: 21rpx;
       }
     }
     .iconplayphoto{
@@ -201,8 +237,19 @@ const playAudio = (type,item) =>{
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding:0 10rpx;
-        .audio-left{}
+        padding: 10rpx;
+        .audio-left{
+          font-size: 31rpx;
+          font-family: Source Han Sans SC;
+          font-weight: 400;
+          color: #000000;
+          .time{
+            font-size: 25rpx;
+            font-family: Source Han Sans SC;
+            font-weight: 400;
+            color: #999999;
+          }
+        }
         .audio-right{
           image{
             width:50rpx;
@@ -210,6 +257,28 @@ const playAudio = (type,item) =>{
           }
         }
       }
+    }
+  }
+  .last{
+    margin-bottom: 120rpx;
+  }
+  .alarm{
+    position: fixed;
+    bottom:0;
+    left: 0;
+    width:100%;
+    height: 100rpx;
+    text-align: center;
+    line-height: 100rpx;
+    background: #fff;
+    border: 0px solid #333333;
+    box-shadow: 0rpx 2rpx 10rpx 1rpx rgba(13,4,8,0.11);
+    border-radius: 21rpx 21rpx 0rpx 0rpx;
+    view{
+      font-size: 29rpx;
+      font-family: Source Han Sans SC;
+      font-weight: 400;
+      color: #F65A5A;
     }
   }
 }</style>

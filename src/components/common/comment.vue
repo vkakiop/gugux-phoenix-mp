@@ -141,7 +141,7 @@ import emoji from "@/utils/imconfig/emoji";
 import commentBox from "@/components/common/commentBox.vue"
 import {opuscomment,commentlike,commentlist,subcommentlist} from '@/api/comment/index'
 import useRouterStore from '@/store/modules/router'
-const emit = defineEmits(['debounce'])
+const emits = defineEmits(['reply-finish'])
 const props = defineProps({
     id:{
         type:String,
@@ -377,6 +377,7 @@ const commentClose = (data,str)=>{
         })
         pageData.indexList[pageData.index].subCommentNum += 1;
     }
+    emits('reply-finish');
     pageData.mainCommentId = '';
     pageData. replyId = '';
     pageData.replyCommentId = '';

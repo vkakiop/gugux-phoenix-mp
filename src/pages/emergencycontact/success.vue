@@ -1,6 +1,6 @@
 <template>
     <view class="emergencycontact">
-        <image src="/static/emergencycontact/bg.png" alt=""></image>
+        <image src="/static/emergencycontact/bg.jpg" alt=""></image>
         <view class="contain">
             <view>感谢您，</view>
             <view>紧急联系人绑定成功</view>
@@ -9,22 +9,23 @@
             <view class="btn" @click="showBox(true)">
                 打开咕咕行app
             </view>
-            <!-- <view class="">
-                <span class="span1" @click="goApp">关注咕咕行公众号</span>
+            <view class="">
+                <text class="span1" @click="goApp">关注咕咕行公众号</text>
                 <view class="card">
                     <view class="img">
-                        <img src="@/assets/images/emergencycontact/head.png" alt="">
+                        <image src="/static/emergencycontact/head.png" alt=""></image>
                     </view>
-                    <ul class="card-ul">
-                        <li>咕咕行app</li>
-                        <li>机车生活分享社区、用车知识加油站、</li>
-                        <li>海量陆游游记聚集地...</li>
-                    </ul>
+                    <view class="card-ul">
+                        <view>咕咕行app</view>
+                        <view>机车生活分享社区、用车知识加油站、</view>
+                        <view>海量陆游游记聚集地...</view>
+                    </view>
                 </view>
                 <view class="btn btn2">
                     关注公众号
                 </view>
-            </view> -->
+                <official-account bindload="bindload" binderror="binderror"></official-account>
+            </view>
         </view>
     </view>
 </template>
@@ -90,36 +91,38 @@ const showBox = (value)=>{
             line-height: 100rpx;
             font-weight: 400;
             text-align: center;
-            color:#fff;
-            background: #4BA1F8;
+            color:#333333;
+            background: #F8CF01;
             margin-top: 100rpx;
             margin-bottom: 60rpx;
         }
         .card{
             background-color: #fff;
             padding:20rpx;
-            margin:40rpx 0;
+            margin-top:40rpx;
             display: flex;
             justify-content: flex-start;
             align-items: center;
             .img{
                 width:200rpx;
                 margin-right:20rpx;
-                img{
+                height: 150rpx;
+                image{
                     width:100%;
+                    height: 100%;
                 }
             }
             .card-ul{
                 font-size: 24rpx;
                 color:#000;
-                li{
+                view{
                     margin:20rpx 0;
                 }
             }
         }
         .btn2{
-            border-radius: 20rpx;
-            margin-top:20rpx;
+            border-radius: 0 0 20rpx 20rpx;
+            margin-top:0rpx;
         }
     }
 }
