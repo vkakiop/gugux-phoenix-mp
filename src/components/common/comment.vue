@@ -2,8 +2,8 @@
     <view class="comment">
         <view v-if="pageData.total == -1 || pageData.total == 0">
             <u-empty
-                    mode="data"
-                    icon="http://cdn.uviewui.com/uview/empty/car.png"
+                    mode="data" text="暂时没有评论"
+                    icon="/static/img/nodata.png"
             >
             </u-empty>
         </view>

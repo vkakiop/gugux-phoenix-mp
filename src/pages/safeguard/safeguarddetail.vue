@@ -18,8 +18,8 @@
       <view class="red">{{ pageData.data.address }}</view>
     </view>
     <view class="page-section page-section-gap" style="width: 100%; background: #ddd; height: 300rpx;">
-      <!-- <map style="width: 100%; height: 100vh;" :latitude="pageData.data.latitude" :longitude="pageData.data.longitude" :markers="pageData.data.covers"> -->
-      <!-- </map> -->
+      <map style="width: 100%; height: 300rpx;" :latitude="pageData.data.latitude" :longitude="pageData.data.longitude" :markers="pageData.data.covers">
+      </map>
     </view>
     <view class="box">
       <view>现场图片：</view>

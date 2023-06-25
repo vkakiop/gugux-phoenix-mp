@@ -2,12 +2,12 @@
 <template>
 	<view class="navi">
         <view class="page-section page-section-gap" style="width: 100%; background: #ddd; height: 100vh;">
-            <!-- <map style="width: 100%; height: 100vh;" :latitude="pageData.latitude" :longitude="pageData.longitude" :markers="pageData.covers">
-            </map> -->
+            <map style="width: 100%; height: 100vh;" :joinCluster="true" :latitude="pageData.data.latitude" :longitude="pageData.data.longitude" :markers="pageData.data.covers">
+      </map>
         </view>
         <view class="box">
             <view class="info">
-                <view> <image class="headimg" :src="pageData.data.headImg"  mode="widthFix"/> ：{{ pageData.data.name }}</view>
+                <view class="imgbox"> <image class="headimg" :src="pageData.data.headImg" /> 　{{ pageData.data.name }}</view>
                 <view>电话：{{ pageData.data.phone }}</view>
             </view>
             <view class="funk">
@@ -47,11 +47,25 @@ const pageData = reactive({
         address: '重庆市四川商会重庆市四川商会重庆市四川商会重庆市四川商会',
         latitude: 39.909,
         longitude: 116.39742,
-        covers:[{
-            latitude: 30.909,
-            longitude: 120.39742,
-            // iconPath: '../../../static/location.png'
+        covers: [{
+            latitude: 39.909,
+            longitude: 116.39742,
+            // iconPath: 'https://cdn.uviewui.com/uview/album/1.jpg',
+            // width:10,
+            // height:10,
+            // callout:{
+            //     borderWidth:10,
+            //     borderColor:'#000'
+            // }
         }]
+        // covers:[{
+            
+        //     latitude: 30.909,
+        //     longitude: 120.39742,
+        //     // iconPath: '../../../static/img/mark-icon.png'
+        //     // iconPath: '../../../static/location.png'
+        //     iconPath : 'static/location.png',
+        // }]
     }
 })
 onLoad((option)=>{
@@ -242,9 +256,14 @@ const callPhone = (phone) =>{
             font-family: Microsoft YaHei;
             font-weight: 400;
             color: #F8CF01;
+            .imgbox{
+                display: flex;
+                align-items: center;
+            }
             .headimg{
-                width: 30rpx;
-                height: 30rpx;
+                width: 45rpx;
+                height: 45rpx;
+                border-radius: 50%;
             }
         }
         .funk{
