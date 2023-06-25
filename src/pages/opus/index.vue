@@ -56,9 +56,9 @@
       </u-popup>
       <loginPop :isShow="pageData.isShowLoginPop" @close="pageData.isShowLoginPop = false"></loginPop>
     </view>
-    <view v-else-if="pageData.isLoadError">
+    <view v-else-if="pageData.isLoadError" class="w-screen h-screen flex justify-center items-center">
       <u-empty
-          mode="data" text="获取文章错误"
+          mode="data" text="获取文章失败"
           icon="/static/img/nodata.png"
       />
     </view>
@@ -233,10 +233,13 @@ const getData = ()=>{
 
 const getDataApi = (params)=>{
     opusInfo(params).then((res)=>{
-        pageData.detail = res.data
+      pageData.detail = res.data
       nextTick(()=>{
         observePage()
       })
+    }).catch(e=>{
+      pageData.isLoadError = true
+      pageData.detail.id = 0
     })
 }
 
