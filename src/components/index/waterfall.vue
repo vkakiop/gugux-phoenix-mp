@@ -13,7 +13,7 @@
     </view>
   </view>
   <view v-if="isComplete" class="text-center h-50 leading-50">
-    已经到底了
+    没有更多了
   </view>
 </template>
 <script setup>

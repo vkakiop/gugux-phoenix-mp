@@ -5,15 +5,16 @@
 			<swiper-item v-for="(item, index) in pageData.list" :key="index">
 				<view v-if="index == pageData.current" @click="handleVideo(index)" class="w-screen h-screen">
 					<video autoplay class="w-screen h-screen fixed" :id="'video' + index" :src="item.cover.content" loop
-						:controls="false" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false"
+						:controls="true" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false"
 						@error="videoErrorCallback">
 					</video>
 					<view v-if="pageData.status == 1" class="icon_play w-full h-full absolute w-50 h-50">
 						<image class="w-64 h-64" src="@/static/opus/icon_play.png" />
 					</view>
-					<view class="info">
-						<view class="font-bold h-17 leading-16 text-17">@{{ item.author }}</view>
-						<view class="text-14 leading-16">发布时间：{{ item.createdTime }}</view>
+					<view class="info w-275 pl-14">
+						<view class="flex items-center text-13 mb-15 bg-[#F4F4F4]  rounded-9 w-80  justify-center  h-19  bg-opacity-5" ><image src="@/static/opus/icon_location_white.png" class="w-9 h-11 mr-4" />{{ item.recommendedCity }}</view>
+						<view class="font-bold h-17 leading-16 text-17">@{{ item.author }} <image src="/static/mine/shop.png" class="w-19 h-19" v-if="item.hasShop"></image></view>
+						<view class="text-14 leading-16 my-11">发布于：{{ item.createdTime }}</view>
 						<view class="text-16 leading-25">{{ item.brief }}</view>
 					</view>
 					<view class="buttons text-sm">
@@ -92,7 +93,7 @@ const pageData = reactive({
 	isShowLoginPop: false,
 	lastVideoId: '',
 	list: [],
-	current: 0,
+	current: 0, //当前下标
 	status: 0, //0播放 1暂停
 })
 const opusDetail = () => {
@@ -104,11 +105,11 @@ const opusDetail = () => {
 }
 opusDetail()
 const getDataApi = () => {
-	postVideorecommend({
-		"lastVideoId": pageData.lastVideoId
-	}).then(res => {
+	console.log('发请求');
+	postVideorecommend({}).then(res => {
+		console.log('视频', res);
 		pageData.list = [...pageData.list, ...res.data]
-		pageData.lastVideoId = res.data[res.data.length - 1].id
+		// pageData.lastVideoId = res.data[res.data.length - 1].id
 	})
 }
 const { ctx } = getCurrentInstance()
@@ -262,11 +263,11 @@ const fetch = () => {
 const handleShare = () => {
 	isShare.value = true
 }
-onShow(() => {
-	if (!isShare.value) {
-		fetch()
-	}
-})
+// onShow(() => {
+// 	if (!isShare.value) {
+// 		fetch()
+// 	}
+// })
 const onShareTimeline = () => {
 	return onShareAppMessage()
 }
@@ -286,9 +287,8 @@ const onShareTimeline = () => {
 	.info {
 		z-index: 1;
 		position: absolute;
-		bottom: 200upx;
+		bottom: 140upx;
 		color: white;
-		text-indent: 1em;
 	}
 
 	.buttons {
@@ -296,7 +296,7 @@ const onShareTimeline = () => {
 		flex-direction: column;
 		position: absolute;
 		right: 0vw;
-		bottom: 12vh;
+		bottom: 140upx;
 		color: white;
 		text-align: center;
 		justify-content: center;

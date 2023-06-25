@@ -4,7 +4,7 @@
             <view class="comment">
                 <view class="contain">
                     <u--input
-                        placeholder="请输入内容"
+                        placeholder="请输入内容" always-embed="{{true}}" 
                         border="surround"
                         v-model="pageData.content"
                     ></u--input>
@@ -111,9 +111,9 @@ const sendMsg = ()=>{
         justify-content: space-between;
         align-items: center;
         // background-color: red;
-        input{
-            height: 50rpx;
-        }
+        // input{
+        //     height: 50rpx;
+        // }
     }
     .icon{
         overflow: auto;

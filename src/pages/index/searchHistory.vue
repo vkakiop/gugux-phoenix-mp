@@ -5,18 +5,19 @@
 			<!-- 搜索框 -->
 			<view class="bg-white w-full py-10 ">
 				<view class="w-full flex items-center">
-					<view
-						class="flex items-center ml-5  bg-[#F5F6F8]  h-30 w-175 rounded-40 border-1 border-[#E3E3E3] text-15 text-[#333]">
+					<view	class="flex items-center ml-5  bg-[#F5F6F8]  h-30 w-175 rounded-40 border-1 border-[#E3E3E3] text-15 text-[#333]">
 						<input class="ml-15" v-model="searchvalue" placeholder="搜索" type="text" @confirm="search" />
-						<image src="/static/mine/searchhistory.png" class="w-16 h-16 mr-12 reactive z-10" @click="search" />
+						<view class="px-12 relative z-50 flex items-center" @click="search">
+							<image src="/static/mine/searchhistory.png" class="w-16 h-16" />
+						</view>
 					</view>
 				</view>
 			</view>
 			<!-- 搜索框 -->
 		</customNav>
-		<view class="fixed top-70 py-10 bg-[#fff] z-50 w-full">
+		<view class="fixed top-70 pt-10 bg-[#fff] z-50 w-full">
 			<!-- 搜索历史 -->
-			<view class="w-full mt-5" v-if="isShowHistory">
+			<view class="w-full mt-5 py-15" v-if="isShowHistory">
 				<view v-if="pageData.searchHistoryList.length">
 					<view class="flex px-15 justify-between mb-10">
 						<view class="text-17 font-bold">历史搜索:</view>
@@ -24,7 +25,7 @@
 							<image src="/static/mine/ashbin.png" class="w-20 h-20" />
 						</view>
 					</view>
-					<view class="w-full flex flex-wrap px-15">
+					<view class="w-full flex flex-wrap px-12">
 						<view v-for="(item, index) in pageData.searchHistoryList" :key="index"
 							class="bg-[#F5F6F8] w-76 h-38 my-5 mr-14 rounded-10 text-center leading-38">
 							<text @click='handlehistory(item)'>{{ item }}</text>
@@ -39,7 +40,7 @@
 			</view>
 			<!-- 搜索历史 -->
 			<!-- 菜单 -->
-			<view class="w-full bg-white py-10" v-show="!isShowHistory">
+			<view class="w-full bg-white py-15" v-show="!isShowHistory">
 				<view class="flex ml-10">
 					<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-28 "
 						@click="changeWaterfall(index)">
@@ -53,7 +54,7 @@
 			</view>
 			<!-- 菜单 -->
 		</view>
-		<view class="mt-90" v-show="!isShowHistory">
+		<view class="mt-70" v-show="!isShowHistory">
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
 				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
 					class="h-screen flex items-center justify-center">
@@ -206,14 +207,14 @@ const empty = () => {
 	});
 
 }
-const gotoBack = ()=>{
-  let pages = getCurrentPages()
-  if (pages.length == 1) {
-    uni.switchTab({url:'/pages/index/index'})
-  }
-  else {
-    uni.navigateBack({delta: 1})
-  }
+const gotoBack = () => {
+	let pages = getCurrentPages()
+	if (pages.length == 1) {
+		uni.switchTab({ url: '/pages/index/index' })
+	}
+	else {
+		uni.navigateBack({ delta: 1 })
+	}
 }
 onReachBottom(() => {
 	let currentIndex = pageData.currentIndex
@@ -237,5 +238,4 @@ onReachBottom(() => {
 	font-family: Source Han Sans SC;
 	font-weight: 400;
 	color: #999999;
-}
-</style>
+}</style>
