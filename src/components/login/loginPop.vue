@@ -1,18 +1,18 @@
 <template>
   <u-popup :show="isShow" mode="bottom" round="10" :customStyle="{marginLeft:'0rpx',marginRight:'0rpx'}" @close="close">
-    <view class="mx-30 my-20">
-      <view class="text-20 text-[#272a29] font-bold">登录或注册</view>
+    <view class="mx-30 mt-20 mb-16">
+      <view class="text-18 text-[#000000] text-center font-bold">登录或注册</view>
       <view class="mt-20 text-13 flex items-center">
         <!--u-checkbox-group v-model="pageData.isAgreeItems">
           <u-checkbox shape="circle" activeColor="#4ba1f8" label=""></u-checkbox>
         </u-checkbox-group-->
-        <view class="text-16 leading-30 text-[#272a29]">
-          若手机号未注册将进入注册流程，注册即为同意<text class="text-[#f8cf01]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#f8cf01]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>
+        <view class="text-13 leading-22 text-[#333]">
+          若手机号未注册将进入注册流程，注册即为同意<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>
         </view>
       </view>
       <view class="mt-20">
-        <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber" class="h-40 leading-40 rounded-full bg-[#09bb07] active:bg-[#09b307] text-white text-14">微信一键登录</button>
-        <button @click="gotoLogin" class="mt-20 h-40 leading-40 rounded-full bg-[#f8cf01] active:bg-[#f0c801] text-[#333333] text-14">手机号登录/注册</button>
+        <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber" class="h-40 leading-40 rounded-full bg-[#51ab3a] active:bg-[#09b307] text-white text-14">微信一键登录</button>
+        <button @click="gotoLogin" class="mt-15 h-40 leading-40 rounded-full bg-[#e9ebef] active:bg-[#e4e5e9] text-[#929292] text-14">手机号登录/注册</button>
       </view>
       <!--u-popup :show="pageData.isDialogShow" mode="center" round="10" :customStyle="{marginLeft:'60rpx',marginRight:'60rpx'}">
         <view class="m-22">
