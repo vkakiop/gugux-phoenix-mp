@@ -65,8 +65,7 @@
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
 				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
 					class="h-500 flex items-center justify-center">
-					<u-empty mode="list" icon="http://cdn.uviewui.com/uview/empty/list.png">
-					</u-empty>
+					<u-empty  text="内容为空"   mode="list" icon="/static/img/nodata.png" />
 				</view>
 				<view v-show="waterIndex == pageData.currentIndex">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
