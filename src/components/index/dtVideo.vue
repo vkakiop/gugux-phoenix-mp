@@ -67,7 +67,7 @@
 <script setup>
 import comment from "@/components/common/comment.vue"
 import { opusdetails } from "@/api/mine/index"
-import { postVideorecommend } from "@/api/recvideo/index"
+import { opusrecommend } from "@/api/recvideo/index"
 import { getTokenValue } from "@/utils/utils"
 import { opusInfo, opusCollect, opusLike, userFans, userFansRemove } from "@/api/opus/index"
 import { getCurrentInstance, reactive, watch, ref } from 'vue'
@@ -106,7 +106,7 @@ const opusDetail = () => {
 opusDetail()
 const getDataApi = () => {
 	console.log('发请求');
-	postVideorecommend({}).then(res => {
+	opusrecommend({}).then(res => {
 		console.log('视频', res);
 		pageData.list = [...pageData.list, ...res.data]
 		// pageData.lastVideoId = res.data[res.data.length - 1].id
