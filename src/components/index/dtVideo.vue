@@ -117,7 +117,7 @@ const gohomepage = (item) => {
 	if (useLoginTokenStore().get().user) {
 		if (item.createdBy == useLoginTokenStore().get().user.id) {
 			uni.switchTab({
-				url: '/pages/mine/mine.vue'
+				url: '/pages/mine/mine'
 			})
 			return
 		}
