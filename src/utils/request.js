@@ -176,7 +176,7 @@ axios.defaults.adapter = function(config) { //自己定义个适配器，用来�
                     reject({data:JSONbig.parse(data),message:'请求失败',url:config.baseURL + buildURL(config.url, config.params, config.paramsSerializer)});
                 }
             },
-            fail:(err) => {
+            fail:(error) => {
                 // if(url.indexOf('cashride')>0){
                 //
                 // }
@@ -185,7 +185,11 @@ axios.defaults.adapter = function(config) { //自己定义个适配器，用来�
                 //         title: '网络异常，请重试！',
                 //         icon: 'none'
                 //     })
-                    reject({message:'网络异常，请重试！',url:config.baseURL + buildURL(config.url, config.params, config.paramsSerializer)});
+                let message = error + '';
+                if (typeof(error) == 'object') {
+                    message = error.message + ''
+                }
+                    reject({message:message,url:config.baseURL + buildURL(config.url, config.params, config.paramsSerializer)});
                 //}
             },
             complete:()=>{
