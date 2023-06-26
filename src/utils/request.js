@@ -7,6 +7,7 @@ import JSONBIG from 'json-bigint'
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 
 let baseUrl = import.meta.env.VITE_APP_BASE_API
+let ignoreErrorUrls = ['/gugux-services-location-api/app/security/safe/emergency/contact/help/add']
 
 // 创建axios实例
 const service = axios.create({
@@ -85,8 +86,6 @@ service.interceptors.response.use(res => {
         }
         if (code !== 200) {
             //Toast.fail(msg);
-            console.log('错误url:',oldres.url)
-            let ignoreErrorUrls = ['/gugux-services-location-api/app/security/safe/emergency/contact/help/add']
             let isFind = false;
             ignoreErrorUrls.forEach((item)=>{
                 if(oldres.url.indexOf(item) != -1){
@@ -123,11 +122,19 @@ service.interceptors.response.use(res => {
             message = "网络异常，请重试！";
         }
         //Toast.fail(message);
-        // uni.showToast({
-        //     title: message,
-        //     icon:'none',
-        //     duration: 2000
-        // });
+        let isFind = false;
+        ignoreErrorUrls.forEach((item)=>{
+            if(oldres.url.indexOf(item) != -1){
+                isFind = true;
+            }
+        })
+        if(!isFind) {
+            uni.showToast({
+                title: message,
+                icon:'none',
+                duration: 2000
+            });
+        }
         return Promise.reject(error)
     }
 )
