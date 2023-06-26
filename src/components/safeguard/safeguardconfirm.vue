@@ -21,7 +21,8 @@
                     </view>
                     <view class="disagree" v-else-if="alarmData.isAgree == 2">
                         <view>绑定失败</view>
-                        {{alarmData.data.name}}的紧急联系人绑定已达上限
+                        <!-- {{alarmData.data.name}}的紧急联系人绑定已达上限 -->
+                        {{ alarmData.msg }}
                     </view>
                     <view class="foot-btn center">
                         <view class="btn btn2" @click="show = false">我知道了</view>
@@ -35,7 +36,9 @@
 
 <script setup>
 import { ref, onMounted, reactive, watch } from 'vue'
+import { emergenccontactadd } from '@/api/safeguard/safeguard'
 import { onLoad, onReachBottom } from '@dcloudio/uni-app'
+
 const show = ref(true);
 const alarmData = reactive({
     showBox: true,
@@ -44,20 +47,22 @@ const alarmData = reactive({
         name: '张三',
         phone: '13333333333',
         address: '重庆市四川商会重庆市四川商会商会',
-        latitude: 39.909,
-        longitude: 116.39742,
-        covers: [{
-            latitude: 39.909,
-            longitude: 116.39742,
-            // iconPath: '../../../static/location.png'
-        }]
     },
-    isAgree: false
+    isAgree: false,
+    msg:'',
 })
 // alarmData.data.phone =  res.data.phone.substr(0, 3) + "****" + res.data.phone.substr(7);
 const confirmShow = (id) => {
     alarmData.showBox = false;
-    alarmData.isAgree = 0;
+    let helpId = alarmData.data.id;
+    emergenccontactadd({helpId:helpId}).then((res)=>{
+        if(res.status == 0){
+            alarmData.isAgree = 2;
+            alarmData.msg =res.msg;
+        }else{
+            alarmData.isAgree = 0;
+        }
+    })
 }
 const closeShow = (id) => {
     alarmData.showBox = false;

@@ -29,8 +29,8 @@
         </view>
       </view>
     </view>
-    <safeguardconfirm></safeguardconfirm>
-    <!-- <safeguard></safeguard> -->
+    <!-- <safeguardconfirm></safeguardconfirm> -->
+    <safeguard></safeguard>
   </view>
 </template>
 

@@ -58,6 +58,7 @@
 
 <script setup>
 import { ref, onMounted, reactive } from 'vue'
+import { emergenccontactinfo } from '@/api/safeguard/safeguard'
 import { onLoad,onUnload } from '@dcloudio/uni-app'
 const pageData = reactive({
   data: {

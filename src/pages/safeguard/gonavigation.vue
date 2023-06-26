@@ -34,7 +34,7 @@
 <script setup>
 import { ref, onMounted, reactive } from 'vue'
 import comment from "@/components/common/comment.vue"
-
+import { emergenccontactinfo } from '@/api/safeguard/safeguard'
 import { onLoad } from '@dcloudio/uni-app'
 const pageData = reactive({
     data:{

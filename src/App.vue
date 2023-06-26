@@ -437,7 +437,12 @@ export default {
           calcUnReadSpot(message);
           ack(message);
           onGetSilentConfig(message);
+          
         }
+      },
+      // 当前用户收到自定义消息。
+      onCustomMessage: function (message) {
+        console.log("onCustomMessage", message);
       },
 
       onEmojiMessage(message) {

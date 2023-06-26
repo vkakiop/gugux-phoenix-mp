@@ -1,5 +1,5 @@
 <template>
-    <view>
+    <view class="safe">
     <u-modal :show="show"
       :showConfirmButton="false" ref="uModal" >
       <view class="slot-content">
@@ -22,6 +22,7 @@
         </view>
       </view>
     </u-modal>
+    <view class="close">123</view>
   </view>
 </template>
 
@@ -60,6 +61,13 @@ const closeShow = (id) =>  {
 </script>
 
 <style lang="scss" scoped>
+.safe{
+  position: relative;
+  .close{
+    position: absolute;
+    bottom: -100rpx;
+  }
+}
 .slot-content{
   width: 100%;
   .title{
