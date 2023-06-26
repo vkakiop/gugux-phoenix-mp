@@ -253,7 +253,7 @@ const gotoBack = () => {
 }
 
 .Express {
-	line-height: 24rpx;
+	// line-height: 24rpx;
 	font-weight: 300;
 	color: #999999;
 	display: flex;
