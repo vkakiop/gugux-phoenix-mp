@@ -1,5 +1,7 @@
 //内部版本号
-export const innserVersion = 1
+export const innserVersion = ()=>{
+    return import.meta.env.VITE_APP_INNER_VERSION
+}
 
 
 //配置判断是否SwitchTab
@@ -13,4 +15,6 @@ export const configLoginToken = 'ggx_login_token'
 
 
 //表情图标位置
-export const configCommentFaceUrl = 'https://gugux.caigetuxun.com/v3/xcx/static/comment/facesnew/'
+export const configCommentFaceUrl = ()=>{
+    return import.meta.env.VITE_APP_STATIC_URL + '/static/comment/facesnew/'
+}
