@@ -29,7 +29,7 @@
         </view>
       </view>
     </view>
-    <!-- <safeguardconfirm></safeguardconfirm> -->
+    <safeguardconfirm></safeguardconfirm>
     <safeguard></safeguard>
   </view>
 </template>

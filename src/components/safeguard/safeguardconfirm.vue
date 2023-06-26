@@ -4,7 +4,7 @@
             <view class="slot-content">
                 <view class="title">安全守护</view>
                 <view class="confirm" v-if="alarmData.showBox">
-                    您的好友 {{ alarmData.data.name }} ({{ alarmData.data.phone }})邀请您成为他的安全守护紧急联系人。
+                    您的好友 {{ alarmData.data.ggx_name }} ({{ alarmData.data.phone }})邀请您成为他的安全守护紧急联系人。
                     <view class="foot-btn">
                         <view class="btn btn1" @click="closeShow()">拒绝</view>
                         <view class="btn btn2" @click="confirmShow()">同意</view>
@@ -17,7 +17,7 @@
                     </view>
                     <view class="disagree" v-else-if="alarmData.isAgree == 1">
                         <view>绑定失败</view>
-                        很遗憾，您拒绝了成为{{alarmData.data.name}}的紧急联系人
+                        很遗憾，您拒绝了成为{{alarmData.data.ggx_name}}的紧急联系人
                     </view>
                     <view class="disagree" v-else-if="alarmData.isAgree == 2">
                         <view>绑定失败</view>
@@ -38,30 +38,46 @@
 import { ref, onMounted, reactive, watch } from 'vue'
 import { emergenccontactadd } from '@/api/safeguard/safeguard'
 import { onLoad, onReachBottom } from '@dcloudio/uni-app'
-
-const show = ref(true);
+const show = ref(false);
 const alarmData = reactive({
     showBox: true,
     data: {
-        id: '1601683533353328702',
-        name: '张三',
+        UserId: '1508181957879767040',
+        ggx_name: '张三',
         phone: '13333333333',
-        address: '重庆市四川商会重庆市四川商会商会',
     },
     isAgree: false,
     msg:'',
 })
+
+onLoad(()=>{
+//   getData();
+})
+const getData = ()=>{
+  let data =  uni.getStorageSync('help_contact');
+  if(data){
+    alarmData.data =data.data;
+    show.value = true;
+  }
+}
 // alarmData.data.phone =  res.data.phone.substr(0, 3) + "****" + res.data.phone.substr(7);
 const confirmShow = (id) => {
-    alarmData.showBox = false;
-    let helpId = alarmData.data.id;
+    
+    let helpId = alarmData.data.UserId;
     emergenccontactadd({helpId:helpId}).then((res)=>{
-        if(res.status == 0){
-            alarmData.isAgree = 2;
-            alarmData.msg =res.msg;
-        }else{
-            alarmData.isAgree = 0;
-        }
+        console.log(res)
+        // if(res.status == 0){
+        //     alarmData.isAgree = 2;
+        //     alarmData.msg =res.msg;
+        // }else{
+        //     alarmData.isAgree = 0;
+        // }
+        alarmData.showBox = false;
+    }).catch((res)=>{
+        console.log(res)
+        alarmData.msg =res.data.msg;
+        alarmData.isAgree = 2;
+        alarmData.showBox = false;
     })
 }
 const closeShow = (id) => {

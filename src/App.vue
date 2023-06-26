@@ -441,7 +441,7 @@ export default {
           onGetSilentConfig(message);
           if(message.from == "admin-safe"){
             uni.setStorage({
-              key: 'storage_key',
+              key: 'admin-safe',
               data: {
                 data:message.ext.custom_json.connectContact
               }
@@ -452,6 +452,24 @@ export default {
       // 当前用户收到自定义消息。
       onCustomMessage: function (message) {
         console.log("onCustomMessage", message);
+        if (message) {
+          // if (onMessageError(message)) {
+          //   msgStorage.saveReceiveMsg(message, msgType.TEXT);
+          // }
+
+          // calcUnReadSpot(message);
+          // ack(message);
+          // onGetSilentConfig(message);
+          console.log(message.customEvent)
+          if(message.customEvent == "help_contact"){
+            uni.setStorage({
+              key: 'help_contact',
+              data: {
+                data:message.ext
+              }
+            });
+          }
+        }
       },
 
       onEmojiMessage(message) {
