@@ -3,7 +3,7 @@
 <template>
   <view class="navi">
     <view class="userinfo">
-      <view><view>姓名：<text>{{ pageData.data.name }}</text></view>
+      <view><view>姓名：<text>{{ pageData.data.abnormalName }}</text></view>
       </view>
       <view>
         <view>电话：<text>{{ pageData.data.phone }}</text>
@@ -15,32 +15,32 @@
         <view>现场地址：</view>
         <view  @click="goNav"><image class="phone" src="/static/img/location.png"  mode="widthFix"/></view>
       </view>
-      <view class="red">{{ pageData.data.address }}</view>
+      <view class="red">{{ pageData.data.unusualLocation }}</view>
     </view>
     <view class="page-section page-section-gap" style="width: 100%; background: #ddd; height: 300rpx;">
-      <map style="width: 100%; height: 300rpx;" :latitude="pageData.data.latitude" :longitude="pageData.data.longitude" :markers="pageData.data.covers">
+      <map style="width: 100%; height: 300rpx;" :latitude="pageData.data.lat" :longitude="pageData.data.lng" :markers="pageData.data.covers">
       </map>
     </view>
     <view class="box">
       <view>现场图片：</view>
       <view class="scroll">
-          <image v-for="(item,index) in pageData.data.imgs" @click="previewImage(pageData.data.imgs,index)" :key="index" :src="item" alt=""></image>
+          <image v-for="(item,index) in pageData.data.picture" @click="previewImage(pageData.data.picture,index)" :key="index" :src="item" alt=""></image>
       </view>
     </view>
     <view class="box">
       <view>现场视频：</view>
-      <view class="relative" v-for="(item,index) in pageData.data.video" :key="index" @click="previewMedia(item.address)">
-        <image :src="item.cover" class="rounded-8 iconplayphoto" mode="widthFix"/>
+      <view class="relative" v-for="(item,index) in pageData.data.video" :key="index" @click="previewMedia(item.url)">
+        <image :src="item.icon" class="rounded-8 iconplayphoto" mode="widthFix"/>
         <view class="icon_play w-full h-full absolute w-50 h-50"><image class="w-64 h-64" src="@/static/opus/icon_play.png"/></view>
       </view>
     </view>
     <view class="box last">
       <view>现场录音：</view>
       <view class="audio-box">
-        <view class="audio-row" v-for="(item,index) in pageData.data.audio" :key="index">
+        <view class="audio-row" v-for="(item,index) in pageData.data.soundRecordingInfoVOS" :key="index">
           <view class="audio-left">
             <view>{{ item.name }}</view>
-            <text class="time">{{ item.time }}</text>
+            <text class="time">{{ item.createTime }}</text>
           </view>
           <view class="audio-right">
             <image @click="playAudio(0,item)" v-if="item.play == 0 ||item.play == undefined" src="/static/img/p1.png" class="rounded-8 iconplayphoto" mode="widthFix"/>
@@ -63,49 +63,17 @@ import { onLoad,onUnload } from '@dcloudio/uni-app'
 const pageData = reactive({
   data: {
     id: '',
-    name: '张三',
-    phone: '13333333333',
-    address: '重庆市四川商会重庆市四川商会重庆市四川商会重庆市四川商会',
-    latitude: 39.909,
-    longitude: 116.39742,
-    imgs: [
-    'https://cdn.uviewui.com/uview/album/1.jpg',
-    'https://cdn.uviewui.com/uview/album/2.jpg',
-    'https://cdn.uviewui.com/uview/album/3.jpg',
-    'https://cdn.uviewui.com/uview/album/4.jpg',
-    'https://cdn.uviewui.com/uview/album/5.jpg',
-    'https://cdn.uviewui.com/uview/album/6.jpg',
-    'https://cdn.uviewui.com/uview/album/7.jpg',
-    'https://cdn.uviewui.com/uview/album/8.jpg',
-    'https://cdn.uviewui.com/uview/album/9.jpg',
-    'https://cdn.uviewui.com/uview/album/10.jpg',
-    ],
-    video: [
-      {
-        address: "https://cdn.caigetuxun.com/7cc352316adb43b3b1e1cfccff1b4989.mp4",
-        cover: "https://cdn.caigetuxun.com/f7b9ca23138544cd8c4d896cf1a86ced.jpeg"
-      },
-      {
-        address: "https://cdn.caigetuxun.com/7cc352316adb43b3b1e1cfccff1b4989.mp4",
-        cover: "https://cdn.caigetuxun.com/f7b9ca23138544cd8c4d896cf1a86ced.jpeg"
-      },
-    ],
-    audio: [
-      {
-        audio:"https://gi-sycdn.kuwo.cn/3f9d4107a083aea307200007ee5c8663/6486b76e/resource/n2/58/88/2469806786.mp3",
-        time:'2022-02-23 12:12:12',
-        name:'LY1778U841.mp3',
-      },
-      {
-        audio:"https://other-web-rh01-sycdn.kuwo.cn/db7c4bd2b8c4448cbbc94d0a7736c3b2/6486bd4d/resource/n3/54/71/3004052532.mp3",
-        time:'2022-02-23 12:12:12',
-        name:'LY1778U84222.mp3',
-      },
-
-    ],
+    abnormalName: '',
+    phone: '',
+    unusualLocation: '',
+    lat: '',
+    lng: '',
+    picture: [],
+    video:[],
+    soundRecordingInfoVOS: [],
     covers: [{
-      latitude: 39.909,
-      longitude: 116.39742,
+      latitude: '',
+      longitude: '',
       // iconPath: '../../../static/location.png'
     }]
   },
@@ -114,6 +82,7 @@ let player = null;
 onLoad((option) => {
   if (option.id) {
     pageData.data.id = option.id;
+    getData({manageId:pageData.data.id});
     player  =  uni.createInnerAudioContext();
   }
   else {
@@ -125,6 +94,52 @@ onLoad((option) => {
   }
 })
 
+
+const getData = (params) =>{
+  emergenccontactinfo(params).then((res)=>{
+    console.log(res);
+    pageData.data = res.data;
+    pageData.data.covers = [{
+      latitude : pageData.data.lat,
+      longitude : pageData.data.lng,
+    }]
+    pageData.data.picture = [
+    'https://cdn.uviewui.com/uview/album/1.jpg',
+    'https://cdn.uviewui.com/uview/album/2.jpg',
+    'https://cdn.uviewui.com/uview/album/3.jpg',
+    'https://cdn.uviewui.com/uview/album/4.jpg',
+    'https://cdn.uviewui.com/uview/album/5.jpg',
+    'https://cdn.uviewui.com/uview/album/6.jpg',
+    'https://cdn.uviewui.com/uview/album/7.jpg',
+    'https://cdn.uviewui.com/uview/album/8.jpg',
+    'https://cdn.uviewui.com/uview/album/9.jpg',
+    'https://cdn.uviewui.com/uview/album/10.jpg',
+    ]
+    pageData.data.video = [
+      {
+        url: "https://cdn.caigetuxun.com/7cc352316adb43b3b1e1cfccff1b4989.mp4",
+        icon: "https://cdn.caigetuxun.com/f7b9ca23138544cd8c4d896cf1a86ced.jpeg"
+      },
+      {
+        url: "https://cdn.caigetuxun.com/7cc352316adb43b3b1e1cfccff1b4989.mp4",
+        icon: "https://cdn.caigetuxun.com/f7b9ca23138544cd8c4d896cf1a86ced.jpeg"
+      },
+    ],
+    pageData.data.soundRecordingInfoVOS = [
+      {
+        audio:"https://gi-sycdn.kuwo.cn/3f9d4107a083aea307200007ee5c8663/6486b76e/resource/n2/58/88/2469806786.mp3",
+        createTime:'2022-02-23 12:12:12',
+        name:'LY1778U841.mp3',
+      },
+      {
+        audio:"https://other-web-rh01-sycdn.kuwo.cn/db7c4bd2b8c4448cbbc94d0a7736c3b2/6486bd4d/resource/n3/54/71/3004052532.mp3",
+        createTime:'2022-02-23 12:12:12',
+        name:'LY1778U84222.mp3',
+      },
+
+    ]
+  })
+}
 const previewImage = (url,index)=>{
   uni.previewImage({
     urls:url,
@@ -132,7 +147,7 @@ const previewImage = (url,index)=>{
   })
 }
 const goNav = ()=>{
-  uni.navigateTo({ url: '/pages/safeguard/gonavigation?id=' + encodeURIComponent(123) })
+  uni.navigateTo({ url: '/pages/safeguard/gonavigation?id=' + encodeURIComponent(pageData.data.id) })
 }
 const callPhone = (phone) =>{
   uni.makePhoneCall({
@@ -157,7 +172,7 @@ const playAudio = (type,item) =>{
   console.log(type)
   // type 0 播放 1 暂停
   if(type == 0){
-    pageData.data.audio.forEach((item)=>{
+    pageData.data.soundRecordingInfoVOS.forEach((item)=>{
       item.play = 0;
     })
     player.src = item.audio;
