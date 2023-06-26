@@ -76,7 +76,6 @@ const comment2Ref = ref()
 const _this = getCurrentInstance()
 
 onLoad((option)=>{
-  console.log('option:',option)
     pageData.id = option.id
     pageData.traceInfo = decodeURIComponent(option.traceInfo || '')
     getData()

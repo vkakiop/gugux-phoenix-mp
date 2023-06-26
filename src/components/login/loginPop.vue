@@ -3,28 +3,28 @@
     <view class="mx-30 mt-20 mb-16">
       <view class="text-18 text-[#000000] text-center font-bold">登录或注册</view>
       <view class="mt-20 text-13 flex items-center">
-        <!--u-checkbox-group v-model="pageData.isAgreeItems">
+        <u-checkbox-group v-model="pageData.isAgreeItems">
           <u-checkbox shape="circle" activeColor="#4ba1f8" label=""></u-checkbox>
-        </u-checkbox-group-->
+        </u-checkbox-group>
         <view class="text-13 leading-22 text-[#333]">
           若手机号未注册将进入注册流程，注册即为同意<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>
         </view>
       </view>
       <view class="mt-20">
-        <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber" class="h-40 leading-40 rounded-full bg-[#51ab3a] active:bg-[#09b307] text-white text-14">微信一键登录</button>
+        <button :open-type="pageData.isAgreeItems.length ? 'getPhoneNumber':''" @click="getPhoneNumberValid" @getphonenumber="getPhoneNumber" class="h-40 leading-40 rounded-full bg-[#51ab3a] active:bg-[#09b307] text-white text-14">微信一键登录</button>
         <button @click="gotoLogin" class="mt-15 h-40 leading-40 rounded-full bg-[#e9ebef] active:bg-[#e4e5e9] text-[#929292] text-14">手机号登录/注册</button>
       </view>
-      <!--u-popup :show="pageData.isDialogShow" mode="center" round="10" :customStyle="{marginLeft:'60rpx',marginRight:'60rpx'}">
+      <u-popup :show="pageData.isDialogShow" mode="center" round="10" :customStyle="{marginLeft:'60rpx',marginRight:'60rpx'}">
         <view class="m-22">
           <view class="text-center font-bold">同意隐私条款</view>
           <view class="my-28">登录注册需要您阅读并同意我们的<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>
           </view>
           <view class="flex justify-center items-center">
-            <button class="w-115 h-40 leading-40 rounded-full bg-[#f4f5f6] active:bg-[#eeeff0] text-black" @click="pageData.isDialogShow=false">不同意</button>
-            <button class="w-115 h-40 leading-40 rounded-full bg-[#4ba1f8] active:bg-[#3194f9] text-white" @click="pageData.isDialogShow=false;pageData.isAgreeItems=[''];onLogin();">我同意</button>
+            <button class="w-115 h-40 leading-40 rounded-full text-black" @click="pageData.isDialogShow=false">不同意</button>
+            <button class="w-115 h-40 leading-40 rounded-full bg-[#4ba1f8] active:bg-[#3194f9] text-white" @click="pageData.isDialogShow=false;pageData.isAgreeItems=[''];">我同意</button>
           </view>
         </view>
-      </u-popup-->
+      </u-popup>
     </view>
   </u-popup>
 </template>
@@ -43,9 +43,21 @@ const close = ()=>{
   emits('close')
 }
 
+const getPhoneNumberValid = ()=>{
+  if (!pageData.isAgreeItems.length) {
+    pageData.isDialogShow = true
+  }
+}
+
 const getPhoneNumber = (e)=> {
-  uni.showToast({title:e.detail.code})
-  emits('close')
+  console.log('getPhoneNumber',e)
+  if (e.detail.errMsg) {
+    uni.showToast({title:e.detail.errMsg,icon: 'none', duration: 2000})
+  }
+  else {
+    uni.showToast({title:e.detail.code})
+    emits('close')
+  }
 }
 
 const gotoLogin = ()=>{
