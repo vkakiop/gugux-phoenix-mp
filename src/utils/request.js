@@ -119,12 +119,15 @@ service.interceptors.response.use(res => {
         else if (message.includes("Request failed with status code")) {
             message = "系统接口" + message.substr(message.length - 3) + "异常";
         }
+        else if (message.includes('request:fail')) {
+            message = "网络异常，请重试！";
+        }
         //Toast.fail(message);
-        uni.showToast({
-            title: message,
-            icon:'none',
-            duration: 2000
-        });
+        // uni.showToast({
+        //     title: message,
+        //     icon:'none',
+        //     duration: 2000
+        // });
         return Promise.reject(error)
     }
 )
@@ -187,9 +190,9 @@ axios.defaults.adapter = function(config) { //自己定义个适配器，用来�
                 //     })
                 let message = error || '网络异常，请重试！'
                 if (typeof(error) == 'object') {
-                    message = error.message + ''
+                    message = error.errMsg + ''
                 }
-                    reject({message:message,url:config.baseURL + buildURL(config.url, config.params, config.paramsSerializer)});
+                reject({message:message,url:config.baseURL + buildURL(config.url, config.params, config.paramsSerializer)});
                 //}
             },
             complete:()=>{
