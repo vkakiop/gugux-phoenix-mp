@@ -185,7 +185,7 @@ axios.defaults.adapter = function(config) { //自己定义个适配器，用来�
                 //         title: '网络异常，请重试！',
                 //         icon: 'none'
                 //     })
-                let message = error + '';
+                let message = error || '网络异常，请重试！'
                 if (typeof(error) == 'object') {
                     message = error.message + ''
                 }
