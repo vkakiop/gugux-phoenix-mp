@@ -105,10 +105,7 @@ service.interceptors.response.use(res => {
         }
     },
     error => {
-        let message = error + '';
-        if (typeof(error) == 'object') {
-            message = error.message + ''
-        }
+        let message = error.message + ''
         if (message == "Network Error") {
             message = "后端接口连接异常";
         }
@@ -124,7 +121,7 @@ service.interceptors.response.use(res => {
         //Toast.fail(message);
         let isFind = false;
         ignoreErrorUrls.forEach((item)=>{
-            if(oldres.url.indexOf(item) != -1){
+            if(error.url.indexOf(item) != -1){
                 isFind = true;
             }
         })
