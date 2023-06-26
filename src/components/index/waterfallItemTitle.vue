@@ -30,6 +30,7 @@
 import { opusLike } from "@/api/opus/index"
 import {distanceOf,formatedDistance,getTokenValue,imageThumb} from "@/utils/utils"
 import {computed,ref,onMounted,reactive} from 'vue';
+import useLoginTokenStore from '@/store/modules/loginToken'
 const pageData = reactive({
   id: '',
   isShowLoginPop: false,
@@ -42,10 +43,19 @@ const computedHeight = computed({
     }
   }
 })
-const gohomepage=(item)=>{
-  uni.navigateTo({
-    url:'/pages/userhomepage/userhomepage?id='+item.createdBy
-  })
+const gohomepage = (item) => {
+	if (useLoginTokenStore().get().user) {
+		if (item.createdBy == useLoginTokenStore().get().user.id) {
+			uni.switchTab({
+				url: '/pages/mine/mine.vue'
+			})
+      return
+		}
+	}
+	uni.navigateTo({
+		url: '/pages/userhomepage/userhomepage?id=' + item.createdBy
+	})
+
 }
 const godetail = (item) => {
   if (item.cover.itemType == 2) {

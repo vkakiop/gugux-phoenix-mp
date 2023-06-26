@@ -114,15 +114,18 @@ const getDataApi = () => {
 }
 const { ctx } = getCurrentInstance()
 const gohomepage = (item) => {
-   if(item.createdBy==useLoginTokenStore().get().user.id){
-	uni.switchTab({
-		url: '/pages/mine/mine.vue'
-	})
-   }else{
+	if (useLoginTokenStore().get().user) {
+		if (item.createdBy == useLoginTokenStore().get().user.id) {
+			uni.switchTab({
+				url: '/pages/mine/mine.vue'
+			})
+			return
+		}
+	}
 	uni.navigateTo({
 		url: '/pages/userhomepage/userhomepage?id=' + item.createdBy
 	})
-   }	
+
 }
 watch(() => props.lastVideoId, (newV, oldV) => {
 	if (newV) {
