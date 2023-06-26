@@ -74,6 +74,7 @@ import { opusdetails } from "@/api/mine/index"
 import { getTokenValue } from "@/utils/utils"
 import { opusCollect, opusLike, userFans } from "@/api/opus/index"
 import { getCurrentInstance, reactive, ref } from 'vue'
+import useLoginTokenStore from '@/store/modules/loginToken'
 import { onLoad } from '@dcloudio/uni-app'
 const isShare = ref(false)
 const pageData = reactive({
@@ -100,9 +101,15 @@ const fetchData = () => {
 	}
 }
 const gohomepage = (item) => {
+   if(item.createdBy==useLoginTokenStore().get().user.id){
+	uni.switchTab({
+		url: '/pages/mine/mine.vue'
+	})
+   }else{
 	uni.navigateTo({
 		url: '/pages/userhomepage/userhomepage?id=' + item.createdBy
 	})
+   }	
 }
 const playVideo = () => {
 	let currentId = 'video0'; // 获取当前视频id

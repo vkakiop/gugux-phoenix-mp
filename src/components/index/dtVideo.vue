@@ -71,6 +71,7 @@ import { opusrecommend } from "@/api/recvideo/index"
 import { getTokenValue } from "@/utils/utils"
 import { opusCollect, opusLike, userFans} from "@/api/opus/index"
 import { getCurrentInstance, reactive, watch, ref } from 'vue'
+import useLoginTokenStore from '@/store/modules/loginToken'
 import { onShow } from '@dcloudio/uni-app'
 const props = defineProps({
 	lastVideoId: {
@@ -106,18 +107,22 @@ const opusDetail = () => {
 }
 opusDetail()
 const getDataApi = () => {
-	console.log('发请求');
 	opusrecommend({}).then(res => {
-		console.log('视频', res);
 		pageData.list = [...pageData.list, ...res.data]
 		// pageData.lastVideoId = res.data[res.data.length - 1].id
 	})
 }
 const { ctx } = getCurrentInstance()
 const gohomepage = (item) => {
+   if(item.createdBy==useLoginTokenStore().get().user.id){
+	uni.switchTab({
+		url: '/pages/mine/mine.vue'
+	})
+   }else{
 	uni.navigateTo({
 		url: '/pages/userhomepage/userhomepage?id=' + item.createdBy
 	})
+   }	
 }
 watch(() => props.lastVideoId, (newV, oldV) => {
 	if (newV) {
