@@ -24,7 +24,7 @@
         </view>
       </view>
     </u-modal>
-    <view class="close">123</view>
+    <!-- <view class="close">123</view> -->
   </view>
 </template>
 
@@ -54,26 +54,39 @@ onLoad(()=>{
   getData();
 })
 const getData = ()=>{
-  let data =  uni.getStorageSync('storage_key');
-  alarmData.msg = data.data.content;
-   
-  const json = JSONBIG({storeAsString:true});
-  alarmData.data = json.parse(data.data.data);
-  alarmData.data.covers = [{
-    latitude : alarmData.data.lat,
-    longitude : alarmData.data.lng,
-  }]
-  show.value = true;
+  let data =  uni.getStorageSync('admin-safe');
+  if(data){
+    alarmData.msg = data.data.content;
+    const json = JSONBIG({storeAsString:true});
+    alarmData.data = json.parse(data.data.data);
+    alarmData.data.covers = [{
+      latitude : alarmData.data.lat,
+      longitude : alarmData.data.lng,
+    }]
+    show.value = true;
+  }
 }
 const confirmShow = (manageId) => {
   show.value = false;
   console.log('去导航');
-  uni.navigateTo({ url: '/pages/safeguard/gonavigation?id=' + encodeURIComponent(manageId) })
+  uni.navigateTo({ url: '/pages/safeguard/gonavigation?id=' + encodeURIComponent(manageId) });
+  uni.removeStorage({
+      key: 'admin-safe',
+      success: function (res) {
+          console.log('success');
+      }
+  });
 }
 const closeShow = (manageId) =>  {
   show.value = false;
+  uni.navigateTo({ url: '/pages/safeguard/safeguarddetail?id=' + encodeURIComponent(manageId) });
+  uni.removeStorage({
+      key: 'admin-safe',
+      success: function (res) {
+          console.log('success');
+      }
+  });
   console.log('查看详情');
-  uni.navigateTo({ url: '/pages/safeguard/safeguarddetail?id=' + encodeURIComponent(manageId) })
 }
 </script>
 
