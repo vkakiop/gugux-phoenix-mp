@@ -164,7 +164,7 @@ axios.defaults.adapter = function(config) { //自己定义个适配器，用来�
                 }
                 catch (err) {
                     // 如果转换失败，则包装为统一数据格式并返回
-                    reject({data:JSONbig.parse(data),title:'请求失败',url:config.baseURL + buildURL(config.url, config.params, config.paramsSerializer)});
+                    reject({data:JSONbig.parse(data),message:'请求失败',url:config.baseURL + buildURL(config.url, config.params, config.paramsSerializer)});
                 }
             },
             fail:(err) => {
@@ -172,11 +172,11 @@ axios.defaults.adapter = function(config) { //自己定义个适配器，用来�
                 //
                 // }
                 // else {
-                    uni.showToast({
-                        title: '网络异常，请重试！',
-                        icon: 'none'
-                    })
-                    reject({title:'网络异常，请重试！',url:config.baseURL + buildURL(config.url, config.params, config.paramsSerializer)});
+                //     uni.showToast({
+                //         title: '网络异常，请重试！',
+                //         icon: 'none'
+                //     })
+                    reject({message:'网络异常，请重试！',url:config.baseURL + buildURL(config.url, config.params, config.paramsSerializer)});
                 //}
             },
             complete:()=>{
