@@ -53,6 +53,10 @@ onMounted(() => {
   changeWaterfall(0)
 })
 
+onShow(()=>{
+  useRouterStore().setRouter('/pages/mine/mine',false)
+})
+
 const waterfallItems = [
   {
     scrollTop: -1, isComplete: false, isLoading: false, itemKey: 'testestse', itemType: 'title', name: '推荐', items: [], query: {
