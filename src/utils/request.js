@@ -52,6 +52,7 @@ service.interceptors.request.use(config => {
     if (config.method === 'post' && config.params) {
         config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
         let url = config.url + '?' + tansParams(config.params);
+        url = url.slice(0, -1);
         config.url = url;
         config.data = tansParams(config.params).slice(0, -1);
         config.params = {};
