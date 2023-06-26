@@ -12,32 +12,44 @@
 						<image class="w-64 h-64" src="@/static/opus/icon_play.png" />
 					</view>
 					<view class="info w-275 pl-14">
-						<view v-if="item.recommendedCity"   class="flex items-center text-13 mb-15   rounded-9 w-90  justify-center  h-19 "  style="background-color: rgba(244, 244, 244, 0.2);"><image src="@/static/opus/icon_location_white.png" class="w-9 h-11 mr-4" />{{ item.recommendedCity }}</view>
-						<view class="font-bold h-17 leading-16 text-17 flex items-center">@{{ item.author }} <image src="/static/mine/shop.png" class="w-19 h-19 ml-4" v-if="item.hasShop" /><image src="/static/mine/vip.png" class="w-49 h-19 ml-4" v-if="item.isDr"/></view>
+						<view v-if="item.recommendedCity"
+							class="flex items-center text-13 mb-15   rounded-9 w-90  justify-center  h-19 "
+							style="background-color: rgba(244, 244, 244, 0.2);">
+							<image src="@/static/opus/icon_location_white.png" class="w-9 h-11 mr-4" />{{
+								item.recommendedCity }}
+						</view>
+						<view class="font-bold h-17 leading-16 text-17 flex items-center">@{{ item.author }}
+							<image src="/static/mine/shop.png" class="w-19 h-19 ml-4" v-if="item.hasShop" />
+							<image src="/static/mine/vip.png" class="w-49 h-19 ml-4" v-if="item.isDr" />
+						</view>
 						<view class="text-14 leading-16 my-11">发布于：{{ item.createdTime }}</view>
-						<view class="text-16 leading-25 flex items-center"><image src="/static/video/good.png" class="w-19 h-19 mr-4"  v-if="item.boutique"/>{{ item.brief }}</view>
+						<view class="text-16 leading-25 flex items-center">
+							<image src="/static/video/good.png" class="w-19 h-19 mr-4" v-if="item.boutique" />{{ item.brief
+							}}
+						</view>
 					</view>
 					<view class="buttons text-sm">
 						<debounce class="header_group">
 							<image class="header" :src="item.icon" @click="gohomepage(item)"></image>
-							<view class="add" v-if="!item.isFollow" >
-								<image src="@/static/video/attention.png" class="w-19 h-19" @click.stop="attention(item)"></image>
+							<view class="add" v-if="!item.isFollow">
+								<image src="@/static/video/attention.png" class="w-19 h-19" @click.stop="attention(item)">
+								</image>
 							</view>
 						</debounce>
 						<debounce @debounce="like(item)" class="button mb-10">
 							<image v-if="item.isLike" class="w-36 h-36" src="@/static/video/likefill.png" />
 							<image v-else class="w-36 h-36" src="@/static/video/like.png" />
-							<view>{{ item.likeNum }}</view>
+							<view>{{ computedNumber(item.likeNum) }}</view>
 						</debounce>
 						<debounce @debounce="openBox(item)" class="button mb-10">
 							<image class="w-36 h-36" src="@/static/video/evaluate.png" />
-							<view>{{ item.commentNum }}</view>
+							<view>{{ computedNumber(item.commentNum) }}</view>
 						</debounce>
 						<debounce @debounce="collection(item)" class="button mb-10">
 							<view class="button mb-10">
 								<image v-if="item.isCollection" class="w-36 h-36" src="@/static/video/collectfill.png" />
 								<image v-else class="w-36 h-36" src="@/static/video/collect.png" />
-								<view>{{ item.collectionNum }}</view>
+								<view>{{ computedNumber(item.collectionNum) }}</view>
 							</view>
 						</debounce>
 						<view class="button mb-10" @click='handleShare'>
@@ -51,7 +63,8 @@
 		</swiper>
 		<u-popup :show="pageData.show" @close="closeBox">
 			<view class="container">
-				<comment ref="commentRef" :id="pageData.commentid" :articleType="2"   :createdBy="pageData.createdBy" ></comment>
+				<comment ref="commentRef" :id="pageData.commentid" :articleType="2" :createdBy="pageData.createdBy">
+				</comment>
 			</view>
 			<view
 				class="flex items-center ml-14  mb-14 bg-[#f5f6f8]  h-39 w-350 rounded-19 border-1 border-[#E3E3E3] text-14"
@@ -69,8 +82,8 @@ import comment from "@/components/common/comment.vue"
 import { opusdetails } from "@/api/mine/index"
 import { opusrecommend } from "@/api/recvideo/index"
 import { getTokenValue } from "@/utils/utils"
-import { opusCollect, opusLike, userFans} from "@/api/opus/index"
-import { getCurrentInstance, reactive, watch, ref } from 'vue'
+import { opusCollect, opusLike, userFans } from "@/api/opus/index"
+import { getCurrentInstance, reactive, watch, ref, computed } from 'vue'
 import useLoginTokenStore from '@/store/modules/loginToken'
 import { onShow } from '@dcloudio/uni-app'
 const props = defineProps({
@@ -89,7 +102,7 @@ const open = () => {
 }
 const isShare = ref(false)
 const pageData = reactive({
-	createdBy:'',
+	createdBy: '',
 	commentid: '',
 	id: '',
 	isShowLoginPop: false,
@@ -112,12 +125,15 @@ const getDataApi = () => {
 		// pageData.lastVideoId = res.data[res.data.length - 1].id
 	})
 }
+const computedNumber = computed({
+	get: (num) => { return function (num) { return num > 9999 ? (num / 10000).toFixed(1) + 'w' : num } }
+})
 const { ctx } = getCurrentInstance()
 const gohomepage = (item) => {
 	if (useLoginTokenStore().get().user) {
 		if (item.createdBy == useLoginTokenStore().get().user.id) {
 			uni.switchTab({
-				url: '/pages/mine/mine.vue'
+				url: '/pages/mine/mine'
 			})
 			return
 		}
@@ -246,7 +262,7 @@ const like = (item) => {
 	}
 }
 const openBox = (item) => {
-	pageData.createdBy=item.createdBy
+	pageData.createdBy = item.createdBy
 	pageData.commentid = item.id
 	pageData.show = true;
 }

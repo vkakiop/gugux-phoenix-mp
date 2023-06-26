@@ -18,16 +18,16 @@
 			</view>
 			<view class="flex text-14">
 				<view class="line relative w-60  flex items-center">
-					<view class="font-bold">{{ pageInfo.mineMessage.fans }}</view>
+					<view class="font-bold">{{ computedNumber(pageInfo.mineMessage.fans) }}</view>
 					<view class="textStyle">&nbsp;关注</view>
 				</view>
 				<view class="line relative w-60 ml-10 flex items-center">
-					<view class="font-bold">{{ pageInfo.mineMessage.focus }}</view>
+					<view class="font-bold">{{ computedNumber(pageInfo.mineMessage.focus) }}</view>
 
 					<view class="textStyle">&nbsp;收藏</view>
 				</view>
 				<view class="w-60  ml-10 flex items-center">
-					<view class="font-bold">{{ pageInfo.mineMessage.liked }}</view>
+					<view class="font-bold">{{ computedNumber(pageInfo.mineMessage.liked) }}</view>
 					<view class="textStyle">&nbsp;获赞</view>
 				</view>
 			</view>
@@ -80,11 +80,14 @@
 <script setup>
 import waterfall from '@/components/index/waterfall.vue'
 import { userhomepage, homepagelike, homepageopus, homepagecollection } from "@/api/mine/index.js"
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
 import { getTokenValue } from "@/utils/utils"
 import useLoginTokenStore from '@/store/modules/loginToken'
 import useRouterStore from '@/store/modules/router'
+const computedNumber = computed({
+	get: (num) => { return function (num) { return num > 9999 ? (num / 10000).toFixed(1) + 'w' : num } }
+})
 onShow(() => {
 	if (getTokenValue()) {
 		pageData.masterId = useLoginTokenStore().get().user.id
@@ -291,7 +294,7 @@ const fetchData = () => {
 }
 
 .Express {
-	line-height: 24rpx;
+	// line-height: 24rpx;
 	font-weight: 300;
 	color: #999999;
 	display: flex;

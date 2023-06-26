@@ -24,20 +24,20 @@
               <view class="flex mr-20">
                 <image v-if="pageData.detail.isLike" class="w-24 h-24" src="@/static/opus/icon_like_ed.png"/>
                 <image v-else class="w-24 h-24" src="@/static/opus/icon_like.png"/>
-                <view class="ml-5 mt-2">{{pageData.detail.likeNum}}</view>
+                <view class="ml-5 mt-2">{{computedNumber(pageData.detail.likeNum)}}</view>
               </view>
             </debounce>
             <debounce @debounce="collection">
               <view class="flex mr-20">
                 <image v-if="pageData.detail.isCollection" class="w-24 h-24" src="@/static/opus/icon_collect_ed.png"/>
                 <image v-else class="w-24 h-24" src="@/static/opus/icon_collect.png"/>
-                <view class="ml-5 mt-2">{{pageData.detail.collectionNum}}</view>
+                <view class="ml-5 mt-2">{{computedNumber(pageData.detail.collectionNum)}}</view>
               </view>
             </debounce>
             <debounce @debounce="commentAdd">
               <view class="flex mr-0">
                 <image class="w-24 h-24" src="@/static/opus/icon_comment.png"/>
-                <view class="ml-5 mt-2">{{pageData.detail.commentNum}}</view>
+                <view class="ml-5 mt-2">{{computedNumber(pageData.detail.commentNum)}}</view>
               </view>
             </debounce>
           </view>
@@ -62,7 +62,7 @@
 </template>
 
 <script setup>
-import {reactive, ref, watch, getCurrentInstance, nextTick} from "vue"
+import {reactive, ref, watch, getCurrentInstance, nextTick, computed} from "vue"
 import { opusInfo,opusCollect,opusLike,userFans,userFansRemove } from "@/api/opus/index"
 import { getTokenValue } from "@/utils/utils"
 import {onLoad,onPageScroll} from '@dcloudio/uni-app'
@@ -83,6 +83,10 @@ onLoad((option)=>{
 
 watch(()=>loginTokenStore.get().accessToken,(newVal,oldVal)=>{
   getData()
+})
+
+const computedNumber = computed({
+  get: (num) => { return function (num) { return num > 9999 ? (num / 10000).toFixed(1) + 'w' : num } }
 })
 
 const pageData = reactive({
@@ -221,7 +225,15 @@ const gotoBack = ()=>{
 }
 
 const gotoMine = ()=>{
-  uni.switchTab({url:'/pages/mine/mine?id='+pageData.detail.createdBy})
+  let loginToken = useLoginTokenStore().get()
+  if (loginToken.user && loginToken.user.id == pageData.detail.createdBy) {
+    uni.switchTab({url:'/pages/mine/mine'})
+  }
+  else {
+    uni.navigateTo({
+      url: '/pages/userhomepage/userhomepage?id=' + pageData.detail.createdBy
+    })
+  }
 }
 
 const getData = ()=>{

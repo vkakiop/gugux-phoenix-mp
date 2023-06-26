@@ -35,17 +35,17 @@
 			<debounce @debounce="like(pageData.opusdetail)" class="button mb-10">
 				<image v-if="pageData.opusdetail.isLike" class="w-36 h-36" src="@/static/video/likefill.png" />
 				<image v-else class="w-36 h-36" src="@/static/video/like.png" />
-				<view>{{ pageData.opusdetail.likeNum }}</view>
+				<view>{{ computedNumber(pageData.opusdetail.likeNum) }}</view>
 			</debounce>
 			<debounce @debounce="openBox(pageData.opusdetail)" class="button mb-10">
 				<image class="w-36 h-36" src="@/static/video/evaluate.png" />
-				<view>{{ pageData.opusdetail.commentNum }}</view>
+				<view>{{ computedNumber(pageData.opusdetail.commentNum) }}</view>
 			</debounce>
 			<debounce @debounce="collection(pageData.opusdetail)" class="button mb-10">
 				<view class="button mb-10">
 					<image v-if="pageData.opusdetail.isCollection" class="w-36 h-36" src="@/static/video/collectfill.png" />
 					<image v-else class="w-36 h-36" src="@/static/video/collect.png" />
-					<view>{{ pageData.opusdetail.collectionNum }}</view>
+					<view>{{ computedNumber(pageData.opusdetail.collectionNum) }}</view>
 				</view>
 			</debounce>
 			<view class="button mb-10" @click='handleShare'>
@@ -77,9 +77,12 @@ import comment from "@/components/common/comment.vue"
 import { opusdetails } from "@/api/mine/index"
 import { getTokenValue } from "@/utils/utils"
 import { opusCollect, opusLike, userFans } from "@/api/opus/index"
-import { getCurrentInstance, reactive, ref } from 'vue'
+import { getCurrentInstance, reactive, ref, computed } from 'vue'
 import useLoginTokenStore from '@/store/modules/loginToken'
 import { onLoad } from '@dcloudio/uni-app'
+const computedNumber = computed({
+	get: (num) => { return function (num) { return num > 9999 ? (num / 10000).toFixed(1) + 'w' : num } }
+})
 const isShare = ref(false)
 const pageData = reactive({
 	id: '',
@@ -108,7 +111,7 @@ const gohomepage = (item) => {
 	if (useLoginTokenStore().get().user) {
 		if (item.createdBy == useLoginTokenStore().get().user.id) {
 			uni.switchTab({
-				url: '/pages/mine/mine.vue'
+				url: '/pages/mine/mine'
 			})
 			return
 		}

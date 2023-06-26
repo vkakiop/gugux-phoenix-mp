@@ -30,16 +30,16 @@
 			</view>
 			<view class="flex text-14">
 				<view class="line relative w-60  flex items-center">
-					<view class="font-bold">{{ pageInfo.mineMessage.fans }}</view>
+					<view class="font-bold">{{ computedNumber(pageInfo.mineMessage.fans) }}</view>
 					<view class="textStyle">&nbsp;关注</view>
 				</view>
 				<view class="line relative w-60 ml-10 flex items-center">
-					<view class="font-bold">{{ pageInfo.mineMessage.focus }}</view>
+					<view class="font-bold">{{ computedNumber(pageInfo.mineMessage.focus) }}</view>
 
 					<view class="textStyle">&nbsp;收藏</view>
 				</view>
 				<view class="w-60  ml-10 flex items-center">
-					<view class="font-bold">{{ pageInfo.mineMessage.liked }}</view>
+					<view class="font-bold">{{ computedNumber(pageInfo.mineMessage.liked) }}</view>
 					<view class="textStyle">&nbsp;获赞</view>
 				</view>
 			</view>
@@ -77,7 +77,7 @@
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
 				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
 					class="h-500 flex items-center justify-center">
-					<u-empty mode="list" icon="/static/img/nodata.png" text="内容为空"/>
+					<u-empty mode="list" icon="/static/img/nodata.png" text="内容为空" />
 				</view>
 				<view v-show="waterIndex == pageData.currentIndex">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
@@ -95,10 +95,13 @@ import { getTokenValue } from "@/utils/utils"
 import waterfall from '@/components/index/waterfall.vue'
 import { userFans, userFansRemove } from "@/api/opus/index"
 import { userhomepage, homepageopus } from "@/api/mine/index.js"
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, computed } from 'vue'
 import { onReachBottom, onPageScroll, onLoad } from "@dcloudio/uni-app"
 import useLoginTokenStore from '@/store/modules/loginToken'
 import _ from 'lodash'
+const computedNumber = computed({
+	get: (num) => { return function (num) { return num > 9999 ? (num / 10000).toFixed(1) + 'w' : num } }
+})
 const waterfallItems = [{
 	scrollTop: -1, isComplete: false, isLoading: false, itemType: 'image', name: '作品', items: [],
 	query: {
@@ -122,7 +125,7 @@ onLoad((option) => {
 	pageData.masterId = option.id
 	fetchInfo()
 })
-const fetchInfo=()=>{
+const fetchInfo = () => {
 	userhomepage({
 		masterId: pageData.masterId
 	}).then(reslove => {
@@ -253,7 +256,7 @@ const gotoBack = () => {
 }
 
 .Express {
-	line-height: 24rpx;
+	// line-height: 24rpx;
 	font-weight: 300;
 	color: #999999;
 	display: flex;
