@@ -2,12 +2,12 @@
     <view v-if="pageData.detail.id">
       <customNav>
         <view @click="gotoBack" class="ml-3 mt-5"><uni-icons type="back" size="24"></uni-icons></view>
-        <view class="flex flex-1 items-center" @click="gotoMine">
+        <view class="flex flex-none items-center" @click="gotoMine">
           <image class="w-32 h-32 rounded-full flex-none" :src="pageData.detail.icon"/>
           <view class="name mx-6 text-14 line-clamp-1">{{pageData.detail.author}}</view>
         </view>
         <debounce @debounce="attention">
-          <button :class="['flex-none', 'mr-5', 'w-64', 'h-26', 'leading-26', 'rounded-full', 'text-12', pageData.detail.isFollow ? '' : 'bg-[#f8cf01]', pageData.detail.isFollow ? '' : 'text-[#272a29]']">{{pageData.detail.isFollow ? '已':'+'}}关注</button>
+          <button :class="['flex-none', 'ml-5', 'mr-5', 'w-64', 'h-26', 'leading-26', 'rounded-full', 'text-12', pageData.detail.isFollow ? '' : 'bg-[#f8cf01]', pageData.detail.isFollow ? '' : 'text-[#272a29]']">{{pageData.detail.isFollow ? '已':'+'}}关注</button>
         </debounce>
       </customNav>
       <opus-article :detail="pageData.detail" v-if="pageData.detail.opusType == 1"></opus-article>
