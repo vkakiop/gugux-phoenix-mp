@@ -65,6 +65,7 @@ service.interceptors.request.use(config => {
 })
 
 service.interceptors.response.use(res => {
+        let oldres = res
         if (isPlatformMp()) {
             res = res.data
         }
@@ -84,12 +85,13 @@ service.interceptors.response.use(res => {
         }
         if (code !== 200) {
             //Toast.fail(msg);
+            console.log('错误url:',oldres.url)
             uni.showToast({
                 title: msg,
                 icon:'none',
                 duration: 2000
             });
-            return Promise.reject('error')
+            return Promise.reject(res.data)
         } else {
             return  Promise.resolve(res.data)
         }
@@ -158,11 +160,11 @@ axios.defaults.adapter = function(config) { //自己定义个适配器，用来�
                 let data = res.data
                 try {
                     var JSONbig = JSONBIG({storeAsString: true});
-                    resolve({data:JSONbig.parse(data)});
+                    resolve({data:JSONbig.parse(data),url:config.baseURL + buildURL(config.url, config.params, config.paramsSerializer)});
                 }
                 catch (err) {
                     // 如果转换失败，则包装为统一数据格式并返回
-                    reject('请求失败');
+                    reject({data:JSONbig.parse(data),title:'请求失败',url:config.baseURL + buildURL(config.url, config.params, config.paramsSerializer)});
                 }
             },
             fail:(err) => {
@@ -174,7 +176,7 @@ axios.defaults.adapter = function(config) { //自己定义个适配器，用来�
                         title: res.data.msg!=null&&res.data.msg!=undefined&&res.data.msg!=''?res.data.msg:'网络异常，请重试！',
                         icon: 'none'
                     })
-                    reject('网络异常，请重试！');
+                    reject({title:'网络异常，请重试！',url:config.baseURL + buildURL(config.url, config.params, config.paramsSerializer)});
                 //}
             },
             complete:()=>{
