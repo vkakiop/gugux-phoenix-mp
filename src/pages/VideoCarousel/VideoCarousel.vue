@@ -5,9 +5,9 @@
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive} from "vue";
 import dtVideo from "../../components/index/dtVideo.vue"
-import { onShow, onLoad } from "@dcloudio/uni-app"
+import { onLoad } from "@dcloudio/uni-app"
 const pageData = reactive({
 	lastVideoId: '',
 	id: ''

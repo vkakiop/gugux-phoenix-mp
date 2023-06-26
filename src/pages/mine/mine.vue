@@ -65,7 +65,7 @@
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
 				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
 					class="h-500 flex items-center justify-center">
-					<u-empty  text="内容为空"   mode="list" icon="/static/img/nodata.png" />
+					<u-empty text="内容为空" mode="list" icon="/static/img/nodata.png" />
 				</view>
 				<view v-show="waterIndex == pageData.currentIndex">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
@@ -80,7 +80,7 @@
 <script setup>
 import waterfall from '@/components/index/waterfall.vue'
 import { userhomepage, homepagelike, homepageopus, homepagecollection } from "@/api/mine/index.js"
-import { ref, onMounted, reactive, watch, computed, getCurrentInstance } from 'vue'
+import { ref, reactive } from 'vue'
 import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
 import { getTokenValue } from "@/utils/utils"
 import useLoginTokenStore from '@/store/modules/loginToken'
@@ -225,7 +225,7 @@ const gettolcount = () => {
 				pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
 			})
 		} else if (index === 2) {
-			homepagecollection({pageNum: 1,pageSize: 10}).then(res => {
+			homepagecollection({ pageNum: 1, pageSize: 10 }).then(res => {
 				pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
 			})
 		}

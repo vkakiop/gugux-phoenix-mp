@@ -1,6 +1,8 @@
 import {switchTabPathes,configLoginToken} from '@/config/index'
 import useLoginTokenStore from '@/store/modules/loginToken'
 import {getUserInfo} from '@/api/mine/index'
+import WebIM from '@/utils/WebIM'
+
 export function tokenSave(res,returnUrl) {
     //const app = getApp()
     let tokenRes = res.data
@@ -15,6 +17,21 @@ export function tokenSave(res,returnUrl) {
                 key: configLoginToken,
                 data: JSON.stringify(tokenRes),
                 success: function () {
+                    //环信登录
+                    uni.setStorage({
+                        key: "myUsername",
+                        data: tokenRes.user.nickname
+                    });
+                    getApp().globalData.conn.open({
+                        apiUrl: WebIM.config.apiURL,
+                        user: tokenRes.imId,
+                        pwd: tokenRes.imPwd,
+                        accessToken: tokenRes.imToken,
+                        //grant_type: this.data.grant_type,
+                        appKey: WebIM.config.appkey
+                    });
+
+                    //跳转
                     let url = returnUrl || '/pages/index/index'
                     if (returnUrl) {
                         let isSwitch = isSwitchTab(url)

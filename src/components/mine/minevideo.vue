@@ -8,15 +8,28 @@
 			<image class="w-64 h-64" src="@/static/opus/icon_play.png" />
 		</view>
 		<view class="info w-275 pl-16">
-			<view class="font-bold h-17 leading-16 text-17">@{{ pageData.opusdetail.author }}</view>
-			<view class="text-14 leading-16 my-11">发布时间：{{ pageData.opusdetail.createdTime }}</view>
-			<view class="text-16 leading-25">{{ pageData.opusdetail.brief }}</view>
+			<view v-if="pageData.opusdetail.recommendedCity"
+				class="flex items-center text-13 mb-15   rounded-9 w-90  justify-center  h-19"
+				style="background-color: rgba(244, 244, 244, 0.2);">
+				<image src="@/static/opus/icon_location_white.png" class="w-9 h-11 mr-4" />{{
+					pageData.opusdetail.recommendedCity }}
+			</view>
+			<view class="font-bold h-17 leading-16 text-17 flex items-center">@{{ pageData.opusdetail.author }}
+				<image src="/static/mine/shop.png" class="w-19 h-19 ml-4" v-if="pageData.opusdetail.hasShop" />
+				<image src="/static/mine/vip.png" class="w-49 h-19 ml-4" v-if="pageData.opusdetail.isDr" />
+			</view>
+			<view class="text-14 leading-16 my-11">发布于：{{ pageData.opusdetail.createdTime }}</view>
+			<view class="text-16 leading-25 flex items-center">
+				<image src="/static/video/good.png" class="w-19 h-19 mr-4" v-if="pageData.opusdetail.boutique" />{{
+					pageData.opusdetail.brief }}
+			</view>
 		</view>
 		<view class="buttons text-sm">
 			<debounce class="header_group">
 				<image class="header" :src="pageData.opusdetail.icon" @click="gohomepage(pageData.opusdetail)"></image>
-				<view class="add" v-if="!pageData.opusdetail.isFollow" @click="attention(pageData.opusdetail)">
-					<image src="@/static/video/attention.png" class="w-19 h-19"></image>
+				<view class="add" v-if="!pageData.opusdetail.isFollow">
+					<image src="@/static/video/attention.png" class="w-19 h-19"
+						@click.stop="attention(pageData.opusdetail)"></image>
 				</view>
 			</debounce>
 			<debounce @debounce="like(pageData.opusdetail)" class="button mb-10">
@@ -55,17 +68,18 @@
 		<loginPop :isShow="pageData.isShowLoginPop" @close="pageData.isShowLoginPop = false"></loginPop>
 	</view>
 	<view v-else class="w-screen h-screen flex justify-center items-center">
-      <u-empty mode="data" text="获取视频失败" icon="/static/img/nodata.png"/>
-    </view>
+		<u-empty mode="data" text="获取视频失败" icon="/static/img/nodata.png" />
+	</view>
 </template>
 
 <script setup>
 import comment from "@/components/common/comment.vue"
 import { opusdetails } from "@/api/mine/index"
 import { getTokenValue } from "@/utils/utils"
-import { opusInfo, opusCollect, opusLike, userFans, userFansRemove } from "@/api/opus/index"
-import { getCurrentInstance, reactive, watch, ref } from 'vue'
-import { onLoad, onShow } from '@dcloudio/uni-app'
+import { opusCollect, opusLike, userFans } from "@/api/opus/index"
+import { getCurrentInstance, reactive, ref } from 'vue'
+import useLoginTokenStore from '@/store/modules/loginToken'
+import { onLoad } from '@dcloudio/uni-app'
 const isShare = ref(false)
 const pageData = reactive({
 	id: '',
@@ -91,9 +105,18 @@ const fetchData = () => {
 	}
 }
 const gohomepage = (item) => {
+	if (useLoginTokenStore().get().user) {
+		if (item.createdBy == useLoginTokenStore().get().user.id) {
+			uni.switchTab({
+				url: '/pages/mine/mine.vue'
+			})
+			return
+		}
+	}
 	uni.navigateTo({
 		url: '/pages/userhomepage/userhomepage?id=' + item.createdBy
 	})
+
 }
 const playVideo = () => {
 	let currentId = 'video0'; // 获取当前视频id

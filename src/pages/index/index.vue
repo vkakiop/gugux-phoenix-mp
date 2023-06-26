@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive, watch, computed, getCurrentInstance } from 'vue'
+import { ref, onMounted, reactive, watch } from 'vue'
 import { opusList } from '@/api/opus/list'
 import waterfall from '@/components/index/waterfall.vue'
 import safeguardconfirm from '@/components/safeguard/safeguardconfirm.vue'
