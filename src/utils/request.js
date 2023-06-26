@@ -173,7 +173,7 @@ axios.defaults.adapter = function(config) { //自己定义个适配器，用来�
                 // }
                 // else {
                     uni.showToast({
-                        title: res.data.msg!=null&&res.data.msg!=undefined&&res.data.msg!=''?res.data.msg:'网络异常，请重试！',
+                        title: '网络异常，请重试！',
                         icon: 'none'
                     })
                     reject({title:'网络异常，请重试！',url:config.baseURL + buildURL(config.url, config.params, config.paramsSerializer)});
