@@ -45,7 +45,7 @@
           <view class="my-28">登录注册需要您阅读并同意我们的<text class="text-[#f0c801]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#f0c801]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>
           </view>
           <view class="flex justify-center items-center">
-            <button class="w-115 h-40 leading-40 rounded-full bg-[#282A29] active:bg-[#222423] text-[#f8Cf01]" @click="pageData.isDialogShow=false">不同意</button>
+            <button class="w-115 h-40 leading-40 rounded-full " @click="pageData.isDialogShow=false">不同意</button>
             <button class="w-115 h-40 leading-40 rounded-full bg-[#f8cf01] active:bg-[#f0c801] text-[#333333]" @click="pageData.isDialogShow=false;pageData.isAgreeItems=[''];onLogin();">我同意</button>
           </view>
         </view>
