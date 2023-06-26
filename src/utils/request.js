@@ -86,11 +86,20 @@ service.interceptors.response.use(res => {
         if (code !== 200) {
             //Toast.fail(msg);
             console.log('错误url:',oldres.url)
-            uni.showToast({
-                title: msg,
-                icon:'none',
-                duration: 2000
-            });
+            let ignoreErrorUrls = ['/gugux-services-location-api/app/security/safe/emergency/contact/help/add']
+            let isFind = false;
+            ignoreErrorUrls.forEach((item)=>{
+                if(oldres.url.indexOf(item) != -1){
+                    isFind = true;
+                }
+            })
+            if(!isFind){
+                uni.showToast({
+                    title: msg,
+                    icon:'none',
+                    duration: 2000
+                });
+            }
             return Promise.reject(res.data)
         } else {
             return  Promise.resolve(res.data)

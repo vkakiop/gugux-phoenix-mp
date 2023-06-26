@@ -51,7 +51,7 @@ const alarmData = reactive({
 })
 
 onLoad(()=>{
-//   getData();
+  getData();
 })
 const getData = ()=>{
   let data =  uni.getStorageSync('help_contact');
@@ -74,8 +74,8 @@ const confirmShow = (id) => {
         // }
         alarmData.showBox = false;
     }).catch((res)=>{
-        console.log(res)
-        alarmData.msg =res.data.msg;
+        console.log(res,222)
+        alarmData.msg =res.msg;
         alarmData.isAgree = 2;
         alarmData.showBox = false;
     })
