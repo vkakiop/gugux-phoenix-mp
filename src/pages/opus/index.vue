@@ -76,6 +76,7 @@ const comment2Ref = ref()
 const _this = getCurrentInstance()
 
 onLoad((option)=>{
+  console.log('option:',option)
     pageData.id = option.id
     pageData.traceInfo = decodeURIComponent(option.traceInfo || '')
     getData()
@@ -139,7 +140,7 @@ const attention = ()=>{
 const collection = ()=>{
   let action = pageData.detail.isCollection ? 0 : 1
   if (getTokenValue()) {
-    opusCollect({opusId: pageData.id, action: action}).then(res => {
+    opusCollect({opusId: pageData.id, action: action},{trackInfo:pageData.traceInfo}).then(res => {
       if (action) {
         pageData.detail.isCollection = true
         pageData.detail.collectionNum ++
@@ -164,7 +165,7 @@ const collection = ()=>{
 const like = ()=>{
   let action = pageData.detail.isLike ? 0 : 1
   if (getTokenValue()) {
-    opusLike({opusId: pageData.id, action: action}).then(res => {
+    opusLike({opusId: pageData.id, action: action},{trackInfo:pageData.traceInfo}).then(res => {
       if (action) {
         pageData.detail.isLike = true
         pageData.detail.likeNum ++

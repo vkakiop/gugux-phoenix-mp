@@ -19,18 +19,20 @@ export function getOpusTrack(data) {
 }
 
 //作品收藏
-export function opusCollect(data) {
+export function opusCollect(path,data) {
     return request({
-        url: '/gugux-services-opus-api/app/opus/collect/'+data.opusId+'/'+data.action,
+        url: '/gugux-services-opus-api/app/opus/collect/'+path.opusId+'/'+path.action,
         method: 'post',
+        params:data,
     })
 }
 
 //作品点赞
-export function opusLike(data) {
+export function opusLike(path,data) {
     return request({
-        url: '/gugux-services-opus-api/app/opus/like/'+data.opusId+'/'+data.action,
-        method: 'post'
+        url: '/gugux-services-opus-api/app/opus/like/'+path.opusId+'/'+path.action,
+        method: 'post',
+        params:data,
     })
 }
 

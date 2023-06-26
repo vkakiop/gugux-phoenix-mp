@@ -60,16 +60,16 @@ const gohomepage = (item) => {
 const godetail = (item) => {
   if (item.cover.itemType == 2) {
     uni.navigateTo({
-      url: `/pages/opus/index?id=${item.id}?traceInfo=${encodeURIComponent(item.traceInfo)}`
+      url: `/pages/opus/index?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}`
     })
   } else if (item.cover.itemType == 3) {
     if(props["itemKey"]=='mine'){
       uni.navigateTo({
-        url: `/components/mine/minevideo?id=${item.id}`
+        url: `/components/mine/minevideo?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}`
       })
     }else{
       uni.navigateTo({
-        url: `/pages/VideoCarousel/VideoCarousel?id=${item.id}`
+        url: `/pages/VideoCarousel/VideoCarousel?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}`
       })
     }
   }
