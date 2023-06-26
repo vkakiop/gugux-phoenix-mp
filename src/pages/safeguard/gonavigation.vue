@@ -17,7 +17,7 @@
                 </view>
                 <view class="btn location" @click="openMap(pageData.data.longitude,pageData.data.latitude)">
                     <image src="/static/img/location.png"  mode="widthFix"/>
-                    去导航
+                    导航过去
                 </view>
             </view>
         </view>

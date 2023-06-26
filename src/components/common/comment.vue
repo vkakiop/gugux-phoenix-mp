@@ -473,6 +473,7 @@ image{
                     image{
                         width:16rpx;
                         height: 25rpx;
+                        margin:0 10rpx;
                     }
                 }
                 .content{
