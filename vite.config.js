@@ -56,4 +56,7 @@ export default defineConfig({
       plugins: postcssPlugins,
     },
   },
+  optimizeDeps: {
+    include:['@/newSDK/Easemob-chat-4.1.4','@/newSDK/uni_sdk3.6.3','@/newSDK/uni_sdk3.6.3','@/newSDK/uniapp-sdk-4.1.3']
+  },
 });
