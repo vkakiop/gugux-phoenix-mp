@@ -1,6 +1,6 @@
 <template>
     <view class="emergencycontact">
-        <!--image src="/static/emergencycontact/bg.jpg" alt=""></image-->
+        <!-- <image src="/static/emergencycontact/bg.jpg" alt=""></image> -->
         <view class="contain">
             <view>感谢您，</view>
             <view>紧急联系人绑定成功</view>

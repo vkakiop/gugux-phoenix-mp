@@ -3,22 +3,24 @@
     <u-modal :show="show"
       :showConfirmButton="false" ref="uModal" >
       <view class="slot-content">
-        <view class="title"><text class="alarm-red">{{ alarmData.data.name}}</text>发出了<text class="alarm-red">紧急求助！</text>
-        这是{{ alarmData.data.name}}的位置，请前往救助！
+        <view class="title">
+          <!-- <text class="alarm-red">{{ alarmData.data.name}}</text>发出了<text class="alarm-red">紧急求助！</text>
+            这是{{ alarmData.data.name}}的位置，请前往救助！ -->
+            {{ alarmData.msg }}
         </view>
         <view class="map">
           <view class="page-section page-section-gap" style="width: 100%; background: #ddd; height: 300rpx;">
-            <map style="width: 100%; height: 300rpx;" :latitude="alarmData.data.latitude" :longitude="alarmData.data.longitude" :markers="alarmData.data.covers">
+            <map style="width: 100%; height: 300rpx;" :latitude="alarmData.data.lat" :longitude="alarmData.data.lng" :markers="alarmData.data.covers">
             </map>
           </view>
           <view class="map-name">
             <image  src="/static/img/user.png"  mode="widthFix"/>
-             {{ alarmData.data.address }}
+             {{ alarmData.data.unusualLocation }}
           </view>
         </view>
         <view class="foot-btn">
-          <view class="btn btn1" @click="closeShow(alarmData.data.id)">查看详情</view>
-          <view class="btn btn2" @click="confirmShow(alarmData.data.id)">导航去这里</view>
+          <view class="btn btn1" @click="closeShow(alarmData.data.manageId)">查看详情</view>
+          <view class="btn btn2" @click="confirmShow(alarmData.data.manageId)">导航去这里</view>
         </view>
       </view>
     </u-modal>
@@ -30,33 +32,48 @@
 <script setup>
 import { ref, onMounted, reactive,watch } from 'vue'
 import { onLoad ,onReachBottom} from '@dcloudio/uni-app'
-const show = ref(true);
+import JSONBIG from 'json-bigint'
+const show = ref(false);
 const alarmData = reactive({
+  msg:'',
   data:{
-    id: '1601683533353328702',
-    name: '张三',
+    manageId: '1601683533353328702',
+    username: '张三',
     phone: '13333333333',
-    address: '重庆市四川商会重庆市四川商会商会',
-    latitude: 39.909,
-    longitude: 116.39742,
+    unusualLocation: '重庆市四川商会重庆市四川商会商会',
+    lat: '',
+    lng: '',
     covers: [{
-      latitude: 39.909,
-      longitude: 116.39742,
+      latitude: '',
+      longitude: '',
       // iconPath: '../../../static/location.png'
     }]
   }
 })
-
-const confirmShow = (id) => {
+onLoad(()=>{
+  getData();
+})
+const getData = ()=>{
+  let data =  uni.getStorageSync('storage_key');
+  alarmData.msg = data.data.content;
+   
+  const json = JSONBIG({storeAsString:true});
+  alarmData.data = json.parse(data.data.data);
+  alarmData.data.covers = [{
+    latitude : alarmData.data.lat,
+    longitude : alarmData.data.lng,
+  }]
+  show.value = true;
+}
+const confirmShow = (manageId) => {
   show.value = false;
   console.log('去导航');
-  // uni.navigateTo({ url: '/pages/emergencycontact/index?id=' + encodeURIComponent(13333333333) })
-  uni.navigateTo({ url: '/pages/safeguard/gonavigation?id=' + encodeURIComponent(id) })
+  uni.navigateTo({ url: '/pages/safeguard/gonavigation?id=' + encodeURIComponent(manageId) })
 }
-const closeShow = (id) =>  {
+const closeShow = (manageId) =>  {
   show.value = false;
   console.log('查看详情');
-  uni.navigateTo({ url: '/pages/safeguard/safeguarddetail?id=' + encodeURIComponent(id) })
+  uni.navigateTo({ url: '/pages/safeguard/safeguarddetail?id=' + encodeURIComponent(manageId) })
 }
 </script>
 

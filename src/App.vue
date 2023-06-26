@@ -439,7 +439,14 @@ export default {
           calcUnReadSpot(message);
           ack(message);
           onGetSilentConfig(message);
-          
+          if(message.from == "admin-safe"){
+            uni.setStorage({
+              key: 'storage_key',
+              data: {
+                data:message.ext.custom_json.connectContact
+              }
+            });
+          }
         }
       },
       // 当前用户收到自定义消息。

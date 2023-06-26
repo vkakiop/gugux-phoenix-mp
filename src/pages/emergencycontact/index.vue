@@ -1,6 +1,6 @@
 <template>
     <view class="emergencycontact">
-        <!--image src="/static/emergencycontact/bg.jpg" alt=""></image-->
+        <!-- <image src="/static/emergencycontact/bg.jpg" alt=""></image> -->
         <view class="contain">
             <view>您的好友{{pageData.data.name}}({{ pageData.data.phone }})邀请您
             成为他的紧急联系人</view>
