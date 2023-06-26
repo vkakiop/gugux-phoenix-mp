@@ -7,7 +7,6 @@ import JSONBIG from 'json-bigint'
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 
 let baseUrl = import.meta.env.VITE_APP_BASE_API
-let ignoreErrorUrls = ['/gugux-services-location-api/app/security/safe/emergency/contact/help/add']
 
 // 创建axios实例
 const service = axios.create({
@@ -86,6 +85,7 @@ service.interceptors.response.use(res => {
         }
         if (code !== 200) {
             //Toast.fail(msg);
+            let ignoreErrorUrls = ['/gugux-services-location-api/app/security/safe/emergency/contact/help/add']
             let isFind = false;
             ignoreErrorUrls.forEach((item)=>{
                 if(oldres.url.indexOf(item) != -1){
@@ -105,33 +105,12 @@ service.interceptors.response.use(res => {
         }
     },
     error => {
-        let message = error.message + ''
-        if (message == "Network Error") {
-            message = "后端接口连接异常";
-        }
-        else if (message.includes("timeout")) {
-            message = "系统接口请求超时";
-        }
-        else if (message.includes("Request failed with status code")) {
-            message = "系统接口" + message.substr(message.length - 3) + "异常";
-        }
-        else if (message.includes('request:fail')) {
-            message = "网络异常，请重试！";
-        }
         //Toast.fail(message);
-        let isFind = false;
-        ignoreErrorUrls.forEach((item)=>{
-            if(error.url.indexOf(item) != -1){
-                isFind = true;
-            }
-        })
-        if(!isFind) {
-            uni.showToast({
-                title: message,
-                icon:'none',
-                duration: 2000
-            });
-        }
+        uni.showToast({
+            title: error.message,
+            icon:'none',
+            duration: 2000
+        });
         return Promise.reject(error)
     }
 )
@@ -195,6 +174,18 @@ axios.defaults.adapter = function(config) { //自己定义个适配器，用来�
                 let message = error || '网络异常，请重试！'
                 if (typeof(error) == 'object') {
                     message = error.errMsg + ''
+                }
+                if (message == "Network Error") {
+                    message = "后端接口连接异常";
+                }
+                else if (message.includes("timeout")) {
+                    message = "系统接口请求超时";
+                }
+                else if (message.includes("Request failed with status code")) {
+                    message = "系统接口" + message.substr(message.length - 3) + "异常";
+                }
+                else if (message.includes('request:fail')) {
+                    message = "网络异常，请重试！";
                 }
                 reject({message:message,url:config.baseURL + buildURL(config.url, config.params, config.paramsSerializer)});
                 //}
