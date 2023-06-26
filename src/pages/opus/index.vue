@@ -31,7 +31,7 @@
               <view class="flex mr-20">
                 <image v-if="pageData.detail.isCollection" class="w-24 h-24" src="@/static/opus/icon_collect_ed.png"/>
                 <image v-else class="w-24 h-24" src="@/static/opus/icon_collect.png"/>
-                <view class="ml-5 mt-2">{{computedNumber(pageData.detail.collectionNum}}</view>
+                <view class="ml-5 mt-2">{{computedNumber(pageData.detail.collectionNum)}}</view>
               </view>
             </debounce>
             <debounce @debounce="commentAdd">

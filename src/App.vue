@@ -10,6 +10,7 @@ import { onGetSilentConfig } from './components/chat/pushStorage'
 import {getCurrentPageUrl} from '@/utils/utils'
 import {configLoginToken} from '@/config/index'
 import useLoginTokenStore from '@/store/modules/loginToken'
+import {hxLogin} from "./utils/login";
 
 let logout = false;
 
@@ -135,10 +136,11 @@ export default {
       curOpenOpt: {},
 
       open(opt) {
-        uni.showLoading({
-          title: "正在初始化客户端..",
-          mask: true,
-        });
+        // uni.showLoading({
+        //   title: "正在初始化客户端..",
+        //   mask: true,
+        // });
+        console.log('正在初始化客户端..')
         this.curOpenOpt = opt;
         WebIM.conn.open(opt);
         this.closed = false;
@@ -195,13 +197,13 @@ export default {
   onLaunch: function () {
     //登录信息处理
     let ggx_login_token_text = uni.getStorageSync(configLoginToken)
+    let loginToken = {}
     if (ggx_login_token_text) {
-      let loginToken = JSON.parse(ggx_login_token_text) || {}
+      loginToken = JSON.parse(ggx_login_token_text) || {}
       //this.globalData.loginToken = loginToken
       const loginTokenStore = useLoginTokenStore()
       loginTokenStore.set(loginToken)
     }
-    console.log('loginToken',this.globalData)
 
     //环信IM消息处理
     // 调用 API 从本地缓存中获取数据
@@ -538,6 +540,12 @@ export default {
       },
     });
     this.globalData.checkIsIPhoneX();
+
+    //已登录登录环信
+    if (loginToken.accessToken) {
+      //环信登录
+      hxLogin(loginToken,this)
+    }
   },
   onShow: function () {
     console.log('App Show')

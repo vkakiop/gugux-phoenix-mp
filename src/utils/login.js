@@ -18,18 +18,7 @@ export function tokenSave(res,returnUrl) {
                 data: JSON.stringify(tokenRes),
                 success: function () {
                     //环信登录
-                    uni.setStorage({
-                        key: "myUsername",
-                        data: tokenRes.user.nickname
-                    });
-                    getApp().globalData.conn.open({
-                        apiUrl: WebIM.config.apiURL,
-                        user: tokenRes.imId,
-                        pwd: tokenRes.imPwd,
-                        accessToken: tokenRes.imToken,
-                        //grant_type: this.data.grant_type,
-                        appKey: WebIM.config.appkey
-                    });
+                    hxLogin(tokenRes)
 
                     //跳转
                     let url = returnUrl || '/pages/index/index'
@@ -72,4 +61,24 @@ export function isSwitchTab(path) {
         })
     }
     return isSwitch
+}
+
+export function hxLogin(tokenRes,app) {
+    uni.setStorage({
+        key: "myUsername",
+        data: tokenRes.user.nickname
+    });
+    let thisApp = app
+    if (!app) {
+        thisApp = getApp()
+    }
+    thisApp.globalData.conn.open({
+        apiUrl: WebIM.config.apiURL,
+        user: tokenRes.imId,
+        pwd: tokenRes.imPwd,
+        accessToken: tokenRes.imToken,
+        //grant_type: this.data.grant_type,
+        appKey: WebIM.config.appkey
+    });
+    console.log('环信已登录')
 }
