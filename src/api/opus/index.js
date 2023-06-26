@@ -23,7 +23,7 @@ export function opusCollect(path,data) {
     return request({
         url: '/gugux-services-opus-api/app/opus/collect/'+path.opusId+'/'+path.action,
         method: 'post',
-        data:data,
+        params:data,
     })
 }
 
@@ -32,7 +32,7 @@ export function opusLike(path,data) {
     return request({
         url: '/gugux-services-opus-api/app/opus/like/'+path.opusId+'/'+path.action,
         method: 'post',
-        data:data,
+        params:data,
     })
 }
 
