@@ -1,6 +1,6 @@
 <template>
 	<view v-if="pageData.lastVideoId">
-		<dt-video :lastVideoId="pageData.lastVideoId" :opusid="pageData.id" />
+		<dt-video :lastVideoId="pageData.lastVideoId" :opusid="pageData.id"  :traceInfo="pageData.traceInfo"  />
 	</view>
 </template>
 
@@ -10,11 +10,13 @@ import dtVideo from "../../components/index/dtVideo.vue"
 import { onLoad } from "@dcloudio/uni-app"
 const pageData = reactive({
 	lastVideoId: '',
-	id: ''
+	id: '',
+	traceInfo:'',
 })
 onLoad((option) => {
 	pageData.lastVideoId = option.id
 	pageData.id = option.id
+	pageData.traceInfo=option.traceInfo
 })
 </script>
 
