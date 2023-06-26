@@ -24,8 +24,8 @@
 		<view class="buttons text-sm">
 			<debounce class="header_group">
 				<image class="header" :src="pageData.opusdetail.icon" @click="gohomepage(pageData.opusdetail)"></image>
-				<view class="add" v-if="!pageData.opusdetail.isFollow" @click="attention(pageData.opusdetail)">
-					<image src="@/static/video/attention.png" class="w-19 h-19"></image>
+				<view class="add" v-if="!pageData.opusdetail.isFollow">
+					<image src="@/static/video/attention.png" class="w-19 h-19" @click.stop="attention(pageData.opusdetail)"></image>
 				</view>
 			</debounce>
 			<debounce @debounce="like(pageData.opusdetail)" class="button mb-10">

@@ -20,8 +20,8 @@
 					<view class="buttons text-sm">
 						<debounce class="header_group">
 							<image class="header" :src="item.icon" @click="gohomepage(item)"></image>
-							<view class="add" v-if="!item.isFollow" @click="attention(item)">
-								<image src="@/static/video/attention.png" class="w-19 h-19"></image>
+							<view class="add" v-if="!item.isFollow" >
+								<image src="@/static/video/attention.png" class="w-19 h-19" @click.stop="attention(item)"></image>
 							</view>
 						</debounce>
 						<debounce @debounce="like(item)" class="button mb-10">
