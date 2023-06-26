@@ -3,11 +3,11 @@
 		<customNav>
 			<view @click="gotoBack" class="ml-3"><uni-icons type="back" size="24"></uni-icons></view>
 			<!-- 搜索框 -->
-			<view class="bg-white w-full py-10 ">
+			<view class="bg-white w-full py-10" @click="isShowHistory=true">
 				<view class="w-full flex items-center">
 					<view	class="flex items-center ml-5  bg-[#F5F6F8]  h-30 w-175 rounded-40 border-1 border-[#E3E3E3] text-15 text-[#333]">
 						<input class="ml-15" v-model="searchvalue" placeholder="搜索" type="text" @confirm="search" />
-						<view class="px-12 relative z-50 flex items-center" @click="search">
+						<view class="px-12 relative z-50 flex items-center" @click.stop="search">
 							<image src="/static/mine/searchhistory.png" class="w-16 h-16" />
 						</view>
 					</view>
