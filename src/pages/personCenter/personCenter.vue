@@ -75,16 +75,14 @@
 <script setup>
 import { getUserInfo } from "@/api/mine/index.js"
 import { onLoad } from "@dcloudio/uni-app";
-import { ref, reactive } from 'vue'
+import {reactive } from 'vue'
 const pageData = reactive({
 	//数据全部列表
 	userInfo: {}
 })
 onLoad(() => {
 	getUserInfo({}).then(res => {
-		pageData.userInfo = {
-			...res.data
-		}
+		pageData.userInfo = {...res.data}
 	})
 })
 const skipQRcode = () => {

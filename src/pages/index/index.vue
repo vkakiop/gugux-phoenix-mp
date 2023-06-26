@@ -61,11 +61,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive, watch, computed, getCurrentInstance } from 'vue'
+import { ref, onMounted, reactive, watch } from 'vue'
 import { opusList } from '@/api/opus/list'
 import waterfall from '@/components/index/waterfall.vue'
-import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
-import useRouterStore from '@/store/modules/router'
+import { onReachBottom, onPageScroll } from "@dcloudio/uni-app"
 import useLoginTokenStore from '@/store/modules/loginToken'
 import _ from 'lodash'
 const show = ref(false);

@@ -73,8 +73,8 @@
 <script setup>
 import waterfall from '@/components/index/waterfall.vue'
 import { opusSearchNew } from "@/api/worksSearch/index.js"
-import { ref, onMounted, reactive, watch, computed, getCurrentInstance } from 'vue'
-import { onReachBottom, onLoad, onPageScroll, onShow } from '@dcloudio/uni-app';
+import { ref, onMounted, reactive, watch } from 'vue'
+import { onReachBottom, onPageScroll} from '@dcloudio/uni-app';
 import useLoginTokenStore from '@/store/modules/loginToken'
 import _ from 'lodash'
 const searchvalue = ref('')

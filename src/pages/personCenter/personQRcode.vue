@@ -1,7 +1,7 @@
 <template>
 	<view style="background-color:#F7F8F9 ;width: 100vw;height: 100vh" class="flex justify-center ">
 		<view class="codeSty">
-			<image src="/static/callingcard/perBack.png" class="backgroundSTY"></image>
+			<!-- <image src="/static/callingcard/perBack.png" class="backgroundSTY"></image> -->
 			<view class="flex flex-col justify-center items-center  relative z-20 ">
 				<view>
 					<image src="/static/logo.png" class="w-83 h-83 rounded-full mt-20"></image>
@@ -14,7 +14,7 @@
 			</view>
 			<view class="qdText">扫描上面的二维码图案，加我咕咕号</view>
 			<view class="m-20">
-				<image src="/static/callingcard/warlAll.png" class="w-72 h-33"></image>
+				<!-- <image src="/static/callingcard/warlAll.png" class="w-72 h-33"></image> -->
 			</view>
 			<view class="flex justify-between mt-10">
 				<button class="btnStyle1 mr-5">保存图片</button>
