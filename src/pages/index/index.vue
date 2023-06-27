@@ -3,8 +3,8 @@
     <view class="fixed -top-5 z-50 bg-white w-full py-10 mb-14">
       <view class="bg-white w-full pt-7 pb-5 pl-14  pr-22 flex justify-between">
         <!-- 菜单 -->
-        <view class="flex ">
-          <view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-29"
+        <view class="flex">
+          <view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-20"
             @click="changeWaterfall(index)">
             <view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }}</view>
             <view class=" h-4 relative -top-5 ">
@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive, watch } from 'vue'
+import { ref, onMounted, reactive, watch, nextTick } from 'vue'
 import { opusList } from '@/api/opus/list'
 import waterfall from '@/components/index/waterfall.vue'
 import safeguardconfirm from '@/components/safeguard/safeguardconfirm.vue'
@@ -43,52 +43,42 @@ import safeguard from '@/components/safeguard/safeguard.vue'
 import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
 import useRouterStore from '@/store/modules/router'
 import useLoginTokenStore from '@/store/modules/loginToken'
+import { frontpage } from "@/api/index/index";
 import _ from 'lodash'
 const gohistory = () => {
   uni.navigateTo({
     url: '/pages/index/searchHistory'
   })
 }
-onMounted(() => {
-  changeWaterfall(0)
-})
-
-onShow(()=>{
-  useRouterStore().setRouter('/pages/mine/mine',false)
-})
-
-const waterfallItems = [
-  {
-    scrollTop: -1, isComplete: false, isLoading: false, itemKey: 'testestse', itemType: 'title', name: '推荐', items: [], query: {
-      path: { category: '1', pageNum: 1, getNum: 10 },
-    }
-  },
-  {
-    scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '徒步', items: [], query: {
-      path: { category: '2431436580328327949', pageNum: 1, getNum: 10 },
-    }
-  },
-  {
-    scrollTop: -1, isComplete: false, isLoading: false, name: '风景', items: [], query: {
-      path: { category: '1622581366744965137', pageNum: 1, getNum: 10 },
-    }
-  },
-  {
-    scrollTop: -1, isComplete: false, isLoading: false, name: '骑行', items: [], query: {
-      path: { category: '1622581366744965136', pageNum: 1, getNum: 10 },
-    }
-  },
-]
-
+const waterfallItems = []
 const pageData = reactive({
   scrollTop: 0,
   currentIndex: 0,
-  waterfallItems: _.cloneDeep(waterfallItems),
+  waterfallItems: [],
+})
+frontpage({}).then(res => {
+  const opusCategoryVOS = res.data.opusCategoryVOS
+  opusCategoryVOS.forEach((item, index) => {
+    let obj = {
+      scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '', items: [], query: {
+        path: { category: '', pageNum: 1, getNum: 10 }
+      }
+    }
+    obj.name = item.name
+    obj.query.path.category = item.id
+    waterfallItems.push(obj)
+  })
+  pageData.waterfallItems = _.cloneDeep(waterfallItems)
+  nextTick(() => { changeWaterfall(0) })
+})
+onShow(() => {
+  useRouterStore().setRouter('/pages/mine/mine', false)
 })
 watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
   pageData.waterfallItems = _.cloneDeep(waterfallItems)
   changeWaterfall(pageData.currentIndex)
 })
+
 
 const changeWaterfall = (waterIndex) => {
   if (pageData.currentIndex != waterIndex) {
@@ -115,7 +105,7 @@ const getData = () => {
   pageData.waterfallItems[currentIndex].isLoading = true
   let query = pageData.waterfallItems[currentIndex].query
   opusList(query.path).then(res => {
-    if (res.data.length<10) {
+    if (res.data.length < 10) {
       pageData.waterfallItems[currentIndex].isComplete = true
     }
     pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data)
