@@ -39,6 +39,7 @@ const pageData = reactive({
   isShow:true,
   isDialogShow:false,
   isAgreeItems:[],
+  jsCode:'',
 })
 
 const close = ()=>{
@@ -49,12 +50,21 @@ const getPhoneNumberValid = ()=>{
   if (!pageData.isAgreeItems.length) {
     pageData.isDialogShow = true
   }
+  else {
+    uni.login({
+      provider: 'weixin', //使用微信登录
+      success: function (res) {
+        pageData.jsCode = res.code
+        console.log('wxLogin',res)
+      }
+    });
+  }
 }
 
 const getPhoneNumber = (e)=> {
   console.log('getPhoneNumber',e)
   if (e.detail.code) {
-    authWxLogin({code:e.detail.code}).then(res=>{
+    authWxLogin({code:e.detail.code,jsCode:pageData.jsCode}).then(res=>{
       tokenSave(res,'')
     })
     emits('close')
