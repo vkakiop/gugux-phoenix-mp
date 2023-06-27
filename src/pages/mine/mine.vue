@@ -85,6 +85,7 @@ import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
 import { getTokenValue } from "@/utils/utils"
 import useLoginTokenStore from '@/store/modules/loginToken'
 import useRouterStore from '@/store/modules/router'
+import _ from 'lodash'
 const computedNumber = computed({
 	get: (num) => { return function (num) { return num > 9999 ? (num / 10000).toFixed(1) + 'w' : num } }
 })
@@ -143,7 +144,7 @@ const pageData = reactive({
 	masterId: '',
 	scrollTop: 0,
 	currentIndex: 0,
-	waterfallItems: waterfallItems,
+	waterfallItems: _.cloneDeep(waterfallItems),
 })
 const iSinfo = ref(false)
 const pageInfo = reactive({
