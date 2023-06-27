@@ -53,14 +53,14 @@ const getPhoneNumberValid = ()=>{
 
 const getPhoneNumber = (e)=> {
   console.log('getPhoneNumber',e)
-  if (e.detail.errMsg) {
-    uni.showToast({title:e.detail.errMsg,icon: 'none', duration: 2000})
-  }
-  else {
+  if (e.detail.code) {
     authWxLogin({code:e.detail.code}).then(res=>{
       tokenSave(res,'')
     })
     emits('close')
+  }
+  else {
+    uni.showToast({title:e.detail.errMsg,icon: 'none', duration: 2000})
   }
 }
 
