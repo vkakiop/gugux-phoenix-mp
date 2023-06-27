@@ -3,9 +3,10 @@
 		<customNav>
 			<view @click="gotoBack" class="ml-3"><uni-icons type="back" size="24"></uni-icons></view>
 			<!-- 搜索框 -->
-			<view class="bg-white w-full py-10" @click="isShowHistory=true">
+			<view class="bg-white w-full py-10" @click="isShowHistory = true">
 				<view class="w-full flex items-center">
-					<view	class="flex items-center ml-5  bg-[#F5F6F8]  h-30 w-175 rounded-40 border-1 border-[#E3E3E3] text-15 text-[#333]">
+					<view
+						class="flex items-center ml-5  bg-[#F5F6F8]  h-30 w-175 rounded-40 border-1 border-[#E3E3E3] text-15 text-[#333]">
 						<input class="ml-15" v-model="searchvalue" placeholder="搜索" type="text" @confirm="search" />
 						<view class="px-12 relative z-50 flex items-center" @click.stop="search">
 							<image src="/static/mine/searchhistory.png" class="w-16 h-16" />
@@ -32,12 +33,12 @@
 						</view>
 					</view>
 				</view>
+				<view v-if="!pageData.searchHistoryList.length">
+					<u-empty mode="history" text="暂无历史记录" icon="/static/img/nodata.png">
+					</u-empty>
+				</view>
+			</view>
 
-			</view>
-			<view v-if="!pageData.searchHistoryList.length">
-				<u-empty mode="history" text="暂无历史记录"  icon="/static/img/nodata.png">
-				</u-empty>
-			</view>
 			<!-- 搜索历史 -->
 			<!-- 菜单 -->
 			<view class="w-full bg-white py-15" v-show="!isShowHistory">
@@ -56,14 +57,14 @@
 		</view>
 		<view class="mt-70" v-show="!isShowHistory">
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
-				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
-					class="h-500 flex items-center justify-center">
-					<u-empty mode="search" text="对不起,没有找到您要的搜索内容"   icon="/static/img/nodata.png" />
-				</view>
 				<view v-show="waterIndex == pageData.currentIndex">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
 						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
 					</waterfall>
+				</view>
+				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex && !waterItem.isComplete"
+					class="h-500 flex items-center justify-center">
+					<u-empty mode="search" text="对不起,没有找到您要的搜索内容" icon="/static/img/nodata.png" />
 				</view>
 			</view>
 		</view>
@@ -73,21 +74,12 @@
 <script setup>
 import waterfall from '@/components/index/waterfall.vue'
 import { opusSearchNew } from "@/api/worksSearch/index.js"
-import { ref, onMounted, reactive, watch } from 'vue'
-import { onReachBottom, onPageScroll} from '@dcloudio/uni-app';
+import { ref, onMounted, reactive, watch, nextTick } from 'vue'
+import { onReachBottom, onPageScroll } from '@dcloudio/uni-app';
 import useLoginTokenStore from '@/store/modules/loginToken'
 import _ from 'lodash'
 const searchvalue = ref('')
 const isShowHistory = ref(true)
-onMounted(() => {
-	changeWaterfall(0)
-	uni.getStorage({
-		key: 'gugusearchList',
-		success: function (res) {
-			pageData.searchHistoryList = JSON.parse(res.data)
-		}
-	})
-})
 const waterfallItems = [
 	{
 		scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '综合', items: [],
@@ -118,6 +110,17 @@ const pageData = reactive({
 	scrollTop: 0,
 	currentIndex: 0,
 	waterfallItems: _.cloneDeep(waterfallItems),
+})
+uni.getStorage({
+	key: 'gugusearchList',
+	success: function (res) {
+		pageData.searchHistoryList = JSON.parse(res.data)
+	}
+})
+onMounted(() => {
+	nextTick(() => {
+		changeWaterfall(0)
+	})
 })
 watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
 	pageData.waterfallItems = _.cloneDeep(waterfallItems)
@@ -237,4 +240,5 @@ onReachBottom(() => {
 	font-family: Source Han Sans SC;
 	font-weight: 400;
 	color: #999999;
-}</style>
+}
+</style>
