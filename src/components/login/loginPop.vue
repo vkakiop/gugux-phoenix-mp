@@ -54,9 +54,18 @@ const getPhoneNumberValid = ()=>{
     uni.login({
       provider: 'weixin', //使用微信登录
       success: function (res) {
-        pageData.jsCode = res.code
+        if (res.code) {
+          pageData.jsCode = res.code
+        }
+        else {
+          let title = '登录错误：'+res.errMsg
+          uni.showToast({title:title,icon: 'none', duration: 2000})
+        }
         console.log('wxLogin',res)
-      }
+      },
+      fail : function(res) {
+        uni.showToast({title:'登录错误：'+res.detail.code,icon: 'none', duration: 2000})
+      },
     });
   }
 }
@@ -64,13 +73,35 @@ const getPhoneNumberValid = ()=>{
 const getPhoneNumber = (e)=> {
   console.log('getPhoneNumber',e)
   if (e.detail.code) {
-    authWxLogin({code:e.detail.code,jsCode:pageData.jsCode}).then(res=>{
-      tokenSave(res,'')
-    })
-    emits('close')
+    if (pageData.jsCode) {
+      authWxLogin({code:e.detail.code,jsCode:pageData.jsCode}).then(res=>{
+        tokenSave(res,'')
+      })
+      emits('close')
+    }
+    else {
+      setTimeout(()=>{
+        if (pageData.jsCode) {
+          authWxLogin({code: e.detail.code, jsCode: pageData.jsCode}).then(res => {
+            tokenSave(res, '')
+          })
+          emits('close')
+        }
+        else {
+          uni.showToast({title:'登录获取code错误',icon: 'none', duration: 2000})
+        }
+      },2000)
+    }
   }
   else {
-    uni.showToast({title:e.detail.errMsg,icon: 'none', duration: 2000})
+    let title = '获取手机号错误：' + e.detail.errMsg
+    if (title.indexOf('getPhoneNumber:fail user deny') != -1) {
+      title = '获取手机号用户取消授权'
+    }
+    else if (title.indexOf('etPhoneNumber:fail no permission') != -1) {
+      title = '获取手机号暂无权限'
+    }
+    uni.showToast({title:title,icon: 'none', duration: 2000})
   }
 }
 
