@@ -35,7 +35,7 @@
 
 			</view>
 			<view v-if="!pageData.searchHistoryList.length">
-				<u-empty mode="history" icon="http://cdn.uviewui.com/uview/empty/history.png">
+				<u-empty mode="history" text="暂无历史记录"  icon="/static/img/nodata.png">
 				</u-empty>
 			</view>
 			<!-- 搜索历史 -->
@@ -57,8 +57,8 @@
 		<view class="mt-70" v-show="!isShowHistory">
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
 				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
-					class="h-screen flex items-center justify-center">
-					<u-empty mode="search" icon="/static/img/nodata.png" />
+					class="h-500 flex items-center justify-center">
+					<u-empty mode="search" text="对不起,没有找到您要的搜索内容"   icon="/static/img/nodata.png" />
 				</view>
 				<view v-show="waterIndex == pageData.currentIndex">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
