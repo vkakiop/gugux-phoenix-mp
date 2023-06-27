@@ -31,6 +31,8 @@
 
 <script setup>
 import {reactive} from 'vue'
+import {authWxLogin} from '@/api/login/index'
+import {tokenSave} from '@/utils/login'
 const props = defineProps(['isShow'])
 const emits = defineEmits(['close'])
 const pageData = reactive({
@@ -55,7 +57,9 @@ const getPhoneNumber = (e)=> {
     uni.showToast({title:e.detail.errMsg,icon: 'none', duration: 2000})
   }
   else {
-    uni.showToast({title:e.detail.code})
+    authWxLogin({code:e.detail.code}).then(res=>{
+      tokenSave(res,'')
+    })
     emits('close')
   }
 }

@@ -36,3 +36,16 @@ export function authPwdLogin(data) {
     })
 }
 
+// 微信小程序登录
+export function authWxLogin(data) {
+    return request({
+        url: '/gugux-services-auth-api/app/auth/applet/wx/login',
+        headers: {
+            isToken: false
+        },
+        method: 'post',
+        data:data
+    })
+}
+
+
