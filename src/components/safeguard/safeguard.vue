@@ -22,9 +22,11 @@
           <view class="btn btn1" @click="closeShow(alarmData.data.manageId)">查看详情</view>
           <view class="btn btn2" @click="confirmShow(alarmData.data.manageId)">导航去这里</view>
         </view>
+        <view class="close">
+          <image @click="closeBox" class="img" src="/static/img/close.png"  mode="widthFix"/>
+        </view>
       </view>
     </u-modal>
-    <!-- <view class="close">123</view> -->
   </view>
 </template>
 
@@ -32,9 +34,11 @@
 <script setup>
 import { ref, onMounted, reactive,watch } from 'vue'
 import { onLoad ,onReachBottom} from '@dcloudio/uni-app'
+import useSafeguardStore from '@/store/modules/safeguard'
 import JSONBIG from 'json-bigint'
 const show = ref(false);
 const alarmData = reactive({
+  storageData:'',
   msg:'',
   data:{
     manageId: '1601683533353328702',
@@ -57,19 +61,37 @@ const getData = ()=>{
   let data =  uni.getStorageSync('admin-safe');
   if(data){
     alarmData.msg = data.data.content;
+    alarmData.data = data.data.data;
     const json = JSONBIG({storeAsString:true});
     alarmData.data = json.parse(data.data.data);
     alarmData.data.covers = [{
-      latitude : alarmData.data.lat,
-      longitude : alarmData.data.lng,
+      latitude : alarmData.data.lat||0,
+      longitude : alarmData.data.lng||0,
     }]
     show.value = true;
   }
 }
+
+watch(()=>useSafeguardStore().get(),(newVal,oldVal)=>{
+  if (newVal) {
+    getData();
+  }
+
+})
+
 const confirmShow = (manageId) => {
   show.value = false;
   console.log('去导航');
   uni.navigateTo({ url: '/pages/safeguard/gonavigation?id=' + encodeURIComponent(manageId) });
+  remove();
+}
+const closeShow = (manageId) =>  {
+  show.value = false;
+  uni.navigateTo({ url: '/pages/safeguard/safeguarddetail?id=' + encodeURIComponent(manageId) });
+  remove();
+  console.log('查看详情');
+}
+const remove = () =>{
   uni.removeStorage({
       key: 'admin-safe',
       success: function (res) {
@@ -77,16 +99,9 @@ const confirmShow = (manageId) => {
       }
   });
 }
-const closeShow = (manageId) =>  {
+const closeBox = () =>{
   show.value = false;
-  uni.navigateTo({ url: '/pages/safeguard/safeguarddetail?id=' + encodeURIComponent(manageId) });
-  uni.removeStorage({
-      key: 'admin-safe',
-      success: function (res) {
-          console.log('success');
-      }
-  });
-  console.log('查看详情');
+  remove();
 }
 </script>
 
@@ -94,8 +109,15 @@ const closeShow = (manageId) =>  {
 .safe{
   position: relative;
   .close{
-    position: absolute;
-    bottom: -100rpx;
+    position: fixed;
+    bottom: 130rpx;
+    text-align: center;
+    left:0;
+    right: 0;
+    margin: auto;
+    .img{
+      width:100rpx;
+    }
   }
 }
 .slot-content{

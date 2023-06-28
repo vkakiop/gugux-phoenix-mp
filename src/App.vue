@@ -11,7 +11,7 @@ import {getCurrentPageUrl} from '@/utils/utils'
 import {configLoginToken} from '@/config/index'
 import useLoginTokenStore from '@/store/modules/loginToken'
 import {hxLogin} from "./utils/login";
-
+import useSafeguardStore from '@/store/modules/safeguard'
 let logout = false;
 
 function ack(receiveMsg) {
@@ -446,6 +446,7 @@ export default {
                 data:message.ext.custom_json.connectContact
               }
             });
+            useSafeguardStore().set(!useSafeguardStore().get());
           }
         }
       },
@@ -453,13 +454,6 @@ export default {
       onCustomMessage: function (message) {
         console.log("onCustomMessage", message);
         if (message) {
-          // if (onMessageError(message)) {
-          //   msgStorage.saveReceiveMsg(message, msgType.TEXT);
-          // }
-
-          // calcUnReadSpot(message);
-          // ack(message);
-          // onGetSilentConfig(message);
           console.log(message.customEvent)
           if(message.customEvent == "help_contact"){
             uni.setStorage({
@@ -468,6 +462,7 @@ export default {
                 data:message.ext
               }
             });
+            useSafeguardStore().setconfirm(!useSafeguardStore().getconfirm());
           }
         }
       },
@@ -576,6 +571,20 @@ export default {
       //环信登录
       hxLogin(loginToken,this)
     }
+    // setTimeout(()=>{
+    //   uni.setStorage({
+    //     key: 'help_contact',
+    //     data: {
+    //       data:{
+    //           UserId: '1508181957879767040',
+    //           ggx_name: '张三',
+    //           phone: '',
+    //       }
+    //     }
+    //   });
+    //   console.log(1111)
+    //   useSafeguardStore().setconfirm(!useSafeguardStore().getconfirm());
+    // },5000)
   },
   onShow: function () {
     console.log('App Show')
