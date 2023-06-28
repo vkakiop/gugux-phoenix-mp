@@ -64,10 +64,10 @@ export function isSwitchTab(path) {
 }
 
 export function hxLogin(tokenRes,app) {
-    uni.setStorage({
-        key: "myUsername",
-        data: tokenRes.user.nickname
-    });
+    // uni.setStorage({
+    //     key: "myUsername",
+    //     data: tokenRes.user.nickname
+    // });
     let thisApp = app
     if (!app) {
         thisApp = getApp()
