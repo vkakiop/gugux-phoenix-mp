@@ -3,19 +3,19 @@
 		<swiper class="swiper w-screen h-screen" vertical :current="pageData.current" :interval="2000" :duration="600"
 			@animationfinish="animationfinish" @change="handleChange" :circular="false">
 			<swiper-item v-for="(item, index) in pageData.list" :key="index">
-				<view v-if="index == pageData.current" @click="handleVideo(index)" class="w-screen h-screen">
+				<view v-if="index == pageData.current" class="w-screen h-screen">
 					<video autoplay class="w-screen h-screen fixed" :id="'video' + index" :src="item.cover.content" loop
 						:controls="true" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false"
-						@error="videoErrorCallback">
+						@error="videoErrorCallback"  @click.stop="handleVideo(index)">
 					</video>
-					<view v-if="pageData.status == 1" class="icon_play w-full h-full absolute w-50 h-50">
-						<image class="w-64 h-64" src="@/static/opus/icon_play.png" />
+					<view v-if="pageData.status == 1" class="icon_play w-full h-full absolute">
+						<image class="w-64 h-64" src="@/static/opus/icon_play.png" @click.stop="handleVideo(index)"/>
 					</view>
 					<view class="info w-275 pl-14">
 						<view v-if="item.cover.name"
-							class="flex items-center text-13 mb-15 rounded-9 w-180 justify-center  h-19 "
+							class="flex items-center text-13 mb-15 rounded-9 w-180 justify-evenly  h-19 "
 							style="background-color: rgba(244, 244, 244, 0.2);">
-							<image src="@/static/opus/icon_location_white.png" class="w-9 h-11 mr-4" />
+							<image src="@/static/opus/icon_location_white.png" class="w-9 h-11" />
 							{{item.cover.name }}
 						</view>
 						<view class="font-bold h-17 leading-16 text-17 flex items-center">@{{ item.author }}

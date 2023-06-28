@@ -1,17 +1,17 @@
 <template>
-	<view @click="handleVideo(0)" class="w-screen h-screen relative" v-if="pageData.opusdetail.cover">
+	<view  class="w-screen h-screen relative" v-if="pageData.opusdetail.cover">
 		<video autoplay class="w-screen h-screen fixed" id='video0' :src="pageData.opusdetail.cover.content" loop
 			:controls="true" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false"
-			@error="videoErrorCallback">
+			@error="videoErrorCallback"  @click.stop="handleVideo(0)">
 		</video>
-		<view v-if="pageData.status == 1" class="icon_play w-full h-full fixed w-50 h-50">
-			<image class="w-64 h-64" src="@/static/opus/icon_play.png" />
+		<view v-if="pageData.status == 1" class="icon_play w-full h-full fixed">
+			<image class="w-64 h-64" src="@/static/opus/icon_play.png"  @click.stop="handleVideo(0)"/>
 		</view>
 		<view class="info w-275 pl-16">
 			<view v-if="pageData.opusdetail.cover.name"
-				class=" text-13 mb-15 rounded-9 w-180  h-19 flex items-center justify-center"
+				class=" text-13 mb-15 rounded-9 w-180  h-19 flex items-center justify-evenly"
 				style="background-color: rgba(244, 244, 244, 0.2);">
-				<image src="@/static/opus/icon_location_white.png" class="w-9 h-11 mr-4" />
+				<image src="@/static/opus/icon_location_white.png" class="w-9 h-11" />
 				{{ pageData.opusdetail.cover.name }}
 			</view>
 			<view class="font-bold h-17 leading-16 text-17 flex items-center">@{{ pageData.opusdetail.author }}
@@ -242,7 +242,7 @@ const onShareTimeline = () => {
 
 .info {
 	z-index: 1;
-	position: absolute;
+	position: fixed;
 	bottom: 140upx;
 	color: white;
 }
