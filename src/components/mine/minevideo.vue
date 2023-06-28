@@ -97,7 +97,7 @@ const open = () => {
 }
 onLoad((option) => {
 	pageData.id = option.id
-	pageData.traceInfo = option.traceInfo
+	pageData.traceInfo = decodeURIComponent(option.traceInfo || '')
 })
 onShow(() => {
 	fetchData()

@@ -130,7 +130,7 @@ const gohomepage = (item) => {
 		}
 	}
 	uni.navigateTo({
-		url: '/pages/userhomepage/userhomepage?id=' + item.createdBy
+		url: `/pages/userhomepage/userhomepage?id=${item.createdBy}&traceInfo=${encodeURIComponent(props.traceInfo)}`
 	})
 
 }

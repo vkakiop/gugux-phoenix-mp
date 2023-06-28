@@ -1,11 +1,12 @@
 <template>
   <view class="w-172 bg-[#fff] rounded-5" v-if="item && item.cover">
     <view class="relative rounded-5">
-      <view v-if="isVirtualCal" :style="{ width: '100%', height: computedHeight(item.cover.width, item.cover.height) + 'rpx' }"
-        class="rounded-5"></view>
+      <view v-if="isVirtualCal"
+        :style="{ width: '100%', height: computedHeight(item.cover.width, item.cover.height) + 'rpx' }" class="rounded-5">
+      </view>
       <image v-else :src="imageThumb(item.cover.itemType == 2 ? item.cover.content : item.cover.thumbnail, 400, 400)"
-        :style="{ width: '100%', height: computedHeight(item.cover.width, item.cover.height) + 'rpx' }" @click="godetail(item)"
-        class="rounded-5"></image>
+        :style="{ width: '100%', height: computedHeight(item.cover.width, item.cover.height) + 'rpx' }"
+        @click="godetail(item)" class="rounded-5"></image>
       <image v-if="item.cover.itemType == 3" src="/static/video/videoplay.png" mode=""
         class="absolute w-36 h-36 top-[50%] left-[50%] -ml-18 -mt-18 z-40" @click="godetail(item)"></image>
       <view v-if="item.cover.itemType == 2 && item.cover.name"
@@ -41,7 +42,7 @@ const pageData = reactive({
   id: '',
   isShowLoginPop: false,
 })
-const props = defineProps(['item', 'isVirtualCal', 'itemKey','traceInfo'])
+const props = defineProps(['item', 'isVirtualCal', 'itemKey', 'traceInfo'])
 const computedHeight = computed({
   get: (w, h) => {
     return function (w, h) {
@@ -50,6 +51,7 @@ const computedHeight = computed({
   }
 })
 const gohomepage = (item) => {
+  item.traceInfo = item.traceInfo ? item.traceInfo : ''
   if (useLoginTokenStore().get().user) {
     if (item.createdBy == useLoginTokenStore().get().user.id) {
       uni.switchTab({
@@ -64,6 +66,7 @@ const gohomepage = (item) => {
 
 }
 const godetail = (item) => {
+  item.traceInfo = item.traceInfo ? item.traceInfo : ''
   if (item.cover.itemType == 2) {
     uni.navigateTo({
       url: `/pages/opus/index?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}`
@@ -97,9 +100,10 @@ onMounted(() => {
 })
 //点赞
 const like = (item) => {
+  item.traceInfo = item.traceInfo ? item.traceInfo : ''
   let action = item.isLike ? 0 : 1
   if (getTokenValue()) {
-    opusLike({ opusId: item.id, action: action}, {trackInfo: item.traceInfo }).then(res => {
+    opusLike({ opusId: item.id, action: action }, { trackInfo: item.traceInfo }).then(res => {
       if (action) {
         item.isLike = true
         item.likeNum++
