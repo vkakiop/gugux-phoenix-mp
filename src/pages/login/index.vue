@@ -8,10 +8,11 @@
       <!--navigator url="/pages/index/index" open-type="switchTab">跳过</navigator-->
     </view>
     <phoneslogan></phoneslogan>
-    <view class="mt-45">
+    <view>
+      <view chass="h-45"></view>
       <view class="mb-10 text-16 text-[#777]">未注册手机验证后完成注册</view>
       <view class="h-48 bg-[#e9ebef] rounded-full flex items-center relative">
-        <view class="ml-10 -mt-2 text-[#777]">+86</view>
+        <view class="ml-10 h-48 leading-48 text-[#777]">+86</view>
         <input class="w-3/5 ml-10 h-48" v-model="pageData.phone" placeholder="请输入手机号码" maxlength="11"/>
         <view class="w-90 h-22 leading-22 absolute right-15 top-11">
           <debounce v-if="!pageData.isReget" @debounce="getCode">
