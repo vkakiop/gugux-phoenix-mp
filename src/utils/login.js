@@ -82,3 +82,8 @@ export function hxLogin(tokenRes,app) {
     });
     console.log('环信已登录')
 }
+
+export function logout() {
+    useLoginTokenStore().set({accessToken:'',expireTime:0,user:{id:''}})
+    uni.clearStorageSync(configLoginToken)
+}

@@ -6,6 +6,7 @@ import msgStorage from '@/components/chat/msgstorage'
 import msgType from '@/components/chat/msgtype'
 import disp from '@/utils/broadcast'
 import { onGetSilentConfig } from './components/chat/pushStorage'
+import {logout} from '@/utils/login'
 
 import {getCurrentPageUrl} from '@/utils/utils'
 import {configLoginToken} from '@/config/index'
@@ -271,6 +272,8 @@ export default {
         // uni.removeStorageSync('pushStorageData');
         // uni.clearStorageSync();
 
+        logout()
+
         uni.showModal({
           title: '提示',
           content: '您的账号已在其他系统登录',
@@ -278,8 +281,8 @@ export default {
           cancelText:'知道了',
           success: function (res) {
             if (res.confirm) {
-              uni.redirectTo({
-                url: "/pages/login/logout?url="+encodeURIComponent('/pages/index/index'),
+              uni.switchTab({
+                url: "/pages/index/index'),
               })
             } else if (res.cancel) {
             }
@@ -580,6 +583,25 @@ export default {
           if (error.data.errMsg.indexOf('url not in domain list') != -1) {
             title = '环信未加入socket白名单'
             uni.showToast({title: title,icon: "none",duration: 2000})
+          }
+        }
+        else if (error.type == 1) {
+          if (error.data.data.error_description == 'user not found') {
+            logout()
+            uni.showModal({
+              title: '提示',
+              content: '环信账号信息不存在',
+              showCancel:false,
+              cancelText:'知道了',
+              success: function (res) {
+                if (res.confirm) {
+                  uni.switchTab({
+                    url: "/pages/index/index"
+                  })
+                } else if (res.cancel) {
+                }
+              }
+            });
           }
         }
       },
