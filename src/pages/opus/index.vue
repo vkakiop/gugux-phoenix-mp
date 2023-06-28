@@ -231,17 +231,15 @@ const gotoBack = ()=>{
 const gotoMine = ()=>{
   let loginToken = useLoginTokenStore().get()
   if (loginToken.user && loginToken.user.id == pageData.detail.createdBy) {
-    uni.switchTab({url:'/pages/mine/mine'})
+    uni.switchTab({url:'/pages/mine/mine?traceInfo='+encodeURIComponent(pageData.traceInfo)})
   }
   else {
-    uni.navigateTo({
-      url: '/pages/userhomepage/userhomepage?id=' + pageData.detail.createdBy
-    })
+    uni.navigateTo({url: '/pages/userhomepage/userhomepage?id=' + pageData.detail.createdBy + '&traceInfo='+encodeURIComponent(pageData.traceInfo)})
   }
 }
 
 const getData = ()=>{
-  getDataApi({opusId:pageData.id,traceInfo:pageData.traceInfo})
+  getDataApi({opusId:pageData.id,trackInfo:pageData.traceInfo})
 }
 
 const getDataApi = (params)=>{
