@@ -156,9 +156,9 @@ export default {
     },
     onLoginSuccess: function (myName) {
       uni.hideLoading();
-      uni.redirectTo({
-        url: "../conversation/conversation?myName=" + myName,
-      });
+      // uni.redirectTo({
+      //   url: "../conversation/conversation?myName=" + myName,
+      // });
     },
 
     getUserInfo(cb) {
@@ -561,6 +561,13 @@ export default {
             duration: 2000,
           });
           disp.fire("em.error.sendMsgErr", error);
+        }
+        if (error.type == 40) {
+          let title = ''
+          if (error.data.errMsg.indexOf('url not in domain list') != -1) {
+            title = '环信未加入socket白名单'
+            uni.showToast({title: title,icon: "none",duration: 2000})
+          }
         }
       },
     });
