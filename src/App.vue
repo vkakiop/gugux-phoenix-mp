@@ -673,17 +673,29 @@ export default {
     }
 
     //通过网络状态监听IM状态
-    uni.onNetworkStatusChange((info) => {
-      // console.log('>>>>>>>>>>>>>网络变化', info);
+    uni.onNetworkStatusChange((res) => {
       uni.showToast({
         icon: 'none',
-        title: '网络变化'+WebIM.conn.isOpened(),
+        title: '网络变化'+res.isConnected,
       });
-      if (WebIM.conn.isOpened()) {
-        WebIM.conn.close()
+      if (res.isConnected) {
+        uni.showModal({
+          title: '提示',
+          content: 'reopen'+JSON.stringify(this.curOpenOpt),
+          showCancel:false,
+          cancelText:'知道了',
+          success: function (res) {
+            if (res.confirm) {
+            } else if (res.cancel) {
+            }
+          }
+        });
+        this.closed = true
+        WebIM.conn.reopen()
       }
       else {
-        WebIM.conn.reopen()
+        this.closed = false
+        WebIM.conn.close()
       }
       //
       // uni.WebIM.conn.close();
