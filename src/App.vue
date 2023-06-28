@@ -594,19 +594,19 @@ export default {
         //     url: "../login/login"
         //   });
         // }
-        if (error.type == WebIM.statusCode.WEBIM_CONNCTION_OPEN_ERROR) {
-          uni.hideLoading();
-          disp.fire("em.error.passwordErr"); // uni.showModal({
-          // 	title: "用户名或密码错误",
-          // 	confirmText: "OK",
-          // 	showCancel: false
-          // });
-        }
-
-        if (error.type == WebIM.statusCode.WEBIM_CONNCTION_AUTH_ERROR) {
-          uni.hideLoading();
-          disp.fire("em.error.tokenErr");
-        }
+        // if (error.type == WebIM.statusCode.WEBIM_CONNCTION_OPEN_ERROR) {
+        //   uni.hideLoading();
+        //   disp.fire("em.error.passwordErr"); // uni.showModal({
+        //   // 	title: "用户名或密码错误",
+        //   // 	confirmText: "OK",
+        //   // 	showCancel: false
+        //   // });
+        // }
+        //
+        // if (error.type == WebIM.statusCode.WEBIM_CONNCTION_AUTH_ERROR) {
+        //   uni.hideLoading();
+        //   disp.fire("em.error.tokenErr");
+        // }
 
         // if (error.type == "socket_error") {
         //   ///sendMsgError
@@ -618,7 +618,9 @@ export default {
         //   });
         //   disp.fire("em.error.sendMsgErr", error);
         // }
-        if (error.type == 206) {
+        //206 用户在其他设备登录。
+        //217 用户被踢下线。
+        if ([206,217].includes(error.type)) {
           loginout()
           uni.showModal({
             title: '提示',
@@ -656,7 +658,14 @@ export default {
           }
 
         }
-        else if (error.type == 1) {
+
+        //
+        // 204 用户不存在
+        // 32  当前用户未登录。
+        // 12   获取 Chat token 失败。
+        // 1  登录失败。
+        // 207 用户已经被注销。
+        else if ([1,12,32,204,207].includes(error.type)) {
           loginout()
           uni.showModal({
             title: '提示',
