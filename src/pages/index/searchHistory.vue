@@ -55,7 +55,7 @@
 			</view>
 			<!-- 菜单 -->
 		</view>
-		<view  v-show="!isShowHistory">
+		<view v-show="!isShowHistory">
 			<view class="h-70"></view>
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
 				<view v-show="waterIndex == pageData.currentIndex">
@@ -63,7 +63,7 @@
 						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
 					</waterfall>
 				</view>
-				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
+				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex && pageData.isLoading"
 					class="h-500 flex items-center justify-center">
 					<u-empty mode="search" text="对不起,没有找到您要的搜索内容" icon="/static/img/nodata.png" />
 				</view>
@@ -107,7 +107,8 @@ const waterfallItems = [
 	}
 ]
 const pageData = reactive({
-	ishow:false,
+	isLoading: false,
+	ishow: false,
 	searchHistoryList: [],
 	scrollTop: 0,
 	currentIndex: 0,
@@ -122,7 +123,7 @@ uni.getStorage({
 onMounted(() => {
 	nextTick(() => {
 		changeWaterfall(0)
-		pageData.ishow=true
+		pageData.ishow = true
 	})
 })
 watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
@@ -151,6 +152,7 @@ const changeWaterfall = (waterIndex) => {
 	}
 }
 const getData = () => {
+	pageData.isLoading = false
 	let currentIndex = pageData.currentIndex
 	pageData.waterfallItems[currentIndex].isLoading = true
 	let query = pageData.waterfallItems[currentIndex].query
@@ -161,6 +163,9 @@ const getData = () => {
 		pageData.waterfallItems[currentIndex].query.path.searchTime = res.data.serviceTime
 		pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
 		pageData.waterfallItems[currentIndex].isLoading = false
+		if (!res.data.list.length) {
+			pageData.isLoading = true
+		}
 	}).catch(e => {
 		pageData.waterfallItems[currentIndex].isLoading = false
 	})
