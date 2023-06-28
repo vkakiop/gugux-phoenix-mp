@@ -13,13 +13,13 @@
       <view class="h-48 bg-[#e9ebef] rounded-full flex items-center relative">
         <view class="ml-10 -mt-2 text-[#777]">+86</view>
         <input class="w-3/5 ml-10 h-48" v-model="pageData.phone" placeholder="请输入手机号码" maxlength="11"/>
-        <view class="w-80 h-22 leading-22 absolute right-15 top-11">
+        <view class="w-90 h-22 leading-22 absolute right-15 top-11">
           <debounce v-if="!pageData.isReget" @debounce="getCode">
-            <button class=" text-10 rounded-full bg-[#f8cf01] active:bg-[#f0c801] text-[#333333]">
+            <button class=" text-10 rounded-full bg-[#333333] active:bg-[#2c2c2c] text-[#f8cf01]">
               获取验证码
             </button>
           </debounce>
-          <button v-else class="text-10 rounded-full bg-[#f4f5f6] text-black">重发({{pageData.count}})</button>
+          <button v-else class="text-10 rounded-full bg-[#f4f5f6] text-black">{{pageData.count}}秒后重发</button>
         </view>
 
       </view>
@@ -39,7 +39,7 @@
           我已阅读并同意<text class="text-[#f0c801]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#f0c801]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>
         </view>
       </view>
-      <u-popup :show="pageData.isDialogShow" mode="center" round="10" :customStyle="{marginLeft:'60rpx',marginRight:'60rpx'}">
+      <!--u-popup :show="pageData.isDialogShow" mode="center" round="10" :customStyle="{marginLeft:'60rpx',marginRight:'60rpx'}">
         <view class="m-22">
           <view class="text-center font-bold">同意隐私条款</view>
           <view class="my-28">登录注册需要您阅读并同意我们的<text class="text-[#f0c801]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#f0c801]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>
@@ -49,7 +49,7 @@
             <button class="w-115 h-40 leading-40 rounded-full bg-[#f8cf01] active:bg-[#f0c801] text-[#333333]" @click="pageData.isDialogShow=false;pageData.isAgreeItems=[''];onLogin();">我同意</button>
           </view>
         </view>
-      </u-popup>
+      </u-popup-->
     </view>
   </view>
 </template>
@@ -88,6 +88,7 @@ const onLogin = ()=>{
     if (vaildPhone()) {
       if (pageData.isAgreeItems.length == 0) {
         pageData.isDialogShow=true
+        uni.showToast({title: '请勾选同意隐私条款',icon:'none',duration: 2000})
       }
       else {
         authSmsLogin({phone:pageData.phone,code:pageData.code}).then(res=>{
@@ -122,10 +123,7 @@ const getTimer = ()=>{
 const vaildPhone = ()=>{
   let reg =  /^1[3456789]\d{9}$/;
   if(pageData.phone == ''){
-    uni.showToast({
-      title: '请输入手机号',
-      icon:'none',
-      duration: 2000
+    uni.showToast({title: '请输入手机号',icon:'none',duration: 2000
     });
     return false
   }
@@ -133,10 +131,7 @@ const vaildPhone = ()=>{
     return true
   }
   else{
-    uni.showToast({
-      title: '请输入正确的手机号',
-      icon:'none',
-      duration: 2000
+    uni.showToast({title: '请输入正确的手机号',icon:'none',duration: 2000
     });
     return false
   }
