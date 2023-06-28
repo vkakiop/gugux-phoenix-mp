@@ -86,7 +86,7 @@ import { opusCollect, opusLike, userFans } from "@/api/opus/index"
 import { getCurrentInstance, reactive, watch, ref, computed } from 'vue'
 import useLoginTokenStore from '@/store/modules/loginToken'
 import { onShow } from '@dcloudio/uni-app'
-const props = defineProps(['lastVideoId', 'opusid', 'traceInfo'])
+const props = defineProps(['lastVideoId', 'opusid', 'traceInfo','categoryId'])
 const commentRef = ref();
 const open = () => {
 	commentRef.value.init(true);
@@ -201,7 +201,7 @@ const attention = (item) => {
 const collection = (item) => {
 	let action = item.isCollection ? 0 : 1
 	if (getTokenValue()) {
-		opusCollect({ opusId: item.id, action: action }, { trackInfo: props.traceInfo }).then(res => {
+		opusCollect({ opusId: item.id, action: action }, { trackInfo: props.traceInfo },{categoryId: props.traceInfo }).then(res => {
 			if (action) {
 				item.isCollection = true
 				item.collectionNum++
@@ -226,7 +226,7 @@ const collection = (item) => {
 const like = (item) => {
 	let action = item.isLike ? 0 : 1
 	if (getTokenValue()) {
-		opusLike({ opusId: item.id, action: action }, { trackInfo: props.traceInfo }).then(res => {
+		opusLike({ opusId: item.id, action: action }, { trackInfo: props.traceInfo },{categoryId: props.traceInfo }).then(res => {
 			if (action) {
 				item.isLike = true
 				item.likeNum++

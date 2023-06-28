@@ -112,7 +112,7 @@ const waterfallItems = [{
 	name: '作品',
 	items: [],
 	query: {
-		path: { pageNum: 1, pageSize: 10, },
+		path: { pageNum: 1, pageSize: 20, },
 		data: { totalCount: '' }
 	}
 },
@@ -124,7 +124,7 @@ const waterfallItems = [{
 	name: '喜欢',
 	items: [],
 	query: {
-		path: { pageNum: 1, pageSize: 10, },
+		path: { pageNum: 1, pageSize: 20, },
 		data: { totalCount: '' }
 	}
 },
@@ -135,7 +135,7 @@ const waterfallItems = [{
 	name: '收藏',
 	items: [],
 	query: {
-		path: { pageNum: 1, pageSize: 10, },
+		path: { pageNum: 1, pageSize: 20, },
 		data: { totalCount: '' }
 	}
 }

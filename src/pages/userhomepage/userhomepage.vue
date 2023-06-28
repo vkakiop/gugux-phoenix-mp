@@ -108,7 +108,7 @@ const computedNumber = computed({
 const waterfallItems = [{
 	scrollTop: -1, isComplete: false, isLoading: false, itemType: 'image', name: '作品', items: [],
 	query: {
-		path: { pageNum: 1, pageSize: 10, },
+		path: { pageNum: 1, pageSize: 20, },
 		data: { totalCount: '' }
 	}
 }]
