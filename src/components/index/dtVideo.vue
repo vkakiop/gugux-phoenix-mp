@@ -121,6 +121,7 @@ const computedNumber = computed({
 })
 const { ctx } = getCurrentInstance()
 const gohomepage = (item) => {
+	isShare.value = false
 	if (useLoginTokenStore().get().user) {
 		if (item.createdBy == useLoginTokenStore().get().user.id) {
 			uni.switchTab({
@@ -274,11 +275,11 @@ const fetch = () => {
 const handleShare = () => {
 	isShare.value = true
 }
-// onShow(() => {
-// 	if (!isShare.value) {
-// 		fetch()
-// 	}
-// })
+onShow(() => {
+	if (!isShare.value) {
+		fetch()
+	}
+})
 const onShareTimeline = () => {
 	return onShareAppMessage()
 }

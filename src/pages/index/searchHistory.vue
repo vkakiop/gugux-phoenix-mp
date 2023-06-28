@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<customNav v-show="pageData.ishow">
+		<customNav >
 			<view @click="gotoBack" class="ml-3"><uni-icons type="back" size="24"></uni-icons></view>
 			<!-- 搜索框 -->
 			<view class="bg-white w-full py-10">
@@ -28,7 +28,7 @@
 					</view>
 					<view class="w-full flex flex-wrap ">
 						<view v-for="(item, index) in pageData.searchHistoryList" :key="index"
-							class="bg-[#F5F6F8] w-76 h-38 my-5 ml-14 rounded-10 text-center leading-38">
+							class="bg-[#F5F6F8] px-24 h-38 my-5 ml-14 rounded-10 text-center leading-38">
 							<text @click='handlehistory(item)'>{{ item }}</text>
 						</view>
 					</view>
@@ -76,7 +76,7 @@
 import waterfall from '@/components/index/waterfall.vue'
 import { opusSearchNew } from "@/api/worksSearch/index.js"
 import { ref, onMounted, reactive, watch, nextTick } from 'vue'
-import { onReachBottom, onPageScroll } from '@dcloudio/uni-app';
+import { onReachBottom, onPageScroll, onShow } from '@dcloudio/uni-app';
 import useLoginTokenStore from '@/store/modules/loginToken'
 import _ from 'lodash'
 const searchvalue = ref('')
@@ -108,7 +108,6 @@ const waterfallItems = [
 ]
 const pageData = reactive({
 	isLoading: false,
-	ishow: false,
 	searchHistoryList: [],
 	scrollTop: 0,
 	currentIndex: 0,
@@ -120,10 +119,9 @@ uni.getStorage({
 		pageData.searchHistoryList = JSON.parse(res.data)
 	}
 })
-onMounted(() => {
+onShow(() => {
 	nextTick(() => {
 		changeWaterfall(0)
-		pageData.ishow = true
 	})
 })
 watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {

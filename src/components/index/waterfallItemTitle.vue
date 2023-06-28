@@ -42,7 +42,7 @@ const pageData = reactive({
   id: '',
   isShowLoginPop: false,
 })
-const props = defineProps(['item', 'isVirtualCal', 'itemKey', 'traceInfo'])
+const props = defineProps(['item', 'isVirtualCal', 'itemKey', 'traceInfo','categoryId'])
 const computedHeight = computed({
   get: (w, h) => {
     return function (w, h) {
@@ -69,7 +69,7 @@ const godetail = (item) => {
   item.traceInfo = item.traceInfo ? item.traceInfo : ''
   if (item.cover.itemType == 2) {
     uni.navigateTo({
-      url: `/pages/opus/index?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}`
+      url: `/pages/opus/index?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}&categoryId=${props.categoryId}`
     })
   } else if (item.cover.itemType == 3) {
     if (props["itemKey"] == 'mine') {
