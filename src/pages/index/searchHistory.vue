@@ -33,7 +33,7 @@
 						</view>
 					</view>
 				</view>
-				<view v-if="!pageData.searchHistoryList.length">
+				<view v-else="!pageData.searchHistoryList.length">
 					<u-empty mode="history" text="暂无历史记录" icon="/static/img/nodata.png">
 					</u-empty>
 				</view>
@@ -55,14 +55,15 @@
 			</view>
 			<!-- 菜单 -->
 		</view>
-		<view class="mt-70" v-show="!isShowHistory">
+		<view  v-show="!isShowHistory">
+			<view class="h-70"></view>
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
 				<view v-show="waterIndex == pageData.currentIndex">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
 						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
 					</waterfall>
 				</view>
-				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex && !waterItem.isComplete"
+				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
 					class="h-500 flex items-center justify-center">
 					<u-empty mode="search" text="对不起,没有找到您要的搜索内容" icon="/static/img/nodata.png" />
 				</view>
