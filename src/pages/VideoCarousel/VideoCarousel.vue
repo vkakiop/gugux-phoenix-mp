@@ -1,6 +1,6 @@
 <template>
 	<view v-if="pageData.lastVideoId">
-		<dt-video :lastVideoId="pageData.lastVideoId" :opusid="pageData.id"  :traceInfo="pageData.traceInfo"  />
+		<dt-video :lastVideoId="pageData.lastVideoId" :opusid="pageData.id"  :traceInfo="pageData.traceInfo"  :categoryId="pageData.categoryId" />
 	</view>
 </template>
 
@@ -12,11 +12,13 @@ const pageData = reactive({
 	lastVideoId: '',
 	id: '',
 	traceInfo:'',
+	categoryId:''
 })
 onLoad((option) => {
 	pageData.lastVideoId = option.id
 	pageData.id = option.id
 	pageData.traceInfo=	decodeURIComponent(option.traceInfo || '')
+	pageData.categoryId=option.categoryId || ''
 })
 </script>
 

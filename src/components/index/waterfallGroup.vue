@@ -1,8 +1,8 @@
 <template>
   <view :id="`waterfallgroup_${waterIndex}_${groupIndex}`">
     <view v-if="pageData.isShow" class="w-172" v-for="(item,index) in items" :key="index">
-      <waterfallItemTitle v-if="itemType == 'title'" :item="item" :itemKey="itemKey" :traceInfo="traceInfo"></waterfallItemTitle>
-      <waterfallItemImage v-else :item="item" :itemKey="itemKey" :traceInfo="traceInfo"></waterfallItemImage>
+      <waterfallItemTitle v-if="itemType == 'title'" :item="item" :itemKey="itemKey" :traceInfo="traceInfo" :categoryId="categoryId"></waterfallItemTitle>
+      <waterfallItemImage v-else :item="item" :itemKey="itemKey" :traceInfo="traceInfo" :categoryId="categoryId"></waterfallItemImage>
     </view>
     <view v-else :style="{height: height+'px'}">
     </view>
@@ -42,6 +42,10 @@ const props = defineProps({
     default: 0
   },
   traceInfo: {
+    type: String,
+    default: ''
+  },
+  categoryId: {
     type: String,
     default: ''
   },
