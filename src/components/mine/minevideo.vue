@@ -9,7 +9,7 @@
 		</view>
 		<view class="info w-275 pl-16">
 			<view v-if="pageData.opusdetail.cover.name"
-				class=" text-13 mb-15 rounded-9 w-180  h-19 flex items-center justify-evenly"
+				class=" text-13 mb-15 rounded-9 w-160  h-19 flex items-center justify-evenly"
 				style="background-color: rgba(244, 244, 244, 0.2);">
 				<image src="@/static/opus/icon_location_white.png" class="w-9 h-11" />
 				{{ pageData.opusdetail.cover.name }}
