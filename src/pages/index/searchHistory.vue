@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<customNav>
+		<customNav v-show="pageData.ishow">
 			<view @click="gotoBack" class="ml-3"><uni-icons type="back" size="24"></uni-icons></view>
 			<!-- 搜索框 -->
 			<view class="bg-white w-full py-10" @click="isShowHistory = true">
@@ -106,6 +106,7 @@ const waterfallItems = [
 	}
 ]
 const pageData = reactive({
+	ishow:false,
 	searchHistoryList: [],
 	scrollTop: 0,
 	currentIndex: 0,
@@ -120,6 +121,7 @@ uni.getStorage({
 onMounted(() => {
 	nextTick(() => {
 		changeWaterfall(0)
+		pageData.ishow=true
 	})
 })
 watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
