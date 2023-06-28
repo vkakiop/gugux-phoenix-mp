@@ -1,11 +1,11 @@
 <template>
-	<view  class="w-screen h-screen relative" v-if="pageData.opusdetail.cover">
+	<view class="w-screen h-screen relative" v-if="pageData.opusdetail.cover">
 		<video autoplay class="w-screen h-screen fixed" id='video0' :src="pageData.opusdetail.cover.content" loop
 			:controls="true" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false"
-			@error="videoErrorCallback"  @click.stop="handleVideo(0)">
+			@error="videoErrorCallback" @click.stop="handleVideo(0)">
 		</video>
 		<view v-if="pageData.status == 1" class="icon_play w-full h-full fixed">
-			<image class="w-64 h-64" src="@/static/opus/icon_play.png"  @click.stop="handleVideo(0)"/>
+			<image class="w-64 h-64" src="@/static/opus/icon_play.png" @click.stop="handleVideo(0)" />
 		</view>
 		<view class="info w-275 pl-16">
 			<view v-if="pageData.opusdetail.cover.name"
@@ -79,7 +79,7 @@ import { getTokenValue } from "@/utils/utils"
 import { opusCollect, opusLike, userFans } from "@/api/opus/index"
 import { getCurrentInstance, reactive, ref, computed } from 'vue'
 import useLoginTokenStore from '@/store/modules/loginToken'
-import { onLoad,onShow } from '@dcloudio/uni-app'
+import { onLoad, onShow } from '@dcloudio/uni-app'
 const computedNumber = computed({
 	get: (num) => { return function (num) { return num > 9999 ? (num / 10000).toFixed(1) + 'w' : num } }
 })
@@ -100,16 +100,16 @@ onLoad((option) => {
 	pageData.traceInfo = decodeURIComponent(option.traceInfo || '')
 })
 onShow(() => {
-	fetchData()
+	if (!isShare.value) {
+		fetchData()
+	}
 })
 const fetchData = () => {
-	if (!isShare.value) {
-		opusdetails({
-			opusId: pageData.id
-		}).then(res => {
-			pageData.opusdetail = res.data
-		})
-	}
+	opusdetails({
+		opusId: pageData.id
+	}).then(res => {
+		pageData.opusdetail = res.data
+	})
 }
 const gohomepage = (item) => {
 	if (useLoginTokenStore().get().user) {
@@ -121,7 +121,7 @@ const gohomepage = (item) => {
 		}
 	}
 	uni.navigateTo({
-		 url: `/pages/userhomepage/userhomepage?id=${item.createdBy}&traceInfo=${encodeURIComponent(pageData.traceInfo)}`
+		url: `/pages/userhomepage/userhomepage?id=${item.createdBy}&traceInfo=${encodeURIComponent(pageData.traceInfo)}`
 	})
 
 }
@@ -150,16 +150,22 @@ const videoErrorCallback = () => {
 }
 //关注
 const attention = (item) => {
-	userFans({
-		id: item.createdBy
-	}).then(res => {
-		item.isFollow = true
-		uni.showToast({
-			title: '关注成功',
-			icon: 'none',
-			duration: 2000
+	if (getTokenValue()) {
+		userFans({
+			id: item.createdBy
+		}).then(res => {
+			item.isFollow = true
+			uni.showToast({
+				title: '关注成功',
+				icon: 'none',
+				duration: 2000
+			})
 		})
-	})
+	} else {
+		pageData.isShowLoginPop = true
+		isShare.value = false
+	}
+
 }
 //收藏
 const collection = (item) => {
