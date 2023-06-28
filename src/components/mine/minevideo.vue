@@ -79,7 +79,7 @@ import { getTokenValue } from "@/utils/utils"
 import { opusCollect, opusLike, userFans } from "@/api/opus/index"
 import { getCurrentInstance, reactive, ref, computed } from 'vue'
 import useLoginTokenStore from '@/store/modules/loginToken'
-import { onLoad } from '@dcloudio/uni-app'
+import { onLoad,onShow } from '@dcloudio/uni-app'
 const computedNumber = computed({
 	get: (num) => { return function (num) { return num > 9999 ? (num / 10000).toFixed(1) + 'w' : num } }
 })
@@ -98,6 +98,8 @@ const open = () => {
 onLoad((option) => {
 	pageData.id = option.id
 	pageData.traceInfo = option.traceInfo
+})
+onShow(() => {
 	fetchData()
 })
 const fetchData = () => {
