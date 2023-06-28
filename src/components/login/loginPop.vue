@@ -14,7 +14,7 @@
         <button :open-type="pageData.isAgreeItems.length ? 'getPhoneNumber':''" @click="getPhoneNumberValid" @getphonenumber="getPhoneNumber" class="h-40 leading-40 rounded-full bg-[#51ab3a] active:bg-[#09b307] text-white text-14">微信一键登录</button>
         <button @click="gotoLogin" class="mt-15 h-40 leading-40 rounded-full bg-[#e9ebef] active:bg-[#e4e5e9] text-[#929292] text-14">手机号登录/注册</button>
       </view>
-      <u-popup :show="pageData.isDialogShow" mode="center" round="10" :customStyle="{marginLeft:'60rpx',marginRight:'60rpx'}">
+      <!--u-popup :show="pageData.isDialogShow" mode="center" round="10" :customStyle="{marginLeft:'60rpx',marginRight:'60rpx'}">
         <view class="m-22">
           <view class="text-center font-bold">同意隐私条款</view>
           <view class="my-28">登录注册需要您阅读并同意我们的<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>
@@ -24,7 +24,7 @@
             <button class="w-115 h-40 leading-40 rounded-full bg-[#4ba1f8] active:bg-[#3194f9] text-white" @click="pageData.isDialogShow=false;pageData.isAgreeItems=[''];">我同意</button>
           </view>
         </view>
-      </u-popup>
+      </u-popup-->
     </view>
   </u-popup>
 </template>
@@ -49,6 +49,7 @@ const close = ()=>{
 const getPhoneNumberValid = ()=>{
   if (!pageData.isAgreeItems.length) {
     pageData.isDialogShow = true
+    uni.showToast({title: '请勾选同意隐私条款',icon:'none',duration: 2000})
   }
   else {
     uni.login({
