@@ -260,22 +260,31 @@ export default {
       },
 
       onClosed() {
-        uni.showToast({
-          title: "您的账号已在其他系统登录",
-          icon: "none",
-          duration: 2000,
-        });
+        // uni.showToast({
+        //   title: "您的账号已在其他系统登录",
+        //   icon: "none",
+        //   duration: 2000,
+        // });
 
         me.globalData.conn.closed = true;
         WebIM.conn.close();
         // uni.removeStorageSync('pushStorageData');
         // uni.clearStorageSync();
 
-        setTimeout(()=>{
-          uni.redirectTo({
-            url: "/pages/login/logout?url="+encodeURIComponent('/pages/mine/mine'),
-          })
-        },2000)
+        uni.showModal({
+          title: '提示',
+          content: '您的账号已在其他系统登录',
+          showCancel:false,
+          cancelText:'知道了',
+          success: function (res) {
+            if (res.confirm) {
+              uni.redirectTo({
+                url: "/pages/login/logout?url="+encodeURIComponent('/pages/index/index'),
+              })
+            } else if (res.cancel) {
+            }
+          }
+        });
       },
 
       onInviteMessage(message) {
