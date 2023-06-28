@@ -85,14 +85,14 @@ const waterfallItems = [
 	{
 		scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '综合', items: [],
 		query: {
-			path: { type: 1, pageNum: 1, pageSize: 10, searchTime: "", keyword: '' },
+			path: { type: 1, pageNum: 1, pageSize: 20, searchTime: "", keyword: '' },
 			data: { passTime: '' }
 		}
 	},
 	{
 		scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '文章', items: [], query: {
 			path: {
-				type: 2, pageNum: 1, pageSize: 10, searchTime: "", keyword: ''
+				type: 2, pageNum: 1, pageSize:20, searchTime: "", keyword: ''
 			},
 			data: { passTime: '' }
 		}
@@ -100,7 +100,7 @@ const waterfallItems = [
 	{
 		scrollTop: -1, isComplete: false, isLoading: false, name: '视频', items: [], query: {
 			path: {
-				type: 3, pageNum: 1, pageSize: 10, searchTime: "", keyword: ''
+				type: 3, pageNum: 1, pageSize: 20, searchTime: "", keyword: ''
 			},
 			data: { passTime: '' }
 		}

@@ -24,7 +24,7 @@
           <view v-show="waterIndex == pageData.currentIndex">
             <waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" itemKey="index"
               :value="waterItem.items" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex"
-              :categoryId="waterItem.query.path.categoryId">
+              :categoryId="waterItem.query.path.categoryId+''">
             </waterfall>
           </view>
         </view>
@@ -62,7 +62,7 @@ frontpage({}).then(res => {
   opusCategoryVOS.forEach((item, index) => {
     let obj = {
       scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '', items: [], query: {
-        path: { categoryId: '', pageNum: 1, getNum: 10 }
+        path: { categoryId: '', pageNum: 1, getNum: 20 }
       }
     }
     obj.name = item.name
