@@ -15,6 +15,14 @@ import {hxLogin} from "./utils/login";
 import useSafeguardStore from '@/store/modules/safeguard'
 let logout = false;
 
+//环信消息逻辑
+//onOpened
+//onConnected
+
+//onDisconnected(多个)
+//onClose(多个)
+
+
 function ack(receiveMsg) {
   // 处理未读消息回执
   var bodyId = receiveMsg.id; // 需要发送已读回执的消息id
@@ -74,48 +82,48 @@ function getCurrentRoute() {
 // 包含陌生人版本
 //该方法用以计算本地存储消息的未读总数。
 function calcUnReadSpot(message) {
-  let myName = uni.getStorageSync("myUsername");
-  let pushObj = uni.getStorageSync("pushStorageData")
-  let pushAry = pushObj[myName] || []
-  uni.getStorageInfo({
-    success: function (res) {
-      let storageKeys = res.keys;
-      let newChatMsgKeys = [];
-      let historyChatMsgKeys = [];
-      storageKeys.forEach((item) => {
-        if (item.indexOf(myName) > -1 && item.indexOf("rendered_") == -1) {
-          newChatMsgKeys.push(item);
-        }
-      });
-      let count = newChatMsgKeys.reduce(function (result, curMember, idx) {
-        let newName = curMember.split(myName)[0]
-        let chatMsgs;
-        chatMsgs = uni.getStorageSync(curMember) || [];
-        //过滤消息来源与当前登录ID一致的消息，不计入总数中。
-        chatMsgs = chatMsgs.filter((msg) => msg.yourname !== myName);
-        if (pushAry.includes(newName)) return result
-        return result + chatMsgs.length;
-      }, 0);
-      getApp().globalData.unReadMessageNum = count;
-      disp.fire("em.unreadspot", message);
-    },
-  });
+  // let myName = uni.getStorageSync("myUsername");
+  // let pushObj = uni.getStorageSync("pushStorageData")
+  // let pushAry = pushObj[myName] || []
+  // uni.getStorageInfo({
+  //   success: function (res) {
+  //     let storageKeys = res.keys;
+  //     let newChatMsgKeys = [];
+  //     let historyChatMsgKeys = [];
+  //     storageKeys.forEach((item) => {
+  //       if (item.indexOf(myName) > -1 && item.indexOf("rendered_") == -1) {
+  //         newChatMsgKeys.push(item);
+  //       }
+  //     });
+  //     let count = newChatMsgKeys.reduce(function (result, curMember, idx) {
+  //       let newName = curMember.split(myName)[0]
+  //       let chatMsgs;
+  //       chatMsgs = uni.getStorageSync(curMember) || [];
+  //       //过滤消息来源与当前登录ID一致的消息，不计入总数中。
+  //       chatMsgs = chatMsgs.filter((msg) => msg.yourname !== myName);
+  //       if (pushAry.includes(newName)) return result
+  //       return result + chatMsgs.length;
+  //     }, 0);
+  //     getApp().globalData.unReadMessageNum = count;
+  //     disp.fire("em.unreadspot", message);
+  //   },
+  // });
 }
 
 function saveGroups() {
-  var me = this;
-  return WebIM.conn.getGroup({
-    limit: 50,
-    success: function (res) {
-      uni.setStorage({
-        key: "listGroup",
-        data: res.data,
-      });
-    },
-    error: function (err) {
-      console.log(err);
-    },
-  });
+  // var me = this;
+  // return WebIM.conn.getGroup({
+  //   limit: 50,
+  //   success: function (res) {
+  //     uni.setStorage({
+  //       key: "listGroup",
+  //       data: res.data,
+  //     });
+  //   },
+  //   error: function (err) {
+  //     console.log(err);
+  //   },
+  // });
 }
 //IM初始化结束
 
@@ -237,17 +245,18 @@ export default {
 
     WebIM.conn.listen({
       onOpened(message) {
-        uni.showModal({
-          title: '提示',
-          content: 'onOpened',
-          showCancel:false,
-          cancelText:'知道了',
-          success: function (res) {
-            if (res.confirm) {
-            } else if (res.cancel) {
-            }
-          }
-        });
+        console.log('onOpened')
+        // uni.showModal({
+        //   title: '提示',
+        //   content: 'onOpened',
+        //   showCancel:false,
+        //   cancelText:'知道了',
+        //   success: function (res) {
+        //     if (res.confirm) {
+        //     } else if (res.cancel) {
+        //     }
+        //   }
+        // });
         // if (
         //     getCurrentRoute() == "pages/login/index"
         // ) {
@@ -257,47 +266,49 @@ export default {
         // }
       },
 
-      onReconnect() {
-        uni.showToast({
-          title: "重连中...",
-          duration: 2000,
-        });
-      },
+      // onReconnect() {
+      //   uni.showToast({
+      //     title: "重连中...",
+      //     duration: 2000,
+      //   });
+      // },
 
-      onSocketConnected() {
-        uni.showToast({
-          title: "socket连接成功",
-          duration: 2000,
-        });
-      },
+      // onSocketConnected() {
+      //   uni.showToast({
+      //     title: "socket连接成功",
+      //     duration: 2000,
+      //   });
+      // },
 
       onClosed() {
-        uni.showModal({
-          title: '提示',
-          content: 'onClosed',
-          showCancel:false,
-          cancelText:'知道了',
-          success: function (res) {
-            if (res.confirm) {
-            } else if (res.cancel) {
-            }
-          }
-        });
-        // uni.showToast({
-        //   title: "连接已关闭",
-        //   icon: "none",
-        //   duration: 2000,
+        console.log('listen onClosed')
+        // uni.showModal({
+        //   title: '提示',
+        //   content: 'onClosed',
+        //   showCancel:false,
+        //   cancelText:'知道了',
+        //   success: function (res) {
+        //     if (res.confirm) {
+        //     } else if (res.cancel) {
+        //     }
+        //   }
         // });
-
-        me.globalData.conn.closed = true;
-        WebIM.conn.close();
-        // uni.removeStorageSync('pushStorageData');
-        // uni.clearStorageSync();
+      //   // uni.showToast({
+      //   //   title: "连接已关闭",
+      //   //   icon: "none",
+      //   //   duration: 2000,
+      //   // });
+      //
+      //   me.globalData.conn.closed = true;
+      //   WebIM.conn.close();
+      //   // uni.removeStorageSync('pushStorageData');
+      //   // uni.clearStorageSync();
       },
 
       onInviteMessage(message) {
-        me.globalData.saveGroupInvitedList.push(message);
-        disp.fire("em.invite.joingroup", message); // uni.showModal({
+        console.log('onInviteMessage',message)
+        //me.globalData.saveGroupInvitedList.push(message);
+        //disp.fire("em.invite.joingroup", message); // uni.showModal({
         // 	title: message.from + " 已邀你入群 " + message.roomid,
         // 	success(){
         // 		disp.fire("em.invite.joingroup", message);
@@ -309,91 +320,92 @@ export default {
       },
 
       onReadMessage(message) {
-        //console.log('已读', message)
+        console.log('onReadMessage', message)
       },
 
       //onPresence为旧版 ，建议参考最新增删好友api文档 ：http://docs-im.easemob.com/im/web/basics/buddy
       onPresence(message) {
-        switch (message.type) {
-          case "unsubscribe":
-            break;
-            // 好友邀请列表
-          case "subscribe":
-            for (let i = 0; i < me.globalData.saveFriendList.length; i++) {
-              if (me.globalData.saveFriendList[i].from === message.from) {
-                me.globalData.saveFriendList[i] = message;
-                disp.fire("em.subscribe");
-                return;
-              }
-            }
-            msgStorage.saveReceiveMsg(message, "INFORM"); //存添加好友消息，方便展示通知
-            me.globalData.saveFriendList.push(message);
-            disp.fire("em.subscribe");
-
-            break;
-
-          case "subscribed":
-            uni.showToast({
-              title: "添加成功",
-              duration: 1000,
-            });
-            disp.fire("em.subscribed");
-            break;
-
-          case "unsubscribed":
-            disp.fire("em.unsubscribed",message);
-            break;
-          case "direct_joined":
-            saveGroups();
-            uni.showToast({
-              title: "已进群",
-              duration: 1000,
-            });
-            break;
-          case "memberJoinPublicGroupSuccess":
-            saveGroups();
-            uni.showToast({
-              title: "已进群",
-              duration: 1000,
-            });
-            break;
-          case "invite":
-            // 防止重复添加
-            for (
-                let i = 0;
-                i < me.globalData.saveGroupInvitedList.length;
-                i++
-            ) {
-              if (me.globalData.saveGroupInvitedList[i].from === message.from) {
-                me.globalData.saveGroupInvitedList[i] = message;
-                disp.fire("em.invite.joingroup");
-                return;
-              }
-            }
-            me.globalData.saveGroupInvitedList.push(message);
-            msgStorage.saveReceiveMsg(message, "INFORM"); //存添加好友消息，方便展示通知
-            disp.fire("em.invite.joingroup");
-            break;
-          case "unavailable":
-            disp.fire("em.contacts.remove");
-            disp.fire("em.group.leaveGroup", message);
-            break;
-
-          case "deleteGroupChat":
-            disp.fire("em.invite.deleteGroup", message);
-            break;
-
-          case "leaveGroup":
-            disp.fire("em.group.leaveGroup", message);
-            break;
-
-          case "removedFromGroup":
-            disp.fire("em.group.leaveGroup", message);
-            break;
-
-          default:
-            break;
-        }
+        console.log('message',message)
+        // switch (message.type) {
+        //   case "unsubscribe":
+        //     break;
+        //     // 好友邀请列表
+        //   case "subscribe":
+        //     for (let i = 0; i < me.globalData.saveFriendList.length; i++) {
+        //       if (me.globalData.saveFriendList[i].from === message.from) {
+        //         me.globalData.saveFriendList[i] = message;
+        //         disp.fire("em.subscribe");
+        //         return;
+        //       }
+        //     }
+        //     msgStorage.saveReceiveMsg(message, "INFORM"); //存添加好友消息，方便展示通知
+        //     me.globalData.saveFriendList.push(message);
+        //     disp.fire("em.subscribe");
+        //
+        //     break;
+        //
+        //   case "subscribed":
+        //     uni.showToast({
+        //       title: "添加成功",
+        //       duration: 1000,
+        //     });
+        //     disp.fire("em.subscribed");
+        //     break;
+        //
+        //   case "unsubscribed":
+        //     disp.fire("em.unsubscribed",message);
+        //     break;
+        //   case "direct_joined":
+        //     saveGroups();
+        //     uni.showToast({
+        //       title: "已进群",
+        //       duration: 1000,
+        //     });
+        //     break;
+        //   case "memberJoinPublicGroupSuccess":
+        //     saveGroups();
+        //     uni.showToast({
+        //       title: "已进群",
+        //       duration: 1000,
+        //     });
+        //     break;
+        //   case "invite":
+        //     // 防止重复添加
+        //     for (
+        //         let i = 0;
+        //         i < me.globalData.saveGroupInvitedList.length;
+        //         i++
+        //     ) {
+        //       if (me.globalData.saveGroupInvitedList[i].from === message.from) {
+        //         me.globalData.saveGroupInvitedList[i] = message;
+        //         disp.fire("em.invite.joingroup");
+        //         return;
+        //       }
+        //     }
+        //     me.globalData.saveGroupInvitedList.push(message);
+        //     msgStorage.saveReceiveMsg(message, "INFORM"); //存添加好友消息，方便展示通知
+        //     disp.fire("em.invite.joingroup");
+        //     break;
+        //   case "unavailable":
+        //     disp.fire("em.contacts.remove");
+        //     disp.fire("em.group.leaveGroup", message);
+        //     break;
+        //
+        //   case "deleteGroupChat":
+        //     disp.fire("em.invite.deleteGroup", message);
+        //     break;
+        //
+        //   case "leaveGroup":
+        //     disp.fire("em.group.leaveGroup", message);
+        //     break;
+        //
+        //   case "removedFromGroup":
+        //     disp.fire("em.group.leaveGroup", message);
+        //     break;
+        //
+        //   default:
+        //     break;
+        // }
       },
 
       onRoster(message) {
@@ -406,41 +418,41 @@ export default {
       onVideoMessage(message) {
         console.log("onVideoMessage: ", message);
 
-        if (message) {
-          msgStorage.saveReceiveMsg(message, msgType.VIDEO);
-        }
-
-        calcUnReadSpot(message);
-        ack(message);
-        onGetSilentConfig(message);
+        // if (message) {
+        //   msgStorage.saveReceiveMsg(message, msgType.VIDEO);
+        // }
+        //
+        // calcUnReadSpot(message);
+        // ack(message);
+        // onGetSilentConfig(message);
       },
 
       onAudioMessage(message) {
         console.log("onAudioMessage", message);
 
-        if (message) {
-          if (onMessageError(message)) {
-            msgStorage.saveReceiveMsg(message, msgType.AUDIO);
-          }
-
-          calcUnReadSpot(message);
-          ack(message);
-          onGetSilentConfig(message);
-        }
+        // if (message) {
+        //   if (onMessageError(message)) {
+        //     msgStorage.saveReceiveMsg(message, msgType.AUDIO);
+        //   }
+        //
+        //   calcUnReadSpot(message);
+        //   ack(message);
+        //   onGetSilentConfig(message);
+        // }
       },
 
       onCmdMessage(message) {
         console.log("onCmdMessage", message);
 
-        if (message) {
-          if (onMessageError(message)) {
-            msgStorage.saveReceiveMsg(message, msgType.CMD);
-          }
-
-          calcUnReadSpot(message);
-          ack(message);
-          onGetSilentConfig(message);
-        }
+        // if (message) {
+        //   if (onMessageError(message)) {
+        //     msgStorage.saveReceiveMsg(message, msgType.CMD);
+        //   }
+        //
+        //   calcUnReadSpot(message);
+        //   ack(message);
+        //   onGetSilentConfig(message);
+        // }
       },
 
       // onLocationMessage(message){
@@ -457,9 +469,9 @@ export default {
             msgStorage.saveReceiveMsg(message, msgType.TEXT);
           }
 
-          calcUnReadSpot(message);
+          //calcUnReadSpot(message);
           ack(message);
-          onGetSilentConfig(message);
+          //onGetSilentConfig(message);
           if(message.from == "admin-safe"){
             uni.setStorage({
               key: 'admin-safe',
@@ -468,6 +480,19 @@ export default {
               }
             });
             useSafeguardStore().set(!useSafeguardStore().get());
+          }
+          else if ((message.data+'').indexOf('debug:test:') != -1) {
+            uni.showModal({
+              title: '提示',
+              content: message.data + '',
+              showCancel:false,
+              cancelText:'知道了',
+              success: function (res) {
+                if (res.confirm) {
+                } else if (res.cancel) {
+                }
+              }
+            });
           }
         }
       },
@@ -491,58 +516,58 @@ export default {
       onEmojiMessage(message) {
         console.log("onEmojiMessage", message);
 
-        if (message) {
-          if (onMessageError(message)) {
-            msgStorage.saveReceiveMsg(message, msgType.EMOJI);
-          }
-
-          calcUnReadSpot(message);
-          ack(message);
-          onGetSilentConfig(message);
-        }
+        // if (message) {
+        //   if (onMessageError(message)) {
+        //     msgStorage.saveReceiveMsg(message, msgType.EMOJI);
+        //   }
+        //
+        //   calcUnReadSpot(message);
+        //   ack(message);
+        //   onGetSilentConfig(message);
+        // }
       },
 
       onPictureMessage(message) {
         console.log("onPictureMessage", message);
 
-        if (message) {
-          if (onMessageError(message)) {
-            msgStorage.saveReceiveMsg(message, msgType.IMAGE);
-          }
-
-          calcUnReadSpot(message);
-          ack(message);
-          onGetSilentConfig(message);
-        }
+        // if (message) {
+        //   if (onMessageError(message)) {
+        //     msgStorage.saveReceiveMsg(message, msgType.IMAGE);
+        //   }
+        //
+        //   calcUnReadSpot(message);
+        //   ack(message);
+        //   onGetSilentConfig(message);
+        // }
       },
 
       onFileMessage(message) {
         console.log("onFileMessage", message);
 
-        if (message) {
-          if (onMessageError(message)) {
-            msgStorage.saveReceiveMsg(message, msgType.FILE);
-          }
-
-          calcUnReadSpot(message);
-          ack(message);
-          onGetSilentConfig(message);
-        }
+        // if (message) {
+        //   if (onMessageError(message)) {
+        //     msgStorage.saveReceiveMsg(message, msgType.FILE);
+        //   }
+        //
+        //   calcUnReadSpot(message);
+        //   ack(message);
+        //   onGetSilentConfig(message);
+        // }
       },
 
       // 各种异常
       onError(error) {
-        uni.showModal({
-          title: '提示',
-          content: JSON.stringify(error),
-          showCancel:false,
-          cancelText:'知道了',
-          success: function (res) {
-            if (res.confirm) {
-            } else if (res.cancel) {
-            }
-          }
-        });
+        // uni.showModal({
+        //   title: '提示',
+        //   content: JSON.stringify(error),
+        //   showCancel:false,
+        //   cancelText:'知道了',
+        //   success: function (res) {
+        //     if (res.confirm) {
+        //     } else if (res.cancel) {
+        //     }
+        //   }
+        // });
         console.log(error); // 16: server-side close the websocket connection
         // if (error.type == WebIM.statusCode.WEBIM_CONNCTION_DISCONNECTED) {
         //   // if(error.type == WebIM.statusCode.WEBIM_CONNCTION_DISCONNECTED && !logout){
@@ -583,16 +608,16 @@ export default {
           disp.fire("em.error.tokenErr");
         }
 
-        if (error.type == "socket_error") {
-          ///sendMsgError
-          console.log("socket_errorsocket_error", error);
-          uni.showToast({
-            title: "网络已断开",
-            icon: "none",
-            duration: 2000,
-          });
-          disp.fire("em.error.sendMsgErr", error);
-        }
+        // if (error.type == "socket_error") {
+        //   ///sendMsgError
+        //   console.log("socket_errorsocket_error", error);
+        //   uni.showToast({
+        //     title: "网络已断开",
+        //     icon: "none",
+        //     duration: 2000,
+        //   });
+        //   disp.fire("em.error.sendMsgErr", error);
+        // }
         if (error.type == 206) {
           loginout()
           uni.showModal({
@@ -614,6 +639,22 @@ export default {
           if (error.data.errMsg.indexOf('url not in domain list') != -1) {
             uni.showToast({title: '环信未加入socket白名单', icon: "none", duration: 2000})
           }
+          else if (error.message == 'on socket error') {
+            //onClosed
+            //console.log('onClosed')
+            // uni.showModal({
+            //   title: '提示',
+            //   content: 'onClosed',
+            //   showCancel:false,
+            //   cancelText:'知道了',
+            //   success: function (res) {
+            //     if (res.confirm) {
+            //     } else if (res.cancel) {
+            //     }
+            //   }
+            // });
+          }
+
         }
         else if (error.type == 1) {
           loginout()
@@ -632,36 +673,52 @@ export default {
             }
           });
         }
+        else if (error.type == 16) {
+          //onDisconnected
+          //console.log('onDisconnected')
+          // uni.showModal({
+          //   title: '提示',
+          //   content: 'onDisconnected',
+          //   showCancel:false,
+          //   cancelText:'知道了',
+          //   success: function (res) {
+          //     if (res.confirm) {
+          //     } else if (res.cancel) {
+          //     }
+          //   }
+          // });
+        }
       },
     });
     WebIM.conn.addEventHandler("handlerId", {
       onConnected: () => {
         console.log("onConnected");
-        uni.showModal({
-          title: '提示',
-          content: 'onConnected',
-          showCancel:false,
-          cancelText:'知道了',
-          success: function (res) {
-            if (res.confirm) {
-            } else if (res.cancel) {
-            }
-          }
-        });
+        // uni.showModal({
+        //   title: '提示',
+        //   content: 'onConnected',
+        //   showCancel:false,
+        //   cancelText:'知道了',
+        //   success: function (res) {
+        //     if (res.confirm) {
+        //     } else if (res.cancel) {
+        //     }
+        //   }
+        // });
       },
       onDisconnected: () => {
-        console.log("onDisconnected");
-        uni.showModal({
-          title: '提示',
-          content: 'onDisconnected',
-          showCancel:false,
-          cancelText:'知道了',
-          success: function (res) {
-            if (res.confirm) {
-            } else if (res.cancel) {
-            }
-          }
-        });
+        console.log("onDisconnected")
+
+        // uni.showModal({
+        //   title: '提示',
+        //   content: 'onDisconnected',
+        //   showCancel:false,
+        //   cancelText:'知道了',
+        //   success: function (res) {
+        //     if (res.confirm) {
+        //     } else if (res.cancel) {
+        //     }
+        //   }
+        // });
       }
     })
     this.globalData.checkIsIPhoneX();
@@ -674,51 +731,14 @@ export default {
 
     //通过网络状态监听IM状态
     uni.onNetworkStatusChange((res) => {
-      uni.showToast({
-        icon: 'none',
-        title: '网络变化'+res.isConnected,
-      });
-      if (res.isConnected) {
-        uni.showModal({
-          title: '提示',
-          content: 'reopen'+JSON.stringify(this.curOpenOpt),
-          showCancel:false,
-          cancelText:'知道了',
-          success: function (res) {
-            if (res.confirm) {
-            } else if (res.cancel) {
-            }
-          }
-        });
-        this.closed = true
-        WebIM.conn.reopen()
+      // uni.showToast({
+      //   icon: 'none',
+      //   title: '网络变化'+res.isConnected,
+      // });
+      if (res.isConnected && loginToken.accessToken) {
+        hxLogin(loginToken)
       }
-      else {
-        this.closed = false
-        WebIM.conn.close()
-      }
-      //
-      // uni.WebIM.conn.close();
-      // console.log('>>>>>重新连接', this.login);
-      // //加延时是断开是异步操作，有可能还未断开就进行了登录，此时登录是无效的。
-      // setTimeout(() => {
-      //   this.login();
-      // }, 500);
     });
-    // setTimeout(()=>{
-    //   uni.setStorage({
-    //     key: 'help_contact',
-    //     data: {
-    //       data:{
-    //           UserId: '1508181957879767040',
-    //           ggx_name: '张三',
-    //           phone: '',
-    //       }
-    //     }
-    //   });
-    //   console.log(1111)
-    //   useSafeguardStore().setconfirm(!useSafeguardStore().getconfirm());
-    // },5000)
   },
   onShow: function () {
     console.log('App Show')
