@@ -12,11 +12,11 @@
 						<image class="w-64 h-64" src="@/static/opus/icon_play.png" />
 					</view>
 					<view class="info w-275 pl-14">
-						<view v-if="item.recommendedCity"
-							class="flex items-center text-13 mb-15   rounded-9 w-90  justify-center  h-19 "
+						<view v-if="item.cover.name"
+							class="flex items-center text-13 mb-15 rounded-9 w-180 justify-center  h-19 "
 							style="background-color: rgba(244, 244, 244, 0.2);">
-							<image src="@/static/opus/icon_location_white.png" class="w-9 h-11 mr-4" />{{
-								item.recommendedCity }}
+							<image src="@/static/opus/icon_location_white.png" class="w-9 h-11 mr-4" />
+							{{item.cover.name }}
 						</view>
 						<view class="font-bold h-17 leading-16 text-17 flex items-center">@{{ item.author }}
 							<image src="/static/mine/shop.png" class="w-19 h-19 ml-4" v-if="item.hasShop" />
@@ -86,7 +86,7 @@ import { opusCollect, opusLike, userFans } from "@/api/opus/index"
 import { getCurrentInstance, reactive, watch, ref, computed } from 'vue'
 import useLoginTokenStore from '@/store/modules/loginToken'
 import { onShow } from '@dcloudio/uni-app'
-const props = defineProps(['lastVideoId','opusid','traceInfo'])
+const props = defineProps(['lastVideoId', 'opusid', 'traceInfo'])
 const commentRef = ref();
 const open = () => {
 	commentRef.value.init(true);
@@ -200,7 +200,7 @@ const attention = (item) => {
 const collection = (item) => {
 	let action = item.isCollection ? 0 : 1
 	if (getTokenValue()) {
-		opusCollect({ opusId: item.id, action: action}, {trackInfo: props.traceInfo }).then(res => {
+		opusCollect({ opusId: item.id, action: action }, { trackInfo: props.traceInfo }).then(res => {
 			if (action) {
 				item.isCollection = true
 				item.collectionNum++
@@ -225,7 +225,7 @@ const collection = (item) => {
 const like = (item) => {
 	let action = item.isLike ? 0 : 1
 	if (getTokenValue()) {
-		opusLike({ opusId: item.id, action: action}, {trackInfo: props.traceInfo }).then(res => {
+		opusLike({ opusId: item.id, action: action }, { trackInfo: props.traceInfo }).then(res => {
 			if (action) {
 				item.isLike = true
 				item.likeNum++
