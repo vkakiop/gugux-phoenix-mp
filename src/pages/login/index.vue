@@ -34,7 +34,7 @@
       <!--view class="mt-18 text-center" @click="gotoLoginPhone">验证码登录</view-->
       <view class="mt-58 text-13 flex items-center">
         <u-checkbox-group v-model="pageData.isAgreeItems">
-          <u-checkbox shape="circle" activeColor="#f8cf01" label="" iconColor="#333333"></u-checkbox>
+          <u-checkbox shape="circle" activeColor="#f8cf01" label="" iconColor="#333333" iconSize="15" size="22"></u-checkbox>
         </u-checkbox-group>
         <view>
           我已阅读并同意<text class="text-[#f0c801]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#f0c801]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>

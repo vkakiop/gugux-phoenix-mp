@@ -4,7 +4,7 @@
       <view class="text-18 text-[#000000] text-center font-bold">登录或注册</view>
       <view class="mt-20 text-13 flex items-center">
         <u-checkbox-group v-model="pageData.isAgreeItems">
-          <u-checkbox shape="circle" activeColor="#4ba1f8" label=""></u-checkbox>
+          <u-checkbox shape="circle" activeColor="#4ba1f8" label="" iconSize="15" size="22"></u-checkbox>
         </u-checkbox-group>
         <view class="text-13 leading-22 text-[#333]">
           若手机号未注册将进入注册流程，注册即为同意<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=用户服务协议')">《用户服务协议》</text>及<text class="text-[#4ba1f8]" @click="gotoAgreement('/pages/agreement/index?code=yonghufuwuxieyi&title=隐私政策')">《隐私政策》</text>
