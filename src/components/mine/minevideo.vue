@@ -112,6 +112,7 @@ const fetchData = () => {
 	})
 }
 const gohomepage = (item) => {
+	isShare.value = false
 	if (useLoginTokenStore().get().user) {
 		if (item.createdBy == useLoginTokenStore().get().user.id) {
 			uni.switchTab({

@@ -5,11 +5,11 @@
 				<view class=" border-2 border-[#fff] w-80 rounded-full h-80 iconShadow" @click="skipPerson">
 					<image :src="pageInfo.mineMessage.icon" class="w-76 h-76 rounded-full" />
 				</view>
-				<view class="mx-11 pt-14">
-					<view class="text-21 flex items-center">
+				<view class="mx-11 pt-10">
+					<view class="text-21">
 						{{ pageInfo.mineMessage.nickname }}
 					</view>
-					<view class=" text-14 flex items-center pt-18">
+					<view class=" text-14 flex items-center mt-18">
 						<image src="/static/mine/ID.png" class="w-15 h-15 " />
 						<text class="ml-5 mr-15">{{ pageInfo.mineMessage.guguId }}</text>
 						<!-- 	<image src="/static/mine/copy.png" class="w-15 h-15 ml-10" @click.stop="copy(pageInfo.mineMessage.guguId)" /> -->

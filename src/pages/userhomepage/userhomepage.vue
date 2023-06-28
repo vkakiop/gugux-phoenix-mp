@@ -11,10 +11,10 @@
 						<image :src="pageInfo.mineMessage.icon" class="w-76 h-76 rounded-full" />
 					</view>
 					<view class="mx-11 pt-10">
-						<view class="text-21 flex items-center">
+						<view class="text-21">
 							{{ pageInfo.mineMessage.nickname }}
 						</view>
-						<view class=" text-14 flex items-center pt-18">
+						<view class=" text-14 flex items-center mt-18">
 							<image src="/static/mine/ID.png" class="w-15 h-15 " />
 							<text class="ml-5 mr-15">{{ pageInfo.mineMessage.guguId }}</text>
 							<!-- 	<image src="/static/mine/copy.png" class="w-15 h-15 ml-10" @click.stop="copy(pageInfo.mineMessage.guguId)" /> -->
@@ -99,7 +99,7 @@ import waterfall from '@/components/index/waterfall.vue'
 import { userFans, userFansRemove } from "@/api/opus/index"
 import { userhomepage, homepageopus } from "@/api/mine/index.js"
 import { ref, reactive, watch, computed } from 'vue'
-import { onReachBottom, onPageScroll, onLoad } from "@dcloudio/uni-app"
+import { onReachBottom, onPageScroll, onLoad, onShow } from "@dcloudio/uni-app"
 import useLoginTokenStore from '@/store/modules/loginToken'
 import _ from 'lodash'
 const computedNumber = computed({
@@ -128,6 +128,9 @@ watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
 onLoad((option) => {
 	pageData.masterId = option.id
 	pageData.traceInfo=	decodeURIComponent(option.traceInfo || '')
+	
+})
+onShow(()=>{
 	fetchInfo()
 })
 const fetchInfo = () => {

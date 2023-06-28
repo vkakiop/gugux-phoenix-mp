@@ -23,7 +23,8 @@
         <view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
           <view v-show="waterIndex == pageData.currentIndex">
             <waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :itemKey="waterItem.itemKey"
-              :value="waterItem.items" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
+              :value="waterItem.items" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex"
+              :categoryId="waterItem.query.path.categoryId">
             </waterfall>
           </view>
         </view>
@@ -73,6 +74,7 @@ frontpage({}).then(res => {
 })
 onShow(() => {
   useRouterStore().setRouter('/pages/mine/mine', false)
+
 })
 watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
   pageData.waterfallItems = _.cloneDeep(waterfallItems)
