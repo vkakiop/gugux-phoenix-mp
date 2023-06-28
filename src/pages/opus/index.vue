@@ -78,6 +78,7 @@ const _this = getCurrentInstance()
 onLoad((option)=>{
     pageData.id = option.id
     pageData.traceInfo = decodeURIComponent(option.traceInfo || '')
+    pageData.categoryId = option.categoryId || ''
     getData()
 })
 
@@ -96,8 +97,10 @@ const computedNumber = computed({
 const pageData = reactive({
   //id: '1601683533353328803',
   id:'',
-  isLoadError:false,
+  categoryId:'',
   traceInfo:'',
+
+  isLoadError:false,
   isShowLoginPop:false,
   isShowCommentPage:true,
   isShowCommentPop:false,
@@ -231,10 +234,10 @@ const gotoBack = ()=>{
 const gotoMine = ()=>{
   let loginToken = useLoginTokenStore().get()
   if (loginToken.user && loginToken.user.id == pageData.detail.createdBy) {
-    uni.switchTab({url:'/pages/mine/mine?traceInfo='+encodeURIComponent(pageData.traceInfo)})
+    uni.switchTab({url:'/pages/mine/mine?traceInfo='+encodeURIComponent(pageData.traceInfo)+'&categoryId='+pageData.categoryId})
   }
   else {
-    uni.navigateTo({url: '/pages/userhomepage/userhomepage?id=' + pageData.detail.createdBy + '&traceInfo='+encodeURIComponent(pageData.traceInfo)})
+    uni.navigateTo({url: '/pages/userhomepage/userhomepage?id=' + pageData.detail.createdBy + '&traceInfo='+encodeURIComponent(pageData.traceInfo)+'&categoryId='+pageData.categoryId})
   }
 }
 
