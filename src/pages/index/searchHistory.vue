@@ -140,7 +140,9 @@ const changeWaterfall = (waterIndex) => {
 	}
 	pageData.currentIndex = waterIndex
 	if (pageData.waterfallItems[waterIndex].items.length == 0) {
-		getData()
+		if(!isShowHistory.value){
+			getData()
+		}	
 	} else {
 		//写入滚动条高度
 		if (pageData.waterfallItems[waterIndex].scrollTop != -1) {
