@@ -65,7 +65,7 @@
 import {reactive, ref, watch, getCurrentInstance, nextTick, computed} from "vue"
 import { opusInfo,opusCollect,opusLike,userFans,userFansRemove } from "@/api/opus/index"
 import { getTokenValue } from "@/utils/utils"
-import {onLoad,onPageScroll} from '@dcloudio/uni-app'
+import {onLoad,onShow,onPageScroll} from '@dcloudio/uni-app'
 import opusArticle from './components/opusArticle'
 import comment from "@/components/common/comment.vue"
 import useLoginTokenStore from '@/store/modules/loginToken'
@@ -79,6 +79,10 @@ onLoad((option)=>{
     pageData.id = option.id
     pageData.traceInfo = decodeURIComponent(option.traceInfo || '')
     getData()
+})
+
+onShow(()=>{
+  getData()
 })
 
 watch(()=>loginTokenStore.get().accessToken,(newVal,oldVal)=>{
