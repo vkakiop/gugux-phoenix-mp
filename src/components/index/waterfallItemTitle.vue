@@ -41,7 +41,7 @@ const pageData = reactive({
   id: '',
   isShowLoginPop: false,
 })
-const props = defineProps(['item', 'isVirtualCal', 'itemKey'])
+const props = defineProps(['item', 'isVirtualCal', 'itemKey','traceInfo'])
 const computedHeight = computed({
   get: (w, h) => {
     return function (w, h) {
@@ -59,7 +59,7 @@ const gohomepage = (item) => {
     }
   }
   uni.navigateTo({
-    url: '/pages/userhomepage/userhomepage?id=' + item.createdBy
+    url: `/pages/userhomepage/userhomepage?id=${item.createdBy}&traceInfo=${encodeURIComponent(item.traceInfo)}`
   })
 
 }

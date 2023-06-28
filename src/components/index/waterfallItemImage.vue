@@ -29,7 +29,7 @@ const pageData = reactive({
   id: '',
   isShowLoginPop: false,
 })
-const props = defineProps(['item', 'itemKey', 'isVirtualCal', 'itemKey'])
+const props = defineProps(['item', 'itemKey', 'isVirtualCal', 'itemKey','traceInfo'])
 const computedHeight = computed({
   get: (w, h) => {
     return function (w, h) {
@@ -40,16 +40,16 @@ const computedHeight = computed({
 const godetail = (item) => {
   if (item.cover.itemType == 2) {
     uni.navigateTo({
-      url: `/pages/opus/index?id=${item.id}`
+      url: `/pages/opus/index?id=${item.id}&traceInfo=${encodeURIComponent(props.traceInfo)}`
     })
   } else if (item.cover.itemType == 3) {
     if (props["itemKey"] == 'mine') {
       uni.navigateTo({
-        url: `/components/mine/minevideo?id=${item.id}`
+        url: `/components/mine/minevideo?id=${item.id}&traceInfo=${encodeURIComponent(props.traceInfo)}`
       })
     } else {
       uni.navigateTo({
-        url: `/pages/VideoCarousel/VideoCarousel?id=${item.id}`
+        url: `/pages/VideoCarousel/VideoCarousel?id=${item.id}&traceInfo=${encodeURIComponent(props.traceInfo)}`
       })
     }
   }
@@ -73,7 +73,7 @@ onMounted(() => {
 const like = (item) => {
   let action = item.isLike ? 0 : 1
   if (getTokenValue()) {
-    opusLike({ opusId: item.id, action: action}, {trackInfo: item.traceInfo }).then(res => {
+    opusLike({ opusId: item.id, action: action}, {trackInfo: props.traceInfo }).then(res => {
       if (action) {
         item.isLike = true
         item.likeNum++

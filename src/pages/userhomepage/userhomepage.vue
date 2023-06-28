@@ -81,7 +81,7 @@
 				</view>
 				<view v-show="waterIndex == pageData.currentIndex">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
-						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex" itemKey="mine">
+						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex" itemKey="mine"  :traceInfo="pageData.traceInfo">
 					</waterfall>
 				</view>
 			</view>
@@ -115,6 +115,7 @@ const waterfallItems = [{
 const pageData = reactive({
 	isShowLoginPop: false,
 	masterId: '',
+	traceInfo:'',
 	scrollTop: 0,
 	currentIndex: 0,
 	waterfallItems: _.cloneDeep(waterfallItems),
@@ -126,6 +127,7 @@ watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
 })
 onLoad((option) => {
 	pageData.masterId = option.id
+	pageData.traceInfo=option.traceInfo
 	fetchInfo()
 })
 const fetchInfo = () => {
