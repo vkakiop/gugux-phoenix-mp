@@ -3,14 +3,14 @@
 
 <script setup>
 import {onLoad} from "@dcloudio/uni-app"
-import {logout} from '@/utils/login'
+import {loginout} from '@/utils/login'
 
 onLoad((option)=>{
   //const app = getApp()
   //app.globalData.loginToken = {accessToken:'',expireTime:0,}
   // loginTokenStore.set({accessToken:'',expireTime:0,user:{id:''}})
   // uni.clearStorageSync(configLoginToken)
-  logout()
+  loginout()
   let returnUrl = decodeURIComponent(option.url || '')
   let url = returnUrl || '/pages/index/index'
   uni.reLaunch({url:url})

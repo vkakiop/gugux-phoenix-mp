@@ -6,7 +6,7 @@ import msgStorage from '@/components/chat/msgstorage'
 import msgType from '@/components/chat/msgtype'
 import disp from '@/utils/broadcast'
 import { onGetSilentConfig } from './components/chat/pushStorage'
-import {logout} from '@/utils/login'
+import {loginout} from '@/utils/login'
 
 import {getCurrentPageUrl} from '@/utils/utils'
 import {configLoginToken} from '@/config/index'
@@ -237,13 +237,24 @@ export default {
 
     WebIM.conn.listen({
       onOpened(message) {
-        if (
-            getCurrentRoute() == "pages/login/index"
-        ) {
-          me.globalData.onLoginSuccess(
-              uni.getStorageSync("myUsername").toLowerCase()
-          );
-        }
+        uni.showModal({
+          title: '提示',
+          content: 'onOpened',
+          showCancel:false,
+          cancelText:'知道了',
+          success: function (res) {
+            if (res.confirm) {
+            } else if (res.cancel) {
+            }
+          }
+        });
+        // if (
+        //     getCurrentRoute() == "pages/login/index"
+        // ) {
+        //   me.globalData.onLoginSuccess(
+        //       uni.getStorageSync("myUsername").toLowerCase()
+        //   );
+        // }
       },
 
       onReconnect() {
@@ -261,8 +272,19 @@ export default {
       },
 
       onClosed() {
+        uni.showModal({
+          title: '提示',
+          content: 'onClosed',
+          showCancel:false,
+          cancelText:'知道了',
+          success: function (res) {
+            if (res.confirm) {
+            } else if (res.cancel) {
+            }
+          }
+        });
         // uni.showToast({
-        //   title: "您的账号已在其他系统登录",
+        //   title: "连接已关闭",
         //   icon: "none",
         //   duration: 2000,
         // });
@@ -271,23 +293,6 @@ export default {
         WebIM.conn.close();
         // uni.removeStorageSync('pushStorageData');
         // uni.clearStorageSync();
-
-        logout()
-
-        uni.showModal({
-          title: '提示',
-          content: '您的账号已在其他系统登录',
-          showCancel:false,
-          cancelText:'知道了',
-          success: function (res) {
-            if (res.confirm) {
-              uni.switchTab({
-                url: "/pages/index/index'),
-              })
-            } else if (res.cancel) {
-            }
-          }
-        });
       },
 
       onInviteMessage(message) {
@@ -527,6 +532,17 @@ export default {
 
       // 各种异常
       onError(error) {
+        uni.showModal({
+          title: '提示',
+          content: JSON.stringify(error),
+          showCancel:false,
+          cancelText:'知道了',
+          success: function (res) {
+            if (res.confirm) {
+            } else if (res.cancel) {
+            }
+          }
+        });
         console.log(error); // 16: server-side close the websocket connection
         // if (error.type == WebIM.statusCode.WEBIM_CONNCTION_DISCONNECTED) {
         //   // if(error.type == WebIM.statusCode.WEBIM_CONNCTION_DISCONNECTED && !logout){
@@ -553,7 +569,6 @@ export default {
         //     url: "../login/login"
         //   });
         // }
-
         if (error.type == WebIM.statusCode.WEBIM_CONNCTION_OPEN_ERROR) {
           uni.hideLoading();
           disp.fire("em.error.passwordErr"); // uni.showModal({
@@ -578,34 +593,77 @@ export default {
           });
           disp.fire("em.error.sendMsgErr", error);
         }
-        if (error.type == 40) {
-          let title = ''
+        if (error.type == 206) {
+          loginout()
+          uni.showModal({
+            title: '提示',
+            content: '您的账号已在其他系统登录',
+            showCancel:false,
+            cancelText:'知道了',
+            success: function (res) {
+              if (res.confirm) {
+                uni.switchTab({
+                  url: "/pages/index/index",
+                })
+              } else if (res.cancel) {
+              }
+            }
+          });
+        }
+        else if (error.type == 40) {
           if (error.data.errMsg.indexOf('url not in domain list') != -1) {
-            title = '环信未加入socket白名单'
-            uni.showToast({title: title,icon: "none",duration: 2000})
+            uni.showToast({title: '环信未加入socket白名单', icon: "none", duration: 2000})
           }
         }
         else if (error.type == 1) {
-          if (error.data.data.error_description == 'user not found') {
-            logout()
-            uni.showModal({
-              title: '提示',
-              content: '环信账号信息不存在',
-              showCancel:false,
-              cancelText:'知道了',
-              success: function (res) {
-                if (res.confirm) {
-                  uni.switchTab({
-                    url: "/pages/index/index"
-                  })
-                } else if (res.cancel) {
-                }
+          loginout()
+          uni.showModal({
+            title: '提示',
+            content: '环信账号信息不存在',
+            showCancel:false,
+            cancelText:'知道了',
+            success: function (res) {
+              if (res.confirm) {
+                uni.switchTab({
+                  url: "/pages/index/index"
+                })
+              } else if (res.cancel) {
               }
-            });
-          }
+            }
+          });
         }
       },
     });
+    WebIM.conn.addEventHandler("handlerId", {
+      onConnected: () => {
+        console.log("onConnected");
+        uni.showModal({
+          title: '提示',
+          content: 'onConnected',
+          showCancel:false,
+          cancelText:'知道了',
+          success: function (res) {
+            if (res.confirm) {
+            } else if (res.cancel) {
+            }
+          }
+        });
+      },
+      onDisconnected: () => {
+        console.log("onDisconnected");
+        uni.showModal({
+          title: '提示',
+          content: 'onDisconnected',
+          showCancel:false,
+          cancelText:'知道了',
+          success: function (res) {
+            if (res.confirm) {
+            } else if (res.cancel) {
+            }
+          }
+        });
+      }
+    })
     this.globalData.checkIsIPhoneX();
 
     //已登录登录环信
@@ -613,6 +671,28 @@ export default {
       //环信登录
       hxLogin(loginToken,this)
     }
+
+    //通过网络状态监听IM状态
+    uni.onNetworkStatusChange((info) => {
+      // console.log('>>>>>>>>>>>>>网络变化', info);
+      uni.showToast({
+        icon: 'none',
+        title: '网络变化'+WebIM.conn.isOpened(),
+      });
+      if (WebIM.conn.isOpened()) {
+        WebIM.conn.close()
+      }
+      else {
+        WebIM.conn.reopen()
+      }
+      //
+      // uni.WebIM.conn.close();
+      // console.log('>>>>>重新连接', this.login);
+      // //加延时是断开是异步操作，有可能还未断开就进行了登录，此时登录是无效的。
+      // setTimeout(() => {
+      //   this.login();
+      // }, 500);
+    });
     // setTimeout(()=>{
     //   uni.setStorage({
     //     key: 'help_contact',
