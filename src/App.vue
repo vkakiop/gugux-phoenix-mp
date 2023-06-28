@@ -261,17 +261,21 @@ export default {
 
       onClosed() {
         uni.showToast({
-          title: "退出登录",
+          title: "您的账号已在其他系统登录",
           icon: "none",
           duration: 2000,
         });
-        uni.redirectTo({
-          url: "../login/login",
-        });
+
         me.globalData.conn.closed = true;
         WebIM.conn.close();
         // uni.removeStorageSync('pushStorageData');
         // uni.clearStorageSync();
+
+        setTimeout(()=>{
+          uni.redirectTo({
+            url: "/pages/login/logout?url="+encodeURIComponent('/pages/mine/mine'),
+          })
+        },2000)
       },
 
       onInviteMessage(message) {

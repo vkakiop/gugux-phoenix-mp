@@ -74,6 +74,7 @@ const pageData = reactive({
   timer:null,
   count:60,
   isReget: false,  // 判断是否显示 ‘重新获取’按钮
+  isGetCode:false, // 是否获取过验证码
 })
 
 watch(()=>pageData.count,(newVal,oldVal)=>{
@@ -85,7 +86,10 @@ watch(()=>pageData.count,(newVal,oldVal)=>{
 
 const onLogin = ()=>{
   if (pageData.code.length >= 6) {
-    if (vaildPhone()) {
+    if (!pageData.isGetCode) {
+      uni.showToast({title: '请您先获取验证码',icon:'none',duration: 2000})
+    }
+    else if (vaildPhone()) {
       if (pageData.isAgreeItems.length == 0) {
         pageData.isDialogShow=true
         uni.showToast({title: '请勾选同意隐私条款',icon:'none',duration: 2000})
@@ -101,12 +105,18 @@ const onLogin = ()=>{
 
 //获取验证码
 const getCode = ()=>{
-  console.log('getCode')
-  authSms({phone:pageData.phone,type:1}).then(res=>{
-    pageData.count = 60
-    pageData.isReget = true
-    getTimer()
-  })
+  if (pageData.isAgreeItems.length == 0) {
+    pageData.isDialogShow=true
+    uni.showToast({title: '请勾选同意隐私条款',icon:'none',duration: 2000})
+  }
+  else {
+    authSms({phone:pageData.phone,type:1}).then(res=>{
+      pageData.count = 60
+      pageData.isReget = true
+      pageData.isGetCode = true
+      getTimer()
+    })
+  }
 }
 
 const getTimer = ()=>{
