@@ -18,3 +18,13 @@ export const configLoginToken = 'ggx_login_token'
 export const configCommentFaceUrl = ()=>{
     return import.meta.env.VITE_APP_STATIC_URL + '/static/comment/facesnew/'
 }
+
+// 默认header参数
+export const configHeadersDefault = ()=>{
+    return {
+        d_versioncode : '1.0.0',
+        d_versionname : '1.0.0',
+        d_platform : 'xcx',
+        d_deviceid : '',
+    }
+}
