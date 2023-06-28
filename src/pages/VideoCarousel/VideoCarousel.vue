@@ -16,7 +16,7 @@ const pageData = reactive({
 onLoad((option) => {
 	pageData.lastVideoId = option.id
 	pageData.id = option.id
-	pageData.traceInfo=option.traceInfo
+	pageData.traceInfo=	decodeURIComponent(option.traceInfo || '')
 })
 </script>
 

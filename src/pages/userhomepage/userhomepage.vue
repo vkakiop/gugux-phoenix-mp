@@ -127,7 +127,7 @@ watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
 })
 onLoad((option) => {
 	pageData.masterId = option.id
-	pageData.traceInfo=option.traceInfo
+	pageData.traceInfo=	decodeURIComponent(option.traceInfo || '')
 	fetchInfo()
 })
 const fetchInfo = () => {
