@@ -61,11 +61,11 @@ frontpage({}).then(res => {
   opusCategoryVOS.forEach((item, index) => {
     let obj = {
       scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '', items: [], query: {
-        path: { category: '', pageNum: 1, getNum: 10 }
+        path: { categoryId: '', pageNum: 1, getNum: 10 }
       }
     }
     obj.name = item.name
-    obj.query.path.category = item.id
+    obj.query.path.categoryId = item.id
     waterfallItems.push(obj)
   })
   pageData.waterfallItems = _.cloneDeep(waterfallItems)
