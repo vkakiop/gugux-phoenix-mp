@@ -5,7 +5,7 @@
       <view class="name mx-6 text-14 line-clamp-1">视频播放</view>
     </customNav>
     <view class="bg-black">
-      <swiper class="swiper w-screen h-full" :style="`height:calc(100vh - ${pageData.statusHeight/2}px)`" vertical :current="pageData.current" :interval="2000" :duration="600" @animationfinish="animationfinish" @change="handleChange" :circular="false">
+      <swiper class="swiper w-screen h-screen" vertical :current="pageData.current" :interval="2000" :duration="600" @animationfinish="animationfinish" @change="handleChange" :circular="false">
         <swiper-item v-for="(item,index) in pageData.urls" :key="index">
           <view v-if="index == pageData.current" @click="handleVideo(index)" class="w-screen h-full">
             <video autoplay class="w-screen h-screen fixed" :id="'video'+index" :src="item"  loop  :controls="false" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false" @error="videoErrorCallback">
