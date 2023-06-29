@@ -18,16 +18,16 @@
 			}
 		},
 		{
+			"path": "pages/mine/mine",
+			"style": {
+				"navigationBarTitleText": "咕咕行"
+			}
+		},
+		{
 			"path": "pages/index/searchHistory",
 			"style": {
 				"navigationStyle": "custom",
 				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/mine/mine",
-			"style": {
-				"navigationBarTitleText": "咕咕行"
 			}
 		},
 		{
@@ -145,7 +145,16 @@
 				"enablePullDownRefresh": false
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/infopicture/infopicture",
+            "style" :                                                                                    
+            {
+                "navigationStyle": "custom",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "咕咕行",

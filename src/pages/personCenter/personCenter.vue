@@ -8,14 +8,14 @@
 			<view class="flex justify-between  px-10  items-center h-56">
 				<view class="">头像</view>
 				<view class="flex items-center">
-					<view class="mr-8">
+					<view class="mr-8" @click="gopicture(pageData.userInfo.icon)">
 						<image :src="pageData.userInfo.icon" class="w-40 h-40 rounded-full"> </image>
 					</view>
 				</view>
 			</view>
 			<view class="flex justify-between items-center px-10  h-56">
 				<view class="">昵称</view>
-				<view class=" flex items-center">
+				<view class=" flex items-center" @click="dropInput">
 					<view class="mr-8">{{ pageData.userInfo.nickname }}</view>
 				</view>
 			</view>
@@ -69,22 +69,65 @@
 		<view class="h-42 leading-42 text-center ">
 			<text @click="logOff" style="color: #EC5938;">退出登录</text>
 		</view>
+		<view>
+			<uni-popup ref="popup" background-color="#fff">
+				<view class="px-10  py-10">
+					<view class="font-bold py-20 text-center ">修改昵称</view>
+					<view class="flex items-center ml-5  border-dotted bg-[#F5F6F8]  h-50 w-300 rounded-40 border-1 border-[#E3E3E3] text-15 text-[#333]"><input v-model="pageData.name" type="nickname" class="nick-name-input ml-15" placeholder="请输入昵称"
+							@blur="changeNickName" /></view>
+					<view class="flex itemx-center justify-evenly mt-20"> 
+						<button @click="handlesure" class="bg-[#f0c801]  h-38 my-5  rounded-10 text-center leading-38">确认</button>
+						<button @click="handleoff" class="bg-[#F5F6F8]  h-38 my-5  rounded-10 text-center leading-38">取消</button>
+					</view>
+				</view>
+			</uni-popup>
+		</view>
 	</view>
 </template>
 
 <script setup>
-import { getUserInfo } from "@/api/mine/index.js"
-import { onLoad } from "@dcloudio/uni-app";
-import {reactive } from 'vue'
+import { getUserInfo, infoname } from "@/api/mine/index.js"
+import { onLoad, onShow } from "@dcloudio/uni-app";
+import { reactive, ref } from 'vue'
+const popup = ref()
+const dropInput = () => {
+	popup.value.open('center')
+}
+const handlesure = () => {
+	infoname({ name: pageData.name, type: 1 }).then(res => {
+		fetchData()
+		uni.showToast({
+			title: '修改成功'
+		})
+		popup.value.close('center')
+	})
+}
+const handleoff = () => {
+	popup.value.close('center')
+}
+const gopicture = (picture) => {
+	uni.navigateTo({
+		url: `/pages/infopicture/infopicture?picture=${picture}`
+	})
+}
 const pageData = reactive({
 	//数据全部列表
-	userInfo: {}
+	userInfo: {},
+	name: ''
 })
-onLoad(() => {
+const changeNickName = (e) => {
+	let name = e.detail.value;
+	if (name.length === 0) return;
+	pageData.name = name
+}
+onShow(() => {
+	fetchData()
+})
+const fetchData = () => {
 	getUserInfo({}).then(res => {
-		pageData.userInfo = {...res.data}
+		pageData.userInfo = { ...res.data }
 	})
-})
+}
 const skipQRcode = () => {
 	uni.navigateTo({
 		url: `/pages/personCenter/personQRcode?id=${pageData.userInfo.id}`
@@ -124,6 +167,7 @@ const logOff = () => {
 		}
 	});
 }
+
 </script>
 
 <style lang="scss" scoped>
@@ -131,4 +175,5 @@ const logOff = () => {
 	background-color: #fff;
 	color: #272A29;
 }
+
 </style>
