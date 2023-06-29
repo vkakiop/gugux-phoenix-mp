@@ -43,8 +43,8 @@ const show = ref(false);
 const alarmData = reactive({
     showBox: true,
     data: {
-        UserId: '1508181957879767040',
-        ggx_name: '张三',
+        UserId: '',
+        ggx_name: '',
         phone: '',
     },
     isAgree: false,

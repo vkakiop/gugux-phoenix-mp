@@ -41,10 +41,10 @@ const alarmData = reactive({
   storageData:'',
   msg:'',
   data:{
-    manageId: '1601683533353328702',
-    username: '张三',
-    phone: '13333333333',
-    unusualLocation: '重庆市四川商会重庆市四川商会商会',
+    manageId: '',
+    username: '',
+    phone: '',
+    unusualLocation: '',
     lat: 39.909,
     lng: 116.39742,
     covers: [{
@@ -66,8 +66,8 @@ const getData = ()=>{
     const json = JSONBIG({storeAsString:true});
     alarmData.data = json.parse(data.data.data);
     alarmData.data.covers = [{
-      latitude : alarmData.data.lat||0,
-      longitude : alarmData.data.lng||0,
+      latitude : alarmData.data.lat||39.909,
+      longitude : alarmData.data.lng||116.39742,
     }]
     show.value = true;
   }
