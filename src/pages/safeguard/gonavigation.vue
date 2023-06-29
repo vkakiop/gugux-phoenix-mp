@@ -1,5 +1,9 @@
 <!-- 去导航 -->
 <template>
+    <customNav>
+        <view @click="gotoBack" class="ml-3 mt-5"><uni-icons type="back" size="24"></uni-icons></view>
+        <view>咕咕行</view>
+    </customNav>
 	<view class="navi">
         <view class="page-section page-section-gap" style="width: 100%; background: #ddd; height: 100vh;">
             <map style="width: 100%; height: 100vh;" :joinCluster="true" :latitude="pageData.data.lat" :longitude="pageData.data.lng" :markers="pageData.data.covers">
@@ -7,7 +11,7 @@
         </view>
         <view class="box">
             <view class="info">
-                <view class="imgbox"> {{ pageData.data.abnormalName }}</view>
+                <view class="imgbox">姓名： {{ pageData.data.abnormalName }}</view>
                 <!-- <view class="imgbox"> <image class="headimg" :src="pageData.data.headImg" /> 　{{ pageData.data.username }}</view> -->
                 <view>电话：{{ pageData.data.phone }}</view>
             </view>
@@ -243,6 +247,10 @@ const callPhone = (phone) =>{
     console.log('‘拨打失败了’');
     }
   });
+}
+
+const gotoBack = ()=>{
+  uni.navigateBack({ delta: 1 })
 }
 </script>
 <style lang="scss" scoped>

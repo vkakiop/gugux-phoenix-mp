@@ -2,6 +2,10 @@
 <!-- 去导航 -->
 <template>
   <view class="navi">
+    <customNav>
+			<view @click="gotoBack" class="ml-3 mt-5"><uni-icons type="back" size="24"></uni-icons></view>
+			<view>咕咕行</view>
+		</customNav>
     <view class="userinfo">
       <view><view>姓名：<text>{{ pageData.data.abnormalName }}</text></view>
       </view>
@@ -182,6 +186,10 @@ const playAudio = (type,item) =>{
     item.play = 0;
     player.pause();
   }
+}
+
+const gotoBack = ()=>{
+  uni.navigateBack({ delta: 1 })
 }
 </script>
 <style lang="scss" scoped>
