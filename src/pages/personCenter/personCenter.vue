@@ -73,11 +73,11 @@
 			<uni-popup ref="popup" background-color="#fff">
 				<view class="px-10  py-10">
 					<view class="font-bold py-20 text-center ">修改昵称</view>
-					<view class="flex items-center ml-5  border-dotted bg-[#F5F6F8]  h-50 w-300 rounded-40 border-1 border-[#E3E3E3] text-15 text-[#333]"><input v-model="pageData.name" type="nickname" class="nick-name-input ml-15" placeholder="请输入昵称"
+					<view class="flex items-center ml-5  border-dashed border-dashed bg-[#f8fbff]  h-50 w-300 rounded-10 border-2 border-gray-300  text-15 text-[#333]"><input v-model="pageData.name" type="nickname" class="nick-name-input ml-15" placeholder="请输入昵称"
 							@blur="changeNickName" /></view>
-					<view class="flex itemx-center justify-evenly mt-20"> 
-						<button @click="handlesure" class="bg-[#f0c801] w-100 h-38 my-5  rounded-20 text-center leading-38">确认</button>
-						<button @click="handleoff" class="bg-[#F5F6F8] w-100  h-38 my-5  rounded-20 text-center leading-38">取消</button>
+					<view class="flex itemx-center justify-evenly mt-20 "> 
+						<button @click="handlesure" class="bg-[#609ef0] text-white w-100 h-38 my-5  rounded-20 text-center leading-38">确认</button>
+						<button @click="handleoff" class="bg-[#bfc0c3] text-white w-100  h-38 my-5  rounded-20 text-center leading-38">取消</button>
 					</view>
 				</view>
 			</uni-popup>
