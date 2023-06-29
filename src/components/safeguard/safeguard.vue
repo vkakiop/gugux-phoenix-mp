@@ -74,10 +74,7 @@ const getData = ()=>{
 }
 
 watch(()=>useSafeguardStore().get(),(newVal,oldVal)=>{
-  if (newVal) {
     getData();
-  }
-
 })
 
 const confirmShow = (manageId) => {
