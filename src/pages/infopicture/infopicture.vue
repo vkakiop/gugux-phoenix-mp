@@ -41,9 +41,7 @@ const onChooseAvatar = (e) => {
 					uni.showToast({
 						title: '修改成功'
 					})
-					uni.navigateTo({
-						url: `/pages/personCenter/personCenter`
-					})
+					gotoBack()
 				})
 			}
 			else {
