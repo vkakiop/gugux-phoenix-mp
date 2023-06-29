@@ -14,13 +14,13 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "咕咕行"
 			}
 		},
 		{
 			"path": "pages/mine/mine",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "咕咕行"
 			}
 		},
 		{
@@ -33,7 +33,7 @@
 		{
 			"path": "components/mine/minevideo",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "咕咕行"
 			}
 		},
 		{
@@ -59,7 +59,7 @@
 		{
 			"path": "pages/VideoCarousel/VideoCarousel",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "咕咕行"
 			}
 		},
 		{

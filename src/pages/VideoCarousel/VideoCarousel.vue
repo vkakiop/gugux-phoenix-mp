@@ -1,7 +1,4 @@
 <template>
-	<customNav>
-		<view>咕咕行</view>
-	</customNav>
 	<view v-if="pageData.lastVideoId">
 		<dt-video :lastVideoId="pageData.lastVideoId" :opusid="pageData.id" :traceInfo="pageData.traceInfo"
 			:categoryId="pageData.categoryId" />

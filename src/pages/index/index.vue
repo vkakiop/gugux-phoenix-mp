@@ -1,7 +1,4 @@
 <template>
-  <customNav>
-    <view>咕咕行</view>
-  </customNav>
   <view>
     <view class="fixed -top-5 z-50 bg-white w-full py-10 mb-14">
       <view class="bg-white w-full pt-7 pb-5 pl-14  pr-22 flex justify-between">

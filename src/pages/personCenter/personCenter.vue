@@ -75,8 +75,8 @@
 					<view class="font-bold py-20 text-center ">修改昵称</view>
 					<view
 						class="flex items-center ml-5  border-dashed border-dashed bg-[#f8fbff]  h-50 w-300 rounded-10 border-2 border-gray-300  text-15 text-[#333]">
-						<input v-model="pageData.name" type="nickname" class="nick-name-input ml-15" placeholder="请输入昵称"
-							@blur="changeNickName" maxlength="16"  minlength="2"/>
+						<input v-model="pageData.name" type="nickname" class="ml-15" placeholder="请输入昵称"
+							@blur="changeNickName" maxlength="16" minlength="2" @change="changeNickName" />
 					</view>
 					<view class="flex justify-between text-[#c0c0c0] text-12 ml-5 py-10">
 						<view>好名字更容易被记住,2-16个字符</view>
@@ -109,10 +109,12 @@ const handlesure = () => {
 			title: '修改成功'
 		})
 		popup.value.close('center')
+		pageData.name = ''
 	})
 }
 const handleoff = () => {
 	popup.value.close('center')
+	pageData.name = ''
 }
 const gopicture = (picture) => {
 	uni.navigateTo({
