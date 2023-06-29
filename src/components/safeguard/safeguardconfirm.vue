@@ -64,10 +64,7 @@ const getData = ()=>{
 }
 
 watch(()=>useSafeguardStore().getconfirm(),(newVal,oldVal)=>{
-  if (newVal) {
-    console.log(newVal,1111);
     getData();
-  }
 })
 
 
