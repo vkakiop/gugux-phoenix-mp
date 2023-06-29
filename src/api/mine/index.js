@@ -71,3 +71,21 @@ export function opusdetails(data) {
 		},
 	})
 }
+
+// 修改头像
+export function infopicture(data) {
+    return request({
+        url: '/gugux-services-user-api/app/user/info/picture',
+        method: 'post',
+        params:data,
+    })
+}
+
+// 修改昵称
+export function infoname(data) {
+    return request({
+        url: '/gugux-services-user-api/app/user/info/name',
+        method: 'post',
+        params:data,
+    })
+}
