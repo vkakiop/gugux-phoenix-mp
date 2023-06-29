@@ -6,17 +6,16 @@
 				<view v-if="index == pageData.current" class="w-screen h-screen">
 					<video autoplay class="w-screen h-screen fixed" :id="'video' + index" :src="item.cover.content" loop
 						:controls="true" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false"
-						@error="videoErrorCallback"  @click.stop="handleVideo(index)">
+						@error="videoErrorCallback" @click.stop="handleVideo(index)">
 					</video>
 					<view v-if="pageData.status == 1" class="icon_play w-full h-full absolute">
-						<image class="w-64 h-64" src="@/static/opus/icon_play.png" @click.stop="handleVideo(index)"/>
+						<image class="w-64 h-64" src="@/static/opus/icon_play.png" @click.stop="handleVideo(index)" />
 					</view>
 					<view class="info w-275 pl-14">
-						<view v-if="item.cover.name"
-							class="flex items-center text-13 mb-15 rounded-9 w-180 justify-evenly  h-19 "
+						<view v-if="item.cover.name" class=" text-13 mb-15 rounded-9   h-19  inline-block p-10"
 							style="background-color: rgba(244, 244, 244, 0.2);">
-							<image src="@/static/opus/icon_location_white.png" class="w-9 h-11" />
-							{{item.cover.name }}
+							<image src="@/static/opus/icon_location_white.png" class="w-9 h-11 relative -top-8 mx-4" />
+							<text class="relative -top-8 mx-4"> {{ item.cover.name }}</text>
 						</view>
 						<view class="font-bold h-17 leading-16 text-17 flex items-center">@{{ item.author }}
 							<image src="/static/mine/shop.png" class="w-19 h-19 ml-4" v-if="item.hasShop" />
@@ -87,7 +86,7 @@ import { opusCollect, opusLike, userFans } from "@/api/opus/index"
 import { getCurrentInstance, reactive, watch, ref, computed } from 'vue'
 import useLoginTokenStore from '@/store/modules/loginToken'
 import { onShow } from '@dcloudio/uni-app'
-const props = defineProps(['lastVideoId', 'opusid', 'traceInfo','categoryId'])
+const props = defineProps(['lastVideoId', 'opusid', 'traceInfo', 'categoryId'])
 const commentRef = ref();
 const open = () => {
 	commentRef.value.init(true);
@@ -202,7 +201,7 @@ const attention = (item) => {
 const collection = (item) => {
 	let action = item.isCollection ? 0 : 1
 	if (getTokenValue()) {
-		opusCollect({ opusId: item.id, action: action , trackInfo: props.traceInfo ,categoryId: props.categoryId }).then(res => {
+		opusCollect({ opusId: item.id, action: action, trackInfo: props.traceInfo, categoryId: props.categoryId }).then(res => {
 			if (action) {
 				item.isCollection = true
 				item.collectionNum++
@@ -227,7 +226,7 @@ const collection = (item) => {
 const like = (item) => {
 	let action = item.isLike ? 0 : 1
 	if (getTokenValue()) {
-		opusLike({ opusId: item.id, action: action , trackInfo: props.traceInfo ,categoryId: props.categoryId }).then(res => {
+		opusLike({ opusId: item.id, action: action, trackInfo: props.traceInfo, categoryId: props.categoryId }).then(res => {
 			if (action) {
 				item.isLike = true
 				item.likeNum++
@@ -242,7 +241,7 @@ const like = (item) => {
 				icon: 'none',
 				duration: 2000
 			})
-			useOpusStore().setLike({id:item.id,isLike:item.isLike,likeNum:item.likeNum})
+			useOpusStore().setLike({ id: item.id, isLike: item.isLike, likeNum: item.likeNum })
 		})
 	} else {
 		pageData.isShowLoginPop = true
