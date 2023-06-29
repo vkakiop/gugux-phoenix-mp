@@ -12,8 +12,8 @@
       <waterfallGroup v-for="(items,groupIndex) in pageData[`column_values_group_${columnIndex}`]" :waterIndex="waterIndex" :groupIndex="groupIndex" :currentIndex="currentIndex" :itemType="itemType" :itemKey="itemKey"  :traceInfo="traceInfo"  :categoryId="categoryId" :items="items" :height="pageData[`column_height_group_${columnIndex}`][groupIndex]" :key="groupIndex"></waterfallGroup>
     </view>
   </view>
-  <view v-if="isComplete&&value.length" class="text-center h-50 leading-50">
-    没有更多了
+  <view v-if="isComplete&&value.length" class="text-center h-50 leading-50 text-12 text-[#666666]">
+    暂无更多
   </view>
 </template>
 <script setup>
