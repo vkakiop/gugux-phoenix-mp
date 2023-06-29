@@ -2,11 +2,14 @@
   <view class="w-172 bg-[#fff] rounded-5" v-if="item && item.cover">
     <view class="relative rounded-5">
       <view v-if="isVirtualCal"
-        :style="{ width: '100%', height: computedHeight(item.cover.width, item.cover.height) + 'rpx' }" class="rounded-5">
+        :style="{ width: '100%', height: computedHeight(item.cover.width, item.cover.height) + 'rpx' }" class="rounded-5 bg-[#eee]">
       </view>
-      <image v-else :src="imageThumb(item.cover.itemType == 2 ? item.cover.content : item.cover.thumbnail, 400, 400)"
-        :style="{ width: '100%', height: computedHeight(item.cover.width, item.cover.height) + 'rpx' }"
-        @click="godetail(item)" class="rounded-5"></image>
+      <view v-else
+        :style="{ width: '100%', height: computedHeight(item.cover.width, item.cover.height) + 'rpx' }" class="rounded-5 bg-[#eee] overflow-hidden">
+        <image :src="imageThumb(item.cover.itemType == 2 ? item.cover.content : item.cover.thumbnail, 400, 400)"
+          :style="{ width: '100%', height: computedHeight(item.cover.width, item.cover.height) + 'rpx' }"
+          @click="godetail(item)" class="rounded-5"></image>
+      </view>
       <view v-if="isVirtualCal"></view>
       <image v-else-if="item.cover.itemType == 3" src="/static/video/videoplay.png" mode=""
         class="absolute w-36 h-36 top-[50%] left-[50%] -ml-18 -mt-18 z-40" @click="godetail(item)"></image>
