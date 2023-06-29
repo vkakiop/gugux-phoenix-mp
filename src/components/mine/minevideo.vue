@@ -1,4 +1,7 @@
 <template>
+	<customNav>
+		<view>咕咕行</view>
+	</customNav>
 	<view class="w-screen h-screen relative" v-if="pageData.opusdetail.cover">
 		<video autoplay class="w-screen h-screen fixed" id='video0' :src="pageData.opusdetail.cover.content" loop
 			:controls="true" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false"

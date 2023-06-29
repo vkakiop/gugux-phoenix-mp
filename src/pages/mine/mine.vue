@@ -1,4 +1,7 @@
 <template>
+	<customNav>
+		<view>咕咕行</view>
+	</customNav>
 	<view v-if="pageInfo.mineMessage.guguId">
 		<view class="bg-[#fff] w-screen py-20 px-14">
 			<view class="flex  pb-15">

@@ -1,4 +1,7 @@
 <template>
+  <customNav>
+    <view>咕咕行</view>
+  </customNav>
   <view>
     <view class="fixed -top-5 z-50 bg-white w-full py-10 mb-14">
       <view class="bg-white w-full pt-7 pb-5 pl-14  pr-22 flex justify-between">
@@ -24,7 +27,7 @@
           <view v-show="waterIndex == pageData.currentIndex">
             <waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" itemKey="index"
               :value="waterItem.items" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex"
-              :categoryId="waterItem.query.path.categoryId+''">
+              :categoryId="waterItem.query.path.categoryId + ''">
             </waterfall>
           </view>
         </view>
