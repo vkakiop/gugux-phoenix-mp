@@ -24,7 +24,7 @@
           <view v-show="waterIndex == pageData.currentIndex">
             <waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" itemKey="index"
               :value="waterItem.items" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex"
-              :categoryId="waterItem.query.path.categoryId+''">
+              :categoryId="waterItem.query.path.categoryId + ''">
             </waterfall>
           </view>
         </view>

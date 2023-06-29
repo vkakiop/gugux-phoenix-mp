@@ -33,8 +33,7 @@
 		{
 			"path": "components/mine/minevideo",
 			"style": {
-				"navigationBarTitleText": "咕咕行",
-				"enablePullDownRefresh": false
+				"navigationBarTitleText": "咕咕行"
 			}
 		},
 		{
@@ -60,8 +59,7 @@
 		{
 			"path": "pages/VideoCarousel/VideoCarousel",
 			"style": {
-				"navigationBarTitleText": "咕咕行",
-				"enablePullDownRefresh": false
+				"navigationBarTitleText": "咕咕行"
 			}
 		},
 		{

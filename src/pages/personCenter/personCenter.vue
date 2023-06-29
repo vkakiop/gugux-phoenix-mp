@@ -73,11 +73,20 @@
 			<uni-popup ref="popup" background-color="#fff">
 				<view class="px-10  py-10">
 					<view class="font-bold py-20 text-center ">修改昵称</view>
-					<view class="flex items-center ml-5  border-dashed border-dashed bg-[#f8fbff]  h-50 w-300 rounded-10 border-2 border-gray-300  text-15 text-[#333]"><input v-model="pageData.name" type="nickname" class="nick-name-input ml-15" placeholder="请输入昵称"
-							@blur="changeNickName" /></view>
-					<view class="flex itemx-center justify-evenly mt-20 "> 
-						<button @click="handlesure" class="bg-[#609ef0] text-white w-100 h-38 my-5  rounded-20 text-center leading-38">确认</button>
-						<button @click="handleoff" class="bg-[#bfc0c3] text-white w-100  h-38 my-5  rounded-20 text-center leading-38">取消</button>
+					<view
+						class="flex items-center ml-5  border-dashed border-dashed bg-[#f8fbff]  h-50 w-300 rounded-10 border-2 border-gray-300  text-15 text-[#333]">
+						<input v-model="pageData.name" type="nickname" class="ml-15" placeholder="请输入昵称"
+							@blur="changeNickName" maxlength="16" minlength="2" @change="changeNickName" />
+					</view>
+					<view class="flex justify-between text-[#c0c0c0] text-12 ml-5 py-10">
+						<view>好名字更容易被记住,2-16个字符</view>
+						<view>还可输入{{ 16 - pageData.name.length }}/16</view>
+					</view>
+					<view class="flex itemx-center justify-evenly mt-20 ">
+						<button @click="handlesure"
+							class="bg-[#609ef0] text-white w-100 h-38 my-5  rounded-20 text-center leading-38">确认</button>
+						<button @click="handleoff"
+							class="bg-[#bfc0c3] text-white w-100  h-38 my-5  rounded-20 text-center leading-38">取消</button>
 					</view>
 				</view>
 			</uni-popup>
@@ -100,10 +109,12 @@ const handlesure = () => {
 			title: '修改成功'
 		})
 		popup.value.close('center')
+		pageData.name = ''
 	})
 }
 const handleoff = () => {
 	popup.value.close('center')
+	pageData.name = ''
 }
 const gopicture = (picture) => {
 	uni.navigateTo({
@@ -175,5 +186,4 @@ const logOff = () => {
 	background-color: #fff;
 	color: #272A29;
 }
-
 </style>
