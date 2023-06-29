@@ -65,14 +65,15 @@
 		{
 			"path": "pages/opus/index",
 			"style": {
-				"navigationBarTitleText": "咕咕行",
+				"navigationBarTitleText": "",
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/opus/videoplay",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
 			}
 		},
 		{

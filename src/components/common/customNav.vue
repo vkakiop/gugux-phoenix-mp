@@ -6,12 +6,21 @@
         <slot></slot>
       </view>
     </view>
-    <view :style="{height:(pageData.statusBarHeight + pageData.titleBarHeight )+'px'}"></view>
+    <view :style="{height:((pageData.statusBarHeight + pageData.titleBarHeight)/screen )+'px'}"></view>
   </view>
 </template>
 
 <script setup>
-import {onMounted, reactive} from "vue";
+import {onMounted, reactive} from "vue"
+
+const props = defineProps({
+  screen: {
+    type:Number,
+    default:1
+  }
+})
+
+const emit = defineEmits(['heightInfo'])
 
 const pageData = reactive({
   statusBarHeight: 0,
@@ -28,6 +37,8 @@ onMounted(()=> {
   pageData.titleBarRight = menuButtonInfo.width + (systemInfo.windowWidth - menuButtonInfo.right)
 
   pageData.isShow = true
+
+  emit('heightInfo',pageData)
 })
 </script>
 
