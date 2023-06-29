@@ -465,12 +465,12 @@ export default {
         console.log("onTextMessage", message);
 
         if (message) {
-          if (onMessageError(message)) {
-            msgStorage.saveReceiveMsg(message, msgType.TEXT);
-          }
+          // if (onMessageError(message)) {
+          //   msgStorage.saveReceiveMsg(message, msgType.TEXT);
+          // }
 
           //calcUnReadSpot(message);
-          ack(message);
+          // ack(message);
           //onGetSilentConfig(message);
           if(message.from == "admin-safe"){
             uni.setStorage({
