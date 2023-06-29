@@ -78,6 +78,7 @@
 </template>
 
 <script setup>
+import useOpusStore from '@/store/modules/opus'
 import comment from "@/components/common/comment.vue"
 import { opusdetails } from "@/api/mine/index"
 import { opusrecommend } from "@/api/recvideo/index"
@@ -241,6 +242,7 @@ const like = (item) => {
 				icon: 'none',
 				duration: 2000
 			})
+			useOpusStore().setLike({id:item.id,isLike:item.isLike,likeNum:item.likeNum})
 		})
 	} else {
 		pageData.isShowLoginPop = true
