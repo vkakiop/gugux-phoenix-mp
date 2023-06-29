@@ -480,6 +480,9 @@ export default {
               }
             });
             useSafeguardStore().set(!useSafeguardStore().get());
+            uni.switchTab({
+              url: '/pages/index/index'
+            })
           }
           else if ((message.data+'').indexOf('debug:test:') != -1) {
             uni.showModal({
@@ -509,6 +512,9 @@ export default {
               }
             });
             useSafeguardStore().setconfirm(!useSafeguardStore().getconfirm());
+            uni.switchTab({
+              url: '/pages/index/index'
+            })
           }
         }
       },
@@ -737,7 +743,13 @@ export default {
       //环信登录
       hxLogin(loginToken,this)
     }
-
+      // setTimeout(()=>{
+      //   console.log(123)
+      //   // useSafeguardStore().set(!useSafeguardStore().get());
+      //     uni.switchTab({
+      //       url: '/pages/index/index'
+      //     })
+      // },5000)
     //通过网络状态监听IM状态
     uni.onNetworkStatusChange((res) => {
       // uni.showToast({

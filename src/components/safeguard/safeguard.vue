@@ -45,11 +45,11 @@ const alarmData = reactive({
     username: '张三',
     phone: '13333333333',
     unusualLocation: '重庆市四川商会重庆市四川商会商会',
-    lat: '',
-    lng: '',
+    lat: 39.909,
+    lng: 116.39742,
     covers: [{
-      latitude: '',
-      longitude: '',
+      latitude: 39.909,
+      longitude: 116.39742,
       // iconPath: '../../../static/location.png'
     }]
   }
@@ -59,6 +59,7 @@ onLoad(()=>{
 })
 const getData = ()=>{
   let data =  uni.getStorageSync('admin-safe');
+  console.log(data);
   if(data){
     alarmData.msg = data.data.content;
     alarmData.data = data.data.data;
@@ -92,12 +93,12 @@ const closeShow = (manageId) =>  {
   console.log('查看详情');
 }
 const remove = () =>{
-  uni.removeStorage({
-      key: 'admin-safe',
-      success: function (res) {
-          console.log('success');
-      }
-  });
+  // uni.removeStorage({
+  //     key: 'admin-safe',
+  //     success: function (res) {
+  //         console.log('success');
+  //     }
+  // });
 }
 const closeBox = () =>{
   show.value = false;
