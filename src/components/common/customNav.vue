@@ -6,12 +6,19 @@
         <slot></slot>
       </view>
     </view>
-    <view :style="{height:(pageData.height )+'px'}"></view>
+    <view :style="{height:(pageData.height/screen )+'px'}"></view>
   </view>
 </template>
 
 <script setup>
 import {onMounted, reactive} from "vue"
+
+const props = defineProps({
+  screen: {
+    type:Number,
+    default:1
+  }
+})
 
 const emit = defineEmits(['changeHeightInfo'])
 
