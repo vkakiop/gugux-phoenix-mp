@@ -1,11 +1,11 @@
 <template>
   <view class="w-172 bg-[#fff]" v-if="item && item.cover">
     <view class="relative ">
-      <view v-if="isVirtualCal" :style="{ width: '100%', height: computedHeight(item.cover.width, item.cover.height) + 'rpx' }"
-        class="rounded-5"></view>
+      <view v-if="isVirtualCal"
+            :style="{ width: '100%', height: computedHeight(item.cover.width, item.cover.height) + 'rpx' }" class="rounded-5"></view>
       <view v-else
             :style="{ width: '100%', height: computedHeight(item.cover.width, item.cover.height) + 'rpx' }" class="rounded-5 bg-[#eee] overflow-hidden">
-        <image v-else :src="imageThumb(item.cover.itemType == 2 ? item.cover.content : item.cover.thumbnail, 400, 400)"
+        <image :src="imageThumb(item.cover.itemType == 2 ? item.cover.content : item.cover.thumbnail, 400, 400)"
           :style="{ width: '100%', height: computedHeight(item.cover.width, item.cover.height) + 'rpx' }" @click="godetail(item)"
           class="rounded-5"></image>
       </view>
