@@ -1,6 +1,6 @@
 <template>
   <view :id="`waterfallgroup_${waterIndex}_${groupIndex}`">
-    <view v-if="pageData.isShow" class="w-172" v-for="(item,index) in items" :key="index">
+    <view v-if="pageData.isShow" class="w-172" v-for="(item,index) in items" :key="index" :style="{height: height+'px'}">
       <waterfallItemTitle v-if="itemType == 'title'" :item="item" :itemKey="itemKey" :traceInfo="traceInfo" :categoryId="categoryId"></waterfallItemTitle>
       <waterfallItemImage v-else :item="item" :itemKey="itemKey" :traceInfo="traceInfo" :categoryId="categoryId"></waterfallItemImage>
     </view>
