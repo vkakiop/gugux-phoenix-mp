@@ -2,12 +2,13 @@
 <template>
 	<view class="navi">
         <view class="page-section page-section-gap" style="width: 100%; background: #ddd; height: 100vh;">
-            <map style="width: 100%; height: 100vh;" :joinCluster="true" :latitude="pageData.data.latitude" :longitude="pageData.data.longitude" :markers="pageData.data.covers">
+            <map style="width: 100%; height: 100vh;" :joinCluster="true" :latitude="pageData.data.lat" :longitude="pageData.data.lng" :markers="pageData.data.covers">
       </map>
         </view>
         <view class="box">
             <view class="info">
-                <view class="imgbox"> <image class="headimg" :src="pageData.data.headImg" /> 　{{ pageData.data.name }}</view>
+                <view class="imgbox"> {{ pageData.data.abnormalName }}</view>
+                <!-- <view class="imgbox"> <image class="headimg" :src="pageData.data.headImg" /> 　{{ pageData.data.username }}</view> -->
                 <view>电话：{{ pageData.data.phone }}</view>
             </view>
             <view class="funk">
@@ -15,7 +16,7 @@
                     <image src="/static/img/phone.png"  mode="widthFix"/>
                     拨打电话
                 </view>
-                <view class="btn location" @click="openMap(pageData.data.longitude,pageData.data.latitude)">
+                <view class="btn location" @click="openMap(pageData.data.lng,pageData.data.lat)">
                     <image src="/static/img/location.png"  mode="widthFix"/>
                     导航过去
                 </view>
@@ -41,12 +42,12 @@ const pageData = reactive({
         id:'',
         userLat:'',
         userLon:'',
-        name: '张三',
-        headImg:'https://cdn.uviewui.com/uview/album/1.jpg',
-        phone: '13333333333',
-        address: '重庆市四川商会重庆市四川商会重庆市四川商会重庆市四川商会',
-        latitude: 39.909,
-        longitude: 116.39742,
+        abnormalName: '',
+        headImg:'',
+        phone: '',
+        address: '',
+        lat: 39.909,
+        lng: 116.39742,
         covers: [{
             latitude: 39.909,
             longitude: 116.39742,
@@ -71,8 +72,8 @@ const pageData = reactive({
 onLoad((option)=>{
   if (option.id) {
     pageData.data.id = option.id
-    console.log(option)
-    // getApi();
+    getData({manageId:pageData.data.id});
+    getApi();
     //   wx请求获取位置权限
     
   }
@@ -84,6 +85,16 @@ onLoad((option)=>{
     // });
   }
 })
+const getData = (params)=>{
+    emergenccontactinfo(params).then((res)=>{
+        pageData.data = res.data;
+        console.log(res.data);
+        pageData.data.covers = [{
+        latitude : pageData.data.lat||0,
+        longitude : pageData.data.lng||0,
+        }]
+    })
+}
 const commentRef = ref();
 const openBox = () =>{
     pageData.show = true;

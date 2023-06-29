@@ -31,7 +31,7 @@
       </view>
     </view>
     <safeguardconfirm></safeguardconfirm>
-    <safeguard></safeguard>
+    <safe-guard></safe-guard>
   </view>
 </template>
 
@@ -40,7 +40,7 @@ import { ref, onMounted, reactive, watch, nextTick } from 'vue'
 import { opusList } from '@/api/opus/list'
 import waterfall from '@/components/index/waterfall.vue'
 import safeguardconfirm from '@/components/safeguard/safeguardconfirm.vue'
-import safeguard from '@/components/safeguard/safeguard.vue'
+// import safeguard from '@/components/safeguard/safeguard.vue'
 import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
 import useRouterStore from '@/store/modules/router'
 import useLoginTokenStore from '@/store/modules/loginToken'
