@@ -22,6 +22,7 @@ import _ from 'lodash'
 import waterfallGroup from './waterfallGroup.vue'
 import waterfallItemTitle from './waterfallItemTitle.vue'
 import waterfallItemImage from './waterfallItemImage.vue'
+import useOpusStore from '@/store/modules/opus'
 
 const _this = getCurrentInstance()
 const pageData = reactive({
@@ -221,6 +222,39 @@ watch (() => props.currentIndex == props.waterIndex,(newVal,oldValue)=>{
     clearTimeout(pageData.timer)
     pageData.timer = null
     pageData.isLoading = false
+  }
+})
+
+watch(()=>useOpusStore().getLike(),(newValue,oldValue)=>{
+  console.log('点赞1：'+newValue)
+  if (newValue.id) {
+    console.log('点赞：'+newValue.id)
+
+    //查找总数据
+    let index = pageData.list.findIndex(item=>{return item.id == newValue.id})
+    if (index != -1) {
+      pageData.list[index].isLike = newValue.isLike
+      pageData.list[index].likeNum = newValue.likeNum
+    }
+
+    //查找group 0 数据
+    pageData.column_values_group_0.forEach((gitem,gindex)=>{
+      index = gitem.findIndex(item=>{return item.id == newValue.id})
+      if (index != -1) {
+        pageData.column_values_group_0[gindex][index].isLike = newValue.isLike
+        pageData.column_values_group_0[gindex][index].likeNum = newValue.likeNum
+      }
+    })
+
+
+    //查找group 1 数据
+    pageData.column_values_group_1.forEach((gitem,gindex)=>{
+      index = gitem.findIndex(item=>{return item.id == newValue.id})
+      if (index != -1) {
+        pageData.column_values_group_1[gindex][index].isLike = newValue.isLike
+        pageData.column_values_group_1[gindex][index].likeNum = newValue.likeNum
+      }
+    })
   }
 })
 </script>

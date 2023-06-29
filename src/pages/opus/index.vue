@@ -69,8 +69,8 @@ import {onLoad,onShow,onPageScroll} from '@dcloudio/uni-app'
 import opusArticle from './components/opusArticle'
 import comment from "@/components/common/comment.vue"
 import useLoginTokenStore from '@/store/modules/loginToken'
+import useOpusStore from '@/store/modules/opus'
 
-const loginTokenStore = useLoginTokenStore()
 const commentRef = ref()
 const comment2Ref = ref()
 const _this = getCurrentInstance()
@@ -86,7 +86,7 @@ onShow(()=>{
   getData()
 })
 
-watch(()=>loginTokenStore.get().accessToken,(newVal,oldVal)=>{
+watch(()=>useLoginTokenStore().get().accessToken,(newVal,oldVal)=>{
   getData()
 })
 
@@ -188,6 +188,7 @@ const like = ()=>{
         icon: 'none',
         duration: 2000
       })
+      useOpusStore().setLike({id:pageData.id,isLike:pageData.detail.isLike,likeNum:pageData.detail.likeNum})
     })
   }
   else {
