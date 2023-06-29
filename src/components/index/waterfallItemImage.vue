@@ -73,7 +73,7 @@ onMounted(() => {
 const like = (item) => {
   let action = item.isLike ? 0 : 1
   if (getTokenValue()) {
-    opusLike({ opusId: item.id, action: action}, {trackInfo: props.traceInfo },{categoryId: props.traceInfo }).then(res => {
+    opusLike({ opusId: item.id, action: action, trackInfo: props.traceInfo ,categoryId: props.traceInfo }).then(res => {
       if (action) {
         item.isLike = true
         item.likeNum++

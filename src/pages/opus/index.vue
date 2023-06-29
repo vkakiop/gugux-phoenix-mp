@@ -146,7 +146,7 @@ const attention = ()=>{
 const collection = ()=>{
   let action = pageData.detail.isCollection ? 0 : 1
   if (getTokenValue()) {
-    opusCollect({opusId: pageData.id, action: action},{trackInfo:pageData.traceInfo}).then(res => {
+    opusCollect({opusId: pageData.id, action: action,trackInfo:pageData.traceInfo,categoryId: pageData.categoryId}).then(res => {
       if (action) {
         pageData.detail.isCollection = true
         pageData.detail.collectionNum ++
@@ -171,7 +171,7 @@ const collection = ()=>{
 const like = ()=>{
   let action = pageData.detail.isLike ? 0 : 1
   if (getTokenValue()) {
-    opusLike({opusId: pageData.id, action: action},{trackInfo:pageData.traceInfo}).then(res => {
+    opusLike({opusId: pageData.id, action: action ,trackInfo:pageData.traceInfo, categoryId:pageData.categoryId}).then(res => {
       if (action) {
         pageData.detail.isLike = true
         pageData.detail.likeNum ++
