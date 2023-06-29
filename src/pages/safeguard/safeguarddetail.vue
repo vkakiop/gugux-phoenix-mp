@@ -49,10 +49,10 @@
         </view>
       </view>
     </view>
-    <view class="alarm">
+    <!-- <view class="alarm">
       <view v-if="true">您的好友已主动取消安全守护报警</view>
       <view v-else>当前事件已结束</view>
-    </view>
+    </view> -->
   </view>
 </template>
 
@@ -147,7 +147,7 @@ const previewImage = (url,index)=>{
   })
 }
 const goNav = ()=>{
-  uni.navigateTo({ url: '/pages/safeguard/gonavigation?id=' + encodeURIComponent(pageData.data.id) })
+  uni.navigateTo({ url: '/pages/safeguard/gonavigation?id=' + encodeURIComponent(pageData.data.manageId) })
 }
 const callPhone = (phone) =>{
   uni.makePhoneCall({
@@ -275,26 +275,26 @@ const playAudio = (type,item) =>{
       }
     }
   }
-  .last{
-    margin-bottom: 120rpx;
-  }
-  .alarm{
-    position: fixed;
-    bottom:0;
-    left: 0;
-    width:100%;
-    height: 100rpx;
-    text-align: center;
-    line-height: 100rpx;
-    background: #fff;
-    border: 0px solid #333333;
-    box-shadow: 0rpx 2rpx 10rpx 1rpx rgba(13,4,8,0.11);
-    border-radius: 21rpx 21rpx 0rpx 0rpx;
-    view{
-      font-size: 29rpx;
-      font-family: Source Han Sans SC;
-      font-weight: 400;
-      color: #F65A5A;
-    }
-  }
+  // .last{
+  //   margin-bottom: 120rpx;
+  // }
+  // .alarm{
+  //   position: fixed;
+  //   bottom:0;
+  //   left: 0;
+  //   width:100%;
+  //   height: 100rpx;
+  //   text-align: center;
+  //   line-height: 100rpx;
+  //   background: #fff;
+  //   border: 0px solid #333333;
+  //   box-shadow: 0rpx 2rpx 10rpx 1rpx rgba(13,4,8,0.11);
+  //   border-radius: 21rpx 21rpx 0rpx 0rpx;
+  //   view{
+  //     font-size: 29rpx;
+  //     font-family: Source Han Sans SC;
+  //     font-weight: 400;
+  //     color: #F65A5A;
+  //   }
+  // }
 }</style>
