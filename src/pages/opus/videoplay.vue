@@ -89,11 +89,3 @@ const gotoBack = ()=>{
   left:calc(50% - 64rpx);
 }
 </style>
-<style>
-::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  height: 0;
-  color: transparent;
-}
-</style>
