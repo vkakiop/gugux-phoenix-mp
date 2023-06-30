@@ -131,7 +131,7 @@ async function initValue(i) {
   //let startTime = new Date().getTime()
   //获取当前dom高度
   nextTick(()=>{
-    let endTime = new Date().getTime()
+    //let endTime = new Date().getTime()
     //console.log('run time ms:'+(endTime-startTime))
     //pageData.timer = setTimeout(()=>{
       const query = uni.createSelectorQuery().in(_this);
