@@ -38,7 +38,6 @@
 					</u-empty>
 				</view>
 			</view>
-
 			<!-- 搜索历史 -->
 			<!-- 菜单 -->
 			<view class="w-full bg-white py-15" v-show="!isShowHistory">
@@ -64,7 +63,7 @@
 					</waterfall>
 				</view>
 				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex && pageData.isLoading"
-					class=" flex items-center justify-center">
+					class=" flex items-center justify-center mt-30">
 					<u-empty mode="search" text="对不起,没有找到您要的搜索内容" icon="/static/img/nodata.png" />
 				</view>
 			</view>

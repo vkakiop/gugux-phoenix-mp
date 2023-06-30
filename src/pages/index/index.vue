@@ -14,7 +14,7 @@
             </view>
           </view>
         </scroll-view>
-        <view class="flex items-center  relative -top-11 bg-[#fff] ">
+        <view>
           <image src="/static/mine/search.png" class="w-17 h-17" @click="gohistory"></image>
         </view>
         <!-- 菜单 -->

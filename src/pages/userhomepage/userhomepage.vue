@@ -1,5 +1,5 @@
 <template>
-	<view v-if="pageInfo.mineMessage.guguId" class="bg-[#f3f4f6] h-screen">
+	<view v-if="pageInfo.mineMessage.guguId" class="bg-[#F6F6F6] h-screen">
 		<customNav>
 			<view @click="gotoBack" class="ml-3 mt-5"><uni-icons type="back" size="24"></uni-icons></view>
 			<view>咕咕行</view>
@@ -60,7 +60,7 @@
 
 		</view>
 		<!-- 菜单 -->
-		<view class="sticky -top-5 z-50 bg-white ml-14 w-full  -mt-25 pt-10">
+		<view class="sticky -top-5 z-50 bg-white pl-14 w-full  -mt-25 pt-10">
 			<view class="flex ">
 				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
 					@click="changeWaterfall(index)">
@@ -73,10 +73,10 @@
 			</view>
 		</view>
 		<!-- 菜单 -->
-		<view class="pt-13 bg-[#f3f4f6]">
+		<view class="pt-13 bg-[#F6F6F6]">
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
 				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
-					class="flex items-center justify-center">
+					class="flex items-center justify-center mt-30">
 					<u-empty mode="list" icon="/static/img/nodata.png" text="内容为空" />
 				</view>
 				<view v-if="waterIndex == pageData.currentIndex&&waterItem.items.length">
