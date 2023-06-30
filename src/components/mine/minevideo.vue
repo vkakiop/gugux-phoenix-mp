@@ -172,7 +172,7 @@ const attention = (item) => {
 const collection = (item) => {
 	let action = item.isCollection ? 0 : 1
 	if (getTokenValue()) {
-		opusCollect({ opusId: item.id, action: action, trackInfo: pageData.traceInfo }).then(res => {
+		opusCollect({ opusId: item.id, action: action, trackInfo: pageData.traceInfo,categoryId: '' }).then(res => {
 			if (action) {
 				item.isCollection = true
 				item.collectionNum++
@@ -197,7 +197,7 @@ const collection = (item) => {
 const like = (item) => {
 	let action = item.isLike ? 0 : 1
 	if (getTokenValue()) {
-		opusLike({ opusId: item.id, action: action, trackInfo: pageData.traceInfo }).then(res => {
+		opusLike({ opusId: item.id, action: action, trackInfo: pageData.traceInfo,categoryId: '' }).then(res => {
 			if (action) {
 				item.isLike = true
 				item.likeNum++
