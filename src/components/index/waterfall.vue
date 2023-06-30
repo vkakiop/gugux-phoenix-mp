@@ -12,8 +12,8 @@
       <waterfallGroup v-for="(items,groupIndex) in pageData[`column_values_group_${columnIndex}`]" :waterIndex="waterIndex" :groupIndex="groupIndex" :currentIndex="currentIndex" :itemType="itemType" :itemKey="itemKey"  :traceInfo="traceInfo"  :categoryId="categoryId" :items="items" :height="pageData[`column_height_group_${columnIndex}`][groupIndex]" :key="groupIndex"></waterfallGroup>
     </view>
   </view>
-  <view v-if="isComplete&&value.length" class="text-center h-50 leading-50">
-    没有更多了
+  <view v-if="isComplete&&value.length" class="text-center h-50 leading-50 text-12 text-[#666666]">
+    暂无更多
   </view>
 </template>
 <script setup>
@@ -22,6 +22,7 @@ import _ from 'lodash'
 import waterfallGroup from './waterfallGroup.vue'
 import waterfallItemTitle from './waterfallItemTitle.vue'
 import waterfallItemImage from './waterfallItemImage.vue'
+import useOpusStore from '@/store/modules/opus'
 
 const _this = getCurrentInstance()
 const pageData = reactive({
@@ -111,7 +112,7 @@ async function initValue(i) {
   pageData.currentItem = pageData.list[i]
   //获取当前dom高度
   nextTick(()=>{
-    pageData.timer = setTimeout(()=>{
+    //pageData.timer = setTimeout(()=>{
       const query = uni.createSelectorQuery().in(_this);
       query.select(`#waterDom_${props.waterIndex}`).boundingClientRect(res => {
         if (res) {
@@ -160,7 +161,7 @@ async function initValue(i) {
 
       }).exec(() => {
       });
-    },10)
+    //},0)
 
   })
 
@@ -221,6 +222,39 @@ watch (() => props.currentIndex == props.waterIndex,(newVal,oldValue)=>{
     clearTimeout(pageData.timer)
     pageData.timer = null
     pageData.isLoading = false
+  }
+})
+
+watch(()=>useOpusStore().getLike(),(newValue,oldValue)=>{
+  console.log('点赞1：'+newValue)
+  if (newValue.id) {
+    console.log('点赞：'+newValue.id)
+
+    //查找总数据
+    let index = pageData.list.findIndex(item=>{return item.id == newValue.id})
+    if (index != -1) {
+      pageData.list[index].isLike = newValue.isLike
+      pageData.list[index].likeNum = newValue.likeNum
+    }
+
+    //查找group 0 数据
+    pageData.column_values_group_0.forEach((gitem,gindex)=>{
+      index = gitem.findIndex(item=>{return item.id == newValue.id})
+      if (index != -1) {
+        pageData.column_values_group_0[gindex][index].isLike = newValue.isLike
+        pageData.column_values_group_0[gindex][index].likeNum = newValue.likeNum
+      }
+    })
+
+
+    //查找group 1 数据
+    pageData.column_values_group_1.forEach((gitem,gindex)=>{
+      index = gitem.findIndex(item=>{return item.id == newValue.id})
+      if (index != -1) {
+        pageData.column_values_group_1[gindex][index].isLike = newValue.isLike
+        pageData.column_values_group_1[gindex][index].likeNum = newValue.likeNum
+      }
+    })
   }
 })
 </script>

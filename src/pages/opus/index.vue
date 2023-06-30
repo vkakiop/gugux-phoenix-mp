@@ -69,8 +69,8 @@ import {onLoad,onShow,onPageScroll} from '@dcloudio/uni-app'
 import opusArticle from './components/opusArticle'
 import comment from "@/components/common/comment.vue"
 import useLoginTokenStore from '@/store/modules/loginToken'
+import useOpusStore from '@/store/modules/opus'
 
-const loginTokenStore = useLoginTokenStore()
 const commentRef = ref()
 const comment2Ref = ref()
 const _this = getCurrentInstance()
@@ -86,7 +86,7 @@ onShow(()=>{
   getData()
 })
 
-watch(()=>loginTokenStore.get().accessToken,(newVal,oldVal)=>{
+watch(()=>useLoginTokenStore().get().accessToken,(newVal,oldVal)=>{
   getData()
 })
 
@@ -146,7 +146,7 @@ const attention = ()=>{
 const collection = ()=>{
   let action = pageData.detail.isCollection ? 0 : 1
   if (getTokenValue()) {
-    opusCollect({opusId: pageData.id, action: action},{trackInfo:pageData.traceInfo}).then(res => {
+    opusCollect({opusId: pageData.id, action: action,trackInfo:pageData.traceInfo,categoryId: pageData.categoryId}).then(res => {
       if (action) {
         pageData.detail.isCollection = true
         pageData.detail.collectionNum ++
@@ -171,7 +171,7 @@ const collection = ()=>{
 const like = ()=>{
   let action = pageData.detail.isLike ? 0 : 1
   if (getTokenValue()) {
-    opusLike({opusId: pageData.id, action: action},{trackInfo:pageData.traceInfo}).then(res => {
+    opusLike({opusId: pageData.id, action: action ,trackInfo:pageData.traceInfo, categoryId:pageData.categoryId}).then(res => {
       if (action) {
         pageData.detail.isLike = true
         pageData.detail.likeNum ++
@@ -188,6 +188,7 @@ const like = ()=>{
         icon: 'none',
         duration: 2000
       })
+      useOpusStore().setLike({id:pageData.id,isLike:pageData.detail.isLike,likeNum:pageData.detail.likeNum})
     })
   }
   else {
