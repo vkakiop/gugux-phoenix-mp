@@ -1,5 +1,5 @@
 <template>
-  <canvas id="canvas"></canvas>
+  <canvas :id="`canvas_${waterIndex}`"></canvas>
   <!--view :id="'waterDom_'+waterIndex" style="position: absolute;width:100%; visibility: hidden">
     <view v-for="(columnItem,columnIndex) in 1" :key="columnIndex">
       <view class="w-172" v-for="(item,index) in [pageData.currentItem]" :key="index">
@@ -85,17 +85,10 @@ const props = defineProps({
 
 //const emit = defineEmits(['scrolltolower'])
 
-let query = null
-let test = null
-let canvas = null
-let ctx = null
+
+let canvasctx = null
 onMounted(()=>{
-  console.log('onMounted')
-  query = uni.createSelectorQuery().in(_this);
-  canvas = query.select('#canvas')
-
-  ctx = wx.createCanvasContext('canvas');
-
+  canvasctx = wx.createCanvasContext('canvas_'+props.waterIndex);
 })
 
 const calcHeight = ((w,h)=>{
@@ -143,7 +136,7 @@ async function initValue(i) {
 
   let measureTextWidth = 0
   if (props.itemType == 'title') {
-    measureTextWidth = ctx.measureText(pageData.currentItem.title).width
+    measureTextWidth = canvasctx.measureText(pageData.currentItem.title).width
   }
 
   let column = 0
