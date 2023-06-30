@@ -137,7 +137,7 @@ async function initValue(i) {
       const query = uni.createSelectorQuery().in(_this);
       query.select(`#waterDom_${i}`).boundingClientRect(res => {
         if (res) {
-          endTime = new Date().getTime()
+          //endTime = new Date().getTime()
           //console.log('query time ms:'+(endTime-startTime))
           let column = 0
           let height = res.height
