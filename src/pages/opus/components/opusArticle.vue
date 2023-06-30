@@ -27,7 +27,7 @@
           <view class="flex flex-wrap text-14 mt-10">
             <view class="flex">
               <view class="text-[#999999]">发布于：{{detail.createdTime ? detail.createdTime.split(' ')[0] : ''}}</view>
-              <view class="text-[#999999] ml-17">阅读量：{{detail.browseNum}}</view>
+              <view class="text-[#999999] ml-17">阅读量：{{computedNumber(detail.browseNum)}}</view>
             </view>
           </view>
         </view>
@@ -112,6 +112,10 @@ const computedLocation = computed({
   get:(x,y) => {
     return function(x,y) { return geo_x.value != null ? '(距您'+formatedDistance(distanceOf({x:x,y:y},{x:geo_x.value,y:geo_y.value}),1)+')' : ''}
   }
+})
+
+const computedNumber = computed({
+  get: (num) => { return function (num) { return num > 9999 ? (num / 10000).toFixed(1) + 'w' : num } }
 })
 </script>
 
