@@ -1,18 +1,20 @@
 <template>
   <view>
     <view class="fixed -top-5 z-50 bg-white w-full py-10 mb-14">
-      <view class="bg-white w-full pt-7 pb-5 pl-14  pr-22 flex justify-between">
+      <view class="bg-[#fff] w-full pt-7 pb-10 pl-14  pr-22 flex justify-between">
         <!-- 菜单 -->
-        <view class="flex">
-          <view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-20"
-            @click="changeWaterfall(index)">
-            <view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }}</view>
-            <view class=" h-4 relative -top-5 ">
-              <image src="/static/mine/line.png" class="w-30 h-4 " v-show="pageData.currentIndex == index" />
+        <scroll-view class="scroll-view_H" scroll-x="true" @scroll="scroll" scroll-left="60">
+          <view class="flex text-center ">
+            <view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-20"
+              @click="changeWaterfall(index)">
+              <view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }}</view>
+              <view class="">
+                <image src="/static/mine/line.png" class="w-30 h-4 " v-show="pageData.currentIndex == index" />
+              </view>
             </view>
           </view>
-        </view>
-        <view class="flex items-center">
+        </scroll-view>
+        <view class="flex items-center  relative -top-10 bg-[#fff] ">
           <image src="/static/mine/search.png" class="w-17 h-17" @click="gohistory"></image>
         </view>
         <!-- 菜单 -->
@@ -50,6 +52,11 @@ const gohistory = () => {
   uni.navigateTo({
     url: '/pages/index/searchHistory'
   })
+}
+//导航栏滚动条
+const scrollX = ref(0)
+const scroll = (e) => {
+  scrollX.value = e.detail.scrollTop
 }
 const waterfallItems = []
 const pageData = reactive({
@@ -129,7 +136,7 @@ const getData = () => {
 //   pageData.scrollTop = res.scrollTop
 // })
 
-const scrolltolower = (waterIndex)=>{
+const scrolltolower = (waterIndex) => {
   let currentIndex = pageData.currentIndex
   if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
     // pageData.waterfallItems[currentIndex].query.path.pageNum++
@@ -151,6 +158,13 @@ const scrolltolower = (waterIndex)=>{
   font-family: Source Han Sans SC;
   font-weight: 400;
   color: #999999;
+}
+
+
+
+.scroll-view_H {
+  white-space: nowrap;
+  width: 94%;
 }
 </style>
 
