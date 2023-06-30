@@ -243,10 +243,7 @@ watch (() => props.currentIndex == props.waterIndex,(newVal,oldValue)=>{
 })
 
 watch(()=>useOpusStore().getLike(),(newValue,oldValue)=>{
-  console.log('点赞1：'+newValue)
   if (newValue.id) {
-    console.log('点赞：'+newValue.id)
-
     //查找总数据
     let index = pageData.list.findIndex(item=>{return item.id == newValue.id})
     if (index != -1) {
@@ -254,24 +251,38 @@ watch(()=>useOpusStore().getLike(),(newValue,oldValue)=>{
       pageData.list[index].likeNum = newValue.likeNum
     }
 
-    //查找group 0 数据
-    pageData.column_values_group_0.forEach((gitem,gindex)=>{
-      index = gitem.findIndex(item=>{return item.id == newValue.id})
-      if (index != -1) {
-        pageData.column_values_group_0[gindex][index].isLike = newValue.isLike
-        pageData.column_values_group_0[gindex][index].likeNum = newValue.likeNum
-      }
-    })
+    //第一列数据
+    index = pageData.column_values_0.findIndex(item=>{return item.id == newValue.id})
+    if (index != -1) {
+      pageData.column_values_0[index].isLike = newValue.isLike
+      pageData.column_values_0[index].likeNum = newValue.likeNum
+    }
 
+    //第二列数据
+    index = pageData.column_values_1.findIndex(item=>{return item.id == newValue.id})
+    if (index != -1) {
+      pageData.column_values_1[index].isLike = newValue.isLike
+      pageData.column_values_1[index].likeNum = newValue.likeNum
+    }
 
-    //查找group 1 数据
-    pageData.column_values_group_1.forEach((gitem,gindex)=>{
-      index = gitem.findIndex(item=>{return item.id == newValue.id})
-      if (index != -1) {
-        pageData.column_values_group_1[gindex][index].isLike = newValue.isLike
-        pageData.column_values_group_1[gindex][index].likeNum = newValue.likeNum
-      }
-    })
+    // //查找group 0 数据
+    // pageData.column_values_group_0.forEach((gitem,gindex)=>{
+    //   index = gitem.findIndex(item=>{return item.id == newValue.id})
+    //   if (index != -1) {
+    //     pageData.column_values_group_0[gindex][index].isLike = newValue.isLike
+    //     pageData.column_values_group_0[gindex][index].likeNum = newValue.likeNum
+    //   }
+    // })
+    //
+    //
+    // //查找group 1 数据
+    // pageData.column_values_group_1.forEach((gitem,gindex)=>{
+    //   index = gitem.findIndex(item=>{return item.id == newValue.id})
+    //   if (index != -1) {
+    //     pageData.column_values_group_1[gindex][index].isLike = newValue.isLike
+    //     pageData.column_values_group_1[gindex][index].likeNum = newValue.likeNum
+    //   }
+    // })
   }
 })
 

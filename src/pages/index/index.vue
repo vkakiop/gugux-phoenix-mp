@@ -68,8 +68,6 @@ frontpage({}).then(res => {
     obj.name = item.name
     obj.query.path.categoryId = item.id
     waterfallItems.push(obj)
-//debug
-    waterfallItems.push(obj)
   })
   pageData.waterfallItems = _.cloneDeep(waterfallItems)
   nextTick(() => { changeWaterfall(0) })
