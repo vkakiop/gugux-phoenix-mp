@@ -1,5 +1,5 @@
 <template>
-  <canvas :id="`canvas_${waterIndex}`"></canvas>
+  <canvas :canvas-id="`canvas_${waterIndex}`" class="hidden"></canvas>
   <!--view :id="'waterDom_'+waterIndex" style="position: absolute;width:100%; visibility: hidden">
     <view v-for="(columnItem,columnIndex) in 1" :key="columnIndex">
       <view class="w-172" v-for="(item,index) in [pageData.currentItem]" :key="index">
@@ -88,7 +88,13 @@ const props = defineProps({
 
 let canvasctx = null
 onMounted(()=>{
-  canvasctx = wx.createCanvasContext('canvas_'+props.waterIndex);
+  canvasctx = uni.createCanvasContext('canvas_'+props.waterIndex,_this)
+
+  //watch immediate
+  pageData.list = props.value;
+  if (!pageData.isLoading) {
+    init()
+  }
 })
 
 const calcHeight = ((w,h)=>{
@@ -247,7 +253,7 @@ watch(() => props.value, (newValue, oldValue) => {
   if (!pageData.isLoading) {
     init()
   }
-}, { immediate: true })
+}, { immediate: false })
 
 watch (() => props.currentIndex == props.waterIndex,(newVal,oldValue)=>{
   if (!pageData.isLoading && newVal) {
