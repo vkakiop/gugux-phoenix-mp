@@ -14,7 +14,7 @@
             </view>
           </view>
         </scroll-view>
-        <view class="flex items-center  relative -top-10 bg-[#fff] ">
+        <view class="flex items-center  relative -top-11 bg-[#fff] ">
           <image src="/static/mine/search.png" class="w-17 h-17" @click="gohistory"></image>
         </view>
         <!-- 菜单 -->
@@ -164,7 +164,7 @@ const scrolltolower = (waterIndex) => {
 
 .scroll-view_H {
   white-space: nowrap;
-  width: 94%;
+  width: 90%;
 }
 </style>
 
