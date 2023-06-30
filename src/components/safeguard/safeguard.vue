@@ -90,12 +90,12 @@ const closeShow = (manageId) =>  {
   console.log('查看详情');
 }
 const remove = () =>{
-  // uni.removeStorage({
-  //     key: 'admin-safe',
-  //     success: function (res) {
-  //         console.log('success');
-  //     }
-  // });
+  uni.removeStorage({
+      key: 'admin-safe',
+      success: function (res) {
+          console.log('success');
+      }
+  });
 }
 const closeBox = () =>{
   show.value = false;
