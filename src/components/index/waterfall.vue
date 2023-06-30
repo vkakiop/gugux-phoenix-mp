@@ -7,7 +7,7 @@
       </view>
     </view>
   </view-->
-  <u-list @scrolltolower="scrolltolower">
+  <u-list @scrolltolower="scrolltolower" lowerThreshold="200">
       <view class="flex justify-between">
         <view v-for="(columnItem,columnIndex) in 2" :key="columnIndex" :id="`waterfalls_flow_column_${waterIndex}_${columnIndex+1}`" :class="['flex-none',columnIndex == 0 ? 'ml-14' : 'mr-14']">
           <view :id="`waterDom_${item.index}`" class="w-172" v-for="(item,index) in pageData[`column_values_${columnIndex}`]" :key="index">
