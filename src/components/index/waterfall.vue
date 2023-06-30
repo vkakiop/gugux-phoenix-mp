@@ -17,7 +17,7 @@
             <!--waterfallGroup v-for="(items,groupIndex) in pageData[`column_values_group_${columnIndex}`]" :waterIndex="waterIndex" :groupIndex="groupIndex" :currentIndex="currentIndex" :itemType="itemType" :itemKey="itemKey"  :traceInfo="traceInfo"  :categoryId="categoryId" :items="items" :height="pageData[`column_height_group_${columnIndex}`][groupIndex]" :key="groupIndex"></waterfallGroup-->
         </view>
       </view>
-      <view v-if="isComplete&&value.length" class="text-center h-50 leading-50 text-12 text-[#666666]">
+      <view v-if="pageData.isComplete && value.length" class="text-center h-50 leading-50 text-12 text-[#666666]">
         暂无更多
       </view>
   </u-list>
@@ -33,6 +33,7 @@ import useOpusStore from '@/store/modules/opus'
 const _this = getCurrentInstance()
 const pageData = reactive({
   isLoading:false,
+  isComplete:false,
   timer:null,
   list:[],
   currentItem:{},
@@ -203,6 +204,9 @@ const init = ()=>{
     initValue(isAddCount)
     if (isAddCount == props.value.length) {
       pageData.isLoading = false
+      if (props.isComplete) {
+        pageData.isComplete = true
+      }
       //console.log('已加载完成：',isAddCount)
     }
   }
