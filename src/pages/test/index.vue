@@ -1,67 +1,54 @@
 <template>
-  <view>index</view>
-  <testinfo></testinfo>
-  <button open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
-    修改头像
-  </button>
-  {{pageData.avatarUrl}}
-  <image :src="pageData.avatarUrl"/>
-
-
-  <input v-model="pageData.name" type="nickname" class="nick-name-input" placeholder="请输入昵称" 	@blur="changeNickName"/>
+  <view class="u-page" style="border:1px solid red; height:50%">
+    <u-list
+        @scrolltolower="scrolltolower"
+    >
+      <view
+          v-for="(item, index) in indexList"
+          :key="index"
+      >
+        <view class="h-50">
+          列表长度-{{index + 1}}
+        </view>
+      </view>
+    </u-list>
+  </view>
 </template>
 
-<script setup>
-import {onMounted,reactive} from 'vue'
-import {getTokenValue} from '@/utils/utils'
-import testinfo from './components/testinfo.vue'
-onMounted(()=>{
-  // uni.showToast({
-  //   title: 'mount1',
-  //   icon:'none',
-  //   duration: 2000
-  // });
-})
-
-const pageData = reactive({
-  avatarUrl:'',
-  name:''
-})
-
-const onChooseAvatar = (e)=>{
-  console.log('获取头像：',e)
-  pageData.avatarUrl = e.detail.avatarUrl
-
-  let baseUrl = import.meta.env.VITE_APP_BASE_API
-  let token = getTokenValue()
-  uni.uploadFile({
-    url: baseUrl + '/gugux-services-poly-api/app/file/upload',
-    filePath: pageData.avatarUrl,
-    name: 'file',
-    formData: {},
-    header: {
-      token:token
-    },
-    success: (res) => {
-      if (res.data.status == 1) {
-        console.log(res.data)
-      }
-      else {
-        console.log('上传错误');
-      }
-
+<script>
+export default {
+  data() {
+    return {
+      indexList: [],
+      urls: [
+        'https://cdn.uviewui.com/uview/album/1.jpg',
+        'https://cdn.uviewui.com/uview/album/2.jpg',
+        'https://cdn.uviewui.com/uview/album/3.jpg',
+        'https://cdn.uviewui.com/uview/album/4.jpg',
+        'https://cdn.uviewui.com/uview/album/5.jpg',
+        'https://cdn.uviewui.com/uview/album/6.jpg',
+        'https://cdn.uviewui.com/uview/album/7.jpg',
+        'https://cdn.uviewui.com/uview/album/8.jpg',
+        'https://cdn.uviewui.com/uview/album/9.jpg',
+        'https://cdn.uviewui.com/uview/album/10.jpg',
+      ]
     }
-  });
-}
-
-const changeNickName = ()=>{
-  let name = e.detail.value;
-  if(name.length === 0) return;
-
-  pageData.name =  name
+  },
+  onLoad() {
+    this.loadmore()
+  },
+  methods: {
+    scrolltolower() {
+      this.loadmore()
+    },
+    loadmore() {
+      console.log('loadmore')
+      for (let i = 0; i < 30; i++) {
+        this.indexList.push({
+          url: this.urls[uni.$u.random(0, this.urls.length - 1)]
+        })
+      }
+    }
+  },
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

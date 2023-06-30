@@ -1,25 +1,31 @@
 <template>
-  <view :id="'waterDom_'+waterIndex" style="position: absolute;width:100%; visibility: hidden">
+  <!--view :id="'waterDom_'+waterIndex" style="position: absolute;width:100%; visibility: hidden">
     <view v-for="(columnItem,columnIndex) in 1" :key="columnIndex">
       <view class="w-172" v-for="(item,index) in [pageData.currentItem]" :key="index">
         <waterfallItemTitle v-if="itemType == 'title'" :item="item" :itemKey="itemKey" :isVirtualCal="true"></waterfallItemTitle>
         <waterfallItemImage v-else :item="item" :itemKey="itemKey" :isVirtualCal="true"></waterfallItemImage>
       </view>
     </view>
-  </view>
-  <view class="flex justify-between">
-    <view v-for="(columnItem,columnIndex) in 2" :key="columnIndex" :id="`waterfalls_flow_column_${waterIndex}_${columnIndex+1}`" :class="['flex-none',columnIndex == 0 ? 'ml-14' : 'mr-14']">
-      <waterfallGroup v-for="(items,groupIndex) in pageData[`column_values_group_${columnIndex}`]" :waterIndex="waterIndex" :groupIndex="groupIndex" :currentIndex="currentIndex" :itemType="itemType" :itemKey="itemKey"  :traceInfo="traceInfo"  :categoryId="categoryId" :items="items" :height="pageData[`column_height_group_${columnIndex}`][groupIndex]" :key="groupIndex"></waterfallGroup>
-    </view>
-  </view>
-  <view v-if="isComplete&&value.length" class="text-center h-50 leading-50 text-12 text-[#666666]">
-    暂无更多
-  </view>
+  </view-->
+  <u-list @scrolltolower="scrolltolower">
+      <view class="flex justify-between">
+        <view v-for="(columnItem,columnIndex) in 2" :key="columnIndex" :id="`waterfalls_flow_column_${waterIndex}_${columnIndex+1}`" :class="['flex-none',columnIndex == 0 ? 'ml-14' : 'mr-14']">
+          <view :id="`waterDom_${item.index}`" class="w-172" v-for="(item,index) in pageData[`column_values_${columnIndex}`]" :key="index">
+            <waterfallItemTitle v-if="itemType == 'title'" :item="item" :itemKey="itemKey" :traceInfo="traceInfo"  :categoryId="categoryId"></waterfallItemTitle>
+            <waterfallItemImage v-else :item="item" :itemKey="itemKey" :traceInfo="traceInfo"  :categoryId="categoryId"></waterfallItemImage>
+          </view>
+            <!--waterfallGroup v-for="(items,groupIndex) in pageData[`column_values_group_${columnIndex}`]" :waterIndex="waterIndex" :groupIndex="groupIndex" :currentIndex="currentIndex" :itemType="itemType" :itemKey="itemKey"  :traceInfo="traceInfo"  :categoryId="categoryId" :items="items" :height="pageData[`column_height_group_${columnIndex}`][groupIndex]" :key="groupIndex"></waterfallGroup-->
+        </view>
+      </view>
+      <view v-if="isComplete&&value.length" class="text-center h-50 leading-50 text-12 text-[#666666]">
+        暂无更多
+      </view>
+  </u-list>
 </template>
 <script setup>
 import { ref, reactive, watch, nextTick, computed, getCurrentInstance, onMounted } from 'vue'
 import _ from 'lodash'
-import waterfallGroup from './waterfallGroup.vue'
+//import waterfallGroup from './waterfallGroup.vue'
 import waterfallItemTitle from './waterfallItemTitle.vue'
 import waterfallItemImage from './waterfallItemImage.vue'
 import useOpusStore from '@/store/modules/opus'
@@ -32,12 +38,12 @@ const pageData = reactive({
   currentItem:{},
   column_values_0:[],
   column_values_1:[],
-  column_values_group_0:[],
-  column_values_group_1:[],
+  // column_values_group_0:[],
+  // column_values_group_1:[],
   column_height_0:0,
   column_height_1:0,
-  column_height_group_0:[],
-  column_height_group_1:[],
+  // column_height_group_0:[],
+  // column_height_group_1:[],
 })
 
 const props = defineProps({
@@ -71,6 +77,8 @@ const props = defineProps({
     default: ''
   },
 })
+
+const emit = defineEmits(['scrolltolower'])
 
 // 数据赋值
 //pageData.list = props.value ? props.value : [];
@@ -110,11 +118,21 @@ function getMinColumnHeight() {
 async function initValue(i) {
   if (i >= pageData.list.length) return false;
   pageData.currentItem = pageData.list[i]
+
+  let column = 0
+  if (pageData.column_height_1>=pageData.column_height_0) {
+    column = 0
+  }
+  else {
+    column = 1
+  }
+  pageData[`column_values_${column}`].push({ ...pageData.list[i], index: i });
+
   //获取当前dom高度
   nextTick(()=>{
     //pageData.timer = setTimeout(()=>{
       const query = uni.createSelectorQuery().in(_this);
-      query.select(`#waterDom_${props.waterIndex}`).boundingClientRect(res => {
+      query.select(`#waterDom_${i}`).boundingClientRect(res => {
         if (res) {
           let column = 0
           let height = res.height
@@ -128,28 +146,27 @@ async function initValue(i) {
           }
 
           //添加到分组中
-          let groupItems = []
-          if (pageData[`column_values_group_${column}`].length > 0) {
-            groupItems = pageData[`column_values_group_${column}`][pageData[`column_values_group_${column}`].length - 1]
-          }
-          if (groupItems.length >= 10) {
-            groupItems = []
-          }
-          groupItems.push({ ...pageData.list[i], index: i, height:height})
-          if (groupItems.length == 1) {
-            pageData[`column_values_group_${column}`].push(groupItems)
-          }
-          else {
-            pageData[`column_values_group_${column}`][pageData[`column_values_group_${column}`].length - 1] = groupItems
-          }
-          //计算最后一列的高度
-          let lastIndex = pageData[`column_values_group_${column}`].length - 1
-          let lastHeight = pageData[`column_values_group_${column}`][lastIndex].map(item=>{
-            return item.height
-          }).reduce((a,b)=>{return a+b})
-          pageData[`column_height_group_${column}`][lastIndex] = lastHeight
-
-          pageData[`column_values_${column}`].push({ ...pageData.list[i], index: i, height:height });
+          // let groupItems = []
+          // if (pageData[`column_values_group_${column}`].length > 0) {
+          //   groupItems = pageData[`column_values_group_${column}`][pageData[`column_values_group_${column}`].length - 1]
+          // }
+          // if (groupItems.length >= 10) {
+          //   groupItems = []
+          // }
+          // groupItems.push({ ...pageData.list[i], index: i, height:height})
+          // if (groupItems.length == 1) {
+          //   pageData[`column_values_group_${column}`].push(groupItems)
+          // }
+          // else {
+          //   pageData[`column_values_group_${column}`][pageData[`column_values_group_${column}`].length - 1] = groupItems
+          // }
+          // //计算最后一列的高度
+          // let lastIndex = pageData[`column_values_group_${column}`].length - 1
+          // let lastHeight = pageData[`column_values_group_${column}`][lastIndex].map(item=>{
+          //   return item.height
+          // }).reduce((a,b)=>{return a+b})
+          // pageData[`column_height_group_${column}`][lastIndex] = lastHeight
+          //
 
           if (props.currentIndex == props.waterIndex) {
             init()
@@ -257,6 +274,10 @@ watch(()=>useOpusStore().getLike(),(newValue,oldValue)=>{
     })
   }
 })
+
+const scrolltolower = ()=>{
+  emit('scrolltolower',props.waterIndex)
+}
 </script>
 <style lang="scss" scoped>
 

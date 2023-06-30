@@ -21,10 +21,10 @@
     <view class="pt-60">
       <view>
         <view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
-          <view v-show="waterIndex == pageData.currentIndex">
+          <view v-if="waterIndex == pageData.currentIndex">
             <waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" itemKey="index"
               :value="waterItem.items" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex"
-              :categoryId="waterItem.query.path.categoryId + ''">
+              :categoryId="waterItem.query.path.categoryId + ''" @scrolltolower="scrolltolower">
             </waterfall>
           </view>
         </view>
@@ -41,7 +41,7 @@ import { opusList } from '@/api/opus/list'
 import waterfall from '@/components/index/waterfall.vue'
 // import safeguardconfirm from '@/components/safeguard/safeguardconfirm.vue'
 // import safeguard from '@/components/safeguard/safeguard.vue'
-import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
+import { onShow } from "@dcloudio/uni-app"
 import useRouterStore from '@/store/modules/router'
 import useLoginTokenStore from '@/store/modules/loginToken'
 import { frontpage } from "@/api/index/index";
@@ -68,6 +68,8 @@ frontpage({}).then(res => {
     obj.name = item.name
     obj.query.path.categoryId = item.id
     waterfallItems.push(obj)
+//debug
+    waterfallItems.push(obj)
   })
   pageData.waterfallItems = _.cloneDeep(waterfallItems)
   nextTick(() => { changeWaterfall(0) })
@@ -83,23 +85,23 @@ watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
 
 
 const changeWaterfall = (waterIndex) => {
-  if (pageData.currentIndex != waterIndex) {
-    //读取滚动条高度
-    pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
-  }
+  // if (pageData.currentIndex != waterIndex) {
+  //   //读取滚动条高度
+  //   pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
+  // }
   pageData.currentIndex = waterIndex
   if (pageData.waterfallItems[waterIndex].items.length == 0) {
     getData()
   }
-  else {
-    //写入滚动条高度
-    if (pageData.waterfallItems[waterIndex].scrollTop != -1) {
-      uni.pageScrollTo({
-        scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
-        duration: 300
-      });
-    }
-  }
+  // else {
+  //   //写入滚动条高度
+  //   if (pageData.waterfallItems[waterIndex].scrollTop != -1) {
+  //     uni.pageScrollTo({
+  //       scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
+  //       duration: 300
+  //     });
+  //   }
+  // }
 }
 
 const getData = () => {
@@ -117,17 +119,25 @@ const getData = () => {
   })
 }
 
-onReachBottom(() => {
+// onReachBottom(() => {
+//   let currentIndex = pageData.currentIndex
+//   if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
+//     // pageData.waterfallItems[currentIndex].query.path.pageNum++
+//     getData()
+//   }
+// })
+
+// onPageScroll((res) => {
+//   pageData.scrollTop = res.scrollTop
+// })
+
+const scrolltolower = (waterIndex)=>{
   let currentIndex = pageData.currentIndex
   if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
     // pageData.waterfallItems[currentIndex].query.path.pageNum++
     getData()
   }
-})
-
-onPageScroll((res) => {
-  pageData.scrollTop = res.scrollTop
-})
+}
 </script>
 
 <style lang="scss" scoped>

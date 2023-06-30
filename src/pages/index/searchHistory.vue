@@ -58,9 +58,9 @@
 		<view v-show="!isShowHistory">
 			<view class="h-70"></view>
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
-				<view v-show="waterIndex == pageData.currentIndex">
+				<view v-if="waterIndex == pageData.currentIndex">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
-						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
+						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex" @scrolltolower="scrolltolower">
 					</waterfall>
 				</view>
 				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex && pageData.isLoading"
@@ -76,7 +76,7 @@
 import waterfall from '@/components/index/waterfall.vue'
 import { opusSearchNew } from "@/api/worksSearch/index.js"
 import { ref, onMounted, reactive, watch, nextTick } from 'vue'
-import { onReachBottom, onPageScroll, onShow } from '@dcloudio/uni-app';
+import { onShow } from '@dcloudio/uni-app';
 import useLoginTokenStore from '@/store/modules/loginToken'
 import _ from 'lodash'
 const searchvalue = ref('')
@@ -132,24 +132,25 @@ watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
 	changeWaterfall(pageData.currentIndex)
 })
 const changeWaterfall = (waterIndex) => {
-	if (pageData.currentIndex != waterIndex) {
-		//读取滚动条高度
-		pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
-	}
+	// if (pageData.currentIndex != waterIndex) {
+	// 	//读取滚动条高度
+	// 	pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
+	// }
 	pageData.currentIndex = waterIndex
 	if (pageData.waterfallItems[waterIndex].items.length == 0) {
 		if(!isShowHistory.value){
 			getData()
 		}	
-	} else {
-		//写入滚动条高度
-		if (pageData.waterfallItems[waterIndex].scrollTop != -1) {
-			uni.pageScrollTo({
-				scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
-				duration: 300
-			});
-		}
 	}
+	// else {
+	// 	//写入滚动条高度
+	// 	if (pageData.waterfallItems[waterIndex].scrollTop != -1) {
+	// 		uni.pageScrollTo({
+	// 			scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
+	// 			duration: 300
+	// 		});
+	// 	}
+	// }
 }
 const getData = () => {
 	pageData.isLoading = false
@@ -171,9 +172,9 @@ const getData = () => {
 	})
 
 }
-onPageScroll((res) => {
-	pageData.scrollTop = res.scrollTop
-})
+// onPageScroll((res) => {
+// 	pageData.scrollTop = res.scrollTop
+// })
 const handlehistory = (item) => {
 	searchvalue.value = item
 	search()
@@ -226,13 +227,14 @@ const gotoBack = () => {
 		uni.navigateBack({ delta: 1 })
 	}
 }
-onReachBottom(() => {
-	let currentIndex = pageData.currentIndex
-	if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
-		pageData.waterfallItems[currentIndex].query.path.pageNum++
-		getData()
-	}
-})
+
+const scrolltolower = (waterIndex)=>{
+  let currentIndex = pageData.currentIndex
+  if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
+    pageData.waterfallItems[currentIndex].query.path.pageNum++
+    getData()
+  }
+}
 </script>
 
 <style scoped lang="scss">

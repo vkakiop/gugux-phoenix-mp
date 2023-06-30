@@ -67,9 +67,9 @@
 					class="h-500 flex items-center justify-center">
 					<u-empty text="内容为空" mode="list" icon="/static/img/nodata.png" />
 				</view>
-				<view v-show="waterIndex == pageData.currentIndex">
+				<view v-if="waterIndex == pageData.currentIndex">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
-						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex" itemKey="mine">
+						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex" itemKey="mine" @scrolltolower="scrolltolower">
 					</waterfall>
 				</view>
 			</view>
@@ -81,7 +81,7 @@
 import waterfall from '@/components/index/waterfall.vue'
 import { userhomepage, homepagelike, homepageopus, homepagecollection } from "@/api/mine/index.js"
 import { ref, reactive, computed } from 'vue'
-import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
+import { onShow } from "@dcloudio/uni-app"
 import { getTokenValue } from "@/utils/utils"
 import useLoginTokenStore from '@/store/modules/loginToken'
 import useRouterStore from '@/store/modules/router'
@@ -152,22 +152,23 @@ const pageInfo = reactive({
 	mineMessage: {}
 })
 const changeWaterfall = (waterIndex) => {
-	if (pageData.currentIndex != waterIndex) {
-		//读取滚动条高度
-		pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
-	}
+	// if (pageData.currentIndex != waterIndex) {
+	// 	//读取滚动条高度
+	// 	pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
+	// }
 	pageData.currentIndex = waterIndex
 	if (pageData.waterfallItems[waterIndex].items.length == 0) {
 		getData()
-	} else {
-		//写入滚动条高度
-		if (pageData.waterfallItems[waterIndex].scrollTop != -1) {
-			uni.pageScrollTo({
-				scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
-				duration: 300
-			});
-		}
 	}
+	// else {
+	// 	//写入滚动条高度
+	// 	if (pageData.waterfallItems[waterIndex].scrollTop != -1) {
+	// 		uni.pageScrollTo({
+	// 			scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
+	// 			duration: 300
+	// 		});
+	// 	}
+	// }
 }
 const getData = () => {
 	let currentIndex = pageData.currentIndex
@@ -208,16 +209,23 @@ const getData = () => {
 		})
 	}
 }
-onPageScroll((res) => {
-	pageData.scrollTop = res.scrollTop
-})
-onReachBottom(() => {
-	let currentIndex = pageData.currentIndex
-	if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
-		pageData.waterfallItems[currentIndex].query.path.pageNum++
-		getData()
-	}
-})
+// onPageScroll((res) => {
+// 	pageData.scrollTop = res.scrollTop
+// })
+// onReachBottom(() => {
+// 	let currentIndex = pageData.currentIndex
+// 	if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
+// 		pageData.waterfallItems[currentIndex].query.path.pageNum++
+// 		getData()
+// 	}
+// })
+const scrolltolower = (waterIndex)=>{
+  let currentIndex = pageData.currentIndex
+  if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
+    pageData.waterfallItems[currentIndex].query.path.pageNum++
+    getData()
+  }
+}
 const gettolcount = () => {
 	pageData.waterfallItems.forEach((item, index) => {
 		if (index === 0) {

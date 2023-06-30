@@ -79,9 +79,9 @@
 					class="h-500 flex items-center justify-center">
 					<u-empty mode="list" icon="/static/img/nodata.png" text="内容为空" />
 				</view>
-				<view v-show="waterIndex == pageData.currentIndex">
+				<view v-if="waterIndex == pageData.currentIndex">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
-						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex" itemKey="mine"  :traceInfo="pageData.traceInfo">
+						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex" itemKey="mine"  :traceInfo="pageData.traceInfo" @scrolltolower="scrolltolower">
 					</waterfall>
 				</view>
 			</view>
@@ -99,7 +99,7 @@ import waterfall from '@/components/index/waterfall.vue'
 import { userFans, userFansRemove } from "@/api/opus/index"
 import { userhomepage, homepageopus } from "@/api/mine/index.js"
 import { ref, reactive, watch, computed } from 'vue'
-import { onReachBottom, onPageScroll, onLoad, onShow } from "@dcloudio/uni-app"
+import { onLoad, onShow } from "@dcloudio/uni-app"
 import useLoginTokenStore from '@/store/modules/loginToken'
 import _ from 'lodash'
 const computedNumber = computed({
@@ -147,22 +147,23 @@ const pageInfo = reactive({
 	mineMessage: {}
 })
 const changeWaterfall = (waterIndex) => {
-	if (pageData.currentIndex != waterIndex) {
-		//读取滚动条高度
-		pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
-	}
+	// if (pageData.currentIndex != waterIndex) {
+	// 	//读取滚动条高度
+	// 	pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
+	// }
 	pageData.currentIndex = waterIndex
 	if (pageData.waterfallItems[waterIndex].items.length == 0) {
 		getData()
-	} else {
-		//写入滚动条高度
-		if (pageData.waterfallItems[waterIndex].scrollTop != -1) {
-			uni.pageScrollTo({
-				scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
-				duration: 300
-			});
-		}
 	}
+	// else {
+	// 	//写入滚动条高度
+	// 	if (pageData.waterfallItems[waterIndex].scrollTop != -1) {
+	// 		uni.pageScrollTo({
+	// 			scrollTop: pageData.waterfallItems[waterIndex].scrollTop,
+	// 			duration: 300
+	// 		});
+	// 	}
+	// }
 }
 const getData = () => {
 	let currentIndex = pageData.currentIndex
@@ -179,16 +180,23 @@ const getData = () => {
 		pageData.waterfallItems[currentIndex].isLoading = false
 	})
 }
-onPageScroll((res) => {
-	pageData.scrollTop = res.scrollTop
-})
-onReachBottom(() => {
-	let currentIndex = pageData.currentIndex
-	if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
-		pageData.waterfallItems[currentIndex].query.path.pageNum++
-		getData()
-	}
-})
+// onPageScroll((res) => {
+// 	pageData.scrollTop = res.scrollTop
+// })
+// onReachBottom(() => {
+// 	let currentIndex = pageData.currentIndex
+// 	if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
+// 		pageData.waterfallItems[currentIndex].query.path.pageNum++
+// 		getData()
+// 	}
+// })
+const scrolltolower = (waterIndex)=>{
+  let currentIndex = pageData.currentIndex
+  if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
+    pageData.waterfallItems[currentIndex].query.path.pageNum++
+    getData()
+  }
+}
 
 const attention = () => {
 	let action = pageInfo.mineMessage.isFocus ? 0 : 1
