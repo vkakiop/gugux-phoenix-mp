@@ -114,7 +114,7 @@ const getData = () => {
   pageData.waterfallItems[currentIndex].isLoading = true
   let query = pageData.waterfallItems[currentIndex].query
   opusList(query.path).then(res => {
-    if (res.data.length < 10) {
+    if (res.data.length < 20) {
       pageData.waterfallItems[currentIndex].isComplete = true
     }
     pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data)
