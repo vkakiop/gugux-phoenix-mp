@@ -60,7 +60,7 @@
 
 		</view>
 		<!-- 菜单 -->
-		<view class="sticky -top-5 z-50 bg-white pl-14 w-full  -mt-25 pt-10">
+		<view class="sticky top-80 z-999 bg-white pl-14 w-full  -mt-25 pt-10">
 			<view class="flex ">
 				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
 					@click="changeWaterfall(index)">
