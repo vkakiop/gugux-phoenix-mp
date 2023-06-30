@@ -128,17 +128,17 @@ async function initValue(i) {
     column = 1
   }
   pageData[`column_values_${column}`].push({ ...pageData.list[i], index: i });
-  let startTime = new Date().getTime()
+  //let startTime = new Date().getTime()
   //获取当前dom高度
   nextTick(()=>{
     let endTime = new Date().getTime()
-    console.log('run time ms:'+(endTime-startTime))
+    //console.log('run time ms:'+(endTime-startTime))
     //pageData.timer = setTimeout(()=>{
       const query = uni.createSelectorQuery().in(_this);
       query.select(`#waterDom_${i}`).boundingClientRect(res => {
         if (res) {
           endTime = new Date().getTime()
-          console.log('query time ms:'+(endTime-startTime))
+          //console.log('query time ms:'+(endTime-startTime))
           let column = 0
           let height = res.height
           if (pageData.column_height_1>=pageData.column_height_0) {
