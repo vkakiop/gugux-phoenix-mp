@@ -63,7 +63,7 @@
 					</waterfall>
 				</view>
 				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex && pageData.isLoading"
-					class=" flex items-center justify-center mt-30">
+					class="flex items-center justify-center">
 					<u-empty mode="search" text="对不起,没有找到您要的搜索内容" icon="/static/img/nodata.png" />
 				</view>
 			</view>
@@ -238,16 +238,16 @@ const scrolltolower = (waterIndex)=>{
 
 <style scoped lang="scss">
 .active {
-	font-size: 16px;
+	font-size: 36rpx;
 	font-family: Source Han Sans SC;
 	font-weight: bold;
-	color: #272A29;
+	color: #0E0E0E;
 }
 
 .inactive {
-	font-size: 15px;
+	font-size: 30rpx;
 	font-family: Source Han Sans SC;
 	font-weight: 400;
-	color: #999999;
+	color: #232323;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <view>
-    <view class="fixed -top-5 z-50 bg-white w-full py-10 mb-14">
-      <view class="bg-[#fff] w-full pt-7 pb-10 pl-14  pr-22 flex justify-between">
+    <view class="fixed -top-5 z-50 bg-white w-full pt-10 mb-14">
+      <view class="bg-[#fff] w-full pt-7 pb-2 pl-14  pr-22 flex justify-between">
         <!-- 菜单 -->
         <scroll-view class="scroll-view_H" scroll-x="true" @scroll="scroll" scroll-left="60">
           <view class="flex text-center ">
@@ -9,18 +9,18 @@
               @click="changeWaterfall(index)">
               <view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }}</view>
               <view class="">
-                <image src="/static/mine/line.png" class="w-30 h-4 " v-show="pageData.currentIndex == index" />
+                <image src="/static/mine/line.png" class="w-30 h-4 relative -top-5" v-show="pageData.currentIndex == index" />
               </view>
             </view>
           </view>
         </scroll-view>
         <view>
-          <image src="/static/mine/search.png" class="w-17 h-17" @click="gohistory"></image>
+          <image src="/static/mine/search.png" class="w-17 h-17 mt-2" @click="gohistory"></image>
         </view>
         <!-- 菜单 -->
       </view>
     </view>
-    <view class="pt-60">
+    <view class="pt-65">
       <view>
         <view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
           <view v-if="waterIndex == pageData.currentIndex">
@@ -147,14 +147,14 @@ const scrolltolower = (waterIndex) => {
 
 <style lang="scss" scoped>
 .active {
-  font-size: 16px;
+  font-size: 32rpx;
   font-family: Source Han Sans SC;
   font-weight: bold;
   color: #272A29;
 }
 
 .inactive {
-  font-size: 15px;
+  font-size: 30rpx;
   font-family: Source Han Sans SC;
   font-weight: 400;
   color: #999999;

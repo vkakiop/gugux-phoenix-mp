@@ -248,14 +248,14 @@ const gotoBack = () => {
 
 <style lang="scss" scoped>
 .active {
-	font-size: 17px;
+	font-size: 34rpx;
 	font-family: Source Han Sans SC;
 	font-weight: bold;
 	color: #272A29;
 }
 
 .inactive {
-	font-size: 16px;
+	font-size: 32rpx;
 	font-family: Source Han Sans SC;
 	font-weight: 400;
 	color: #666666;
