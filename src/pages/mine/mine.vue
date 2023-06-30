@@ -69,7 +69,7 @@
 				</view>
 				<view v-if="waterIndex == pageData.currentIndex&&waterItem.items.length">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
-						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex" itemKey="mine" @scrolltolower="scrolltolower">
+						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex" itemKey="mine">
 					</waterfall>
 				</view>
 			</view>
@@ -81,7 +81,7 @@
 import waterfall from '@/components/index/waterfall.vue'
 import { userhomepage, homepagelike, homepageopus, homepagecollection } from "@/api/mine/index.js"
 import { ref, reactive, computed } from 'vue'
-import { onShow } from "@dcloudio/uni-app"
+import { onShow,onReachBottom } from "@dcloudio/uni-app"
 import { getTokenValue } from "@/utils/utils"
 import useLoginTokenStore from '@/store/modules/loginToken'
 import useRouterStore from '@/store/modules/router'
@@ -212,20 +212,14 @@ const getData = () => {
 // onPageScroll((res) => {
 // 	pageData.scrollTop = res.scrollTop
 // })
-// onReachBottom(() => {
-// 	let currentIndex = pageData.currentIndex
-// 	if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
-// 		pageData.waterfallItems[currentIndex].query.path.pageNum++
-// 		getData()
-// 	}
-// })
-const scrolltolower = (waterIndex)=>{
-  let currentIndex = pageData.currentIndex
-  if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
-    pageData.waterfallItems[currentIndex].query.path.pageNum++
-    getData()
-  }
-}
+onReachBottom(() => {
+	let currentIndex = pageData.currentIndex
+	if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
+		pageData.waterfallItems[currentIndex].query.path.pageNum++
+		getData()
+	}
+})
+
 const gettolcount = () => {
 	pageData.waterfallItems.forEach((item, index) => {
 		if (index === 0) {

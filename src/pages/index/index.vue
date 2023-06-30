@@ -26,7 +26,7 @@
           <view v-if="waterIndex == pageData.currentIndex">
             <waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" itemKey="index"
               :value="waterItem.items" :waterIndex="waterIndex" :currentIndex="pageData.currentIndex"
-              :categoryId="waterItem.query.path.categoryId + ''" @scrolltolower="scrolltolower">
+              :categoryId="waterItem.query.path.categoryId + ''">
             </waterfall>
           </view>
         </view>
@@ -43,7 +43,7 @@ import { opusList } from '@/api/opus/list'
 import waterfall from '@/components/index/waterfall.vue'
 // import safeguardconfirm from '@/components/safeguard/safeguardconfirm.vue'
 // import safeguard from '@/components/safeguard/safeguard.vue'
-import { onShow } from "@dcloudio/uni-app"
+import { onShow,onReachBottom } from "@dcloudio/uni-app"
 import useRouterStore from '@/store/modules/router'
 import useLoginTokenStore from '@/store/modules/loginToken'
 import { frontpage } from "@/api/index/index";
@@ -124,25 +124,17 @@ const getData = () => {
   })
 }
 
-// onReachBottom(() => {
-//   let currentIndex = pageData.currentIndex
-//   if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
-//     // pageData.waterfallItems[currentIndex].query.path.pageNum++
-//     getData()
-//   }
-// })
-
-// onPageScroll((res) => {
-//   pageData.scrollTop = res.scrollTop
-// })
-
-const scrolltolower = (waterIndex) => {
+onReachBottom(() => {
   let currentIndex = pageData.currentIndex
   if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
     // pageData.waterfallItems[currentIndex].query.path.pageNum++
     getData()
   }
-}
+})
+
+// onPageScroll((res) => {
+//   pageData.scrollTop = res.scrollTop
+// })
 </script>
 
 <style lang="scss" scoped>

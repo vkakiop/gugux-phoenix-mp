@@ -7,7 +7,7 @@
       </view>
     </view>
   </view-->
-  <u-list @scrolltolower="scrolltolower" lowerThreshold="200">
+  <!--u-list @scrolltolower="scrolltolower" lowerThreshold="200"-->
       <view class="flex justify-between">
         <view v-for="(columnItem,columnIndex) in 2" :key="columnIndex" :id="`waterfalls_flow_column_${waterIndex}_${columnIndex+1}`" :class="['flex-none',columnIndex == 0 ? 'ml-14' : 'mr-14']">
           <view :id="`waterDom_${item.index}`" class="w-172" v-for="(item,index) in pageData[`column_values_${columnIndex}`]" :key="index">
@@ -20,7 +20,7 @@
       <view v-if="pageData.isComplete && value.length" class="text-center h-50 leading-50 text-12 text-[#666666]">
         暂无更多
       </view>
-  </u-list>
+  <!--/u-list-->
 </template>
 <script setup>
 import { ref, reactive, watch, nextTick, computed, getCurrentInstance, onMounted } from 'vue'
@@ -79,7 +79,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['scrolltolower'])
+//const emit = defineEmits(['scrolltolower'])
 
 // 数据赋值
 //pageData.list = props.value ? props.value : [];
@@ -128,13 +128,17 @@ async function initValue(i) {
     column = 1
   }
   pageData[`column_values_${column}`].push({ ...pageData.list[i], index: i });
-
+  let startTime = new Date().getTime()
   //获取当前dom高度
   nextTick(()=>{
+    let endTime = new Date().getTime()
+    console.log('run time ms:'+(endTime-startTime))
     //pageData.timer = setTimeout(()=>{
       const query = uni.createSelectorQuery().in(_this);
       query.select(`#waterDom_${i}`).boundingClientRect(res => {
         if (res) {
+          endTime = new Date().getTime()
+          console.log('query time ms:'+(endTime-startTime))
           let column = 0
           let height = res.height
           if (pageData.column_height_1>=pageData.column_height_0) {
@@ -290,9 +294,9 @@ watch(()=>useOpusStore().getLike(),(newValue,oldValue)=>{
   }
 })
 
-const scrolltolower = ()=>{
-  emit('scrolltolower',props.waterIndex)
-}
+// const scrolltolower = ()=>{
+//   emit('scrolltolower',props.waterIndex)
+// }
 </script>
 <style lang="scss" scoped>
 

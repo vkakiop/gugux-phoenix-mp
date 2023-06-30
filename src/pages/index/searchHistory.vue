@@ -59,7 +59,7 @@
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
 				<view v-if="waterIndex == pageData.currentIndex">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
-						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex" @scrolltolower="scrolltolower">
+						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
 					</waterfall>
 				</view>
 				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex && pageData.isLoading"
@@ -75,7 +75,7 @@
 import waterfall from '@/components/index/waterfall.vue'
 import { opusSearchNew } from "@/api/worksSearch/index.js"
 import { ref, onMounted, reactive, watch, nextTick } from 'vue'
-import { onShow } from '@dcloudio/uni-app';
+import { onShow,onReachBottom } from '@dcloudio/uni-app';
 import useLoginTokenStore from '@/store/modules/loginToken'
 import _ from 'lodash'
 const searchvalue = ref('')
@@ -227,13 +227,13 @@ const gotoBack = () => {
 	}
 }
 
-const scrolltolower = (waterIndex)=>{
+onReachBottom(() => {
   let currentIndex = pageData.currentIndex
   if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
     pageData.waterfallItems[currentIndex].query.path.pageNum++
     getData()
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

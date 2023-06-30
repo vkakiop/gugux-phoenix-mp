@@ -81,7 +81,7 @@
 				</view>
 				<view v-if="waterIndex == pageData.currentIndex&&waterItem.items.length">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
-						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex" itemKey="mine"  :traceInfo="pageData.traceInfo" @scrolltolower="scrolltolower">
+						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex" itemKey="mine"  :traceInfo="pageData.traceInfo">
 					</waterfall>
 				</view>
 			</view>
@@ -99,7 +99,7 @@ import waterfall from '@/components/index/waterfall.vue'
 import { userFans, userFansRemove } from "@/api/opus/index"
 import { userhomepage, homepageopus } from "@/api/mine/index.js"
 import { ref, reactive, watch, computed } from 'vue'
-import { onLoad, onShow } from "@dcloudio/uni-app"
+import { onLoad, onShow, onReachBottom } from "@dcloudio/uni-app"
 import useLoginTokenStore from '@/store/modules/loginToken'
 import _ from 'lodash'
 const computedNumber = computed({
@@ -183,20 +183,14 @@ const getData = () => {
 // onPageScroll((res) => {
 // 	pageData.scrollTop = res.scrollTop
 // })
-// onReachBottom(() => {
-// 	let currentIndex = pageData.currentIndex
-// 	if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
-// 		pageData.waterfallItems[currentIndex].query.path.pageNum++
-// 		getData()
-// 	}
-// })
-const scrolltolower = (waterIndex)=>{
-  let currentIndex = pageData.currentIndex
-  if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
-    pageData.waterfallItems[currentIndex].query.path.pageNum++
-    getData()
-  }
-}
+onReachBottom(() => {
+	let currentIndex = pageData.currentIndex
+	if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
+		pageData.waterfallItems[currentIndex].query.path.pageNum++
+		getData()
+	}
+})
+
 
 const attention = () => {
 	let action = pageInfo.mineMessage.isFocus ? 0 : 1
