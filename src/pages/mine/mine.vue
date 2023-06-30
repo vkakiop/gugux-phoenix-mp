@@ -1,7 +1,7 @@
 <template>
-	<view v-if="pageInfo.mineMessage.guguId">
-		<view class="bg-[#fff] w-screen py-20 px-14">
-			<view class="flex  pb-15">
+	<view v-if="pageInfo.mineMessage.guguId" class="bg-[#f3f4f6] h-screen">
+		<view class="bg-[#fff] w-screen py-20 px-14 ">
+			<view class="flex  pb-15  " >
 				<view class=" border-2 border-[#fff] w-80 rounded-full h-80 iconShadow" @click="skipPerson">
 					<image :src="pageInfo.mineMessage.icon" class="w-76 h-76 rounded-full" />
 				</view>
@@ -61,13 +61,13 @@
 			</view>
 		</view>
 		<!-- 菜单 -->
-		<view class="pt-13 bg-gray-100">
+		<view class="pt-13 bg-[#f3f4f6] ">
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
 				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
-					class="flex items-center justify-center">
+					class=" flex items-center justify-center">
 					<u-empty text="内容为空" mode="list" icon="/static/img/nodata.png" />
 				</view>
-				<view v-if="waterIndex == pageData.currentIndex">
+				<view v-if="waterIndex == pageData.currentIndex&&waterItem.items.length">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
 						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex" itemKey="mine" @scrolltolower="scrolltolower">
 					</waterfall>
