@@ -112,7 +112,7 @@ async function initValue(i) {
   pageData.currentItem = pageData.list[i]
   //获取当前dom高度
   nextTick(()=>{
-    pageData.timer = setTimeout(()=>{
+    //pageData.timer = setTimeout(()=>{
       const query = uni.createSelectorQuery().in(_this);
       query.select(`#waterDom_${props.waterIndex}`).boundingClientRect(res => {
         if (res) {
@@ -161,7 +161,7 @@ async function initValue(i) {
 
       }).exec(() => {
       });
-    },10)
+    //},0)
 
   })
 

@@ -69,19 +69,19 @@ const observePage = () => {
       })
 }
 
-watch(()=>props.currentIndex == props.waterIndex,(newVal,oldVal)=>{
-  if (newVal) {
-    pageData.isShow = true
-    observePage()
-    //console.log('开始监听',props.waterIndex)
-  }
-  else {
-    pageData.isShow = false
-    let IntersectionObserver = uni.createIntersectionObserver(_this)
-    IntersectionObserver.disconnect()
-    //console.log('结束监听',props.waterIndex)
-  }
-},{immediate:true})
+// watch(()=>props.currentIndex == props.waterIndex,(newVal,oldVal)=>{
+//   if (newVal) {
+//     pageData.isShow = true
+//     //observePage()
+//     //console.log('开始监听',props.waterIndex)
+//   }
+//   else {
+//     pageData.isShow = false
+//     // let IntersectionObserver = uni.createIntersectionObserver(_this)
+//     // IntersectionObserver.disconnect()
+//     //console.log('结束监听',props.waterIndex)
+//   }
+// },{immediate:true})
 </script>
 
 <style lang="scss" scoped>
