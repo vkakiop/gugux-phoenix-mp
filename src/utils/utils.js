@@ -243,3 +243,11 @@ export function imageThumb(url,width,height,model) {
 	}
 	return url + ((url+'').indexOf('?') == -1 ? '?' : '&') + 'x-oss-process=image/resize' + param
 }
+
+export function rpxTopx(rpx) {
+	return wx.getSystemInfoSync().windowWidth/750*rpx
+}
+
+export function pxTorpx(px) {
+	return 750/wx.getSystemInfoSync().windowWidth*px
+}

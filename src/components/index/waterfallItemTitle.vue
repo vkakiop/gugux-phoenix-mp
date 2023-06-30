@@ -2,12 +2,12 @@
   <view class="w-172 bg-[#fff] rounded-5" v-if="item && item.cover">
     <view class="relative rounded-5">
       <view v-if="isVirtualCal"
-        :style="{ width: '100%', height: computedHeight(item.cover.width, item.cover.height) + 'rpx' }" class="rounded-5 bg-[#eee]">
+        :style="{ width: '100%', height: item.imageHeightRpx + 'rpx' }" class="rounded-5 bg-[#eee]">
       </view>
       <view v-else
-        :style="{ width: '100%', height: computedHeight(item.cover.width, item.cover.height) + 'rpx' }" class="rounded-5 bg-[#eee] overflow-hidden">
+        :style="{ width: '100%', height: item.imageHeightRpx + 'rpx' }" class="rounded-5 bg-[#eee] overflow-hidden">
         <image :src="imageThumb(item.cover.itemType == 2 ? item.cover.content : item.cover.thumbnail, 344, 344)"
-          :style="{ width: '100%', height: computedHeight(item.cover.width, item.cover.height) + 'rpx' }"
+          :style="{ width: '100%', height: item.imageHeightRpx + 'rpx' }"
           @click="godetail(item)" class="rounded-5"></image>
       </view>
       <view v-if="isVirtualCal"></view>
@@ -35,7 +35,6 @@
     </view>
   </view>
   <view class="h-14"></view>
-  <loginPop :isShow="pageData.isShowLoginPop" @close="pageData.isShowLoginPop = false"></loginPop>
 </template>
 
 <script setup>
@@ -45,16 +44,11 @@ import { computed, ref, onMounted, reactive } from 'vue';
 import useLoginTokenStore from '@/store/modules/loginToken'
 const pageData = reactive({
   id: '',
-  isShowLoginPop: false,
+
 })
 const props = defineProps(['item', 'isVirtualCal', 'itemKey', 'traceInfo','categoryId'])
-const computedHeight = computed({
-  get: (w, h) => {
-    return function (w, h) {
-      return w <= 0 ? 344 : h * (344 / w)
-    }
-  }
-})
+const emit = defineEmits(['popLoginShow'])
+
 const gohomepage = (item) => {
   item.traceInfo = item.traceInfo ? item.traceInfo : ''
   if (useLoginTokenStore().get().user) {
@@ -125,7 +119,8 @@ const like = (item) => {
       })
     })
   } else {
-    pageData.isShowLoginPop = true
+    //pageData.isShowLoginPop = true
+    emit('popLoginShow')
   }
 }
 const computedLocation = computed({

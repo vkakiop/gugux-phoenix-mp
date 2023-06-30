@@ -1,4 +1,5 @@
 <template>
+  <canvas id="canvas"></canvas>
   <!--view :id="'waterDom_'+waterIndex" style="position: absolute;width:100%; visibility: hidden">
     <view v-for="(columnItem,columnIndex) in 1" :key="columnIndex">
       <view class="w-172" v-for="(item,index) in [pageData.currentItem]" :key="index">
@@ -11,8 +12,8 @@
       <view class="flex justify-between">
         <view v-for="(columnItem,columnIndex) in 2" :key="columnIndex" :id="`waterfalls_flow_column_${waterIndex}_${columnIndex+1}`" :class="['flex-none',columnIndex == 0 ? 'ml-14' : 'mr-14']">
           <view :id="`waterDom_${item.index}`" class="w-172" v-for="(item,index) in pageData[`column_values_${columnIndex}`]" :key="index">
-            <waterfallItemTitle v-if="itemType == 'title'" :item="item" :itemKey="itemKey" :traceInfo="traceInfo"  :categoryId="categoryId"></waterfallItemTitle>
-            <waterfallItemImage v-else :item="item" :itemKey="itemKey" :traceInfo="traceInfo"  :categoryId="categoryId"></waterfallItemImage>
+            <waterfallItemTitle v-if="itemType == 'title'" :item="item" :itemKey="itemKey" :traceInfo="traceInfo"  :categoryId="categoryId" @popLoginShow="pageData.isShowLoginPop = true"></waterfallItemTitle>
+            <waterfallItemImage v-else :item="item" :itemKey="itemKey" :traceInfo="traceInfo"  :categoryId="categoryId" @popLoginShow="pageData.isShowLoginPop = true"></waterfallItemImage>
           </view>
             <!--waterfallGroup v-for="(items,groupIndex) in pageData[`column_values_group_${columnIndex}`]" :waterIndex="waterIndex" :groupIndex="groupIndex" :currentIndex="currentIndex" :itemType="itemType" :itemKey="itemKey"  :traceInfo="traceInfo"  :categoryId="categoryId" :items="items" :height="pageData[`column_height_group_${columnIndex}`][groupIndex]" :key="groupIndex"></waterfallGroup-->
         </view>
@@ -21,13 +22,15 @@
         暂无更多
       </view>
   <!--/u-list-->
+  <loginPop :isShow="pageData.isShowLoginPop" @close="pageData.isShowLoginPop = false"></loginPop>
 </template>
 <script setup>
-import { ref, reactive, watch, nextTick, computed, getCurrentInstance, onMounted } from 'vue'
+import { ref, reactive, onMounted, watch, nextTick, computed, getCurrentInstance } from 'vue'
 import _ from 'lodash'
 //import waterfallGroup from './waterfallGroup.vue'
 import waterfallItemTitle from './waterfallItemTitle.vue'
 import waterfallItemImage from './waterfallItemImage.vue'
+import {rpxTopx,pxTorpx} from '@/utils/utils'
 import useOpusStore from '@/store/modules/opus'
 
 const _this = getCurrentInstance()
@@ -45,6 +48,7 @@ const pageData = reactive({
   column_height_1:0,
   // column_height_group_0:[],
   // column_height_group_1:[],
+  isShowLoginPop: false,
 })
 
 const props = defineProps({
@@ -80,6 +84,23 @@ const props = defineProps({
 })
 
 //const emit = defineEmits(['scrolltolower'])
+
+let query = null
+let test = null
+let canvas = null
+let ctx = null
+onMounted(()=>{
+  console.log('onMounted')
+  query = uni.createSelectorQuery().in(_this);
+  canvas = query.select('#canvas')
+
+  ctx = wx.createCanvasContext('canvas');
+
+})
+
+const calcHeight = ((w,h)=>{
+  return w <= 0 ? 344 : h * (344 / w)
+})
 
 // 数据赋值
 //pageData.list = props.value ? props.value : [];
@@ -120,6 +141,11 @@ async function initValue(i) {
   if (i >= pageData.list.length) return false;
   pageData.currentItem = pageData.list[i]
 
+  let measureTextWidth = 0
+  if (props.itemType == 'title') {
+    measureTextWidth = ctx.measureText(pageData.currentItem.title).width
+  }
+
   let column = 0
   if (pageData.column_height_1>=pageData.column_height_0) {
     column = 0
@@ -127,66 +153,57 @@ async function initValue(i) {
   else {
     column = 1
   }
-  pageData[`column_values_${column}`].push({ ...pageData.list[i], index: i });
-  //let startTime = new Date().getTime()
+  let imageHeightRpx = calcHeight(pageData.list[i].cover.width, pageData.list[i].cover.height)
+  let textHeightRpx = 20
+  if (pxTorpx(measureTextWidth) > 164*2){
+    textHeightRpx = 40
+  }
+  let heightRpx = imageHeightRpx + 60 //30*2
+  if (props.itemType == 'title') {
+    heightRpx = imageHeightRpx + textHeightRpx + 108 //30*2 + 28 *2
+  }
+  pageData[`column_values_${column}`].push({ ...pageData.list[i], index: i,imageHeightRpx,textHeightRpx,heightRpx });
+  let startTime = new Date().getTime()
+
   //获取当前dom高度
-  nextTick(()=>{
-    //let endTime = new Date().getTime()
-    //console.log('run time ms:'+(endTime-startTime))
-    //pageData.timer = setTimeout(()=>{
-      const query = uni.createSelectorQuery().in(_this);
-      query.select(`#waterDom_${i}`).boundingClientRect(res => {
-        if (res) {
-          //endTime = new Date().getTime()
-          //console.log('query time ms:'+(endTime-startTime))
-          let column = 0
-          let height = res.height
-          if (pageData.column_height_1>=pageData.column_height_0) {
-            pageData.column_height_0 = pageData.column_height_0 + height
-            column = 0
-          }
-          else {
-            pageData.column_height_1 = pageData.column_height_1 + height
-            column = 1
-          }
+  let height = rpxTopx(heightRpx)
+  if (pageData.column_height_1>=pageData.column_height_0) {
+    pageData.column_height_0 = pageData.column_height_0 + height
+  }
+  else {
+    pageData.column_height_1 = pageData.column_height_1 + height
+  }
 
-          //添加到分组中
-          // let groupItems = []
-          // if (pageData[`column_values_group_${column}`].length > 0) {
-          //   groupItems = pageData[`column_values_group_${column}`][pageData[`column_values_group_${column}`].length - 1]
-          // }
-          // if (groupItems.length >= 10) {
-          //   groupItems = []
-          // }
-          // groupItems.push({ ...pageData.list[i], index: i, height:height})
-          // if (groupItems.length == 1) {
-          //   pageData[`column_values_group_${column}`].push(groupItems)
-          // }
-          // else {
-          //   pageData[`column_values_group_${column}`][pageData[`column_values_group_${column}`].length - 1] = groupItems
-          // }
-          // //计算最后一列的高度
-          // let lastIndex = pageData[`column_values_group_${column}`].length - 1
-          // let lastHeight = pageData[`column_values_group_${column}`][lastIndex].map(item=>{
-          //   return item.height
-          // }).reduce((a,b)=>{return a+b})
-          // pageData[`column_height_group_${column}`][lastIndex] = lastHeight
-          //
+  //添加到分组中
+  // let groupItems = []
+  // if (pageData[`column_values_group_${column}`].length > 0) {
+  //   groupItems = pageData[`column_values_group_${column}`][pageData[`column_values_group_${column}`].length - 1]
+  // }
+  // if (groupItems.length >= 10) {
+  //   groupItems = []
+  // }
+  // groupItems.push({ ...pageData.list[i], index: i, height:height})
+  // if (groupItems.length == 1) {
+  //   pageData[`column_values_group_${column}`].push(groupItems)
+  // }
+  // else {
+  //   pageData[`column_values_group_${column}`][pageData[`column_values_group_${column}`].length - 1] = groupItems
+  // }
+  // //计算最后一列的高度
+  // let lastIndex = pageData[`column_values_group_${column}`].length - 1
+  // let lastHeight = pageData[`column_values_group_${column}`][lastIndex].map(item=>{
+  //   return item.height
+  // }).reduce((a,b)=>{return a+b})
+  // pageData[`column_height_group_${column}`][lastIndex] = lastHeight
+  //
 
-          if (props.currentIndex == props.waterIndex) {
-            init()
-          }
-          else {
-            pageData.isLoading = false
-          }
-        }
-
-      }).exec(() => {
-      });
-    //},0)
-
-  })
-
+  if (props.currentIndex == props.waterIndex) {
+    init()
+  }
+  else {
+    pageData.isLoading = false
+  }
+  //获取当前dom结束
 
   //const minHeightRes = await getMinColumnHeight();
   //pageData[`column_${minHeightRes.column}_values`].push({ ...pageData.list[i], index: i });
