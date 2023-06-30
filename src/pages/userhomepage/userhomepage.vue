@@ -76,7 +76,7 @@
 		<view class="pt-13 bg-gray-100">
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
 				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
-					class="h-500 flex items-center justify-center">
+					class="flex items-center justify-center">
 					<u-empty mode="list" icon="/static/img/nodata.png" text="内容为空" />
 				</view>
 				<view v-if="waterIndex == pageData.currentIndex">
