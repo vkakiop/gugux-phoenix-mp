@@ -126,6 +126,7 @@ const waterfallItems = [{
 	}
 }]
 const pageData = reactive({
+	isshowfixed:false,
 	isShowLoginPop: false,
 	masterId: '',
 	traceInfo:'',
