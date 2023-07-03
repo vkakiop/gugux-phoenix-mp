@@ -48,7 +48,19 @@
 
 		</view>
 		<!-- 菜单 -->
-		<view class="sticky -top-5 z-50 bg-white pl-14 w-full  -mt-25 pt-10">
+		<view class="bg-white pl-14 w-full  -mt-25 pt-10 fixed top-20 z-50" v-if="pageData.isshowfixed">
+			<view class="flex  text-center">
+				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
+					@click="changeWaterfall(index)">
+					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text
+							v-if="waterItem.query.data.totalCount">({{ waterItem.query.data.totalCount }})</text></view>
+					<view class="-mt-5">
+						<image src="/static/mine/line.png" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
+					</view>
+				</view>
+			</view>
+		</view>
+		<view class="bg-white pl-14 w-full  -mt-25 pt-10">
 			<view class="flex text-center">
 				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
 					@click="changeWaterfall(index)">
@@ -81,7 +93,7 @@
 import waterfall from '@/components/index/waterfall.vue'
 import { userhomepage, homepagelike, homepageopus, homepagecollection } from "@/api/mine/index.js"
 import { ref, reactive, computed } from 'vue'
-import { onShow,onReachBottom } from "@dcloudio/uni-app"
+import { onShow,onReachBottom,onPageScroll} from "@dcloudio/uni-app"
 import { getTokenValue } from "@/utils/utils"
 import useLoginTokenStore from '@/store/modules/loginToken'
 import useRouterStore from '@/store/modules/router'
@@ -105,6 +117,7 @@ onShow(() => {
 	}
 })
 const waterfallItems = [{
+	isshowfixed:false,
 	scrollTop: -1,
 	isComplete: false,
 	isLoading: false,
@@ -209,9 +222,12 @@ const getData = () => {
 		})
 	}
 }
-// onPageScroll((res) => {
-// 	pageData.scrollTop = res.scrollTop
-// })
+onPageScroll((res) => {
+	// pageData.scrollTop = res.scrollTop
+	// pageData.isshowfixed=true
+	// console.log('滚动条',res.scrollTop);
+	res.scrollTop>182?pageData.isshowfixed=true:pageData.isshowfixed=false
+})
 onReachBottom(() => {
 	let currentIndex = pageData.currentIndex
 	if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
