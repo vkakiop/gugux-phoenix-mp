@@ -1,6 +1,6 @@
 <template>
   <customNav>
-    <view @click="gotoBack" class="pl-10"><uni-icons type="back" size="24"></uni-icons></view>
+    <view @click="gotoBack" class="pl-10 mt-[3rpx]"><uni-icons type="back" size="24"></uni-icons></view>
     <view class="name mx-6 text-18 line-clamp-1">{{pageData.title}}</view>
   </customNav>
   <view class="mx-20 text-15 text-[#272a29]">

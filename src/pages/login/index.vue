@@ -1,6 +1,6 @@
 <template>
   <customNav>
-    <view @click="gotoBack" class="pl-10"><uni-icons type="back" size="24"></uni-icons></view>
+    <view @click="gotoBack" class="pl-10 mt-[3rpx]"><uni-icons type="back" size="24"></uni-icons></view>
     <view class="name mx-6 text-18 line-clamp-1">手机登录</view>
   </customNav>
   <view class="m-30">
