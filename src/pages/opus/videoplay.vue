@@ -1,8 +1,8 @@
 <template>
   <view class="h-screen overflow-hidden">
     <customNav :screen="2">
-      <view @click="gotoBack" class="ml-3 mt-5"><uni-icons type="back" size="24"></uni-icons></view>
-      <view class="name mx-6 text-14 line-clamp-1">视频播放</view>
+      <view @click="gotoBack" class="pl-10 mt-[3rpx]"><uni-icons type="back" size="24"></uni-icons></view>
+      <view class="name mx-6 text-18 line-clamp-1">视频播放</view>
     </customNav>
     <view class="bg-black">
       <swiper class="swiper w-screen h-screen" vertical :current="pageData.current" :interval="2000" :duration="600" @animationfinish="animationfinish" @change="handleChange" :circular="false">
