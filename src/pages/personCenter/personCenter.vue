@@ -5,7 +5,7 @@
 	</customNav>
 	<view class="bg-gray-100 content text-17 text-[#272A29]  w-full" style="height: 89vh;">
 		<view class="mb-10">
-			<view class="flex justify-between  items-center px-10  h-56 border-t-1 border-[#ebebeb]">
+			<view class="flex justify-between  items-center px-15  h-56 border-t-1 border-[#ebebeb]">
 				<view class="">头像</view>
 				<view class="flex items-center">
 					<view class="mr-8" @click="gopicture(pageData.userInfo.icon)">
@@ -13,7 +13,7 @@
 					</view>
 				</view>
 			</view>
-			<view class="flex justify-between  items-center px-10  h-56 border-t-1 border-[#f1f3f5]">
+			<view class="flex justify-between  items-center px-15  h-56 border-t-1 border-[#f1f3f5]">
 				<view class="">昵称</view>
 				<view class=" flex items-center" @click="dropInput">
 					<view class="mr-8">{{ pageData.userInfo.nickname }}</view>
@@ -21,13 +21,13 @@
 			</view>
 		</view>
 		<view class="mb-10">
-			<view class="flex justify-between  items-center  px-10   h-56">
+			<view class="flex justify-between  items-center  px-15   h-56">
 				<view class="">手机号</view>
 				<view class=" flex items-center">
 					<view class="mr-8"><text> {{ pageData.userInfo.phone }}</text></view>
 				</view>
 			</view>
-			<view class="flex justify-between  items-center pl-10  pr-20 h-56 border-t-1 border-[#f1f3f5]">
+			<view class="flex justify-between  items-center pl-15  pr-23 h-56 border-t-1 border-[#f1f3f5]">
 				<view class="">咕咕号</view>
 				<view class="flex items-center">
 					<text>{{ pageData.userInfo.guguId }}</text>
@@ -36,13 +36,13 @@
 			</view>
 		</view>
 		<view class="mb-10">
-			<view class="flex justify-between items-center px-10   h-56">
+			<view class="flex justify-between items-center px-15   h-56">
 				<view class="">签名</view>
 				<view class=" flex items-center">
 					<view class="mr-8">{{ pageData.userInfo.introduce ? pageData.userInfo.introduce : '未设置' }}</view>
 				</view>
 			</view>
-			<view class="flex justify-between  items-center px-10  h-56 border-t-1 border-[#f1f3f5]">
+			<view class="flex justify-between  items-center px-15  h-56 border-t-1 border-[#f1f3f5]">
 				<view class="">性别</view>
 				<view class=" flex items-center">
 					<view class="mr-8">
@@ -52,13 +52,13 @@
 					</view>
 				</view>
 			</view>
-			<view class="flex justify-between  items-center px-10  h-56 border-t-1 border-[#f1f3f5]">
+			<view class="flex justify-between  items-center px-15  h-56 border-t-1 border-[#f1f3f5]">
 				<view class="">出生日期</view>
 				<view class=" flex items-center">
 					<view class="mr-8">{{ pageData.userInfo.birth ? pageData.userInfo.birth : '未设置' }}</view>
 				</view>
 			</view>
-			<view class="flex justify-between  items-center px-10  h-56 border-t-1 border-[#f1f3f5]">
+			<view class="flex justify-between  items-center px-15  h-56 border-t-1 border-[#f1f3f5]">
 				<view class="">所在城市</view>
 				<view class="flex items-center ">
 					<view class="mr-8">{{ pageData.userInfo.city ? pageData.userInfo.city : '未设置' }}</view>
@@ -71,7 +71,7 @@
 		</view>
 		<view>
 			<uni-popup ref="popup" background-color="#fff">
-				<view class="px-10  py-10">
+				<view class="px-15  py-10">
 					<view class="font-bold py-20 text-center ">修改昵称</view>
 					<view
 						class="flex items-center ml-5  border-dashed border-dashed bg-[#f8fbff]  h-50 w-300 rounded-10 border-2 border-gray-300  text-15 text-[#333]">
