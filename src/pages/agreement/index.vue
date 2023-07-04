@@ -3,7 +3,7 @@
     <view @click="gotoBack" class="pl-10"><uni-icons type="back" size="24"></uni-icons></view>
     <view class="name mx-6 text-18 line-clamp-1">{{pageData.title}}</view>
   </customNav>
-  <view class="mx-20 text-16 text-[#272a29]">
+  <view class="mx-20 text-15 text-[#272a29]">
     <rich-text :nodes="pageData.html" class="protocolDetail"></rich-text>
   </view>
   <view class="h-30"></view>
