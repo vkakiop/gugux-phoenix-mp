@@ -61,7 +61,7 @@
 		</view>
 		<!-- 菜单 -->
 		<!-- 吸顶 -->
-		<view class="bg-white pl-14 w-full  -mt-25 pt-10 fixed top-20 z-50" v-if="pageData.isshowfixed">
+		<view class="bg-white pl-14 w-full  -mt-25 pt-10 fixed top-110 z-50 left-0" v-if="pageData.isshowfixed">
 			<view class="flex ">
 				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
 					@click="changeWaterfall(index)">
@@ -92,9 +92,10 @@
 					class="flex items-center justify-center mt-30">
 					<u-empty mode="list" icon="/static/img/nodata.png" text="内容为空" />
 				</view>
-				<view v-if="waterIndex == pageData.currentIndex&&waterItem.items.length">
+				<view v-if="waterIndex == pageData.currentIndex && waterItem.items.length">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
-						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex" itemKey="mine"  :traceInfo="pageData.traceInfo">
+						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex" itemKey="mine"
+						:traceInfo="pageData.traceInfo">
 					</waterfall>
 				</view>
 			</view>
@@ -102,8 +103,8 @@
 		<loginPop :isShow="pageData.isShowLoginPop" @close="pageData.isShowLoginPop = false"></loginPop>
 	</view>
 	<view v-else class="w-screen h-screen flex justify-center items-center">
-      <u-empty mode="data" text="获取失败" icon="/static/img/nodata.png"/>
-    </view>
+		<u-empty mode="data" text="获取失败" icon="/static/img/nodata.png" />
+	</view>
 </template>
 
 <script setup>
@@ -112,7 +113,7 @@ import waterfall from '@/components/index/waterfall.vue'
 import { userFans, userFansRemove } from "@/api/opus/index"
 import { userhomepage, homepageopus } from "@/api/mine/index.js"
 import { ref, reactive, watch, computed } from 'vue'
-import { onLoad, onShow, onReachBottom,onPageScroll } from "@dcloudio/uni-app"
+import { onLoad, onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
 import useLoginTokenStore from '@/store/modules/loginToken'
 import _ from 'lodash'
 const computedNumber = computed({
@@ -126,10 +127,10 @@ const waterfallItems = [{
 	}
 }]
 const pageData = reactive({
-	isshowfixed:false,
+	isshowfixed: false,
 	isShowLoginPop: false,
 	masterId: '',
-	traceInfo:'',
+	traceInfo: '',
 	scrollTop: 0,
 	currentIndex: 0,
 	waterfallItems: _.cloneDeep(waterfallItems),
@@ -141,10 +142,10 @@ watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
 })
 onLoad((option) => {
 	pageData.masterId = option.id
-	pageData.traceInfo=	decodeURIComponent(option.traceInfo || '')
-	
+	pageData.traceInfo = decodeURIComponent(option.traceInfo || '')
+
 })
-onShow(()=>{
+onShow(() => {
 	fetchInfo()
 })
 const fetchInfo = () => {
@@ -165,7 +166,7 @@ const changeWaterfall = (waterIndex) => {
 	// 	//读取滚动条高度
 	// 	pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
 	// }
-	pageData.waterfallItems[waterIndex].items=[]
+	pageData.waterfallItems[waterIndex].items = []
 	pageData.currentIndex = waterIndex
 	if (pageData.waterfallItems[waterIndex].items.length == 0) {
 		getData()
@@ -199,7 +200,7 @@ onPageScroll((res) => {
 	// pageData.scrollTop = res.scrollTop
 	// pageData.isshowfixed=true
 	// console.log('滚动条',res.scrollTop);
-	res.scrollTop>182?pageData.isshowfixed=true:pageData.isshowfixed=false
+	res.scrollTop > 174 ? pageData.isshowfixed = true : pageData.isshowfixed = false
 })
 onReachBottom(() => {
 	let currentIndex = pageData.currentIndex
