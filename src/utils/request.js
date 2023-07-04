@@ -155,13 +155,18 @@ axios.defaults.adapter = function(config) { //自己定义个适配器，用来�
             sslVerify: config.sslVerify,
             success:(res)=> {
                 let data = res.data
-                try {
-                    var JSONbig = JSONBIG({storeAsString: true});
-                    resolve({data:JSONbig.parse(data),url:config.baseURL + buildURL(config.url, config.params, config.paramsSerializer)});
+                if (config.dataType == 'string') {
+                    resolve({data:data,url:config.baseURL + buildURL(config.url, config.params, config.paramsSerializer)});
                 }
-                catch (err) {
-                    // 如果转换失败，则包装为统一数据格式并返回
-                    reject({data:JSONbig.parse(data),message:'请求失败',url:config.baseURL + buildURL(config.url, config.params, config.paramsSerializer)});
+                else {
+                    try {
+                        var JSONbig = JSONBIG({storeAsString: true});
+                        resolve({data:JSONbig.parse(data),url:config.baseURL + buildURL(config.url, config.params, config.paramsSerializer)});
+                    }
+                    catch (err) {
+                        // 如果转换失败，则包装为统一数据格式并返回
+                        reject({data:JSONbig.parse(data),message:'请求失败',url:config.baseURL + buildURL(config.url, config.params, config.paramsSerializer)});
+                    }
                 }
             },
             fail:(error) => {

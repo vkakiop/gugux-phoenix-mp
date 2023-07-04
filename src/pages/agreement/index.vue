@@ -1,17 +1,28 @@
 <template>
-  <web-view v-if="pageData.url" :src="pageData.url"></web-view>
+  <customNav>
+    <view @click="gotoBack" class="ml-3 mt-5"><uni-icons type="back" size="24"></uni-icons></view>
+    <view class="name mx-6 text-14 line-clamp-1">{{pageData.title}}</view>
+  </customNav>
+  <view class="mx-20 text-14">
+    <rich-text :nodes="pageData.html" class="protocolDetail"></rich-text>
+  </view>
+  <view class="h-30"></view>
 </template>
 
 <script setup>
 import {reactive} from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
+import {userProtocol} from '@/api/agreement/index'
 const pageData = reactive({
-  url:'',
+  title:'',
+  html:'',
 })
 onLoad((option)=>{
   if (option.code) {
-    pageData.url = import.meta.env.VITE_APP_BASE_API + '/gugux-services-user-api/app/user/protocol/' + option.code
-    uni.setNavigationBarTitle({title:option.title})
+    pageData.title = option.title
+    userProtocol({code:option.code}).then(res=>{
+      pageData.html = res
+    })
   }
   else {
     uni.showToast({
@@ -21,8 +32,14 @@ onLoad((option)=>{
     });
   }
 })
+
+const gotoBack = ()=>{
+  uni.navigateBack({delta: 1})
+}
 </script>
 
 <style lang="scss" scoped>
-
+.protocolDetail {word-break: break-all;word-wrap: break-word;white-space: pre-wrap;line-height: 180%;}
+.protocolDetail img {width:100%;}
+.protocolDetail p {margin-top:10rpx;}
 </style>

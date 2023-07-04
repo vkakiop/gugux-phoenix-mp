@@ -110,7 +110,8 @@
 		{
 			"path": "pages/agreement/index",
 			"style": {
-				"navigationBarTitleText": "咕咕行"
+				"navigationBarTitleText": "咕咕行",
+				"navigationStyle": "custom"
 			}
 		},
 		{
