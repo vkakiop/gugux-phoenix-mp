@@ -103,6 +103,10 @@
 		<loginPop :isShow="pageData.isShowLoginPop" @close="pageData.isShowLoginPop = false"></loginPop>
 	</view>
 	<view v-else class="w-screen h-screen flex justify-center items-center">
+		<customNav>
+			<view @click="gotoBack" class="ml-3 mt-5"><uni-icons type="back" size="24"></uni-icons></view>
+			<view>咕咕行</view>
+		</customNav>
 		<u-empty mode="data" text="获取失败" icon="/static/img/nodata.png" />
 	</view>
 </template>
