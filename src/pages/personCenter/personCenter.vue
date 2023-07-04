@@ -27,11 +27,11 @@
 					<view class="mr-8"><text> {{ pageData.userInfo.phone }}</text></view>
 				</view>
 			</view>
-			<view class="flex justify-between  items-center px-10  h-56 border-t-1 border-[#f1f3f5]">
+			<view class="flex justify-between  items-center pl-10  pr-20 h-56 border-t-1 border-[#f1f3f5]">
 				<view class="">咕咕号</view>
 				<view class="flex items-center">
-					{{ pageData.userInfo.guguId }}<text class="text-[#F8CF01] ml-11"
-						@click="copy(pageData.userInfo.guguId)"> 复制</text>
+					<text>{{ pageData.userInfo.guguId }}</text>
+					<text class="text-[#F8CF01]  ml-12" @click="copy(pageData.userInfo.guguId)"> 复制</text>
 				</view>
 			</view>
 		</view>
