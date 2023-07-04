@@ -3,9 +3,9 @@
 		<view @click="gotoBack" class="ml-3 mt-5"><uni-icons type="back" size="24"></uni-icons></view>
 		<view>个人信息</view>
 	</customNav>
-	<view class="bg-gray-100 content text-17 text-[#272A29] h-full">
+	<view class="bg-gray-100 content text-17 text-[#272A29]  w-full" style="height: 89vh;">
 		<view class="mb-10">
-			<view class="flex justify-between  px-10  items-center h-56">
+			<view class="flex justify-between  items-center px-10  h-56 border-t-1 border-[#ebebeb]">
 				<view class="">头像</view>
 				<view class="flex items-center">
 					<view class="mr-8" @click="gopicture(pageData.userInfo.icon)">
@@ -13,7 +13,7 @@
 					</view>
 				</view>
 			</view>
-			<view class="flex justify-between items-center px-10  h-56">
+			<view class="flex justify-between  items-center px-10  h-56 border-t-1 border-[#f1f3f5]">
 				<view class="">昵称</view>
 				<view class=" flex items-center" @click="dropInput">
 					<view class="mr-8">{{ pageData.userInfo.nickname }}</view>
@@ -27,9 +27,9 @@
 					<view class="mr-8"><text> {{ pageData.userInfo.phone }}</text></view>
 				</view>
 			</view>
-			<view class="flex justify-between  items-center px-10   h-56">
+			<view class="flex justify-between  items-center px-10  h-56 border-t-1 border-[#f1f3f5]">
 				<view class="">咕咕号</view>
-				<view class=" flex items-center">
+				<view class="flex items-center">
 					{{ pageData.userInfo.guguId }}<text class="text-[#F8CF01] ml-11"
 						@click="copy(pageData.userInfo.guguId)"> 复制</text>
 				</view>
@@ -42,7 +42,7 @@
 					<view class="mr-8">{{ pageData.userInfo.introduce ? pageData.userInfo.introduce : '未设置' }}</view>
 				</view>
 			</view>
-			<view class="flex justify-between px-10  h-56  items-center">
+			<view class="flex justify-between  items-center px-10  h-56 border-t-1 border-[#f1f3f5]">
 				<view class="">性别</view>
 				<view class=" flex items-center">
 					<view class="mr-8">
@@ -52,13 +52,13 @@
 					</view>
 				</view>
 			</view>
-			<view class="flex justify-between  px-10   h-56 items-center">
+			<view class="flex justify-between  items-center px-10  h-56 border-t-1 border-[#f1f3f5]">
 				<view class="">出生日期</view>
 				<view class=" flex items-center">
 					<view class="mr-8">{{ pageData.userInfo.birth ? pageData.userInfo.birth : '未设置' }}</view>
 				</view>
 			</view>
-			<view class="flex justify-between  px-10   h-56 items-center">
+			<view class="flex justify-between  items-center px-10  h-56 border-t-1 border-[#f1f3f5]">
 				<view class="">所在城市</view>
 				<view class="flex items-center ">
 					<view class="mr-8">{{ pageData.userInfo.city ? pageData.userInfo.city : '未设置' }}</view>
@@ -66,7 +66,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="h-42 leading-42 text-center ">
+		<view class="h-42 leading-42 text-center">
 			<text @click="logOff" style="color: #EC5938;">退出登录</text>
 		</view>
 		<view>
