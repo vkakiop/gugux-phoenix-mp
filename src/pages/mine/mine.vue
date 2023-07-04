@@ -227,7 +227,7 @@ onPageScroll((res) => {
 	// pageData.scrollTop = res.scrollTop
 	// pageData.isshowfixed=true
 	// console.log('滚动条',res.scrollTop);
-	res.scrollTop > 172 ? pageData.isshowfixed = true : pageData.isshowfixed = false
+	res.scrollTop > 182 ? pageData.isshowfixed = true : pageData.isshowfixed = false
 })
 onReachBottom(() => {
 	let currentIndex = pageData.currentIndex
