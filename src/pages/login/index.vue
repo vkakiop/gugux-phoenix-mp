@@ -1,7 +1,7 @@
 <template>
   <customNav>
-    <view @click="gotoBack" class="ml-3 mt-5"><uni-icons type="back" size="24"></uni-icons></view>
-    <view class="name mx-6 text-14 line-clamp-1">手机登录</view>
+    <view @click="gotoBack" class="pl-10"><uni-icons type="back" size="24"></uni-icons></view>
+    <view class="name mx-6 text-18 line-clamp-1">手机登录</view>
   </customNav>
   <view class="m-30">
     <view class="text-right h-30 leading-30">
