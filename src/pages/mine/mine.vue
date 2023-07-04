@@ -1,7 +1,7 @@
 <template>
 	<view v-if="pageInfo.mineMessage.guguId" class="bg-[#F6F6F6] h-screen">
 		<view class="bg-[#fff] w-screen py-20 px-14 ">
-			<view class="flex  pb-15  " >
+			<view class="flex  pb-15  ">
 				<view class=" border-2 border-[#fff] w-80 rounded-full h-80 iconShadow" @click="skipPerson">
 					<image :src="pageInfo.mineMessage.icon" class="w-76 h-76 rounded-full" />
 				</view>
@@ -48,7 +48,7 @@
 
 		</view>
 		<!-- 菜单 -->
-		<view class="bg-white pl-14 w-full  -mt-25 pt-10 fixed top-20 z-50" v-if="pageData.isshowfixed">
+		<view class="bg-white pl-14 w-full  pt-10 fixed top-0  left-0   z-50" v-if="pageData.isshowfixed">
 			<view class="flex  text-center">
 				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
 					@click="changeWaterfall(index)">
@@ -79,7 +79,7 @@
 					class="flex items-center justify-center mt-30">
 					<u-empty text="内容为空" mode="list" icon="/static/img/nodata.png" />
 				</view>
-				<view v-if="waterIndex == pageData.currentIndex&&waterItem.items.length">
+				<view v-if="waterIndex == pageData.currentIndex && waterItem.items.length">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
 						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex" itemKey="mine">
 					</waterfall>
@@ -93,7 +93,7 @@
 import waterfall from '@/components/index/waterfall.vue'
 import { userhomepage, homepagelike, homepageopus, homepagecollection } from "@/api/mine/index.js"
 import { ref, reactive, computed } from 'vue'
-import { onShow,onReachBottom,onPageScroll} from "@dcloudio/uni-app"
+import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
 import { getTokenValue } from "@/utils/utils"
 import useLoginTokenStore from '@/store/modules/loginToken'
 import useRouterStore from '@/store/modules/router'
@@ -117,7 +117,7 @@ onShow(() => {
 	}
 })
 const waterfallItems = [{
-	isshowfixed:false,
+	isshowfixed: false,
 	scrollTop: -1,
 	isComplete: false,
 	isLoading: false,
@@ -169,7 +169,7 @@ const changeWaterfall = (waterIndex) => {
 	// 	//读取滚动条高度
 	// 	pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
 	// }
-	pageData.waterfallItems[waterIndex].items=[]
+	pageData.waterfallItems[waterIndex].items = []
 	pageData.currentIndex = waterIndex
 	if (pageData.waterfallItems[waterIndex].items.length == 0) {
 		getData()
@@ -227,7 +227,7 @@ onPageScroll((res) => {
 	// pageData.scrollTop = res.scrollTop
 	// pageData.isshowfixed=true
 	// console.log('滚动条',res.scrollTop);
-	res.scrollTop>182?pageData.isshowfixed=true:pageData.isshowfixed=false
+	res.scrollTop > 182 ? pageData.isshowfixed = true : pageData.isshowfixed = false
 })
 onReachBottom(() => {
 	let currentIndex = pageData.currentIndex
@@ -275,7 +275,7 @@ const skipPerson = () => {
 	})
 }
 const fetchData = () => {
-	changeWaterfall(0)
+	changeWaterfall(pageData.currentIndex)
 	userhomepage({
 		masterId: pageData.masterId
 	}).then(reslove => {

@@ -62,7 +62,7 @@
 						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
 					</waterfall>
 				</view>
-				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex && pageData.isLoading"
+				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
 					class="flex items-center justify-center">
 					<u-empty mode="search" text="对不起,没有找到您要的搜索内容" icon="/static/img/nodata.png" />
 				</view>
