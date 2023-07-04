@@ -275,7 +275,7 @@ const skipPerson = () => {
 	})
 }
 const fetchData = () => {
-	changeWaterfall(0)
+	changeWaterfall(pageData.currentIndex)
 	userhomepage({
 		masterId: pageData.masterId
 	}).then(reslove => {
