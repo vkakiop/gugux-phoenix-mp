@@ -17,16 +17,15 @@
 				</view>
 			</view>
 			<view class="flex text-14">
-				<view class="line relative w-60  flex items-center">
+				<view class="flex items-center">
 					<view class="font-bold">{{ computedNumber(pageInfo.mineMessage.fans) }}</view>
-					<view class="textStyle">&nbsp;关注</view>
+					<view class="textStyle line relative">&nbsp;关注</view>
 				</view>
-				<view class="line relative w-60 ml-10 flex items-center">
+				<view class="  ml-20 flex items-center">
 					<view class="font-bold">{{ computedNumber(pageInfo.mineMessage.focus) }}</view>
-
-					<view class="textStyle">&nbsp;收藏</view>
+					<view class="textStyle line relative">&nbsp;收藏</view>
 				</view>
-				<view class="w-60  ml-10 flex items-center">
+				<view class=" ml-20 flex items-center">
 					<view class="font-bold">{{ computedNumber(pageInfo.mineMessage.liked) }}</view>
 					<view class="textStyle">&nbsp;获赞</view>
 				</view>
@@ -366,14 +365,14 @@ const fetchData = () => {
 
 .line::after {
 	position: absolute;
-	left: 40%;
+	left: 80%;
 	bottom: 20%;
 	z-index: 11;
 	width: 100%;
 	height: 100%;
 	content: "";
 	display: block;
-	border-right: 1px solid gray;
+	border-right: 1rpx solid gray;
 	transform: scale(0.5);
 	transform-origin: left bottom;
 }
