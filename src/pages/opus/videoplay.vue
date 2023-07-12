@@ -38,7 +38,6 @@ onLoad((option)=>{
       pageData.current = index
     }
   })
-  console.log('pageData:',pageData)
 })
 
 const playVideo = ()=> {
