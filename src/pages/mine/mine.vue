@@ -40,9 +40,7 @@
 							这家伙很懒，连介绍都没写~~
 						</view>
 					</view>
-					<!-- <text @tap="showinfo" v-if="!iSinfo">展开</text> -->
 				</view>
-				<!-- <text @tap="showinfo" v-if="iSinfo" class="hidebtn">收起</text> -->
 			</view>
 
 		</view>
@@ -331,27 +329,7 @@ const fetchData = () => {
 			font-weight: 400;
 			word-break: break-word; //换行模式
 		}
-
-		text {
-			width: 70px;
-			display: flex;
-			justify-content: flex-end;
-			align-items: center;
-			color: #0078FF;
-			position: absolute;
-			bottom: 30upx;
-			right: 30upx;
-		}
 	}
-
-}
-
-.hidebtn {
-	display: flex;
-	flex: 1;
-	justify-content: flex-end;
-	color: #0078FF;
-
 }
 
 .hide {
