@@ -13,7 +13,7 @@
       <view v-if="isVirtualCal"></view>
       <image v-else-if="item.opusType == 2" :src="configStaticPath('/static/video/videoplay.png')" mode=""
         class="absolute w-36 h-36 top-[50%] left-[50%] -ml-18 -mt-18 z-40" @click="godetail(item)"></image>
-      <view v-else-if="item.cover.itemType == 2 && item.cover.name"
+      <view v-else-if="item.opusType == 1 && item.cover.name"
         class="absolute  bottom-10 z-40  px-10 text-white text-12 rounded mb-11" @click="godetail(item)">
         <image :src="configStaticPath('/static/opus/icon_location_white.png')" class="w-9 h-11 -mt-2 align-middle"></image>
         {{ item.cover.name }}{{ computedLocation(item.cover.x, item.cover.y) }}
@@ -67,11 +67,11 @@ const gohomepage = (item) => {
 }
 const godetail = (item) => {
   item.traceInfo = item.traceInfo ? item.traceInfo : ''
-  if (item.cover.itemType == 2) {
+  if (item.opusType == 1) {
     uni.navigateTo({
       url: `/pages/opus/index?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}&categoryId=${item.categoryId}`
     })
-  } else if (item.cover.itemType == 3) {
+  } else if (item.opusType == 2) {
     if (props["itemKey"] == 'mine') {
       uni.navigateTo({
         url: `/components/mine/minevideo?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}&categoryId=${item.categoryId}`

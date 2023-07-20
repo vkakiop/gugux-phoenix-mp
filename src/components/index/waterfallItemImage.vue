@@ -10,7 +10,7 @@
           class="rounded-5"></image>
       </view>
       <view v-if="isVirtualCal"></view>
-      <image v-else-if="item.cover.itemType == 3" :src="configStaticPath('/static/video/videoplay.png')" mode=""
+      <image v-else-if="item.opusType == 2" :src="configStaticPath('/static/video/videoplay.png')" mode=""
         class="absolute w-36 h-36 top-[50%] left-[50%] -ml-18 -mt-18 z-40" @click="godetail(item)"></image>
       <view v-if="isVirtualCal" class="h-30"></view>
       <view v-else class="flex justify-end  text-13 items-center h-30  font-light text-[#FFFEFE] absolute  bottom-10 right-10">
@@ -37,11 +37,11 @@ const props = defineProps(['item', 'isVirtualCal', 'itemKey','traceInfo','catego
 const emit = defineEmits(['popLoginShow'])
 
 const godetail = (item) => {
-  if (item.cover.itemType == 2) {
+  if (item.opusType == 1) {
     uni.navigateTo({
       url: `/pages/opus/index?id=${item.id}&traceInfo=${encodeURIComponent(props.traceInfo)}&categoryId=${props.categoryId}`
     })
-  } else if (item.cover.itemType == 3) {
+  } else if (item.opusType == 2) {
     if (props["itemKey"] == 'mine') {
       uni.navigateTo({
         url: `/components/mine/minevideo?id=${item.id}&traceInfo=${encodeURIComponent(props.traceInfo)}&categoryId=${props.categoryId}`
