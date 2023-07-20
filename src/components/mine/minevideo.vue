@@ -98,9 +98,8 @@ const open = () => {
 	commentRef.value.init(true);
 }
 onLoad((option) => {
-	console.log('option',option);
 	pageData.id = option.id
-	pageData.categoryId = option.categoryId || ''
+	pageData.categoryId = ''
 	pageData.traceInfo = decodeURIComponent(option.traceInfo || '')
 })
 onShow(() => {
