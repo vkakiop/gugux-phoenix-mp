@@ -19,7 +19,7 @@
         {{ item.cover.name }}{{ computedLocation(item.cover.x, item.cover.y) }}
       </view>
     </view>
-    <view class=" line-clamp-2 text-14 font-bold text-[#272A29] leading-20 px-4">
+    <view class=" line-clamp-2 text-14 font-bold text-[#272A29] leading-20 px-4" @click="godetail(item)">
       <view class="">{{ item.title }}</view>
     </view>
     <view v-if="isVirtualCal" class="h-30"></view>
