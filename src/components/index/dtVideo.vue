@@ -105,7 +105,9 @@ const pageData = reactive({
 })
 const opusDetail = () => {
 	opusdetails({
-		opusId: props.opusid
+		opusId: props.opusid,
+		categoryId:props.categoryId,
+		traceInfo:props.traceInfo,
 	}).then(res => {
 		pageData.list.unshift(res.data)
 	})
@@ -269,7 +271,9 @@ const onShareAppMessage = () => {
 }
 const fetch = () => {
 	opusdetails({
-		opusId: pageData.list[pageData.current].id
+		opusId: pageData.list[pageData.current].id,
+		categoryId:props.categoryId,
+		traceInfo:props.traceInfo,
 	}).then(res => {
 		pageData.list[pageData.current] = res.data
 	})

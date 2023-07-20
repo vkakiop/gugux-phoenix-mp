@@ -61,7 +61,7 @@ const gohomepage = (item) => {
     }
   }
   uni.navigateTo({
-    url: `/pages/userhomepage/userhomepage?id=${item.createdBy}&traceInfo=${encodeURIComponent(item.traceInfo)}`
+    url: `/pages/userhomepage/userhomepage?id=${item.createdBy}&traceInfo=${encodeURIComponent(item.traceInfo)}&categoryId=${item.categoryId}`
   })
 
 }
@@ -69,16 +69,16 @@ const godetail = (item) => {
   item.traceInfo = item.traceInfo ? item.traceInfo : ''
   if (item.cover.itemType == 2) {
     uni.navigateTo({
-      url: `/pages/opus/index?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}&categoryId=${props.categoryId}`
+      url: `/pages/opus/index?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}&categoryId=${item.categoryId}`
     })
   } else if (item.cover.itemType == 3) {
     if (props["itemKey"] == 'mine') {
       uni.navigateTo({
-        url: `/components/mine/minevideo?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}`
+        url: `/components/mine/minevideo?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}&categoryId=${item.categoryId}`
       })
     } else {
       uni.navigateTo({
-        url: `/pages/VideoCarousel/VideoCarousel?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}`
+        url: `/pages/VideoCarousel/VideoCarousel?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}&categoryId=${item.categoryId}`
       })
     }
   }

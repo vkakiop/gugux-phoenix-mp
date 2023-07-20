@@ -39,16 +39,16 @@ const emit = defineEmits(['popLoginShow'])
 const godetail = (item) => {
   if (item.cover.itemType == 2) {
     uni.navigateTo({
-      url: `/pages/opus/index?id=${item.id}&traceInfo=${encodeURIComponent(props.traceInfo)}categoryId=${props.categoryId}`
+      url: `/pages/opus/index?id=${item.id}&traceInfo=${encodeURIComponent(props.traceInfo)}&categoryId=${props.categoryId}`
     })
   } else if (item.cover.itemType == 3) {
     if (props["itemKey"] == 'mine') {
       uni.navigateTo({
-        url: `/components/mine/minevideo?id=${item.id}&traceInfo=${encodeURIComponent(props.traceInfo)}`
+        url: `/components/mine/minevideo?id=${item.id}&traceInfo=${encodeURIComponent(props.traceInfo)}&categoryId=${props.categoryId}`
       })
     } else {
       uni.navigateTo({
-        url: `/pages/VideoCarousel/VideoCarousel?id=${item.id}&traceInfo=${encodeURIComponent(props.traceInfo)}`
+        url: `/pages/VideoCarousel/VideoCarousel?id=${item.id}&traceInfo=${encodeURIComponent(props.traceInfo)}&categoryId=${props.categoryId}`
       })
     }
   }

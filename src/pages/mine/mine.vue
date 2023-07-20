@@ -135,7 +135,7 @@ const waterfallItems = [{
 	name: '喜欢',
 	items: [],
 	query: {
-		path: { pageNum: 1, pageSize: 20, },
+		path: { index: '', pageSize: 20, },
 		data: { totalCount: '' }
 	}
 },
@@ -146,7 +146,7 @@ const waterfallItems = [{
 	name: '收藏',
 	items: [],
 	query: {
-		path: { pageNum: 1, pageSize: 20, },
+		path: { index: '', pageSize: 20, },
 		data: { totalCount: '' }
 	}
 }
@@ -198,6 +198,9 @@ const getData = () => {
 			pageData.waterfallItems[currentIndex].isLoading = false
 		})
 	} else if (currentIndex === 1) {
+		// if (pageData.waterfallItems[currentIndex].items.length) {
+		// 	console.log(pageData.waterfallItems[currentIndex].items);
+		// }
 		homepagelike({ ...query.path }).then(res => {
 			if (res.data.page == res.data.totalPage) {
 				pageData.waterfallItems[currentIndex].isComplete = true
@@ -242,11 +245,11 @@ const gettolcount = () => {
 				pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
 			})
 		} else if (index === 1) {
-			homepagelike({ pageNum: 1, pageSize: 10 }).then(res => {
+			homepagelike({ index: '', pageSize: 10 }).then(res => {
 				pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
 			})
 		} else if (index === 2) {
-			homepagecollection({ pageNum: 1, pageSize: 10 }).then(res => {
+			homepagecollection({ index: '', pageSize: 10 }).then(res => {
 				pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
 			})
 		}
