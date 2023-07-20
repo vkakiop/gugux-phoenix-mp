@@ -235,9 +235,11 @@ onReachBottom(() => {
 			pageData.waterfallItems[currentIndex].query.path.pageNum++
 		} else if(currentIndex == 1){
 			let obj = Array.from(pageData.waterfallItems[currentIndex].items).findLast((item) => item.isLike == true)
-			pageData.waterfallItems[currentIndex].query.path.index = obj.id
+			pageData.waterfallItems[currentIndex].query.path.index = obj?obj.id:''
 		}else{
-			pageData.waterfallItems[currentIndex].query.path.index = Array.from(pageData.waterfallItems[2].items).at(-1).id
+			if(Array.from(pageData.waterfallItems[2].items).length){
+				pageData.waterfallItems[currentIndex].query.path.index = Array.from(pageData.waterfallItems[2].items).at(-1).id
+			}	
 		}
 		getData()
 	}
