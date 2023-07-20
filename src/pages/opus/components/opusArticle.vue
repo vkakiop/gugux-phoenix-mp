@@ -9,7 +9,7 @@
       />
       <view v-if="detail.cover && detail.cover.name" class="absolute left-0 bottom-0 h-42 w-full text-white text-13">
         <view class="flex ml-14 mt-10">
-          <image class="w-9 h-11 mt-3" src="@/static/opus/icon_location_white.png"></image>
+          <image class="w-9 h-11 mt-3" :src="configStaticPath('/static/opus/icon_location_white.png')"></image>
           <view class="ml-5 line-clamp-1">{{detail.cover.name}} {{ computedLocation(detail.cover.x, detail.cover.y) }}</view>
         </view>
       </view>
@@ -20,7 +20,7 @@
           <view class="text-[#272a29] text-21 font-bold">{{detail.title}}</view>
           <view class="inline-block">
             <view class="flex px-10 h-24 justify-center items-center mt-19 bg-[#f4f5f6] rounded-full" v-if="detail.cover.name">
-              <image class="w-9 h-11" src="@/static/opus/icon_location_black.png"></image>
+              <image class="w-9 h-11" :src="configStaticPath('/static/opus/icon_location_black.png')"></image>
               <view class="ml-5 text-13 line-clamp-1">{{detail.cover.name}} {{ computedLocation(detail.cover.x, detail.cover.y) }}</view>
             </view>
           </view>
@@ -40,7 +40,7 @@
       </view>
       <view v-if="detail.topics">
         <view class="float-left mr-5 mb-10 px-10 flex items-center h-28 leading-28 bg-[#f1f3f5] text-14 rounded-full" v-for="(item,index) in detail.topics" :key="index">
-          <image class="w-13 h-13 -mt-2" src="@/static/opus/icon_topic.png"></image>
+          <image class="w-13 h-13 -mt-2" :src="configStaticPath('/static/opus/icon_topic.png')"></image>
           <view class="ml-4 line-clamp-1">{{item}}</view>
         </view>
         <view class="clear-left"></view>
@@ -62,6 +62,7 @@
 
 <script setup>
 import {computed, onMounted, ref} from "vue"
+import {configStaticPath} from '@/config/index'
 import {numberAdd,copyToClip,jumpAppStore,distanceOf,formatedDistance} from "@/utils/utils"
 import OpusContentInfo from "./opusContentInfo.vue"
 const props = defineProps({

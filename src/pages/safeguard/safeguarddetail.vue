@@ -13,11 +13,11 @@
         <view>电话：<text>{{ pageData.data.phone }}</text>
         </view>
         <view @click="callPhone(pageData.data.phone)">
-          <image class="phone" @click="playAudio(1,item)" src="/static/img/phone.png"  mode="widthFix"/></view>
+          <image class="phone" @click="playAudio(1,item)" :src="configStaticPath('/static/img/phone.png')"  mode="widthFix"/></view>
       </view>
       <view class="red">
         <view>现场地址：</view>
-        <view  @click="goNav"><image class="phone" src="/static/img/location.png"  mode="widthFix"/></view>
+        <view  @click="goNav"><image class="phone" :src="configStaticPath('/static/img/location.png')"  mode="widthFix"/></view>
       </view>
       <view class="red">{{ pageData.data.unusualLocation }}</view>
     </view>
@@ -35,7 +35,7 @@
       <view>现场视频：</view>
       <view class="relative" v-for="(item,index) in pageData.data.video" :key="index" @click="previewMedia(item.url)">
         <image :src="item.icon" class="rounded-8 iconplayphoto" mode="widthFix"/>
-        <view class="icon_play w-full h-full absolute w-50 h-50"><image class="w-64 h-64" src="@/static/opus/icon_play.png"/></view>
+        <view class="icon_play w-full h-full absolute w-50 h-50"><image class="w-64 h-64" :src="configStaticPath('/static/opus/icon_play.png')"/></view>
       </view>
     </view>
     <view class="box last">
@@ -47,8 +47,8 @@
             <text class="time">{{ item.createTime }}</text>
           </view>
           <view class="audio-right">
-            <image @click="playAudio(0,item)" v-if="item.play == 0 ||item.play == undefined" src="/static/img/p1.png" class="rounded-8 iconplayphoto" mode="widthFix"/>
-            <image @click="playAudio(1,item)" v-else-if="item.play == 1" src="/static/img/p2.png" class="rounded-8 iconplayphoto" mode="widthFix"/>
+            <image @click="playAudio(0,item)" v-if="item.play == 0 ||item.play == undefined" :src="configStaticPath('/static/img/p1.png')" class="rounded-8 iconplayphoto" mode="widthFix"/>
+            <image @click="playAudio(1,item)" v-else-if="item.play == 1" :src="configStaticPath('/static/img/p2.png')" class="rounded-8 iconplayphoto" mode="widthFix"/>
           </view>
         </view>
       </view>
@@ -63,6 +63,7 @@
 <script setup>
 import { ref, onMounted, reactive } from 'vue'
 import { emergenccontactinfo } from '@/api/safeguard/safeguard'
+import {configStaticPath} from '@/config/index'
 import { onLoad,onUnload } from '@dcloudio/uni-app'
 const pageData = reactive({
   data: {

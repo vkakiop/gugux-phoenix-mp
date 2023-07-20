@@ -13,7 +13,7 @@
                 <text class="span1" @click="goApp">关注咕咕行公众号</text>
                 <view class="card">
                     <view class="img">
-                        <image src="/static/emergencycontact/head.png" alt=""></image>
+                        <image :src="configStaticPath('/static/emergencycontact/head.png')" alt=""></image>
                     </view>
                     <view class="card-ul">
                         <view>咕咕行app</view>
@@ -31,6 +31,7 @@
 </template>
 <script setup>
 import { ref, reactive ,onMounted} from "vue";
+import {configStaticPath} from '@/config/index'
 import {isMicroMessengerPage,jumpAppStore,distanceOf,formatedDistance} from "@/utils/utils"
 const pageData = reactive({
     id:'',

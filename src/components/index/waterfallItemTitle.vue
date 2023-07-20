@@ -11,11 +11,11 @@
         </image>
       </view>
       <view v-if="isVirtualCal"></view>
-      <image v-else-if="item.cover.itemType == 3" src="/static/video/videoplay.png" mode=""
+      <image v-else-if="item.cover.itemType == 3" :src="configStaticPath('/static/video/videoplay.png')" mode=""
         class="absolute w-36 h-36 top-[50%] left-[50%] -ml-18 -mt-18 z-40" @click="godetail(item)"></image>
       <view v-else-if="item.cover.itemType == 2 && item.cover.name"
         class="absolute  bottom-10 z-40  px-10 text-white text-12 rounded mb-11" @click="godetail(item)">
-        <image src="@/static/opus/icon_location_white.png" class="w-9 h-11 -mt-2 align-middle"></image>
+        <image :src="configStaticPath('/static/opus/icon_location_white.png')" class="w-9 h-11 -mt-2 align-middle"></image>
         {{ item.cover.name }}{{ computedLocation(item.cover.x, item.cover.y) }}
       </view>
     </view>
@@ -28,8 +28,8 @@
         <image :src="item.icon" class="w-16 h-16 rounded-full mr-4"></image>{{ item.author }}
       </view>
       <view class="flex items-center" @click="like(item)">
-        <image src="/static/waterfalls/like.png" class="w-13 h-12 mr-4" v-if="!item.isLike"></image>
-        <image src="/static/waterfalls/likefill.png" class="w-13 h-12 mr-4" v-if="item.isLike"></image>
+        <image :src="configStaticPath('/static/waterfalls/like.png')" class="w-13 h-12 mr-4" v-if="!item.isLike"></image>
+        <image :src="configStaticPath('/static/waterfalls/likefill.png')" class="w-13 h-12 mr-4" v-if="item.isLike"></image>
         {{ item.likeNum }}
       </view>
     </view>
@@ -38,6 +38,7 @@
 </template>
 
 <script setup>
+import {configStaticPath} from '@/config/index'
 import { opusLike } from "@/api/opus/index"
 import { distanceOf, formatedDistance, getTokenValue, imageThumb } from "@/utils/utils"
 import { computed, ref, onMounted, reactive } from 'vue';

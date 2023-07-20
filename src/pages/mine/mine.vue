@@ -10,7 +10,7 @@
 						{{ pageInfo.mineMessage.nickname }}
 					</view>
 					<view class=" text-14 flex items-center mt-18">
-						<image src="/static/mine/ID.png" class="w-15 h-15 " />
+						<image :src="configStaticPath('/static/mine/ID.png')" class="w-15 h-15 " />
 						<text class="ml-5 mr-15">{{ pageInfo.mineMessage.guguId }}</text>
 						<!-- 	<image src="/static/mine/copy.png" class="w-15 h-15 ml-10" @click.stop="copy(pageInfo.mineMessage.guguId)" /> -->
 					</view>
@@ -88,6 +88,7 @@
 
 <script setup>
 import waterfall from '@/components/index/waterfall.vue'
+import {configStaticPath} from '@/config/index'
 import { userhomepage, homepagelike, homepageopus, homepagecollection } from "@/api/mine/index.js"
 import { ref, reactive, computed } from 'vue'
 import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"

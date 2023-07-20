@@ -9,7 +9,7 @@
       <view class="h-48 bg-[#e9ebef] rounded-full flex justify-center items-center relative">
         <view class="mr-10 text-[#888]">+86</view>
         <input v-model="pageData.phone" placeholder="请输入手机号" maxlength="11"/>
-        <image v-if="pageData.phone" class="w-18 h-18 absolute right-15 top-14" src="@/static/login/clear.png" @click="pageData.phone = '';"></image>
+        <image v-if="pageData.phone" class="w-18 h-18 absolute right-15 top-14" :src="configStaticPath('/static/login/clear.png')" @click="pageData.phone = '';"></image>
       </view>
       <view class="mt-18">
         <button class="mb-25 h-48 leading-48 rounded-full bg-[#4ba1f8] active:bg-[#3194f9] text-white" @click="onGetValidCode">获取验证码</button>

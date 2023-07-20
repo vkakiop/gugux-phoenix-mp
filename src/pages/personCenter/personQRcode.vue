@@ -4,7 +4,7 @@
 			<!-- <image src="/static/callingcard/perBack.png" class="backgroundSTY"></image> -->
 			<view class="flex flex-col justify-center items-center  relative z-20 ">
 				<view>
-					<image src="/static/logo.png" class="w-83 h-83 rounded-full mt-20"></image>
+					<image :src="configStaticPath('/static/logo.png')" class="w-83 h-83 rounded-full mt-20"></image>
 				</view>
 				<view class="nickname mt-5" >等等十三月</view>
 				<view class="guguID mt-5" >咕咕号:11123214</view>
@@ -28,6 +28,7 @@
 <script setup>
 	import {ref} from 'vue'
 	import {onLoad,onShareAppMessage,onShareTimeline} from "@dcloudio/uni-app"
+  import {configStaticPath} from '@/config/index'
 	//二维码
 	const codeId = ref('')
 	onLoad((option) => {		codeId.value = option.id

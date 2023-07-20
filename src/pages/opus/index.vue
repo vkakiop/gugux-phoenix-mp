@@ -17,26 +17,26 @@
       <view class="fixed bottom-0 h-50 w-screen bg-[#f7f7f7]">
         <view class="mx-20 flex justify-between mt-12">
           <view>
-            <button class="bg-[#f7f7f7] w-24 h-24 p-0" open-type="share"><img class="w-24 h-24 block" src="@/static/opus/icon_share.png"></button>
+            <button class="bg-[#f7f7f7] w-24 h-24 p-0" open-type="share"><img class="w-24 h-24 block" :src="configStaticPath('/static/opus/icon_share.png')"></button>
           </view>
           <view class="flex">
             <debounce @debounce="like">
               <view class="flex mr-20">
-                <image v-if="pageData.detail.isLike" class="w-24 h-24" src="@/static/opus/icon_like_ed.png"/>
-                <image v-else class="w-24 h-24" src="@/static/opus/icon_like.png"/>
+                <image v-if="pageData.detail.isLike" class="w-24 h-24" :src="configStaticPath('/static/opus/icon_like_ed.png')"/>
+                <image v-else class="w-24 h-24" :src="configStaticPath('/static/opus/icon_like.png')"/>
                 <view class="ml-5 mt-2">{{computedNumber(pageData.detail.likeNum)}}</view>
               </view>
             </debounce>
             <debounce @debounce="collection">
               <view class="flex mr-20">
-                <image v-if="pageData.detail.isCollection" class="w-24 h-24" src="@/static/opus/icon_collect_ed.png"/>
-                <image v-else class="w-24 h-24" src="@/static/opus/icon_collect.png"/>
+                <image v-if="pageData.detail.isCollection" class="w-24 h-24" :src="configStaticPath('/static/opus/icon_collect_ed.png')"/>
+                <image v-else class="w-24 h-24" :src="configStaticPath('/static/opus/icon_collect.png')"/>
                 <view class="ml-5 mt-2">{{computedNumber(pageData.detail.collectionNum)}}</view>
               </view>
             </debounce>
             <debounce @debounce="commentAdd">
               <view class="flex mr-0">
-                <image class="w-24 h-24" src="@/static/opus/icon_comment.png"/>
+                <image class="w-24 h-24" :src="configStaticPath('/static/opus/icon_comment.png')"/>
                 <view class="ml-5 mt-2">{{computedNumber(pageData.detail.commentNum)}}</view>
               </view>
             </debounce>
@@ -57,12 +57,13 @@
       <loginPop :isShow="pageData.isShowLoginPop" @close="pageData.isShowLoginPop = false"></loginPop>
     </view>
     <view v-else-if="pageData.isLoadError" class="w-screen h-screen flex justify-center items-center">
-      <u-empty mode="data" text="获取文章失败" icon="/static/img/nodata.png"/>
+      <u-empty mode="data" text="获取文章失败" :icon="configStaticPath('/static/img/nodata.png')"/>
     </view>
 </template>
 
 <script setup>
 import {reactive, ref, watch, getCurrentInstance, nextTick, computed} from "vue"
+import {configStaticPath} from '@/config/index'
 import { opusInfo,opusCollect,opusLike,userFans,userFansRemove } from "@/api/opus/index"
 import { getTokenValue } from "@/utils/utils"
 import {onLoad,onShow,onPageScroll} from '@dcloudio/uni-app'

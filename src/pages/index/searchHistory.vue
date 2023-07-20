@@ -9,7 +9,7 @@
 						class="flex items-center ml-5  bg-[#F5F6F8]  h-30 w-175 rounded-40 border-1 border-[#E3E3E3] text-15 text-[#333]">
 						<input class="ml-15" v-model="searchvalue" placeholder="搜索" type="text" @confirm="search" />
 						<view class="px-12 relative z-50 flex items-center" @click.stop="search">
-							<image src="/static/mine/searchhistory.png" class="w-16 h-16" />
+							<image :src="configStaticPath('/static/mine/searchhistory.png')" class="w-16 h-16" />
 						</view>
 					</view>
 				</view>
@@ -23,7 +23,7 @@
 					<view class="flex px-15 justify-between mb-10">
 						<view class="text-17 font-bold">历史搜索:</view>
 						<view @click="empty">
-							<image src="/static/mine/ashbin.png" class="w-20 h-20" />
+							<image :src="configStaticPath('/static/mine/ashbin.png')" class="w-20 h-20" />
 						</view>
 					</view>
 					<view class="w-full flex flex-wrap ">
@@ -34,7 +34,7 @@
 					</view>
 				</view>
 				<view v-else="!pageData.searchHistoryList.length">
-					<u-empty mode="history" text="暂无历史记录" icon="/static/img/nodata.png">
+					<u-empty mode="history" text="暂无历史记录" :icon="configStaticPath('/static/img/nodata.png')">
 					</u-empty>
 				</view>
 			</view>
@@ -46,7 +46,7 @@
 						@click="changeWaterfall(index)">
 						<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }}</view>
 						<view class=" h-4 relative -top-5 ">
-							<image src="/static/mine/line.png" class="w-30 h-4 " v-show="pageData.currentIndex == index" />
+							<image :src="configStaticPath('/static/mine/line.png')" class="w-30 h-4 " v-show="pageData.currentIndex == index" />
 						</view>
 					</view>
 				</view>
@@ -64,7 +64,7 @@
 				</view>
 				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
 					class="flex items-center justify-center">
-					<u-empty mode="search" text="对不起,没有找到您要的搜索内容" icon="/static/img/nodata.png" />
+					<u-empty mode="search" text="对不起,没有找到您要的搜索内容" :icon="configStaticPath('/static/img/nodata.png')" />
 				</view>
 			</view>
 		</view>
@@ -73,6 +73,7 @@
 
 <script setup>
 import waterfall from '@/components/index/waterfall.vue'
+import {configStaticPath} from '@/config/index'
 import { opusSearchNew } from "@/api/worksSearch/index.js"
 import { ref, onMounted, reactive, watch, nextTick } from 'vue'
 import { onShow,onReachBottom } from '@dcloudio/uni-app';

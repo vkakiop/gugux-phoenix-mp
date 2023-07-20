@@ -23,6 +23,7 @@
 </template>
 <script setup>
 import { ref, reactive ,onMounted,onBeforeUnmount} from "vue";
+import {configStaticPath} from '@/config/index'
 import { onLoad } from '@dcloudio/uni-app'
 import {  emergencyregister,emergencysign,authsms} from "@/api/emergencycontact/emergencycontact.js";
 const paramsForm = reactive({

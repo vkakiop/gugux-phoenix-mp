@@ -1,5 +1,5 @@
 //内部版本号
-export const innserVersion = ()=>{
+export const innerVersion = ()=>{
     return import.meta.env.VITE_APP_INNER_VERSION
 }
 
@@ -13,6 +13,11 @@ export const switchTabPathes = [
 //存储token名称
 export const configLoginToken = 'ggx_login_token'
 
+
+//表情图标位置
+export const configStaticPath = (path)=>{
+    return import.meta.env.VITE_APP_STATIC_URL + path + '?innerVersion='+innerVersion()
+}
 
 //表情图标位置
 export const configCommentFaceUrl = ()=>{

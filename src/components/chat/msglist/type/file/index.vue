@@ -1,6 +1,6 @@
 <template>
   <view class="attach-msg" @tap="previewFile">
-    <image class="fileIcon" src="/static/images/msgFile.png" />
+    <image class="fileIcon" :src="configStaticPath('/static/images/msgFile.png')" />
     <text class="time"
       >{{ msg.msg.filename }}{{ formatMoney(msg.msg.size) }}</text
     >
@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import {configStaticPath} from '@/config/index'
 const ATTACH_KEY = "filePathCache";
 export default {
   data() {

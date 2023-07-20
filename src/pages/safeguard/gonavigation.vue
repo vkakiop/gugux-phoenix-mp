@@ -17,11 +17,11 @@
             </view>
             <view class="funk">
                 <view class="btn phone" @click="callPhone(pageData.data.phone)">
-                    <image src="/static/img/phone.png"  mode="widthFix"/>
+                    <image :src="configStaticPath('/static/img/phone.png')"  mode="widthFix"/>
                     拨打电话
                 </view>
                 <view class="btn location" @click="openMap(pageData.data.lng,pageData.data.lat)">
-                    <image src="/static/img/location.png"  mode="widthFix"/>
+                    <image :src="configStaticPath('/static/img/location.png')"  mode="widthFix"/>
                     导航过去
                 </view>
             </view>
@@ -40,6 +40,7 @@
 import { ref, onMounted, reactive } from 'vue'
 import comment from "@/components/common/comment.vue"
 import { emergenccontactinfo } from '@/api/safeguard/safeguard'
+import {configStaticPath} from '@/config/index'
 import { onLoad } from '@dcloudio/uni-app'
 const pageData = reactive({
     data:{

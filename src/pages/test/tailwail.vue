@@ -43,7 +43,7 @@
     <view class="flex items-center justify-center w-screen h-screen">
       <view class="!font-bold !text-[#990000]" :class="['text-2xl', { underline: true }]">{{ title }}</view>
     </view>
-    <image class="logo h-10 w-10" src="/static/logo.png" @click="go2SubDemo" />
+    <image class="logo h-10 w-10" :src="configStaticPath('/static/logo.png')" @click="go2SubDemo" />
     <view class="text-area">
       <text class="title h-[200%]">{{ title }}</text>
     </view>

@@ -10,7 +10,7 @@
           <view v-if="index == pageData.current" @click="handleVideo(index)" class="w-screen h-full">
             <video autoplay class="w-screen h-screen fixed" :id="'video'+index" :src="item"  loop  :controls="false" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false" @error="videoErrorCallback">
             </video>
-            <view v-if="pageData.status == 1" class="icon_play top-[calc(50% - 64rpx)] left-[calc(50% - 64rpx)] absolute w-64 h-64"><image class="w-64 h-64" src="@/static/opus/icon_play.png"/></view>
+            <view v-if="pageData.status == 1" class="icon_play top-[calc(50% - 64rpx)] left-[calc(50% - 64rpx)] absolute w-64 h-64"><image class="w-64 h-64" :src="configStaticPath('/static/opus/icon_play.png')"/></view>
           </view>
         </swiper-item>
       </swiper>
@@ -20,6 +20,7 @@
 
 <script setup>
 import {getCurrentInstance, reactive} from 'vue'
+import {configStaticPath} from '@/config/index'
 import { onLoad } from '@dcloudio/uni-app'
 const pageData = reactive({
   url:'',
