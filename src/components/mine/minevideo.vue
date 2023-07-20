@@ -67,7 +67,7 @@
 		<loginPop :isShow="pageData.isShowLoginPop" @close="pageData.isShowLoginPop = false"></loginPop>
 	</view>
 	<view v-else class="w-screen h-screen flex justify-center items-center">
-		<u-empty mode="data" text="获取视频失败" icon="/static/img/nodata.png" />
+		<u-empty mode="data" text="获取视频失败" :icon="configStaticPath('/static/img/nodata.png')" />
 	</view>
 </template>
 

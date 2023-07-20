@@ -3,7 +3,7 @@
         <view class="empty" v-if="pageData.total == -1 || pageData.total == 0">
             <u-empty
                     mode="data" text="暂时没有评论"
-                    icon="/static/img/nodata.png"
+                    :icon="configStaticPath('/static/img/nodata.png')"
             >
             </u-empty>
         </view>

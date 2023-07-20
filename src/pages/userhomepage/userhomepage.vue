@@ -86,7 +86,7 @@
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
 				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
 					class="flex items-center justify-center mt-30">
-					<u-empty mode="list" icon="/static/img/nodata.png" text="内容为空" />
+					<u-empty mode="list" :icon="configStaticPath('/static/img/nodata.png')" text="内容为空" />
 				</view>
 				<view v-if="waterIndex == pageData.currentIndex && waterItem.items.length">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
@@ -103,7 +103,7 @@
 			<view @click="gotoBack" class="ml-3 mt-5"><uni-icons type="back" size="24"></uni-icons></view>
 			<view>咕咕行</view>
 		</customNav>
-		<u-empty mode="data" text="获取失败" icon="/static/img/nodata.png" />
+		<u-empty mode="data" text="获取失败" :icon="configStaticPath('/static/img/nodata.png')" />
 	</view>
 </template>
 
