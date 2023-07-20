@@ -1,20 +1,20 @@
 <template>
   <view class="w-172 bg-[#fff] rounded-5" v-if="item && item.cover">
     <view class="relative rounded-5">
-      <view v-if="isVirtualCal"
-        :style="{ width: '100%', height: item.imageHeightRpx + 'rpx' }" class="rounded-5 bg-[#eee]">
+      <view v-if="isVirtualCal" :style="{ width: '100%', height: item.imageHeightRpx + 'rpx' }"
+        class="rounded-5 bg-[#eee]">
       </view>
-      <view v-else
-        :style="{ width: '100%', height: item.imageHeightRpx + 'rpx' }" class="rounded-5 bg-[#eee] overflow-hidden">
+      <view v-else :style="{ width: '100%', height: item.imageHeightRpx + 'rpx' }"
+        class="rounded-5 bg-[#eee] overflow-hidden">
         <image :src="imageThumb(item.cover.itemType == 2 ? item.cover.content : item.cover.thumbnail, 344, 344)"
-          :style="{ width: '100%', height: item.imageHeightRpx + 'rpx' }"
-          @click="godetail(item)" class="rounded-5"></image>
+          :style="{ width: '100%', height: item.imageHeightRpx + 'rpx' }" @click="godetail(item)" class="rounded-5">
+        </image>
       </view>
       <view v-if="isVirtualCal"></view>
       <image v-else-if="item.cover.itemType == 3" src="/static/video/videoplay.png" mode=""
         class="absolute w-36 h-36 top-[50%] left-[50%] -ml-18 -mt-18 z-40" @click="godetail(item)"></image>
       <view v-else-if="item.cover.itemType == 2 && item.cover.name"
-        class="absolute  bottom-10 z-40  px-10 text-white text-12 rounded mb-11">
+        class="absolute  bottom-10 z-40  px-10 text-white text-12 rounded mb-11" @click="godetail(item)">
         <image src="@/static/opus/icon_location_white.png" class="w-9 h-11 -mt-2 align-middle"></image>
         {{ item.cover.name }}{{ computedLocation(item.cover.x, item.cover.y) }}
       </view>
@@ -46,7 +46,7 @@ const pageData = reactive({
   id: '',
 
 })
-const props = defineProps(['item', 'isVirtualCal', 'itemKey', 'traceInfo','categoryId'])
+const props = defineProps(['item', 'isVirtualCal', 'itemKey', 'traceInfo', 'categoryId'])
 const emit = defineEmits(['popLoginShow'])
 
 const gohomepage = (item) => {
@@ -102,7 +102,7 @@ const like = (item) => {
   item.traceInfo = item.traceInfo ? item.traceInfo : ''
   let action = item.isLike ? 0 : 1
   if (getTokenValue()) {
-    opusLike({ opusId: item.id, action: action , trackInfo: item.traceInfo , categoryId: props.categoryId }).then(res => {
+    opusLike({ opusId: item.id, action: action, trackInfo: item.traceInfo, categoryId: props.categoryId }).then(res => {
       if (action) {
         item.isLike = true
         item.likeNum++
