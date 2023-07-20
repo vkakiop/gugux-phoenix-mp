@@ -3,7 +3,7 @@
       <customNav>
         <view @click="gotoBack" class="pl-10"><uni-icons type="back" size="24"></uni-icons></view>
         <view class="flex flex-none items-center" @click="gotoMine">
-          <image class="w-32 h-32 rounded-full flex-none" :src="pageData.detail.icon"/>
+          <image v-if="pageData.detail.icon" class="w-32 h-32 rounded-full flex-none" :src="pageData.detail.icon"/>
           <view class="name mx-6 text-16 text-[#272a29] line-clamp-1">{{pageData.detail.author}}</view>
         </view>
         <debounce @debounce="attention">
