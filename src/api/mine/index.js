@@ -63,13 +63,10 @@ export function homepagecollection(data) {
 // 用户作品详情
 export function opusdetails(data) {
 	return request({
-		url: `/gugux-services-opus-api/app/opus/rec/details`,
-		method: 'get',
-		params: data,
-		headers: {
-			isToken: false
-		},
-	})
+		url: '/gugux-services-opus-api/app/opus/rec/details',
+		params:data,
+		method: 'get'
+	  })
 }
 
 // 修改头像

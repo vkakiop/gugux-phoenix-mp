@@ -99,7 +99,7 @@ const open = () => {
 }
 onLoad((option) => {
 	pageData.id = option.id
-	pageData.categoryId = option.categoryId
+	pageData.categoryId = option.categoryId||''
 	pageData.traceInfo = decodeURIComponent(option.traceInfo || '')
 })
 onShow(() => {
@@ -110,7 +110,7 @@ onShow(() => {
 const fetchData = () => {
 	opusdetails({
 		opusId: pageData.id,
-		categoryId:pageData.categoryId,
+		categoryId:'',
 		traceInfo:pageData.traceInfo,
 	}).then(res => {
 		pageData.opusdetail = res.data
@@ -177,7 +177,7 @@ const attention = (item) => {
 const collection = (item) => {
 	let action = item.isCollection ? 0 : 1
 	if (getTokenValue()) {
-		opusCollect({ opusId: item.id, action: action, trackInfo: pageData.traceInfo,categoryId: pageData.categoryId }).then(res => {
+		opusCollect({ opusId: item.id, action: action, trackInfo: pageData.traceInfo,categoryId: '' }).then(res => {
 			if (action) {
 				item.isCollection = true
 				item.collectionNum++
@@ -202,7 +202,7 @@ const collection = (item) => {
 const like = (item) => {
 	let action = item.isLike ? 0 : 1
 	if (getTokenValue()) {
-		opusLike({ opusId: item.id, action: action, trackInfo: pageData.traceInfo,categoryId: pageData.categoryId }).then(res => {
+		opusLike({ opusId: item.id, action: action, trackInfo: pageData.traceInfo,categoryId: '' }).then(res => {
 			if (action) {
 				item.isLike = true
 				item.likeNum++
