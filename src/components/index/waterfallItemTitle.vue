@@ -11,7 +11,7 @@
         </image>
       </view>
       <view v-if="isVirtualCal"></view>
-      <image v-else-if="item.cover.itemType == 3" :src="configStaticPath('/static/video/videoplay.png')" mode=""
+      <image v-else-if="item.opusType == 2" :src="configStaticPath('/static/video/videoplay.png')" mode=""
         class="absolute w-36 h-36 top-[50%] left-[50%] -ml-18 -mt-18 z-40" @click="godetail(item)"></image>
       <view v-else-if="item.cover.itemType == 2 && item.cover.name"
         class="absolute  bottom-10 z-40  px-10 text-white text-12 rounded mb-11" @click="godetail(item)">
