@@ -279,13 +279,13 @@ const onShareTimeline = () => {
 			height: 90upx;
 			width: 90upx;
 			position: relative;
-			left: 18rpx;
+			left: 17rpx;
 		}
 
 		.add {
 			position: absolute;
 			bottom: -37upx;
-			left: 46upx;
+			left: 41upx;
 			width: 50upx;
 			height: 50upx;
 			line-height: 50upx;
