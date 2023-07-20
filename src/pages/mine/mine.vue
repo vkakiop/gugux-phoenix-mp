@@ -52,7 +52,7 @@
 					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text
 							v-if="waterItem.query.data.totalCount">({{ waterItem.query.data.totalCount }})</text></view>
 					<view class="-mt-5">
-						<image src="/static/mine/line.png" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
+						<image :src="configStaticPath('/static/mine/line.png')" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
 					</view>
 				</view>
 			</view>
