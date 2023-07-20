@@ -35,7 +35,6 @@ const pageData = reactive({
 })
 const props = defineProps(['item', 'isVirtualCal', 'itemKey','traceInfo','categoryId'])
 const emit = defineEmits(['popLoginShow'])
-
 const godetail = (item) => {
   if (item.opusType == 1) {
     uni.navigateTo({

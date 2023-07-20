@@ -52,6 +52,7 @@ const emit = defineEmits(['popLoginShow'])
 
 const gohomepage = (item) => {
   item.traceInfo = item.traceInfo ? item.traceInfo : ''
+  item.categoryId = item.categoryId ? item.categoryId : ''
   if (useLoginTokenStore().get().user) {
     if (item.createdBy == useLoginTokenStore().get().user.id) {
       uni.switchTab({
@@ -67,6 +68,7 @@ const gohomepage = (item) => {
 }
 const godetail = (item) => {
   item.traceInfo = item.traceInfo ? item.traceInfo : ''
+  item.categoryId = item.categoryId ? item.categoryId : ''
   if (item.opusType == 1) {
     uni.navigateTo({
       url: `/pages/opus/index?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}&categoryId=${item.categoryId}`
@@ -101,6 +103,7 @@ onMounted(() => {
 //点赞
 const like = (item) => {
   item.traceInfo = item.traceInfo ? item.traceInfo : ''
+  item.categoryId = item.categoryId ? item.categoryId : ''
   let action = item.isLike ? 0 : 1
   if (getTokenValue()) {
     opusLike({ opusId: item.id, action: action, trackInfo: item.traceInfo, categoryId: props.categoryId }).then(res => {
