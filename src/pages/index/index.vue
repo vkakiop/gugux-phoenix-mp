@@ -9,13 +9,13 @@
               @click="changeWaterfall(index)">
               <view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }}</view>
               <view class="">
-                <image src="/static/mine/line.png" class="w-30 h-4 relative -top-5" v-show="pageData.currentIndex == index" />
+                <image :src="configStaticPath('/static/mine/line.png')" class="w-30 h-4 relative -top-5" v-show="pageData.currentIndex == index" />
               </view>
             </view>
           </view>
         </scroll-view>
         <view>
-          <image src="/static/mine/search.png" class="w-17 h-17 mt-2" @click="gohistory"></image>
+          <image :src="configStaticPath('/static/mine/search.png')" class="w-17 h-17 mt-2" @click="gohistory"></image>
         </view>
         <!-- 菜单 -->
       </view>
@@ -40,6 +40,7 @@
 <script setup>
 import { ref, onMounted, reactive, watch, nextTick } from 'vue'
 import { opusList } from '@/api/opus/list'
+import {configStaticPath} from '@/config/index'
 import waterfall from '@/components/index/waterfall.vue'
 // import safeguardconfirm from '@/components/safeguard/safeguardconfirm.vue'
 // import safeguard from '@/components/safeguard/safeguard.vue'

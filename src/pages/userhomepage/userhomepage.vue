@@ -15,7 +15,7 @@
 							{{ pageInfo.mineMessage.nickname }}
 						</view>
 						<view class=" text-14 flex items-center mt-18">
-							<image src="/static/mine/ID.png" class="w-15 h-15 " />
+							<image :src="configStaticPath('/static/mine/ID.png')" class="w-15 h-15 " />
 							<text class="ml-5 mr-15">{{ pageInfo.mineMessage.guguId }}</text>
 							<!-- 	<image src="/static/mine/copy.png" class="w-15 h-15 ml-10" @click.stop="copy(pageInfo.mineMessage.guguId)" /> -->
 						</view>
@@ -64,7 +64,7 @@
 					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text
 							v-if="waterItem.query.data.totalCount">({{ waterItem.query.data.totalCount }})</text></view>
 					<view class="-mt-5">
-						<image src="/static/mine/line.png" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
+						<image :src="configStaticPath('/static/mine/line.png')" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
 					</view>
 				</view>
 			</view>
@@ -76,7 +76,7 @@
 					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text
 							v-if="waterItem.query.data.totalCount">({{ waterItem.query.data.totalCount }})</text></view>
 					<view class="-mt-5">
-						<image src="/static/mine/line.png" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
+						<image :src="configStaticPath('/static/mine/line.png')" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
 					</view>
 				</view>
 			</view>
@@ -110,6 +110,7 @@
 <script setup>
 import { getTokenValue } from "@/utils/utils"
 import waterfall from '@/components/index/waterfall.vue'
+import {configStaticPath} from '@/config/index'
 import { userFans, userFansRemove } from "@/api/opus/index"
 import { userhomepage, homepageopus } from "@/api/mine/index.js"
 import { ref, reactive, watch, computed } from 'vue'

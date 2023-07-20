@@ -20,13 +20,14 @@
         @touchmove="handleRecordingMove"
         @touchend="handleRecordingCancel"
       >
-        <image class="icon-mic" src="/static/images/send.png"></image>
+        <image class="icon-mic" :src="configStaticPath('/static/images/send.png')"></image>
       </view>
     </view>
   </view>
 </template>
 
 <script>
+import {configStaticPath} from '@/config/index'
 let WebIM = require("../../../../../utils/WebIM")["default"];
 let msgType = require("../../../msgtype");
 let RECORD_CONST = require("./record_status");

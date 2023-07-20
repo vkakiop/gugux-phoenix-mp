@@ -19,7 +19,7 @@
 						</view>
 						<view class="font-bold h-17 leading-16 text-17 flex items-center">@{{ item.author }}
 							<image :src="configStaticPath('/static/mine/shop.png')" class="w-19 h-19 ml-4" v-if="item.hasShop" />
-							<image src="/static/mine/vip.png" class="w-49 h-19 ml-4" v-if="item.isDr" />
+							<image :src="configStaticPath('/static/mine/vip.png')" class="w-49 h-19 ml-4" v-if="item.isDr" />
 						</view>
 						<view class="text-14 leading-16 my-11">发布于：{{ item.createdTime }}</view>
 						<view class="text-16 leading-25 flex items-center">
