@@ -144,10 +144,10 @@ watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
 onLoad((option) => {
 	pageData.masterId = option.id
 	pageData.traceInfo = decodeURIComponent(option.traceInfo || '')
-
+	fetchInfo()
 })
 onShow(() => {
-	fetchInfo()
+	// fetchInfo()
 })
 const fetchInfo = () => {
 	userhomepage({
