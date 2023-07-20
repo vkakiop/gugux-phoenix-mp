@@ -52,7 +52,8 @@
 					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text
 							v-if="waterItem.query.data.totalCount">({{ waterItem.query.data.totalCount }})</text></view>
 					<view class="-mt-5">
-						<image :src="configStaticPath('/static/mine/line.png')" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
+						<image :src="configStaticPath('/static/mine/line.png')" class="w-34 h-4 "
+							v-show="pageData.currentIndex == index" />
 					</view>
 				</view>
 			</view>
@@ -91,7 +92,7 @@
 import waterfall from '@/components/index/waterfall.vue'
 import { configStaticPath } from '@/config/index'
 import { userhomepage, homepagelike, homepageopus, homepagecollection } from "@/api/mine/index.js"
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
 import { getTokenValue } from "@/utils/utils"
 import useLoginTokenStore from '@/store/modules/loginToken'
@@ -102,9 +103,9 @@ const computedNumber = computed({
 })
 onShow(() => {
 	if (getTokenValue()) {
-		pageData.masterId = useLoginTokenStore().get().user.id
-		fetchData()
-		gettolcount()
+		// pageData.masterId = useLoginTokenStore().get().user.id
+		// fetchData()
+		// gettolcount()
 	} else {
 		useRouterStore().routerTo('/pages/mine/mine')
 		// if (useRouterStore().getRouter('/pages/mine/mine')) {
@@ -115,6 +116,14 @@ onShow(() => {
 		// }
 	}
 })
+watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
+	if (newVal) {
+		pageData.masterId = useLoginTokenStore().get().user.id
+		fetchData()
+		gettolcount()
+	}
+}, { immediate: true })
+
 const waterfallItems = [{
 	isshowfixed: false,
 	scrollTop: -1,
@@ -233,13 +242,13 @@ onReachBottom(() => {
 	if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
 		if (currentIndex == 0) {
 			pageData.waterfallItems[currentIndex].query.path.pageNum++
-		} else if(currentIndex == 1){
+		} else if (currentIndex == 1) {
 			let obj = Array.from(pageData.waterfallItems[currentIndex].items).findLast((item) => item.isLike == true)
-			pageData.waterfallItems[currentIndex].query.path.index = obj?obj.id:''
-		}else{
-			if(Array.from(pageData.waterfallItems[2].items).length){
+			pageData.waterfallItems[currentIndex].query.path.index = obj ? obj.id : ''
+		} else {
+			if (Array.from(pageData.waterfallItems[2].items).length) {
 				pageData.waterfallItems[currentIndex].query.path.index = Array.from(pageData.waterfallItems[2].items).at(-1).id
-			}	
+			}
 		}
 		getData()
 	}
