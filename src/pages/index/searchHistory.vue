@@ -76,7 +76,7 @@ import waterfall from '@/components/index/waterfall.vue'
 import {configStaticPath} from '@/config/index'
 import { opusSearchNew } from "@/api/worksSearch/index.js"
 import { ref, onMounted, reactive, watch, nextTick } from 'vue'
-import { onShow,onReachBottom } from '@dcloudio/uni-app';
+import { onShow,onReachBottom, onLoad } from '@dcloudio/uni-app';
 import useLoginTokenStore from '@/store/modules/loginToken'
 import _ from 'lodash'
 const searchvalue = ref('')
@@ -119,11 +119,16 @@ uni.getStorage({
 		pageData.searchHistoryList = JSON.parse(res.data)
 	}
 })
-onShow(() => {
+onLoad(()=>{
 	nextTick(() => {
 		changeWaterfall(0)
 	})
 })
+// onShow(() => {
+// 	nextTick(() => {
+// 		changeWaterfall(0)
+// 	})
+// })
 watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
 	pageData.waterfallItems = _.cloneDeep(waterfallItems)
 	pageData.waterfallItems.forEach((item, index) => {
