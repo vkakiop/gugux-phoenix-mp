@@ -49,7 +49,8 @@
 			<view class="flex  text-center">
 				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
 					@click="changeWaterfall(index)">
-					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text>({{ waterItem.query.data.totalCount }})</text></view>
+					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text>({{
+						waterItem.query.data.totalCount }})</text></view>
 					<view class="-mt-5">
 						<image :src="configStaticPath('/static/mine/line.png')" class="w-34 h-4 "
 							v-show="pageData.currentIndex == index" />
@@ -61,7 +62,8 @@
 			<view class="flex text-center">
 				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
 					@click="changeWaterfall(index)">
-					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text>({{ waterItem.query.data.totalCount }})</text></view>
+					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text>({{
+						waterItem.query.data.totalCount }})</text></view>
 					<view class="-mt-5">
 						<image :src="configStaticPath('/static/mine/line.png')" class="w-34 h-4 "
 							v-show="pageData.currentIndex == index" />
@@ -168,6 +170,9 @@ const changeWaterfall = (waterIndex) => {
 	// 	//读取滚动条高度
 	// 	pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
 	// }
+	if(waterIndex!=0){
+		pageData.waterfallItems[waterIndex].query.path.index=''
+	}
 	pageData.waterfallItems[waterIndex].items = []
 	pageData.currentIndex = waterIndex
 	if (pageData.waterfallItems[waterIndex].items.length == 0) {
@@ -192,7 +197,7 @@ const getData = () => {
 			if (res.data.page == res.data.totalPage) {
 				pageData.waterfallItems[currentIndex].isComplete = true
 			}
-			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount||0
+			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount || 0
 			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
 			pageData.waterfallItems[currentIndex].isLoading = false
 		}).catch(e => {
@@ -200,10 +205,10 @@ const getData = () => {
 		})
 	} else if (currentIndex === 1) {
 		homepagelike({ ...query.path }).then(res => {
-			if (res.data.page == res.data.totalPage) {
+			if ( res.data.content.length<20) {
 				pageData.waterfallItems[currentIndex].isComplete = true
 			}
-			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalNum||0
+			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalNum || 0
 			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.content)
 			pageData.waterfallItems[currentIndex].isLoading = false
 		}).catch(e => {
@@ -211,10 +216,10 @@ const getData = () => {
 		})
 	} else if (currentIndex === 2) {
 		homepagecollection({ ...query.path }).then(res => {
-			if (res.data.page == res.data.totalPage) {
+			if ( res.data.content.length<20) {
 				pageData.waterfallItems[currentIndex].isComplete = true
 			}
-			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalNum||0
+			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalNum || 0
 			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.content)
 			pageData.waterfallItems[currentIndex].isLoading = false
 		}).catch(e => {
@@ -239,8 +244,8 @@ onReachBottom(() => {
 		} else {
 			if (Array.from(pageData.waterfallItems[2].items).length) {
 				pageData.waterfallItems[currentIndex].query.path.index = Array.from(pageData.waterfallItems[2].items).at(-1).id
-			}else{
-				pageData.waterfallItems[currentIndex].query.path.index=''
+			} else {
+				pageData.waterfallItems[currentIndex].query.path.index = ''
 			}
 		}
 		getData()
@@ -251,15 +256,15 @@ const gettolcount = () => {
 	pageData.waterfallItems.forEach((item, index) => {
 		if (index === 0) {
 			homepageopus({ masterId: pageData.masterId, pageNum: 1, pageSize: 10 }).then(res => {
-				pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount||0
+				pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount || 0
 			})
 		} else if (index === 1) {
 			homepagelike({ index: '', pageSize: 10 }).then(res => {
-				pageData.waterfallItems[index].query.data.totalCount = res.data.totalNum||0
+				pageData.waterfallItems[index].query.data.totalCount = res.data.totalNum || 0
 			})
 		} else if (index === 2) {
 			homepagecollection({ index: '', pageSize: 10 }).then(res => {
-				pageData.waterfallItems[index].query.data.totalCount = res.data.totalNum||0
+				pageData.waterfallItems[index].query.data.totalCount = res.data.totalNum || 0
 			})
 		}
 	})
