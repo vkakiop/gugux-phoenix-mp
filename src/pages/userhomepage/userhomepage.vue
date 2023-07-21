@@ -61,8 +61,7 @@
 			<view class="flex ">
 				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
 					@click="changeWaterfall(index)">
-					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text
-							v-if="waterItem.query.data.totalCount">({{ waterItem.query.data.totalCount }})</text></view>
+					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text>({{ waterItem.query.data.totalCount }})</text></view>
 					<view class="-mt-5">
 						<image :src="configStaticPath('/static/mine/line.png')" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
 					</view>
@@ -73,8 +72,7 @@
 			<view class="flex ">
 				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
 					@click="changeWaterfall(index)">
-					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text
-							v-if="waterItem.query.data.totalCount">({{ waterItem.query.data.totalCount }})</text></view>
+					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text>({{ waterItem.query.data.totalCount }})</text></view>
 					<view class="-mt-5">
 						<image :src="configStaticPath('/static/mine/line.png')" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
 					</view>
@@ -124,7 +122,7 @@ const waterfallItems = [{
 	scrollTop: -1, isComplete: false, isLoading: false, itemType: 'image', name: '作品', items: [],
 	query: {
 		path: { pageNum: 1, pageSize: 20, },
-		data: { totalCount: '' }
+		data: { totalCount: 0 }
 	}
 }]
 const pageData = reactive({
@@ -190,7 +188,7 @@ const getData = () => {
 		if (res.data.page == res.data.totalPage) {
 			pageData.waterfallItems[currentIndex].isComplete = true
 		}
-		pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount
+		pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount||0
 		pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
 		pageData.waterfallItems[currentIndex].isLoading = false
 	}).catch(e => {

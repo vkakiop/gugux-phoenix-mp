@@ -49,8 +49,7 @@
 			<view class="flex  text-center">
 				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
 					@click="changeWaterfall(index)">
-					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text
-							v-if="waterItem.query.data.totalCount">({{ waterItem.query.data.totalCount }})</text></view>
+					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text>({{ waterItem.query.data.totalCount }})</text></view>
 					<view class="-mt-5">
 						<image :src="configStaticPath('/static/mine/line.png')" class="w-34 h-4 "
 							v-show="pageData.currentIndex == index" />
@@ -62,8 +61,7 @@
 			<view class="flex text-center">
 				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
 					@click="changeWaterfall(index)">
-					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text
-							v-if="waterItem.query.data.totalCount">({{ waterItem.query.data.totalCount }})</text></view>
+					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text>({{ waterItem.query.data.totalCount }})</text></view>
 					<view class="-mt-5">
 						<image :src="configStaticPath('/static/mine/line.png')" class="w-34 h-4 "
 							v-show="pageData.currentIndex == index" />
@@ -127,7 +125,7 @@ const waterfallItems = [{
 	items: [],
 	query: {
 		path: { pageNum: 1, pageSize: 20, },
-		data: { totalCount: '' }
+		data: { totalCount: 0 }
 	}
 },
 {
@@ -139,7 +137,7 @@ const waterfallItems = [{
 	items: [],
 	query: {
 		path: { index: '', pageSize: 20, },
-		data: { totalCount: '' }
+		data: { totalCount: 0 }
 	}
 },
 {
@@ -150,7 +148,7 @@ const waterfallItems = [{
 	items: [],
 	query: {
 		path: { index: '', pageSize: 20, },
-		data: { totalCount: '' }
+		data: { totalCount: 0 }
 	}
 }
 ]
@@ -194,7 +192,7 @@ const getData = () => {
 			if (res.data.page == res.data.totalPage) {
 				pageData.waterfallItems[currentIndex].isComplete = true
 			}
-			// pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount
+			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount||0
 			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
 			pageData.waterfallItems[currentIndex].isLoading = false
 		}).catch(e => {
@@ -205,8 +203,8 @@ const getData = () => {
 			if (res.data.page == res.data.totalPage) {
 				pageData.waterfallItems[currentIndex].isComplete = true
 			}
-			// pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount
-			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data)
+			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalNum||0
+			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.content)
 			pageData.waterfallItems[currentIndex].isLoading = false
 		}).catch(e => {
 			pageData.waterfallItems[currentIndex].isLoading = false
@@ -216,8 +214,8 @@ const getData = () => {
 			if (res.data.page == res.data.totalPage) {
 				pageData.waterfallItems[currentIndex].isComplete = true
 			}
-			// pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount
-			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data)
+			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalNum||0
+			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.content)
 			pageData.waterfallItems[currentIndex].isLoading = false
 		}).catch(e => {
 			pageData.waterfallItems[currentIndex].isLoading = false
@@ -241,6 +239,8 @@ onReachBottom(() => {
 		} else {
 			if (Array.from(pageData.waterfallItems[2].items).length) {
 				pageData.waterfallItems[currentIndex].query.path.index = Array.from(pageData.waterfallItems[2].items).at(-1).id
+			}else{
+				pageData.waterfallItems[currentIndex].query.path.index=''
 			}
 		}
 		getData()
@@ -251,15 +251,15 @@ const gettolcount = () => {
 	pageData.waterfallItems.forEach((item, index) => {
 		if (index === 0) {
 			homepageopus({ masterId: pageData.masterId, pageNum: 1, pageSize: 10 }).then(res => {
-				pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
+				pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount||0
 			})
 		} else if (index === 1) {
 			homepagelike({ index: '', pageSize: 10 }).then(res => {
-				pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
+				pageData.waterfallItems[index].query.data.totalCount = res.data.totalNum||0
 			})
 		} else if (index === 2) {
 			homepagecollection({ index: '', pageSize: 10 }).then(res => {
-				pageData.waterfallItems[index].query.data.totalCount = res.data.totalCount
+				pageData.waterfallItems[index].query.data.totalCount = res.data.totalNum||0
 			})
 		}
 	})
