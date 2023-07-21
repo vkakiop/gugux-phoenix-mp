@@ -172,7 +172,10 @@ const changeWaterfall = (waterIndex) => {
 	// }
 	if(waterIndex!=0){
 		pageData.waterfallItems[waterIndex].query.path.index=''
+	}else{
+		pageData.waterfallItems[waterIndex].query.path.pageNum=1
 	}
+	pageData.waterfallItems[waterIndex].isComplete = false
 	pageData.waterfallItems[waterIndex].items = []
 	pageData.currentIndex = waterIndex
 	if (pageData.waterfallItems[waterIndex].items.length == 0) {
