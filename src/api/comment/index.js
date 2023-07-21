@@ -15,18 +15,35 @@ export function commentlike(data) {
         data:data
     })
 }
+// // 获取评论
+// export function commentlist(data) {
+//     return request({
+//         url: '/gugux-services-opus-api/app/opus/comment/list/'+data.opusId+'/'+data.lastCommentId+'/'+data.pageSize,
+//         method: 'get',
+//         // params:data
+//     })
+// }
+// // 获取子评论
+// export function subcommentlist(data) {
+//     return request({
+//         url: '/gugux-services-opus-api/app/opus/subcomment/list/'+data.commentId+'/'+data.lastCommentId+'/'+data.pageSize,
+//         method: 'get',
+//         params:data
+//     })
+// }
+
 // 获取评论
 export function commentlist(data) {
     return request({
-        url: '/gugux-services-opus-api/app/opus/comment/list/'+data.opusId+'/'+data.lastCommentId+'/'+data.pageSize,
+        url: '/gugux-services-opus-api/app/opus/page/comment',
         method: 'get',
-        // params:data
+        params:data
     })
 }
 // 获取子评论
 export function subcommentlist(data) {
     return request({
-        url: '/gugux-services-opus-api/app/opus/subcomment/list/'+data.commentId+'/'+data.lastCommentId+'/'+data.pageSize,
+        url: '/gugux-services-opus-api/app/opus/son/comment',
         method: 'get',
         params:data
     })

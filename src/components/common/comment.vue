@@ -55,6 +55,9 @@
                                 <view v-else-if="item.isExpand == 1" @click="upChange(item,2)">
                                     <view>收起</view><image src="/static/img/up.png"></image>
                                 </view>
+                                <view style="margin-top:5rpx;" v-if="item.isExpand == 0 &&item.childcomMent.length>0 && item.childcomMent.length<item.subCommentNum" @click="clearItem(item,0)">
+                                    <view>收起</view><image src="/static/img/up.png"></image>
+                                </view>
                             </view>
                         </view>
 
@@ -113,12 +116,14 @@
                                 </view>
                                 <view v-else-if="item.isExpand == 0 && item.childcomMent.length<item.subCommentNum" @click="expandChange(item)">展开更多回复</view>
                                 <view v-else-if="item.isExpand == 2" @click="upChange(item,1)">展开全部回复</view>
-                                <view v-else-if="item.isExpand == 1" @click="upChange(item,2)">
+                                <view v-else-if="item.childcomMent.length<item.subCommentNum || item.isExpand == 1" @click="upChange(item,2)">
+                                    <view>收起</view><image src="/static/img/up.png"></image>
+                                </view>
+                                <view style="margin-top:5rpx;" v-if="item.isExpand == 0 &&item.childcomMent.length>0 && item.childcomMent.length<item.subCommentNum" @click="clearItem(item,0)">
                                     <view>收起</view><image src="/static/img/up.png"></image>
                                 </view>
                             </view>
                         </view>
-
                         <view class="like" v-if="item.isLike == 0" @click="likeChange(item,1)">
                             <image src="/static/img/heart1.png"></image>
                             <view>{{ item.likesNum }}</view>
@@ -158,14 +163,15 @@ const props = defineProps({
 })
 const pageData = reactive({
     index:'',//回复当前子评论
+    pageSize:10,
+    pageNum:1,
     childindex:'',
     opusId:'',
     mainCommentId:0,
     replyId:'',
     replyCommentId:'',
     lastCommentId:0,
-    childlastCommentId:0,
-    pageSize:12,
+    // childlastCommentId:0,
     total:-1,
     indexList:[],
     content:'',
@@ -194,10 +200,16 @@ const scrolltolower = () => {
 }
 const loadmore = () =>{
     let obj = {
-        opusId:pageData.opusId,
-        lastCommentId:pageData.lastCommentId == 0 ? 0 :pageData.lastCommentId,
+        // opusId:pageData.opusId,
+        opusId:'1622360605426033038',
+        pageNum:pageData.pageNum,
         pageSize:pageData.pageSize,
     }
+    // let obj = {
+    //     opusId:pageData.opusId,
+    //     lastCommentId:pageData.lastCommentId == 0 ? 0 :pageData.lastCommentId,
+    //     pageSize:pageData.pageSize,
+    // }
     if(pageData.total == pageData.indexList.length){
         return
     }
@@ -212,7 +224,8 @@ const loadmore = () =>{
                 })
             })
             pageData.indexList.push(...list);
-            pageData.lastCommentId = pageData.indexList[pageData.indexList.length-1].id;
+            // pageData.lastCommentId = pageData.indexList[pageData.indexList.length-1].id;
+            pageData.pageNum++;
         }else{
             pageData.indexList = [];
         }
@@ -251,8 +264,8 @@ watch(()=>props.id,(newVal,oldVal)=>{
     pageData.mainCommentId = 0;
     pageData.replyId = '';
     pageData.replyCommentId = '';
-    pageData.lastCommentId=0;
-    pageData.childlastCommentId=0;
+    // pageData.lastCommentId=0;
+    // pageData.childlastCommentId=0;
     pageData.total = -1;
     pageData.indexList = [];
     scrolltolower();
@@ -299,26 +312,34 @@ const likeChange = (item,type)=>{
     })
 }
 const expandChange = (item)=>{
-    // console.log(item);
+    item.pageNum ? item.pageNum += 1 : item.pageNum = 1 ;
+    console.log(item);
     if(item.isExpand == 0){
         let obj = {
             commentId:item.id,
-            lastCommentId:item.childlastCommentId||0,
+            pageNum:item.pageNum,
             pageSize:pageData.pageSize,
         }
+        // let obj = {
+        //     commentId:item.id,
+        //     lastCommentId:item.childlastCommentId||0,
+        //     pageSize:pageData.pageSize,
+        // }
         subcommentlist(obj).then((res)=>{
             let list = [];
             if(!isArrayEmpty(res.data.list)){
                 res.data.list.forEach((item)=>{
                     list.push({
                         ...item,
-                        childlastCommentId:0
+                        pageNum:item.pageNum,
+                        // childlastCommentId:0
                     })
                 })
             }
             item.childcomMent.push(...list);
-            item.childlastCommentId = item.childcomMent[item.childcomMent.length-1].id;
+            // item.childlastCommentId = item.childcomMent[item.childcomMent.length-1].id;
             item.isExpand = item.subCommentNum == item.childcomMent.length ? 1 : 0;
+            console.log(item.isExpand == 0 && item.childcomMent.length<item.subCommentNum)
         })
         // let i = 1;
         // item.childcomMent.push(
@@ -338,6 +359,11 @@ const expandChange = (item)=>{
 }
 const upChange = (item,type)=>{
     item.isExpand = type;
+}
+const clearItem = (item,type)=>{
+    item.isExpand = type;
+    item.pageNum = 0;
+    item.childcomMent = [];
 }
 const customEmoji=(value) =>{
     return `<img src="${value}" style="width:25px;height:25px;" />`;
