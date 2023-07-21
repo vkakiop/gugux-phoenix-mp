@@ -116,13 +116,6 @@ onShow(() => {
 		// }
 	}
 })
-watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
-	if (newVal) {
-		pageData.masterId = useLoginTokenStore().get().user.id
-		fetchData()
-		gettolcount()
-	}
-}, { immediate: true })
 
 const waterfallItems = [{
 	isshowfixed: false,
@@ -303,6 +296,13 @@ const fetchData = () => {
 		})
 	})
 }
+watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
+	if (newVal) {
+		pageData.masterId = useLoginTokenStore().get().user.id
+		fetchData()
+		gettolcount()
+	}
+}, { immediate: true })
 </script>
 
 <style lang="scss" scoped>
