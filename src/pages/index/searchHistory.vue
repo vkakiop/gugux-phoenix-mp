@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<customNav >
+		<customNav>
 			<view @click="gotoBack" class="ml-3"><uni-icons type="back" size="24"></uni-icons></view>
 			<!-- 搜索框 -->
 			<view class="bg-white w-full py-10">
@@ -46,7 +46,8 @@
 						@click="changeWaterfall(index)">
 						<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }}</view>
 						<view class=" h-4 relative -top-5 ">
-							<image :src="configStaticPath('/static/mine/line.png')" class="w-30 h-4 " v-show="pageData.currentIndex == index" />
+							<image :src="configStaticPath('/static/mine/line.png')" class="w-30 h-4 "
+								v-show="pageData.currentIndex == index" />
 						</view>
 					</view>
 				</view>
@@ -62,7 +63,10 @@
 						:waterIndex="waterIndex" :currentIndex="pageData.currentIndex">
 					</waterfall>
 				</view>
-				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
+				<view class="u-page__loading-item" v-if="!pageData.isLoading && waterIndex == pageData.currentIndex">
+					<u-loading-icon size="36"></u-loading-icon>
+				</view>
+				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex && pageData.isLoading"
 					class="flex items-center justify-center">
 					<u-empty mode="search" text="对不起,没有找到您要的搜索内容" :icon="configStaticPath('/static/img/nodata.png')" />
 				</view>
@@ -73,10 +77,10 @@
 
 <script setup>
 import waterfall from '@/components/index/waterfall.vue'
-import {configStaticPath} from '@/config/index'
+import { configStaticPath } from '@/config/index'
 import { opusSearchNew } from "@/api/worksSearch/index.js"
 import { ref, onMounted, reactive, watch, nextTick } from 'vue'
-import { onShow,onReachBottom, onLoad } from '@dcloudio/uni-app';
+import { onShow, onReachBottom, onLoad } from '@dcloudio/uni-app';
 import useLoginTokenStore from '@/store/modules/loginToken'
 import _ from 'lodash'
 const searchvalue = ref('')
@@ -92,7 +96,7 @@ const waterfallItems = [
 	{
 		scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '文章', items: [], query: {
 			path: {
-				type: 2, pageNum: 1, pageSize:20, searchTime: "", keyword: ''
+				type: 2, pageNum: 1, pageSize: 20, searchTime: "", keyword: ''
 			},
 			data: { passTime: '' }
 		}
@@ -119,7 +123,7 @@ uni.getStorage({
 		pageData.searchHistoryList = JSON.parse(res.data)
 	}
 })
-onLoad(()=>{
+onLoad(() => {
 	nextTick(() => {
 		changeWaterfall(0)
 	})
@@ -143,12 +147,12 @@ const changeWaterfall = (waterIndex) => {
 	// }
 	pageData.waterfallItems[waterIndex].query.path.searchTime = ''
 	pageData.waterfallItems[waterIndex].query.path.pageNum = 1
-	pageData.waterfallItems[waterIndex].items=[]
+	pageData.waterfallItems[waterIndex].items = []
 	pageData.currentIndex = waterIndex
 	if (pageData.waterfallItems[waterIndex].items.length == 0) {
-		if(!isShowHistory.value){
+		if (!isShowHistory.value) {
 			getData()
-		}	
+		}
 	}
 	// else {
 	// 	//写入滚动条高度
@@ -169,12 +173,11 @@ const getData = () => {
 		if (res.data.page == res.data.totalPage) {
 			pageData.waterfallItems[currentIndex].isComplete = true
 		}
+		pageData.isLoading = true
 		pageData.waterfallItems[currentIndex].query.path.searchTime = res.data.serviceTime
 		pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
 		pageData.waterfallItems[currentIndex].isLoading = false
-		if (!res.data.list.length) {
-			pageData.isLoading = true
-		}
+
 	}).catch(e => {
 		pageData.waterfallItems[currentIndex].isLoading = false
 	})
@@ -237,11 +240,11 @@ const gotoBack = () => {
 }
 
 onReachBottom(() => {
-  let currentIndex = pageData.currentIndex
-  if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
-    pageData.waterfallItems[currentIndex].query.path.pageNum++
-    getData()
-  }
+	let currentIndex = pageData.currentIndex
+	if (!pageData.waterfallItems[currentIndex].isComplete && !pageData.waterfallItems[currentIndex].isLoading) {
+		pageData.waterfallItems[currentIndex].query.path.pageNum++
+		getData()
+	}
 })
 </script>
 
