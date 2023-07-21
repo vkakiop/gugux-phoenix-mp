@@ -70,7 +70,7 @@ frontpage({}).then(res => {
   opusCategoryVOS.forEach((item, index) => {
     let obj = {
       scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '', items: [], query: {
-        path: { categoryId: '', pageNum: 1, getNum: 20 }
+        path: { categoryId: '', getNum: 20 }
       }
     }
     obj.name = item.name
@@ -95,7 +95,7 @@ const changeWaterfall = (waterIndex) => {
   //   //读取滚动条高度
   //   pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
   // }
-  pageData.waterfallItems[waterIndex].query.path.pageNum = 1
+  // pageData.waterfallItems[waterIndex].query.path.pageNum = 1
   pageData.waterfallItems[waterIndex].items=[]
   pageData.currentIndex = waterIndex
   if (pageData.waterfallItems[waterIndex].items.length == 0) {
