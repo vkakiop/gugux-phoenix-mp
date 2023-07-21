@@ -38,8 +38,10 @@
 		<view class="mb-10">
 			<view class="flex justify-between items-center px-15   h-56">
 				<view class="flex-1">签名</view>
-				<view class="flex items-center flex-1">
-					<view class="mr-8 line-clamp-1">{{ pageData.userInfo.introduce ? pageData.userInfo.introduce : '未设置' }}</view>
+				<view class="flex items-center flex-1 justify-end">
+					<view class="mr-8 line-clamp-1">
+						{{ pageData.userInfo.introduce ? pageData.userInfo.introduce : '未设置' }}
+					</view>
 				</view>
 			</view>
 			<view class="flex justify-between  items-center px-15  h-56 border-t-1 border-[#f1f3f5]">

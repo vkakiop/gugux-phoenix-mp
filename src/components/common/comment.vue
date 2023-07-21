@@ -3,7 +3,7 @@
         <view class="empty" v-if="pageData.total == -1 || pageData.total == 0">
             <u-empty
                     mode="data" text="暂时没有评论"
-                    icon="/static/img/nodata.png"
+                    :icon="configStaticPath('/static/img/nodata.png')"
             >
             </u-empty>
         </view>
@@ -31,15 +31,15 @@
                                             <image :src="row.userIcon"></image>
                                         </view>
                                         <view class="contain-contain">
-                                            <view class="name">{{ row.userName }} <view v-if="createdBy == row.userId"  class="createdBy">作者</view><image src="/static/img/right.png"></image> {{ row.replyName }} <view v-if="createdBy == row.replyId" class="createdBy">作者</view></view>
+                                            <view class="name">{{ row.userName }} <view v-if="createdBy == row.userId"  class="createdBy">作者</view><image :src="configStaticPath('/static/img/right.png')"></image> {{ row.replyName }} <view v-if="createdBy == row.replyId" class="createdBy">作者</view></view>
                                             <rich-text class="content" v-html="renderTxt(row.content)"></rich-text>
                                             <view class="time">
                                                 {{formatedCommentDate(row.createTime) }}<text class="replys" @click="childReply(item,row,index)">　回复</text>
                                             </view>
                                         </view>
                                         <view class="contain-like like">
-                                            <image @click="likeChange(row,1)" v-if="row.isLike == 0" src="/static/img/heart1.png"></image>
-                                            <image @click="likeChange(row,0)" v-else-if="row.isLike == 1" src="/static/img/heart2.png"></image>
+                                            <image @click="likeChange(row,1)" v-if="row.isLike == 0" :src="configStaticPath('/static/img/heart1.png')"></image>
+                                            <image @click="likeChange(row,0)" v-else-if="row.isLike == 1" :src="configStaticPath('/static/img/heart2.png')"></image>
                                             <view>{{ row.likesNum }}</view>
                                         </view>
                                     </view>
@@ -48,25 +48,25 @@
                             <view class="expand" v-if="item.subCommentNum > 0">
                                 <view v-if="item.isExpand == 0 && isArrayEmpty(item.childcomMent)" @click="expandChange(item)">
                                     <view>展开 {{ item.subCommentNum }} 条回复 </view>
-                                    <image src="/static/img/down.png"></image>
+                                    <image :src="configStaticPath('/static/img/down.png')"></image>
                                 </view>
                                 <view v-else-if="item.isExpand == 0 && item.childcomMent.length<item.subCommentNum" @click="expandChange(item)">展开更多回复</view>
                                 <view v-else-if="item.isExpand == 2" @click="upChange(item,1)">展开全部回复</view>
                                 <view v-else-if="item.isExpand == 1" @click="upChange(item,2)">
-                                    <view>收起</view><image src="/static/img/up.png"></image>
+                                    <view>收起</view><image :src="configStaticPath('/static/img/up.png')"></image>
                                 </view>
                                 <view style="margin-top:5rpx;" v-if="item.isExpand == 0 &&item.childcomMent.length>0 && item.childcomMent.length<item.subCommentNum" @click="clearItem(item,0)">
-                                    <view>收起</view><image src="/static/img/up.png"></image>
+                                    <view>收起</view><image :src="configStaticPath('/static/img/up.png')"></image>
                                 </view>
                             </view>
                         </view>
 
                         <view class="like" v-if="item.isLike == 0" @click="likeChange(item,1)">
-                            <image src="/static/img/heart1.png"></image>
+                            <image :src="configStaticPath('/static/img/heart1.png')"></image>
                             <view>{{ item.likesNum }}</view>
                         </view>
                         <view class="like" v-else-if="item.isLike == 1" @click="likeChange(item,0)">
-                            <image src="/static/img/heart2.png"></image>
+                            <image :src="configStaticPath('/static/img/heart2.png')"></image>
                             <view>{{ item.likesNum }}</view>
                         </view>
                     </view>
@@ -95,15 +95,15 @@
                                             <image :src="row.userIcon"></image>
                                         </view>
                                         <view class="contain-contain">
-                                            <view class="name">{{ row.userName }} <view v-if="createdBy == row.userId" class="createdBy">作者</view> <image src="/static/img/right.png"></image> {{ row.replyName }}<view v-if="createdBy == row.replyId" class="createdBy">作者</view></view>
+                                            <view class="name">{{ row.userName }} <view v-if="createdBy == row.userId" class="createdBy">作者</view> <image :src="configStaticPath('/static/img/right.png')"></image> {{ row.replyName }}<view v-if="createdBy == row.replyId" class="createdBy">作者</view></view>
                                             <rich-text class="content" v-html="renderTxt(row.content)"></rich-text>
                                             <view class="time">
                                                 {{formatedCommentDate(row.createTime) }}<text class="replys" @click="childReply(item,row,index)">　回复</text>
                                             </view>
                                         </view>
                                         <view class="contain-like like">
-                                            <image @click="likeChange(row,1)" v-if="row.isLike == 0" src="/static/img/heart1.png"></image>
-                                            <image @click="likeChange(row,0)" v-else-if="row.isLike == 1" src="/static/img/heart2.png"></image>
+                                            <image @click="likeChange(row,1)" v-if="row.isLike == 0" :src="configStaticPath('/static/img/heart1.png')"></image>
+                                            <image @click="likeChange(row,0)" v-else-if="row.isLike == 1" :src="configStaticPath('/static/img/heart2.png')"></image>
                                             <view>{{ row.likesNum }}</view>
                                         </view>
                                     </view>
@@ -112,24 +112,24 @@
                             <view class="expand" v-if="item.subCommentNum > 0">
                                 <view v-if="item.isExpand == 0 && isArrayEmpty(item.childcomMent)" @click="expandChange(item)">
                                     <view>展开 {{ item.subCommentNum }} 条回复 </view>
-                                    <image src="/static/img/down.png"></image>
+                                    <image :src="configStaticPath('/static/img/down.png')"></image>
                                 </view>
                                 <view v-else-if="item.isExpand == 0 && item.childcomMent.length<item.subCommentNum" @click="expandChange(item)">展开更多回复</view>
                                 <view v-else-if="item.isExpand == 2" @click="upChange(item,1)">展开全部回复</view>
-                                <view v-else-if="item.childcomMent.length<item.subCommentNum || item.isExpand == 1" @click="upChange(item,2)">
-                                    <view>收起</view><image src="/static/img/up.png"></image>
+                                <view v-else-if="item.isExpand == 1" @click="upChange(item,2)">
+                                    <view>收起</view><image :src="configStaticPath('/static/img/up.png')"></image>
                                 </view>
                                 <view style="margin-top:5rpx;" v-if="item.isExpand == 0 &&item.childcomMent.length>0 && item.childcomMent.length<item.subCommentNum" @click="clearItem(item,0)">
-                                    <view>收起</view><image src="/static/img/up.png"></image>
+                                    <view>收起</view><image :src="configStaticPath('/static/img/up.png')"></image>
                                 </view>
                             </view>
                         </view>
                         <view class="like" v-if="item.isLike == 0" @click="likeChange(item,1)">
-                            <image src="/static/img/heart1.png"></image>
+                            <image :src="configStaticPath('/static/img/heart1.png')"></image>
                             <view>{{ item.likesNum }}</view>
                         </view>
                         <view class="like" v-else-if="item.isLike == 1" @click="likeChange(item,0)">
-                            <image src="/static/img/heart2.png"></image>
+                            <image :src="configStaticPath('/static/img/heart2.png')"></image>
                             <view>{{ item.likesNum }}</view>
                         </view>
                     </view>
@@ -140,6 +140,7 @@
 </template>
 <script setup>
 import { ref, onMounted, reactive,watch } from 'vue'
+import {configStaticPath} from '@/config/index'
 import { onLoad ,onReachBottom} from '@dcloudio/uni-app'
 import {formatedCommentDate,isArrayEmpty,getTokenValue} from "@/utils/utils"
 import emoji from "@/utils/imconfig/emoji";
@@ -200,8 +201,8 @@ const scrolltolower = () => {
 }
 const loadmore = () =>{
     let obj = {
-        // opusId:pageData.opusId,
-        opusId:'1622360605426033038',
+        opusId:pageData.opusId,
+        // opusId:'1622360605426033038',
         pageNum:pageData.pageNum,
         pageSize:pageData.pageSize,
     }

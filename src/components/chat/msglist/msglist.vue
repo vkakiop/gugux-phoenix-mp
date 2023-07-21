@@ -34,22 +34,22 @@
           <!-- yourname：就是消息的 from -->
           <text class="user-text">{{ item.yourname + ' ' + handleTime(item)}}</text>
         </view>
-        <image class="avatar" src="/static/images/theme2x.png" />
+        <image class="avatar" :src="configStaticPath('/static/images/theme2x.png')" />
         <view class="msg">
           <image
             class="err"
             :class="(item.style == 'self' && item.isFail) ?  'show' : 'hide'"
-            src="/static/images/msgerr.png"
+            :src="configStaticPath('/static/images/msgerr.png')"
           />
 
           <image
             v-if="item.style == 'self'"
-            src="/static/images/poprightarrow2x.png"
+            :src="configStaticPath('/static/images/poprightarrow2x.png')"
             class="msg_poprightarrow"
           />
           <image
             v-if="item.style == ''"
-            src="/static/images/popleftarrow2x.png"
+            :src="configStaticPath('/static/images/popleftarrow2x.png')"
             class="msg_popleftarrow"
           />
           <view v-if="item.msg.type == 'img' || item.msg.type == 'video'">
@@ -80,7 +80,7 @@
               <image
                 v-if="d_item.type == 'emoji'"
                 class="avatar"
-                :src="'/static/images/faces/' + d_item.data"
+                :src="configStaticPath('/static/images/faces/' + d_item.data)"
                 style="width:25px; height:25px; margin:0 0 2px 0; float:left;"
               />
             </view>
@@ -94,6 +94,7 @@
 
 
 <script>
+import {configStaticPath} from '@/config/index'
 let msgStorage = require("../msgstorage");
 let disp = require("../../../utils/broadcast");
 let LIST_STATUS = {

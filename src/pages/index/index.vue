@@ -9,13 +9,14 @@
               @click="changeWaterfall(index)">
               <view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }}</view>
               <view class="">
-                <image src="/static/mine/line.png" class="w-30 h-4 relative -top-5" v-show="pageData.currentIndex == index" />
+                <image :src="configStaticPath('/static/mine/line.png')" class="w-30 h-4 relative -top-5"
+                  v-show="pageData.currentIndex == index" />
               </view>
             </view>
           </view>
         </scroll-view>
         <view>
-          <image src="/static/mine/search.png" class="w-17 h-17 mt-2" @click="gohistory"></image>
+          <image :src="configStaticPath('/static/mine/search.png')" class="w-17 h-17 mt-2" @click="gohistory"></image>
         </view>
         <!-- 菜单 -->
       </view>
@@ -40,10 +41,11 @@
 <script setup>
 import { ref, onMounted, reactive, watch, nextTick } from 'vue'
 import { opusList } from '@/api/opus/list'
+import { configStaticPath } from '@/config/index'
 import waterfall from '@/components/index/waterfall.vue'
 // import safeguardconfirm from '@/components/safeguard/safeguardconfirm.vue'
 // import safeguard from '@/components/safeguard/safeguard.vue'
-import { onShow,onReachBottom } from "@dcloudio/uni-app"
+import { onShow, onReachBottom } from "@dcloudio/uni-app"
 import useRouterStore from '@/store/modules/router'
 import useLoginTokenStore from '@/store/modules/loginToken'
 import { frontpage } from "@/api/index/index";
@@ -69,7 +71,7 @@ frontpage({}).then(res => {
   opusCategoryVOS.forEach((item, index) => {
     let obj = {
       scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '', items: [], query: {
-        path: { categoryId: '', pageNum: 1, getNum: 20 }
+        path: { categoryId: '', getNum: 20 }
       }
     }
     obj.name = item.name
@@ -85,6 +87,7 @@ onShow(() => {
 })
 watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
   pageData.waterfallItems = _.cloneDeep(waterfallItems)
+  pageData.waterfallItems[pageData.currentIndex].items = []
   changeWaterfall(pageData.currentIndex)
 })
 
@@ -94,7 +97,8 @@ const changeWaterfall = (waterIndex) => {
   //   //读取滚动条高度
   //   pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
   // }
-  pageData.waterfallItems[waterIndex].items=[]
+  // pageData.waterfallItems[waterIndex].query.path.pageNum = 1
+  // pageData.waterfallItems[waterIndex].items=[]
   pageData.currentIndex = waterIndex
   if (pageData.waterfallItems[waterIndex].items.length == 0) {
     getData()

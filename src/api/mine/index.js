@@ -41,7 +41,7 @@ export function homepageopus(data) {
 // 用户主页点赞作品列表
 export function homepagelike(data) {
 	return request({
-		url: '/gugux-services-opus-api/app/opus/homepage/like',
+		url: '/gugux-services-opus-api/app/opus/homepage/like/36',
 		method: 'get',
 		params: data,
 		headers: {
@@ -52,7 +52,7 @@ export function homepagelike(data) {
 // 用户主页收藏
 export function homepagecollection(data) {
 	return request({
-		url: '/gugux-services-opus-api/app/opus/homepage/collection',
+		url: '/gugux-services-opus-api/app/opus/homepage/collection/36',
 		method: 'get',
 		params: data,
 		headers: {
@@ -63,7 +63,7 @@ export function homepagecollection(data) {
 // 用户作品详情
 export function opusdetails(data) {
 	return request({
-		url: `/gugux-services-opus-api/app/opus/details/${data.opusId}`,
+		url: `/gugux-services-opus-api/app/opus/rec/details`,
 		method: 'get',
 		params: data,
 		headers: {

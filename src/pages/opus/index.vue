@@ -3,14 +3,14 @@
       <customNav>
         <view @click="gotoBack" class="pl-10"><uni-icons type="back" size="24"></uni-icons></view>
         <view class="flex flex-none items-center" @click="gotoMine">
-          <image class="w-32 h-32 rounded-full flex-none" :src="pageData.detail.icon"/>
+          <image v-if="pageData.detail.icon" class="w-32 h-32 rounded-full flex-none" :src="pageData.detail.icon"/>
           <view class="name mx-6 text-16 text-[#272a29] line-clamp-1">{{pageData.detail.author}}</view>
         </view>
         <debounce @debounce="attention">
           <button :class="['flex-none', 'ml-5', 'mr-5', 'w-64', 'h-26', 'leading-26', 'rounded-full', 'text-12', pageData.detail.isFollow ? '' : 'bg-[#f8cf01]', pageData.detail.isFollow ? '' : 'text-[#272a29]']">{{pageData.detail.isFollow ? '已':'+'}}关注</button>
         </debounce>
       </customNav>
-      <opus-article :detail="pageData.detail" v-if="pageData.detail.opusType == 1"></opus-article>
+      <opus-article :detail="pageData.detail" v-if="pageData.detail.id"></opus-article>
       <!--opus-video :detail="pageData.detail" v-else-if="pageData.detail.opusType == 2"></opus-video-->
       <view id="comment_list"><comment ref="commentRef" :id="pageData.detail.id" :createdBy="pageData.detail.createdBy" @reply-finish="getData()"></comment></view>
       <view class="h-50"></view>

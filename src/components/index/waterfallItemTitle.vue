@@ -11,15 +11,15 @@
         </image>
       </view>
       <view v-if="isVirtualCal"></view>
-      <image v-else-if="item.cover.itemType == 3" :src="configStaticPath('/static/video/videoplay.png')" mode=""
+      <image v-else-if="item.opusType == 2" :src="configStaticPath('/static/video/videoplay.png')" mode=""
         class="absolute w-36 h-36 top-[50%] left-[50%] -ml-18 -mt-18 z-40" @click="godetail(item)"></image>
-      <view v-else-if="item.cover.itemType == 2 && item.cover.name"
+      <view v-else-if="item.opusType == 1 && item.cover.name"
         class="absolute  bottom-10 z-40  px-10 text-white text-12 rounded mb-11" @click="godetail(item)">
         <image :src="configStaticPath('/static/opus/icon_location_white.png')" class="w-9 h-11 -mt-2 align-middle"></image>
         {{ item.cover.name }}{{ computedLocation(item.cover.x, item.cover.y) }}
       </view>
     </view>
-    <view class=" line-clamp-2 text-14 font-bold text-[#272A29] leading-20 px-4">
+    <view class=" line-clamp-2 text-14 font-bold text-[#272A29] leading-20 px-4" @click="godetail(item)">
       <view class="">{{ item.title }}</view>
     </view>
     <view v-if="isVirtualCal" class="h-30"></view>
@@ -52,6 +52,7 @@ const emit = defineEmits(['popLoginShow'])
 
 const gohomepage = (item) => {
   item.traceInfo = item.traceInfo ? item.traceInfo : ''
+  item.categoryId = item.categoryId ? item.categoryId : ''
   if (useLoginTokenStore().get().user) {
     if (item.createdBy == useLoginTokenStore().get().user.id) {
       uni.switchTab({
@@ -61,24 +62,25 @@ const gohomepage = (item) => {
     }
   }
   uni.navigateTo({
-    url: `/pages/userhomepage/userhomepage?id=${item.createdBy}&traceInfo=${encodeURIComponent(item.traceInfo)}`
+    url: `/pages/userhomepage/userhomepage?id=${item.createdBy}&traceInfo=${encodeURIComponent(item.traceInfo)}&categoryId=${item.categoryId}`
   })
 
 }
 const godetail = (item) => {
   item.traceInfo = item.traceInfo ? item.traceInfo : ''
-  if (item.cover.itemType == 2) {
+  item.categoryId = item.categoryId ? item.categoryId : ''
+  if (item.opusType == 1) {
     uni.navigateTo({
-      url: `/pages/opus/index?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}&categoryId=${props.categoryId}`
+      url: `/pages/opus/index?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}&categoryId=${item.categoryId}`
     })
-  } else if (item.cover.itemType == 3) {
+  } else if (item.opusType == 2) {
     if (props["itemKey"] == 'mine') {
       uni.navigateTo({
-        url: `/components/mine/minevideo?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}`
+        url: `/components/mine/minevideo?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}&categoryId=${item.categoryId}`
       })
     } else {
       uni.navigateTo({
-        url: `/pages/VideoCarousel/VideoCarousel?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}`
+        url: `/pages/VideoCarousel/VideoCarousel?id=${item.id}&traceInfo=${encodeURIComponent(item.traceInfo)}&categoryId=${item.categoryId}`
       })
     }
   }
@@ -101,6 +103,7 @@ onMounted(() => {
 //点赞
 const like = (item) => {
   item.traceInfo = item.traceInfo ? item.traceInfo : ''
+  item.categoryId = item.categoryId ? item.categoryId : ''
   let action = item.isLike ? 0 : 1
   if (getTokenValue()) {
     opusLike({ opusId: item.id, action: action, trackInfo: item.traceInfo, categoryId: props.categoryId }).then(res => {

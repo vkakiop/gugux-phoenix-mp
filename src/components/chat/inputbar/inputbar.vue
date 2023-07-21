@@ -37,11 +37,11 @@
       <swiper-item>
         <view :class="'other_func ' + (isIPX ? 'other_func_X' : '')">
           <view class="open_camera" @tap="openCamera">
-            <image src="/static/images/camora.png"></image>
+            <image :src="configStaticPath('/static/images/camora.png')"></image>
             相机
           </view>
           <view class="menu_wrap" @tap="sendImage">
-            <image src="/static/images/pic.png"></image>
+            <image :src="configStaticPath('/static/images/pic.png')"></image>
             相册
           </view>
           <!-- #ifdef APP-PLUS -->
@@ -49,7 +49,7 @@
             <chatSuitAttach :username="username" :chatType="chatType">
               <image
                 style="background-color: #fff"
-                src="/static/images/file.png"
+                :src="configStaticPath('/static/images/file.png')"
               ></image>
               附件
             </chatSuitAttach>
@@ -60,7 +60,7 @@
             @tap="edit_group"
             v-show="chatType === 'chatRoom'"
           >
-            <image src="/static/images/pic.png"></image>
+            <image :src="configStaticPath('/static/images/pic.png')"></image>
             群信息
           </view>
 
@@ -90,6 +90,7 @@
 </template>
 
 <script>
+import {configStaticPath} from '@/config/index'
 let RecordStatus = require("./suit/audio/record_status").RecordStatus;
 let msgType = require("../msgtype");
 import chatSuitEmoji from "./suit/emoji/emoji";

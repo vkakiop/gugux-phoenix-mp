@@ -4,7 +4,7 @@
     <view :class="isIPX ?'f-row-x' :'f-row'">
       <!-- 发送语音 -->
       <view>
-        <image class="icon-mic" src="/static/images/voice.png" @tap="openRecordModal"></image>
+        <image class="icon-mic" :src="configStaticPath('/static/images/voice.png')" @tap="openRecordModal"></image>
       </view>
       <!-- 输入框 -->
       <textarea
@@ -24,10 +24,10 @@
         maxlength="300"
       />
       <view>
-        <image class="icon-mic" src="/static/images/Emoji.png" @tap="openEmoji"></image>
+        <image class="icon-mic" :src="configStaticPath('/static/images/Emoji.png')" @tap="openEmoji"></image>
       </view>
       <view v-show="!inputMessage" @tap="openFunModal">
-        <image class="icon-mic" src="/static/images/ad.png"></image>
+        <image class="icon-mic" :src="configStaticPath('/static/images/ad.png')"></image>
       </view>
        <button 
         class="send-btn-style" 
@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import {configStaticPath} from '@/config/index'
 let WebIM = require("../../../../../utils/WebIM")["default"];
 let msgType = require("../../../msgtype");
 let disp = require("../../../../../utils/broadcast");

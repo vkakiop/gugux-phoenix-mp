@@ -36,7 +36,7 @@
 	
 			<view class="tap_mask" @tap="into_room" :data-username="item.member||item.owner">
 	          	<view class="address_bottom" :data-username="item.member||item.owner" @tap="into_room">
-					<image src="../../../static/images/theme2x.png" @tap="into_room" :data-username="item.member||item.owner"></image>
+					<image :src="configStaticPath('/static/images/theme2x.png')" @tap="into_room" :data-username="item.member||item.owner"></image>
 		          	<text @tap="into_room" :data-username="item.member||item.owner">{{item.member||item.owner}}</text>
 		          	<checkbox :value="item.member||item.owner" :checked="item.checked" :disabled="item.disabled"/>
 	      		</view>
@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import {configStaticPath} from '@/config/index'
 	export default {
 		data() {
 			return {

@@ -14,7 +14,7 @@
             </map>
           </view>
           <view class="map-name">
-            <image  src="/static/img/user.png"  mode="widthFix"/>
+            <image  :src="configStaticPath('/static/img/user.png')"  mode="widthFix"/>
              {{ alarmData.data.unusualLocation }}
           </view>
         </view>
@@ -23,7 +23,7 @@
           <view class="btn btn2" @click="confirmShow(alarmData.data.manageId)">导航去这里</view>
         </view>
         <view class="close">
-          <image @click="closeBox" class="img" src="/static/img/close.png"  mode="widthFix"/>
+          <image @click="closeBox" class="img" :src="configStaticPath('/static/img/close.png')"  mode="widthFix"/>
         </view>
       </view>
     </u-modal>
@@ -33,6 +33,7 @@
 
 <script setup>
 import { ref, onMounted, reactive,watch } from 'vue'
+import {configStaticPath} from '@/config/index'
 import { onLoad ,onReachBottom} from '@dcloudio/uni-app'
 import useSafeguardStore from '@/store/modules/safeguard'
 import JSONBIG from 'json-bigint'

@@ -15,7 +15,7 @@
 							{{ pageInfo.mineMessage.nickname }}
 						</view>
 						<view class=" text-14 flex items-center mt-18">
-							<image src="/static/mine/ID.png" class="w-15 h-15 " />
+							<image :src="configStaticPath('/static/mine/ID.png')" class="w-15 h-15 " />
 							<text class="ml-5 mr-15">{{ pageInfo.mineMessage.guguId }}</text>
 							<!-- 	<image src="/static/mine/copy.png" class="w-15 h-15 ml-10" @click.stop="copy(pageInfo.mineMessage.guguId)" /> -->
 						</view>
@@ -61,10 +61,9 @@
 			<view class="flex ">
 				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
 					@click="changeWaterfall(index)">
-					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text
-							v-if="waterItem.query.data.totalCount">({{ waterItem.query.data.totalCount }})</text></view>
+					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text>({{ waterItem.query.data.totalCount }})</text></view>
 					<view class="-mt-5">
-						<image src="/static/mine/line.png" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
+						<image :src="configStaticPath('/static/mine/line.png')" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
 					</view>
 				</view>
 			</view>
@@ -73,10 +72,9 @@
 			<view class="flex ">
 				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
 					@click="changeWaterfall(index)">
-					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text
-							v-if="waterItem.query.data.totalCount">({{ waterItem.query.data.totalCount }})</text></view>
+					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text>({{ waterItem.query.data.totalCount }})</text></view>
 					<view class="-mt-5">
-						<image src="/static/mine/line.png" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
+						<image :src="configStaticPath('/static/mine/line.png')" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
 					</view>
 				</view>
 			</view>
@@ -86,7 +84,7 @@
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
 				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
 					class="flex items-center justify-center mt-30">
-					<u-empty mode="list" icon="/static/img/nodata.png" text="内容为空" />
+					<u-empty mode="list" :icon="configStaticPath('/static/img/nodata.png')" text="内容为空" />
 				</view>
 				<view v-if="waterIndex == pageData.currentIndex && waterItem.items.length">
 					<waterfall :isComplete="waterItem.isComplete" :itemType="waterItem.itemType" :value="waterItem.items"
@@ -103,13 +101,14 @@
 			<view @click="gotoBack" class="ml-3 mt-5"><uni-icons type="back" size="24"></uni-icons></view>
 			<view>咕咕行</view>
 		</customNav>
-		<u-empty mode="data" text="获取失败" icon="/static/img/nodata.png" />
+		<u-empty mode="data" text="获取失败" :icon="configStaticPath('/static/img/nodata.png')" />
 	</view>
 </template>
 
 <script setup>
 import { getTokenValue } from "@/utils/utils"
 import waterfall from '@/components/index/waterfall.vue'
+import {configStaticPath} from '@/config/index'
 import { userFans, userFansRemove } from "@/api/opus/index"
 import { userhomepage, homepageopus } from "@/api/mine/index.js"
 import { ref, reactive, watch, computed } from 'vue'
@@ -123,7 +122,7 @@ const waterfallItems = [{
 	scrollTop: -1, isComplete: false, isLoading: false, itemType: 'image', name: '作品', items: [],
 	query: {
 		path: { pageNum: 1, pageSize: 20, },
-		data: { totalCount: '' }
+		data: { totalCount: 0 }
 	}
 }]
 const pageData = reactive({
@@ -143,10 +142,10 @@ watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
 onLoad((option) => {
 	pageData.masterId = option.id
 	pageData.traceInfo = decodeURIComponent(option.traceInfo || '')
-
+	fetchInfo()
 })
 onShow(() => {
-	fetchInfo()
+	// fetchInfo()
 })
 const fetchInfo = () => {
 	userhomepage({
@@ -189,7 +188,7 @@ const getData = () => {
 		if (res.data.page == res.data.totalPage) {
 			pageData.waterfallItems[currentIndex].isComplete = true
 		}
-		pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount
+		pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount||0
 		pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
 		pageData.waterfallItems[currentIndex].isLoading = false
 	}).catch(e => {
