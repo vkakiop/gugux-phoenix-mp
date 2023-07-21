@@ -9,7 +9,8 @@
               @click="changeWaterfall(index)">
               <view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }}</view>
               <view class="">
-                <image :src="configStaticPath('/static/mine/line.png')" class="w-30 h-4 relative -top-5" v-show="pageData.currentIndex == index" />
+                <image :src="configStaticPath('/static/mine/line.png')" class="w-30 h-4 relative -top-5"
+                  v-show="pageData.currentIndex == index" />
               </view>
             </view>
           </view>
@@ -40,11 +41,11 @@
 <script setup>
 import { ref, onMounted, reactive, watch, nextTick } from 'vue'
 import { opusList } from '@/api/opus/list'
-import {configStaticPath} from '@/config/index'
+import { configStaticPath } from '@/config/index'
 import waterfall from '@/components/index/waterfall.vue'
 // import safeguardconfirm from '@/components/safeguard/safeguardconfirm.vue'
 // import safeguard from '@/components/safeguard/safeguard.vue'
-import { onShow,onReachBottom } from "@dcloudio/uni-app"
+import { onShow, onReachBottom } from "@dcloudio/uni-app"
 import useRouterStore from '@/store/modules/router'
 import useLoginTokenStore from '@/store/modules/loginToken'
 import { frontpage } from "@/api/index/index";
@@ -86,6 +87,7 @@ onShow(() => {
 })
 watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
   pageData.waterfallItems = _.cloneDeep(waterfallItems)
+  pageData.waterfallItems[pageData.currentIndex].items = []
   changeWaterfall(pageData.currentIndex)
 })
 
