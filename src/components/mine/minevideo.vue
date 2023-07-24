@@ -238,8 +238,8 @@ const onShareAppMessage = () => {
 
 const handleShare = () => {
 	isShare.value = true
-	uni.createVideoContext('video0', ctx).pause()
-	pageData.status = 1
+	// uni.createVideoContext('video0', ctx).pause()
+	// pageData.status = 1
 }
 const onShareTimeline = () => {
 	return onShareAppMessage()

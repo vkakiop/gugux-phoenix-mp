@@ -206,7 +206,9 @@ const getData = () => {
 				pageData.waterfallItems[currentIndex].isComplete = true
 			}
 			pageData.isload = true
-			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount || 0
+			if (query.path.pageNum == 1) {
+				pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount || 0
+			}
 			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
 			pageData.waterfallItems[currentIndex].isLoading = false
 		}).catch(e => {
@@ -214,24 +216,29 @@ const getData = () => {
 		})
 	} else if (currentIndex === 1) {
 		homepagelike({ ...query.path }).then(res => {
-			if (res.data.content.length < 20) {
+			if (res.data.list.length < 20) {
 				pageData.waterfallItems[currentIndex].isComplete = true
 			}
 			pageData.isload = true
-			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalNum || 0
-			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.content)
+			if (query.path.index == '') {
+				pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalNum || 0
+			}
+			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
 			pageData.waterfallItems[currentIndex].isLoading = false
 		}).catch(e => {
 			pageData.waterfallItems[currentIndex].isLoading = false
 		})
 	} else if (currentIndex === 2) {
 		homepagecollection({ ...query.path }).then(res => {
-			if (res.data.content.length < 20) {
+			if (res.data.list.length < 20) {
 				pageData.waterfallItems[currentIndex].isComplete = true
 			}
+			if (query.path.index == '') {
+				pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalNum || 0
+			}
 			pageData.isload = true
-			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalNum || 0
-			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.content)
+			// pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalNum || 0
+			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
 			pageData.waterfallItems[currentIndex].isLoading = false
 		}).catch(e => {
 			pageData.waterfallItems[currentIndex].isLoading = false
@@ -251,10 +258,10 @@ onReachBottom(() => {
 			pageData.waterfallItems[currentIndex].query.path.pageNum++
 		} else if (currentIndex == 1) {
 			let obj = Array.from(pageData.waterfallItems[currentIndex].items).findLast((item) => item.isLike == true)
-			pageData.waterfallItems[currentIndex].query.path.index = obj ? obj.id : ''
+			pageData.waterfallItems[currentIndex].query.path.index = obj ? obj.index : ''
 		} else {
 			if (Array.from(pageData.waterfallItems[2].items).length) {
-				pageData.waterfallItems[currentIndex].query.path.index = Array.from(pageData.waterfallItems[2].items).at(-1).id
+				pageData.waterfallItems[currentIndex].query.path.index = Array.from(pageData.waterfallItems[2].items).at(-1).index
 			} else {
 				pageData.waterfallItems[currentIndex].query.path.index = ''
 			}
