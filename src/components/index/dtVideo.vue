@@ -22,9 +22,13 @@
 							<image :src="configStaticPath('/static/mine/vip.png')" class="w-49 h-19 ml-4" v-if="item.isDr" />
 						</view>
 						<view class="text-14 leading-16 my-11">发布于：{{ item.createdTime }}</view>
-						<view class="text-16 leading-25 flex items-center">
+						<!-- <view class="text-16 leading-25 flex items-center">
 							<image :src="configStaticPath('/static/video/good.png')" class="w-19 h-19 mr-4" v-if="item.boutique" />{{ item.brief
 							}}
+						</view> -->
+						<view class="text-16 leading-25 ">
+							<image :src="configStaticPath('/static/video/good.png')" class="w-19 h-19 mr-4 align-middle" v-if="item.boutique"/>
+							{{ item.brief }}
 						</view>
 					</view>
 					<view class="buttons text-sm">
