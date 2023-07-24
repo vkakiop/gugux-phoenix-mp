@@ -74,7 +74,10 @@
 		<!-- 菜单 -->
 		<view class="pt-13 bg-[#F6F6F6] ">
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
-				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
+				<view class="u-page__loading-item" v-if="!pageData.isload && waterIndex == pageData.currentIndex">
+					<u-loading-icon size="36"></u-loading-icon>
+				</view>
+				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex && pageData.isload"
 					class="flex items-center justify-center mt-30">
 					<u-empty text="内容为空" mode="list" :icon="configStaticPath('/static/img/nodata.png')" />
 				</view>
@@ -155,6 +158,7 @@ const waterfallItems = [{
 }
 ]
 const pageData = reactive({
+	isload: false,
 	masterId: '',
 	scrollTop: 0,
 	currentIndex: 0,
@@ -170,10 +174,10 @@ const changeWaterfall = (waterIndex) => {
 	// 	//读取滚动条高度
 	// 	pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
 	// }
-	if(waterIndex!=0){
-		pageData.waterfallItems[waterIndex].query.path.index=''
-	}else{
-		pageData.waterfallItems[waterIndex].query.path.pageNum=1
+	if (waterIndex != 0) {
+		pageData.waterfallItems[waterIndex].query.path.index = ''
+	} else {
+		pageData.waterfallItems[waterIndex].query.path.pageNum = 1
 	}
 	pageData.waterfallItems[waterIndex].isComplete = false
 	pageData.waterfallItems[waterIndex].items = []
@@ -192,6 +196,7 @@ const changeWaterfall = (waterIndex) => {
 	// }
 }
 const getData = () => {
+	pageData.isload = false
 	let currentIndex = pageData.currentIndex
 	pageData.waterfallItems[currentIndex].isLoading = true
 	let query = pageData.waterfallItems[currentIndex].query
@@ -200,6 +205,7 @@ const getData = () => {
 			if (res.data.page == res.data.totalPage) {
 				pageData.waterfallItems[currentIndex].isComplete = true
 			}
+			pageData.isload = true
 			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount || 0
 			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
 			pageData.waterfallItems[currentIndex].isLoading = false
@@ -208,9 +214,10 @@ const getData = () => {
 		})
 	} else if (currentIndex === 1) {
 		homepagelike({ ...query.path }).then(res => {
-			if ( res.data.content.length<20) {
+			if (res.data.content.length < 20) {
 				pageData.waterfallItems[currentIndex].isComplete = true
 			}
+			pageData.isload = true
 			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalNum || 0
 			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.content)
 			pageData.waterfallItems[currentIndex].isLoading = false
@@ -219,9 +226,10 @@ const getData = () => {
 		})
 	} else if (currentIndex === 2) {
 		homepagecollection({ ...query.path }).then(res => {
-			if ( res.data.content.length<20) {
+			if (res.data.content.length < 20) {
 				pageData.waterfallItems[currentIndex].isComplete = true
 			}
+			pageData.isload = true
 			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalNum || 0
 			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.content)
 			pageData.waterfallItems[currentIndex].isLoading = false
