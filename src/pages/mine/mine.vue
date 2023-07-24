@@ -106,6 +106,15 @@ const computedNumber = computed({
 })
 onShow(() => {
 	if (getTokenValue()) {
+		userhomepage({
+			masterId: pageData.masterId
+		}).then(reslove => {
+			pageInfo.mineMessage = reslove.data.userInfo
+		}).catch((e) => {
+			uni.redirectTo({
+				url: '/pages/login/logout'
+			})
+		})
 		// pageData.masterId = useLoginTokenStore().get().user.id
 		// fetchData()
 		// gettolcount()
@@ -309,15 +318,15 @@ const skipPerson = () => {
 }
 const fetchData = () => {
 	changeWaterfall(pageData.currentIndex)
-	userhomepage({
-		masterId: pageData.masterId
-	}).then(reslove => {
-		pageInfo.mineMessage = reslove.data.userInfo
-	}).catch((e) => {
-		uni.redirectTo({
-			url: '/pages/login/logout'
-		})
-	})
+	// userhomepage({
+	// 	masterId: pageData.masterId
+	// }).then(reslove => {
+	// 	pageInfo.mineMessage = reslove.data.userInfo
+	// }).catch((e) => {
+	// 	uni.redirectTo({
+	// 		url: '/pages/login/logout'
+	// 	})
+	// })
 }
 watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
 	if (newVal) {
