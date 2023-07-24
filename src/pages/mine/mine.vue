@@ -106,6 +106,7 @@ const computedNumber = computed({
 })
 onShow(() => {
 	if (getTokenValue()) {
+		pageData.masterId = useLoginTokenStore().get().user.id
 		userhomepage({
 			masterId: pageData.masterId
 		}).then(reslove => {
@@ -115,7 +116,6 @@ onShow(() => {
 				url: '/pages/login/logout'
 			})
 		})
-		// pageData.masterId = useLoginTokenStore().get().user.id
 		// fetchData()
 		// gettolcount()
 	} else {
