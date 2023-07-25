@@ -1,5 +1,5 @@
 <template>
-	<view class="w-screen h-screen relative" v-if="pageData.opusdetail.cover">
+	<view class="w-screen h-screen relative" v-if="pageData.opusdetail.id">
 		<video autoplay class="w-screen h-screen fixed" id='video0' :src="pageData.opusdetail.cover.content" loop
 			:controls="true" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false"
 			@error="videoErrorCallback" @click.stop="handleVideo(0)">
@@ -72,7 +72,7 @@
 		</u-popup>
 		<loginPop :isShow="pageData.isShowLoginPop" @close="pageData.isShowLoginPop = false"></loginPop>
 	</view>
-	<view v-else class="w-screen h-screen flex justify-center items-center">
+	<view v-else-if="pageData.isLoadError" class="w-screen h-screen flex justify-center items-center">
 		<u-empty mode="data" text="获取视频失败" :icon="configStaticPath('/static/img/nodata.png')" />
 	</view>
 </template>
@@ -93,6 +93,7 @@ const computedNumber = computed({
 const isShare = ref(false)
 const pageData = reactive({
 	id: '',
+	isLoadError:false,
 	categoryId: '',
 	traceInfo: '',
 	opusdetail: {},
@@ -120,7 +121,9 @@ const fetchData = () => {
 		traceInfo: pageData.traceInfo,
 	}).then(res => {
 		pageData.opusdetail = res.data
-	})
+	}).catch(e=>{
+      pageData.isLoadError = true
+    })
 }
 const gohomepage = (item) => {
 	isShare.value = false
