@@ -41,7 +41,7 @@ const onChooseAvatar = (e) => {
 					uni.showToast({
 						title: '修改成功'
 					})
-					gotoBack()
+					setTimeout(()=>{gotoBack()},500)	
 				})
 			}
 			else {
