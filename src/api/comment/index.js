@@ -32,20 +32,37 @@ export function commentlike(data) {
 //     })
 // }
 
-// 获取评论
+// 获取评论3.6
 export function commentlist(data) {
     return request({
-        url: '/gugux-services-opus-api/app/opus/page/comment',
+        url: '/gugux-services-opus-api/app/opus/comment/main',
         method: 'get',
         params:data
     })
 }
-// 获取子评论
+// 获取子评论3.6
 export function subcommentlist(data) {
     return request({
-        url: '/gugux-services-opus-api/app/opus/son/comment',
+        url: '/gugux-services-opus-api/app/opus/comment/sub',
         method: 'get',
         params:data
     })
 }
+
+// // 获取评论
+// export function commentlist(data) {
+//     return request({
+//         url: '/gugux-services-opus-api/app/opus/page/comment',
+//         method: 'get',
+//         params:data
+//     })
+// }
+// // 获取子评论
+// export function subcommentlist(data) {
+//     return request({
+//         url: '/gugux-services-opus-api/app/opus/son/comment',
+//         method: 'get',
+//         params:data
+//     })
+// }
 

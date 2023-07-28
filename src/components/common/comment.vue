@@ -172,7 +172,7 @@ const pageData = reactive({
     replyId:'',
     replyCommentId:'',
     lastCommentId:0,
-    // childlastCommentId:0,
+    childlastCommentId:0,
     total:-1,
     indexList:[],
     content:'',
@@ -200,17 +200,16 @@ const scrolltolower = () => {
     loadmore();
 }
 const loadmore = () =>{
-    let obj = {
-        opusId:pageData.opusId,
-        // opusId:'1622360605426033038',
-        pageNum:pageData.pageNum,
-        pageSize:pageData.pageSize,
-    }
     // let obj = {
     //     opusId:pageData.opusId,
-    //     lastCommentId:pageData.lastCommentId == 0 ? 0 :pageData.lastCommentId,
+    //     pageNum:pageData.pageNum,
     //     pageSize:pageData.pageSize,
     // }
+    let obj = {
+        opusId:pageData.opusId,
+        lastCommentId:pageData.lastCommentId == 0 ? 0 :pageData.lastCommentId,
+        pageSize:pageData.pageSize,
+    }
     if(pageData.total == pageData.indexList.length){
         return
     }
@@ -225,7 +224,7 @@ const loadmore = () =>{
                 })
             })
             pageData.indexList.push(...list);
-            // pageData.lastCommentId = pageData.indexList[pageData.indexList.length-1].id;
+            pageData.lastCommentId = pageData.indexList[pageData.indexList.length-1].id;
             pageData.pageNum++;
         }else{
             pageData.indexList = [];
@@ -265,8 +264,8 @@ watch(()=>props.id,(newVal,oldVal)=>{
     pageData.mainCommentId = 0;
     pageData.replyId = '';
     pageData.replyCommentId = '';
-    // pageData.lastCommentId=0;
-    // pageData.childlastCommentId=0;
+    pageData.lastCommentId=0;
+    pageData.childlastCommentId=0;
     pageData.total = -1;
     pageData.indexList = [];
     scrolltolower();
@@ -316,16 +315,16 @@ const expandChange = (item)=>{
     item.pageNum ? item.pageNum += 1 : item.pageNum = 1 ;
     console.log(item);
     if(item.isExpand == 0){
-        let obj = {
-            commentId:item.id,
-            pageNum:item.pageNum,
-            pageSize:pageData.pageSize,
-        }
         // let obj = {
         //     commentId:item.id,
-        //     lastCommentId:item.childlastCommentId||0,
+        //     pageNum:item.pageNum,
         //     pageSize:pageData.pageSize,
         // }
+        let obj = {
+            commentId:item.id,
+            lastCommentId:item.childlastCommentId||0,
+            pageSize:pageData.pageSize,
+        }
         subcommentlist(obj).then((res)=>{
             let list = [];
             if(!isArrayEmpty(res.data.list)){
@@ -338,7 +337,7 @@ const expandChange = (item)=>{
                 })
             }
             item.childcomMent.push(...list);
-            // item.childlastCommentId = item.childcomMent[item.childcomMent.length-1].id;
+            item.childlastCommentId = item.childcomMent[item.childcomMent.length-1].id;
             item.isExpand = item.subCommentNum == item.childcomMent.length ? 1 : 0;
             console.log(item.isExpand == 0 && item.childcomMent.length<item.subCommentNum)
         })
