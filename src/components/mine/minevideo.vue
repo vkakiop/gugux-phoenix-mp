@@ -1,5 +1,5 @@
 <template>
-	<view class="w-screen h-screen relative" v-if="pageData.opusdetail.cover">
+	<view class="w-screen h-screen relative" v-if="pageData.opusdetail.id">
 		<video autoplay class="w-screen h-screen fixed" id='video0' :src="pageData.opusdetail.cover.content" loop
 			:controls="true" :show-center-play-btn="true" :show-play-btn="false" :show-fullscreen-btn="false"
 			@error="videoErrorCallback" @click.stop="handleVideo(0)">
@@ -10,17 +10,21 @@
 		<view class="info w-275 pl-16">
 			<view v-if="pageData.opusdetail.cover.name" class=" text-13 mb-15 rounded-9   h-19  inline-block p-10"
 				style="background-color: rgba(244, 244, 244, 0.2);">
-				<image :src="configStaticPath('/static/opus/icon_location_white.png')" class="w-9 h-11 relative -top-8 mx-4" />
+				<image :src="configStaticPath('/static/opus/icon_location_white.png')"
+					class="w-9 h-11 relative -top-8 mx-4" />
 				<text class="relative -top-8 mx-4"> {{ pageData.opusdetail.cover.name }}</text>
 			</view>
 			<view class="font-bold h-17 leading-16 text-17 flex items-center">@{{ pageData.opusdetail.author }}
-				<image :src="configStaticPath('/static/mine/shop.png')" class="w-19 h-19 ml-4" v-if="pageData.opusdetail.hasShop" />
-				<image :src="configStaticPath('/static/mine/vip.png')" class="w-49 h-19 ml-4" v-if="pageData.opusdetail.isDr" />
+				<image :src="configStaticPath('/static/mine/shop.png')" class="w-19 h-19 ml-4"
+					v-if="pageData.opusdetail.hasShop" />
+				<image :src="configStaticPath('/static/mine/vip.png')" class="w-49 h-19 ml-4"
+					v-if="pageData.opusdetail.isDr" />
 			</view>
 			<view class="text-14 leading-16 my-11">发布于：{{ pageData.opusdetail.createdTime }}</view>
-			<view class="text-16 leading-25 flex items-center">
-				<image :src="configStaticPath('/static/video/good.png')" class="w-19 h-19 mr-4" v-if="pageData.opusdetail.boutique" />{{
-					pageData.opusdetail.brief }}
+			<view class="text-16 leading-25 ">
+				<image :src="configStaticPath('/static/video/good.png')" class="w-19 h-19 mr-4 align-middle"
+					v-if="pageData.opusdetail.boutique" />
+				{{ pageData.opusdetail.brief }}
 			</view>
 		</view>
 		<view class="buttons text-sm">
@@ -32,7 +36,8 @@
 				</view>
 			</debounce>
 			<debounce @debounce="like(pageData.opusdetail)" class="button mb-10">
-				<image v-if="pageData.opusdetail.isLike" class="w-36 h-36" :src="configStaticPath('/static/video/likefill.png')" />
+				<image v-if="pageData.opusdetail.isLike" class="w-36 h-36"
+					:src="configStaticPath('/static/video/likefill.png')" />
 				<image v-else class="w-36 h-36" :src="configStaticPath('/static/video/like.png')" />
 				<view>{{ computedNumber(pageData.opusdetail.likeNum) }}</view>
 			</debounce>
@@ -42,7 +47,8 @@
 			</debounce>
 			<debounce @debounce="collection(pageData.opusdetail)" class="button mb-10">
 				<view class="button mb-10">
-					<image v-if="pageData.opusdetail.isCollection" class="w-36 h-36" :src="configStaticPath('/static/video/collectfill.png')" />
+					<image v-if="pageData.opusdetail.isCollection" class="w-36 h-36"
+						:src="configStaticPath('/static/video/collectfill.png')" />
 					<image v-else class="w-36 h-36" :src="configStaticPath('/static/video/collect.png')" />
 					<view>{{ computedNumber(pageData.opusdetail.collectionNum) }}</view>
 				</view>
@@ -66,13 +72,13 @@
 		</u-popup>
 		<loginPop :isShow="pageData.isShowLoginPop" @close="pageData.isShowLoginPop = false"></loginPop>
 	</view>
-	<view v-else class="w-screen h-screen flex justify-center items-center">
+	<view v-else-if="pageData.isLoadError" class="w-screen h-screen flex justify-center items-center">
 		<u-empty mode="data" text="获取视频失败" :icon="configStaticPath('/static/img/nodata.png')" />
 	</view>
 </template>
 
 <script setup>
-import {configStaticPath} from '@/config/index'
+import { configStaticPath } from '@/config/index'
 import useOpusStore from '@/store/modules/opus'
 import comment from "@/components/common/comment.vue"
 import { opusdetails } from "@/api/mine/index"
@@ -87,7 +93,8 @@ const computedNumber = computed({
 const isShare = ref(false)
 const pageData = reactive({
 	id: '',
-	categoryId:'',
+	isLoadError:false,
+	categoryId: '',
 	traceInfo: '',
 	opusdetail: {},
 	status: 0, //0播放 1暂停
@@ -110,11 +117,13 @@ onShow(() => {
 const fetchData = () => {
 	opusdetails({
 		opusId: pageData.id,
-		categoryId:pageData.categoryId,
-		traceInfo:pageData.traceInfo,
+		categoryId: pageData.categoryId,
+		traceInfo: pageData.traceInfo,
 	}).then(res => {
 		pageData.opusdetail = res.data
-	})
+	}).catch(e=>{
+      pageData.isLoadError = true
+    })
 }
 const gohomepage = (item) => {
 	isShare.value = false
@@ -177,7 +186,7 @@ const attention = (item) => {
 const collection = (item) => {
 	let action = item.isCollection ? 0 : 1
 	if (getTokenValue()) {
-		opusCollect({ opusId: item.id, action: action, trackInfo: pageData.traceInfo,categoryId: pageData.categoryId }).then(res => {
+		opusCollect({ opusId: item.id, action: action, trackInfo: pageData.traceInfo, categoryId: pageData.categoryId }).then(res => {
 			if (action) {
 				item.isCollection = true
 				item.collectionNum++
@@ -202,7 +211,7 @@ const collection = (item) => {
 const like = (item) => {
 	let action = item.isLike ? 0 : 1
 	if (getTokenValue()) {
-		opusLike({ opusId: item.id, action: action, trackInfo: pageData.traceInfo,categoryId: pageData.categoryId }).then(res => {
+		opusLike({ opusId: item.id, action: action, trackInfo: pageData.traceInfo, categoryId: pageData.categoryId }).then(res => {
 			if (action) {
 				item.isLike = true
 				item.likeNum++
@@ -238,8 +247,8 @@ const onShareAppMessage = () => {
 
 const handleShare = () => {
 	isShare.value = true
-	uni.createVideoContext('video0', ctx).pause()
-	pageData.status = 1
+	// uni.createVideoContext('video0', ctx).pause()
+	// pageData.status = 1
 }
 const onShareTimeline = () => {
 	return onShareAppMessage()
@@ -300,5 +309,4 @@ const onShareTimeline = () => {
 	.button {
 		text-align: center;
 	}
-}
-</style>
+}</style>

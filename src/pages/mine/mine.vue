@@ -74,7 +74,10 @@
 		<!-- 菜单 -->
 		<view class="pt-13 bg-[#F6F6F6] ">
 			<view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
-				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex"
+				<view class="u-page__loading-item" v-if="!pageData.isload && waterIndex == pageData.currentIndex">
+					<u-loading-icon size="36"></u-loading-icon>
+				</view>
+				<view v-if="!waterItem.items.length && waterIndex == pageData.currentIndex && pageData.isload"
 					class="flex items-center justify-center mt-30">
 					<u-empty text="内容为空" mode="list" :icon="configStaticPath('/static/img/nodata.png')" />
 				</view>
@@ -103,7 +106,16 @@ const computedNumber = computed({
 })
 onShow(() => {
 	if (getTokenValue()) {
-		// pageData.masterId = useLoginTokenStore().get().user.id
+		pageData.masterId = useLoginTokenStore().get().user.id
+		userhomepage({
+			masterId: pageData.masterId
+		}).then(reslove => {
+			pageInfo.mineMessage = reslove.data.userInfo
+		}).catch((e) => {
+			uni.redirectTo({
+				url: '/pages/login/logout'
+			})
+		})
 		// fetchData()
 		// gettolcount()
 	} else {
@@ -155,6 +167,7 @@ const waterfallItems = [{
 }
 ]
 const pageData = reactive({
+	isload: false,
 	masterId: '',
 	scrollTop: 0,
 	currentIndex: 0,
@@ -170,10 +183,10 @@ const changeWaterfall = (waterIndex) => {
 	// 	//读取滚动条高度
 	// 	pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
 	// }
-	if(waterIndex!=0){
-		pageData.waterfallItems[waterIndex].query.path.index=''
-	}else{
-		pageData.waterfallItems[waterIndex].query.path.pageNum=1
+	if (waterIndex != 0) {
+		pageData.waterfallItems[waterIndex].query.path.index = ''
+	} else {
+		pageData.waterfallItems[waterIndex].query.path.pageNum = 1
 	}
 	pageData.waterfallItems[waterIndex].isComplete = false
 	pageData.waterfallItems[waterIndex].items = []
@@ -192,6 +205,7 @@ const changeWaterfall = (waterIndex) => {
 	// }
 }
 const getData = () => {
+	pageData.isload = false
 	let currentIndex = pageData.currentIndex
 	pageData.waterfallItems[currentIndex].isLoading = true
 	let query = pageData.waterfallItems[currentIndex].query
@@ -200,7 +214,10 @@ const getData = () => {
 			if (res.data.page == res.data.totalPage) {
 				pageData.waterfallItems[currentIndex].isComplete = true
 			}
-			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount || 0
+			pageData.isload = true
+			if (query.path.pageNum == 1) {
+				pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount || 0
+			}
 			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
 			pageData.waterfallItems[currentIndex].isLoading = false
 		}).catch(e => {
@@ -208,22 +225,29 @@ const getData = () => {
 		})
 	} else if (currentIndex === 1) {
 		homepagelike({ ...query.path }).then(res => {
-			if ( res.data.content.length<20) {
+			if (res.data.list.length < 20) {
 				pageData.waterfallItems[currentIndex].isComplete = true
 			}
-			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalNum || 0
-			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.content)
+			pageData.isload = true
+			if (query.path.index == '') {
+				pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalNum || 0
+			}
+			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
 			pageData.waterfallItems[currentIndex].isLoading = false
 		}).catch(e => {
 			pageData.waterfallItems[currentIndex].isLoading = false
 		})
 	} else if (currentIndex === 2) {
 		homepagecollection({ ...query.path }).then(res => {
-			if ( res.data.content.length<20) {
+			if (res.data.list.length < 20) {
 				pageData.waterfallItems[currentIndex].isComplete = true
 			}
-			pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalNum || 0
-			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.content)
+			if (query.path.index == '') {
+				pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalNum || 0
+			}
+			pageData.isload = true
+			// pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalNum || 0
+			pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
 			pageData.waterfallItems[currentIndex].isLoading = false
 		}).catch(e => {
 			pageData.waterfallItems[currentIndex].isLoading = false
@@ -243,10 +267,10 @@ onReachBottom(() => {
 			pageData.waterfallItems[currentIndex].query.path.pageNum++
 		} else if (currentIndex == 1) {
 			let obj = Array.from(pageData.waterfallItems[currentIndex].items).findLast((item) => item.isLike == true)
-			pageData.waterfallItems[currentIndex].query.path.index = obj ? obj.id : ''
+			pageData.waterfallItems[currentIndex].query.path.index = obj ? obj.index : ''
 		} else {
 			if (Array.from(pageData.waterfallItems[2].items).length) {
-				pageData.waterfallItems[currentIndex].query.path.index = Array.from(pageData.waterfallItems[2].items).at(-1).id
+				pageData.waterfallItems[currentIndex].query.path.index = Array.from(pageData.waterfallItems[2].items).at(-1).index
 			} else {
 				pageData.waterfallItems[currentIndex].query.path.index = ''
 			}
@@ -294,15 +318,15 @@ const skipPerson = () => {
 }
 const fetchData = () => {
 	changeWaterfall(pageData.currentIndex)
-	userhomepage({
-		masterId: pageData.masterId
-	}).then(reslove => {
-		pageInfo.mineMessage = reslove.data.userInfo
-	}).catch((e) => {
-		uni.redirectTo({
-			url: '/pages/login/logout'
-		})
-	})
+	// userhomepage({
+	// 	masterId: pageData.masterId
+	// }).then(reslove => {
+	// 	pageInfo.mineMessage = reslove.data.userInfo
+	// }).catch((e) => {
+	// 	uni.redirectTo({
+	// 		url: '/pages/login/logout'
+	// 	})
+	// })
 }
 watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
 	if (newVal) {

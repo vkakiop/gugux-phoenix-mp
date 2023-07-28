@@ -1,23 +1,25 @@
 <template>
   <view class="w-172 bg-[#fff]" v-if="item && item.cover">
     <view class="relative ">
-      <view v-if="isVirtualCal"
-            :style="{ width: '100%', height: item.imageHeightRpx + 'rpx' }" class="rounded-5"></view>
-      <view v-else
-            :style="{ width: '100%', height: item.imageHeightRpx + 'rpx' }" class="rounded-5 bg-[#eee] overflow-hidden">
+      <view v-if="isVirtualCal" :style="{ width: '100%', height: item.imageHeightRpx + 'rpx' }" class="rounded-5"></view>
+      <view v-else :style="{ width: '100%', height: item.imageHeightRpx + 'rpx' }"
+        class="rounded-5 bg-[#eee] overflow-hidden">
         <image :src="imageThumb(item.cover.itemType == 2 ? item.cover.content : item.cover.thumbnail, 344, 344)"
-          :style="{ width: '100%', height: item.imageHeightRpx + 'rpx' }" @click="godetail(item)"
-          class="rounded-5"></image>
+          :style="{ width: '100%', height: item.imageHeightRpx + 'rpx' }" @click="godetail(item)" class="rounded-5">
+        </image>
       </view>
       <view v-if="isVirtualCal"></view>
       <image v-else-if="item.opusType == 2" :src="configStaticPath('/static/video/videoplay.png')" mode=""
         class="absolute w-36 h-36 top-[50%] left-[50%] -ml-18 -mt-18 z-40" @click="godetail(item)"></image>
       <view v-if="isVirtualCal" class="h-30"></view>
-      <view v-else class="flex justify-end  text-13 items-center h-30  font-light text-[#FFFEFE] absolute  bottom-10 right-10">
+      <view v-else
+        class="flex justify-end  text-13 items-center h-30  font-light text-[#FFFEFE] absolute  bottom-10 right-10">
         <view class="flex items-center" @click="like(item)">
-          <image :src="configStaticPath('/static/waterfalls/likeopus.png')" class="w-13 h-12 mr-4" v-if="!item.isLike"></image>
-          <image :src="configStaticPath('/static/waterfalls/likefill.png')" class="w-13 h-12 mr-4" v-if="item.isLike"></image>
-          {{ item.likeNum }}
+          <image :src="configStaticPath('/static/waterfalls/likeopus.png')" class="w-13 h-12 mr-4" v-if="!item.isLike">
+          </image>
+          <image :src="configStaticPath('/static/waterfalls/likefill.png')" class="w-13 h-12 mr-4" v-if="item.isLike">
+          </image>
+          {{ computedNumber(item.likeNum) }}
         </view>
       </view>
     </view>
@@ -26,14 +28,14 @@
 </template>
 
 <script setup>
-import {configStaticPath} from '@/config/index'
+import { configStaticPath } from '@/config/index'
 import { opusLike } from "@/api/opus/index"
 import { distanceOf, formatedDistance, getTokenValue, imageThumb } from "@/utils/utils"
 import { computed, ref, onMounted, reactive } from 'vue';
 const pageData = reactive({
   id: '',
 })
-const props = defineProps(['item', 'isVirtualCal', 'itemKey','traceInfo','categoryId'])
+const props = defineProps(['item', 'isVirtualCal', 'itemKey', 'traceInfo', 'categoryId'])
 const emit = defineEmits(['popLoginShow'])
 const godetail = (item) => {
   if (item.opusType == 1) {
@@ -52,6 +54,9 @@ const godetail = (item) => {
     }
   }
 }
+const computedNumber = computed({
+  get: (num) => { return function (num) { return num > 9999 ? (num / 10000).toFixed(1) + 'w' : num } }
+})
 //距离获取
 const geo_x = ref(null);
 const geo_y = ref(null);
@@ -71,7 +76,7 @@ onMounted(() => {
 const like = (item) => {
   let action = item.isLike ? 0 : 1
   if (getTokenValue()) {
-    opusLike({ opusId: item.id, action: action, trackInfo: props.traceInfo ,categoryId: props.categoryId}).then(res => {
+    opusLike({ opusId: item.id, action: action, trackInfo: props.traceInfo, categoryId: props.categoryId }).then(res => {
       if (action) {
         item.isLike = true
         item.likeNum++
