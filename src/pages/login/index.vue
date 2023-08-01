@@ -110,7 +110,7 @@ const getCode = ()=>{
     pageData.isDialogShow=true
     uni.showToast({title: '请勾选同意隐私条款',icon:'none',duration: 2000})
   }
-  else {
+  else if (vaildPhone()) {
     authSms({phone:pageData.phone,type:1}).then(res=>{
       pageData.count = 60
       pageData.isReget = true
