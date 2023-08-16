@@ -19,6 +19,7 @@
     "dev:quickapp-webview-huawei": "uni -p quickapp-webview-huawei",
     "dev:quickapp-webview-union": "uni -p quickapp-webview-union",
     "test:mp-weixin": "uni -p mp-weixin --mode test",
+    "test2:mp-weixin": "uni -p mp-weixin --mode test2",
     "build:app": "uni build -p app",
     "build:app-android": "uni build -p app-android",
     "build:app-ios": "uni build -p app-ios",
