@@ -17,7 +17,7 @@
       <view class="fixed bottom-0 h-50 w-screen bg-[#f7f7f7]">
         <view class="mx-20 flex justify-between mt-12">
           <view>
-            <button class="bg-[#f7f7f7] w-24 h-24 p-0" open-type="share"><img class="w-24 h-24 block" :src="configStaticPath('/static/opus/icon_share.png')"></button>
+            <button @click="share" class="bg-[#f7f7f7] w-24 h-24 p-0" :open-type="useLoginTokenStore().get().accessToken ? 'share' : ''"><img class="w-24 h-24 block" :src="configStaticPath('/static/opus/icon_share.png')"></button>
           </view>
           <view class="flex">
             <debounce @debounce="like">
@@ -119,6 +119,12 @@ const pageData = reactive({
 onPageScroll((res) => {
   pageData.scrollTop = res.scrollTop
 })
+
+const share = ()=>{
+  if (!getTokenValue()) {
+    pageData.isShowLoginPop = true
+  }
+}
 
 const attention = ()=>{
   let action = pageData.detail.isFollow ? 0 : 1
