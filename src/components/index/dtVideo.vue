@@ -9,17 +9,21 @@
 						@error="videoErrorCallback" @click.stop="handleVideo(index)">
 					</video>
 					<view v-if="pageData.status == 1" class="icon_play w-full h-full absolute">
-						<image class="w-64 h-64" :src="configStaticPath('/static/opus/icon_play.png')" @click.stop="handleVideo(index)" />
+						<image class="w-64 h-64" :src="configStaticPath('/static/opus/icon_play.png')"
+							@click.stop="handleVideo(index)" />
 					</view>
 					<view class="info w-275 pl-14">
 						<view v-if="item.cover.name" class=" text-13 mb-15 rounded-9   h-19  inline-block p-10"
 							style="background-color: rgba(244, 244, 244, 0.2);">
-							<image :src="configStaticPath('/static/opus/icon_location_white.png')" class="w-9 h-11 relative -top-8 mx-4" />
+							<image :src="configStaticPath('/static/opus/icon_location_white.png')"
+								class="w-9 h-11 relative -top-8 mx-4" />
 							<text class="relative -top-8 mx-4"> {{ item.cover.name }}</text>
 						</view>
 						<view class="font-bold h-17 leading-16 text-17 flex items-center">@{{ item.author }}
-							<image :src="configStaticPath('/static/mine/shop.png')" class="w-19 h-19 ml-4" v-if="item.hasShop" />
-							<image :src="configStaticPath('/static/mine/vip.png')" class="w-49 h-19 ml-4" v-if="item.isDr" />
+							<image :src="configStaticPath('/static/mine/shop.png')" class="w-19 h-19 ml-4"
+								v-if="item.hasShop" />
+							<image :src="configStaticPath('/static/mine/vip.png')" class="w-49 h-19 ml-4"
+								v-if="item.isDr" />
 						</view>
 						<view class="text-14 leading-16 my-11">发布于：{{ item.createdTime }}</view>
 						<!-- <view class="text-16 leading-25 flex items-center">
@@ -27,7 +31,8 @@
 							}}
 						</view> -->
 						<view class="text-16 leading-25 ">
-							<image :src="configStaticPath('/static/video/good.png')" class="w-19 h-19 mr-4 align-middle" v-if="item.boutique"/>
+							<image :src="configStaticPath('/static/video/good.png')" class="w-19 h-19 mr-4 align-middle"
+								v-if="item.boutique" />
 							{{ item.brief }}
 						</view>
 					</view>
@@ -35,12 +40,14 @@
 						<debounce class="header_group">
 							<image class="header" :src="item.icon" @click="gohomepage(item)"></image>
 							<view class="add" v-if="!item.isFollow">
-								<image :src="configStaticPath('/static/video/attention.png')" class="w-19 h-19" @click.stop="attention(item)">
+								<image :src="configStaticPath('/static/video/attention.png')" class="w-19 h-19"
+									@click.stop="attention(item)">
 								</image>
 							</view>
 						</debounce>
 						<debounce @debounce="like(item)" class="button mb-10">
-							<image v-if="item.isLike" class="w-36 h-36" :src="configStaticPath('/static/video/likefill.png')" />
+							<image v-if="item.isLike" class="w-36 h-36"
+								:src="configStaticPath('/static/video/likefill.png')" />
 							<image v-else class="w-36 h-36" :src="configStaticPath('/static/video/like.png')" />
 							<view>{{ computedNumber(item.likeNum) }}</view>
 						</debounce>
@@ -50,13 +57,14 @@
 						</debounce>
 						<debounce @debounce="collection(item)" class="button mb-10">
 							<view class="button mb-10">
-								<image v-if="item.isCollection" class="w-36 h-36" :src="configStaticPath('/static/video/collectfill.png')" />
+								<image v-if="item.isCollection" class="w-36 h-36"
+									:src="configStaticPath('/static/video/collectfill.png')" />
 								<image v-else class="w-36 h-36" :src="configStaticPath('/static/video/collect.png')" />
 								<view>{{ computedNumber(item.collectionNum) }}</view>
 							</view>
 						</debounce>
-						<view class="button mb-10" @click='handleShare'>
-							<button open-type="share" style="background-color: transparent;">
+						<view class="button mb-10">
+							<button :open-type="useLoginTokenStore().get().accessToken ? 'share' : ''" style="background-color: transparent;" @click="share">
 								<image class="w-36 h-36" :src="configStaticPath('/static/video/share.png')" />
 							</button>
 						</view>
@@ -82,7 +90,7 @@
 
 <script setup>
 import useOpusStore from '@/store/modules/opus'
-import {configStaticPath} from '@/config/index'
+import { configStaticPath } from '@/config/index'
 import comment from "@/components/common/comment.vue"
 import { opusdetails } from "@/api/mine/index"
 import { opusrecommend } from "@/api/recvideo/index"
@@ -110,8 +118,8 @@ const pageData = reactive({
 const opusDetail = () => {
 	opusdetails({
 		opusId: props.opusid,
-		categoryId:props.categoryId,
-		traceInfo:props.traceInfo,
+		categoryId: props.categoryId,
+		traceInfo: props.traceInfo,
 	}).then(res => {
 		pageData.list.unshift(res.data)
 	})
@@ -265,6 +273,13 @@ const closeBox = () => {
 	isShare.value = true
 	fetch()
 }
+const share = () => {
+	if (!getTokenValue()) {
+		pageData.isShowLoginPop = true
+	}else{
+		isShare.value = true
+	}
+}
 //分享
 const onShareAppMessage = () => {
 	return {
@@ -276,8 +291,8 @@ const onShareAppMessage = () => {
 const fetch = () => {
 	opusdetails({
 		opusId: pageData.list[pageData.current].id,
-		categoryId:props.categoryId,
-		traceInfo:props.traceInfo,
+		categoryId: props.categoryId,
+		traceInfo: props.traceInfo,
 	}).then(res => {
 		pageData.list[pageData.current] = res.data
 	})
@@ -360,5 +375,4 @@ const onShareTimeline = () => {
 .container {
 	height: 600rpx;
 	overflow: auto;
-}
-</style>
+}</style>

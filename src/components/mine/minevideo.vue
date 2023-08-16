@@ -53,8 +53,9 @@
 					<view>{{ computedNumber(pageData.opusdetail.collectionNum) }}</view>
 				</view>
 			</debounce>
-			<view class="button mb-10" @click='handleShare'>
-				<button open-type="share" style="background-color: transparent;">
+			<view class="button mb-10">
+				<button :open-type="useLoginTokenStore().get().accessToken ? 'share' : ''"
+					style="background-color: transparent;" @click="share">
 					<image class="w-36 h-36" :src="configStaticPath('/static/video/share.png')" />
 				</button>
 			</view>
@@ -93,7 +94,7 @@ const computedNumber = computed({
 const isShare = ref(false)
 const pageData = reactive({
 	id: '',
-	isLoadError:false,
+	isLoadError: false,
 	categoryId: '',
 	traceInfo: '',
 	opusdetail: {},
@@ -121,9 +122,9 @@ const fetchData = () => {
 		traceInfo: pageData.traceInfo,
 	}).then(res => {
 		pageData.opusdetail = res.data
-	}).catch(e=>{
-      pageData.isLoadError = true
-    })
+	}).catch(e => {
+		pageData.isLoadError = true
+	})
 }
 const gohomepage = (item) => {
 	isShare.value = false
@@ -244,7 +245,13 @@ const onShareAppMessage = () => {
 		imageUrl: pageData.opusdetail.thumbnail
 	}
 }
-
+const share = () => {
+	if (!getTokenValue()) {
+		pageData.isShowLoginPop = true
+	}else{
+		isShare.value = true
+	}
+}
 const handleShare = () => {
 	isShare.value = true
 	// uni.createVideoContext('video0', ctx).pause()
@@ -309,4 +316,5 @@ const onShareTimeline = () => {
 	.button {
 		text-align: center;
 	}
-}</style>
+}
+</style>
