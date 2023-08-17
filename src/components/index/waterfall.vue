@@ -142,6 +142,9 @@ async function initValue(i) {
 
   let measureTextWidth = 0
   if (props.itemType == 'title') {
+    if (canvasctx == null) {
+      canvasctx = uni.createCanvasContext('canvas_'+props.waterIndex,_this)
+    }
     measureTextWidth = canvasctx.measureText(pageData.currentItem.title).width
   }
 
