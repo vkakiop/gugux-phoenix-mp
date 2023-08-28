@@ -515,6 +515,7 @@ export default {
                 data:{
                   ...message.ext,
                   userId:JSON.parse(message.customExts.custom_json).userId,
+                  imId:message.to
                 }
               }
             });

@@ -37,6 +37,7 @@
 <script setup>
 import { ref, onMounted, reactive, watch } from 'vue'
 import { emergenccontactadd } from '@/api/safeguard/safeguard'
+import { onSendCustomEmergencyContactAgree } from '@/utils/chat.js'
 import { onLoad, onReachBottom } from '@dcloudio/uni-app'
 import useSafeguardStore from '@/store/modules/safeguard'
 const show = ref(false);
@@ -78,7 +79,7 @@ const confirmShow = (id) => {
         console.log(res)
         alarmData.isAgree = 0;
         alarmData.showBox = false;
-        // onSendCustomEmergencyContactAgree({chatType:'singleChat',chatId:{id:imObj.imId}});
+        onSendCustomEmergencyContactAgree({chatType:'contact',chatId:{id:alarmData.data.imId}});
         remove();
     }).catch((res)=>{
         console.log(res,222)
