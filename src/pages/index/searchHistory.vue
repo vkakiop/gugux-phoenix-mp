@@ -221,6 +221,7 @@ const search = () => {
 		}
 		isShowHistory.value = false
 		pageData.waterfallItems.forEach(item => {
+			item.query.path.pageNum = 1
 			item.query.path.keyword = searchvalue.value
 			item.items = []
 			item.scrollTop = -1
