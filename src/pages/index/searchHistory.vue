@@ -16,7 +16,7 @@
 			</view>
 			<!-- 搜索框 -->
 		</customNav>
-		<view class="fixed top-70 pt-10 bg-[#fff] z-50 w-full">
+		<view class="fixed  pt-10 bg-[#fff] z-50 w-full" :style="{'top':pageData.height+'px'}">
 			<!-- 搜索历史 -->
 			<view class="w-full mt-5 py-15" v-if="isShowHistory">
 				<view v-if="pageData.searchHistoryList.length">
@@ -83,6 +83,18 @@ import { ref, onMounted, reactive, watch, nextTick } from 'vue'
 import { onShow, onReachBottom, onLoad } from '@dcloudio/uni-app';
 import useLoginTokenStore from '@/store/modules/loginToken'
 import _ from 'lodash'
+const emits = defineEmits(["changeHeightInfo"]);
+onMounted(() => {
+	let systemInfo = uni.getSystemInfoSync()
+	pageData.statusBarHeight = systemInfo.statusBarHeight
+	let menuButtonInfo = uni.getMenuButtonBoundingClientRect()
+	pageData.titleBarHeight = (menuButtonInfo.top - pageData.statusBarHeight) * 2 + menuButtonInfo.height
+	pageData.titleBarRight = menuButtonInfo.width + (systemInfo.windowWidth - menuButtonInfo.right)
+	pageData.height = pageData.statusBarHeight + pageData.titleBarHeight
+	pageData.isShow = true
+	emits('changeHeightInfo', pageData)
+	console.log('pageData', pageData);
+})
 const searchvalue = ref('')
 const isShowHistory = ref(true)
 const waterfallItems = [
