@@ -261,15 +261,11 @@ onReachBottom(() => {
 
 <style scoped lang="scss">
 .active {
-	font-size: 36rpx;
-	font-family: Source Han Sans SC;
-	font-weight: bold;
+	font-weight: 900;
 	color: #0E0E0E;
 }
 
 .inactive {
-	font-size: 30rpx;
-	font-family: Source Han Sans SC;
 	font-weight: 400;
 	color: #232323;
 }
