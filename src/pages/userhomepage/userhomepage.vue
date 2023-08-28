@@ -57,13 +57,16 @@
 		</view>
 		<!-- 菜单 -->
 		<!-- 吸顶 -->
-		<view class="bg-white pl-14 w-full  -mt-25 pt-10 fixed top-80 z-50 left-0" v-if="pageData.isshowfixed">
+		<view :class="['bg-white', 'pl-14', 'w-full', 'pt-10', 'fixed', 'z-50', 'left-0']" v-if="pageData.isshowfixed"
+			:style="{'top':pageData.height+'px'}">
 			<view class="flex ">
 				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
 					@click="changeWaterfall(index)">
-					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text>({{ waterItem.query.data.totalCount }})</text></view>
+					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text>({{
+						waterItem.query.data.totalCount }})</text></view>
 					<view class="-mt-5">
-						<image :src="configStaticPath('/static/mine/line.png')" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
+						<image :src="configStaticPath('/static/mine/line.png')" class="w-34 h-4 "
+							v-show="pageData.currentIndex == index" />
 					</view>
 				</view>
 			</view>
@@ -72,9 +75,11 @@
 			<view class="flex ">
 				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
 					@click="changeWaterfall(index)">
-					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text>({{ waterItem.query.data.totalCount }})</text></view>
+					<view :class="pageData.currentIndex == index ? 'active' : 'inactive'">{{ waterItem.name }} <text>({{
+						waterItem.query.data.totalCount }})</text></view>
 					<view class="-mt-5">
-						<image :src="configStaticPath('/static/mine/line.png')" class="w-34 h-4 " v-show="pageData.currentIndex == index" />
+						<image :src="configStaticPath('/static/mine/line.png')" class="w-34 h-4 "
+							v-show="pageData.currentIndex == index" />
 					</view>
 				</view>
 			</view>
@@ -108,13 +113,25 @@
 <script setup>
 import { getTokenValue } from "@/utils/utils"
 import waterfall from '@/components/index/waterfall.vue'
-import {configStaticPath} from '@/config/index'
+import { configStaticPath } from '@/config/index'
 import { userFans, userFansRemove } from "@/api/opus/index"
 import { userhomepage, homepageopus } from "@/api/mine/index.js"
-import { ref, reactive, watch, computed } from 'vue'
+import { ref, reactive, watch, computed, onMounted } from 'vue'
 import { onLoad, onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
 import useLoginTokenStore from '@/store/modules/loginToken'
 import _ from 'lodash'
+const emits = defineEmits(["changeHeightInfo"]);
+onMounted(() => {
+	let systemInfo = uni.getSystemInfoSync()
+	pageData.statusBarHeight = systemInfo.statusBarHeight
+	let menuButtonInfo = uni.getMenuButtonBoundingClientRect()
+	pageData.titleBarHeight = (menuButtonInfo.top - pageData.statusBarHeight) * 2 + menuButtonInfo.height
+	pageData.titleBarRight = menuButtonInfo.width + (systemInfo.windowWidth - menuButtonInfo.right)
+	pageData.height = pageData.statusBarHeight + pageData.titleBarHeight
+	pageData.isShow = true
+	emits('changeHeightInfo', pageData)
+	console.log('pageData', pageData);
+})
 const computedNumber = computed({
 	get: (num) => { return function (num) { return num > 9999 ? (num / 10000).toFixed(1) + 'w' : num } }
 })
@@ -188,7 +205,7 @@ const getData = () => {
 		if (res.data.page == res.data.totalPage) {
 			pageData.waterfallItems[currentIndex].isComplete = true
 		}
-		pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount||0
+		pageData.waterfallItems[currentIndex].query.data.totalCount = res.data.totalCount || 0
 		pageData.waterfallItems[currentIndex].items = pageData.waterfallItems[currentIndex].items.concat(res.data.list)
 		pageData.waterfallItems[currentIndex].isLoading = false
 	}).catch(e => {
