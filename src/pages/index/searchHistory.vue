@@ -156,6 +156,7 @@ const changeWaterfall = (waterIndex) => {
 	// 	//读取滚动条高度
 	// 	pageData.waterfallItems[pageData.currentIndex].scrollTop = pageData.scrollTop
 	// }
+	pageData.waterfallItems[waterIndex].isComplete=false
 	pageData.waterfallItems[waterIndex].query.path.searchTime = ''
 	pageData.waterfallItems[waterIndex].query.path.pageNum = 1
 	pageData.waterfallItems[waterIndex].items = []
@@ -226,6 +227,7 @@ const search = () => {
 			item.query.path.keyword = searchvalue.value
 			item.items = []
 			item.scrollTop = -1
+			item.isComplete=false
 		})
 		getData()
 	}
