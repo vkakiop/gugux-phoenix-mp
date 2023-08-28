@@ -119,7 +119,7 @@ const computedNumber = computed({
 	get: (num) => { return function (num) { return num > 9999 ? (num / 10000).toFixed(1) + 'w' : num } }
 })
 const waterfallItems = [{
-	scrollTop: -1, isComplete: false, isLoading: false, itemType: 'image', name: '作品', items: [],
+	scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '作品', items: [],
 	query: {
 		path: { pageNum: 1, pageSize: 20, },
 		data: { totalCount: 0 }

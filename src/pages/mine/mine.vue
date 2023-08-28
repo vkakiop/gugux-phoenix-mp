@@ -134,7 +134,7 @@ const waterfallItems = [{
 	scrollTop: -1,
 	isComplete: false,
 	isLoading: false,
-	itemType: 'image',
+	itemType: 'title',
 	name: '作品',
 	items: [],
 	query: {
