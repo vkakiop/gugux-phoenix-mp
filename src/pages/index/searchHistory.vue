@@ -93,7 +93,6 @@ onMounted(() => {
 	pageData.height = pageData.statusBarHeight + pageData.titleBarHeight
 	pageData.isShow = true
 	emits('changeHeightInfo', pageData)
-	console.log('pageData', pageData);
 })
 const searchvalue = ref('')
 const isShowHistory = ref(true)

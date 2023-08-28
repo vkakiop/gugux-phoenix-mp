@@ -130,7 +130,6 @@ onMounted(() => {
 	pageData.height = pageData.statusBarHeight + pageData.titleBarHeight
 	pageData.isShow = true
 	emits('changeHeightInfo', pageData)
-	console.log('pageData', pageData);
 })
 const computedNumber = computed({
 	get: (num) => { return function (num) { return num > 9999 ? (num / 10000).toFixed(1) + 'w' : num } }
