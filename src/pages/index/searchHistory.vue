@@ -16,7 +16,7 @@
 			</view>
 			<!-- 搜索框 -->
 		</customNav>
-		<view class="fixed  pt-10 bg-[#fff] z-50 w-full" :style="{'top':pageData.height+'px'}">
+		<view class="fixed  pt-10 bg-[#fff] z-50 w-full" :style="{ 'top': pageData.height + 'px' }">
 			<!-- 搜索历史 -->
 			<view class="w-full mt-5 py-15" v-if="isShowHistory">
 				<view v-if="pageData.searchHistoryList.length">
@@ -222,6 +222,7 @@ const search = () => {
 		isShowHistory.value = false
 		pageData.waterfallItems.forEach(item => {
 			item.query.path.pageNum = 1
+			item.query.path.searchTime = ""
 			item.query.path.keyword = searchvalue.value
 			item.items = []
 			item.scrollTop = -1
