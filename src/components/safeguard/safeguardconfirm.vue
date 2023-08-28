@@ -56,6 +56,7 @@ onLoad(()=>{
 })
 const getData = ()=>{
   let data =  uni.getStorageSync('help_contact');
+  console.log(data);
   if(data){
     alarmData.showBox = true;
     alarmData.data =data.data;
@@ -72,7 +73,7 @@ watch(()=>useSafeguardStore().getconfirm(),(newVal,oldVal)=>{
 // alarmData.data.phone =  res.data.phone.substr(0, 3) + "****" + res.data.phone.substr(7);
 const confirmShow = (id) => {
     
-    let helpId = alarmData.data.UserId;
+    let helpId = alarmData.data.userId;
     emergenccontactadd({helpId:helpId}).then((res)=>{
         console.log(res)
         alarmData.isAgree = 0;

@@ -1,14 +1,17 @@
 <template>
     <view>
         <u-popup :show="pageData.show" @close="close" @open="open" >
-            <view class="comment">
+            <view class="comment"  :style="pageData.isFocus ? 'bottom:20rpx;' : ''">
                 <view class="contain">
-                    <u--input
+                    <u-input
                         placeholder="请输入内容" always-embed="{{true}}" 
-                        border="surround"
+                        border="surround" ref="inputRef"
                         v-model="pageData.content"
-                    ></u--input>
-                    <u-icon @click="pageData.showIcon = true" style="width:90rpx;" name="photo" color="#2979ff" size="28"></u-icon>
+                        @focus="pageData.isFocus = true"
+                        @blur="pageData.isFocus = false"
+                    ></u-input>
+                    <image class="w-40 h-40" :src="configStaticPath('/static/img/icon.png')"
+                    @click="pageData.showIcon = true" />
                     <view style="width:120rpx;">
                         <u-button  type="primary" text="发送" @click="sendMsg"></u-button>
                     </view>
@@ -28,7 +31,8 @@
     </view>
 </template>
 <script setup>
-import { ref, onMounted, reactive } from 'vue'
+import {configStaticPath} from '@/config/index'
+import { ref, onMounted, reactive ,nextTick} from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import emoji from "@/utils/imconfig/emoji";
 import {opuscomment} from '@/api/comment/index'
@@ -44,6 +48,7 @@ const pageData = reactive({
     replyId:'',
     replyCommentId:'',
     showIcon:false,
+    isFocus:false
 })
 const init = (val,obj)=>{
     pageData.show = val;
@@ -55,6 +60,9 @@ const init = (val,obj)=>{
     }
 }
 defineExpose({init})
+
+const inputRef = ref();
+
 const close = () =>{
     pageData.show = false;
 }
@@ -102,6 +110,7 @@ const sendMsg = ()=>{
 <style lang="scss" scoped>
 .comment{
     position: relative;
+    background: #fff;
     .contain{
         padding:10rpx ;
         // position: absolute;

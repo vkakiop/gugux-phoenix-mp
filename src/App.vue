@@ -508,7 +508,10 @@ export default {
             uni.setStorage({
               key: 'help_contact',
               data: {
-                data:message.ext
+                data:{
+                  ...message.ext,
+                  userId:JSON.parse(message.customExts.custom_json).userId,
+                }
               }
             });
             useSafeguardStore().setconfirm(!useSafeguardStore().getconfirm());
