@@ -10,7 +10,7 @@
                         @focus="pageData.isFocus = true"
                         @blur="pageData.isFocus = false"
                     ></u-input>
-                    <image class="w-40 h-40" :src="configStaticPath('/static/img/icon.png')"
+                    <image class="w-34 h-34" :src="configStaticPath('/static/img/icon.png')" style="margin:0 10rpx;"
                     @click="pageData.showIcon = true" />
                     <view style="width:120rpx;">
                         <u-button  type="primary" text="发送" @click="sendMsg"></u-button>
@@ -52,6 +52,10 @@ const pageData = reactive({
 })
 const init = (val,obj)=>{
     pageData.show = val;
+    nextTick(()=>{
+        console.log(inputRef.value);
+        inputRef.value.focus = true;
+    })
     if(obj){
         pageData.opusId = obj.opusId ||'';
         pageData.mainCommentId = obj.mainCommentId ||'';

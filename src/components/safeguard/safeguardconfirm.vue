@@ -78,6 +78,7 @@ const confirmShow = (id) => {
         console.log(res)
         alarmData.isAgree = 0;
         alarmData.showBox = false;
+        // onSendCustomEmergencyContactAgree({chatType:'singleChat',chatId:{id:imObj.imId}});
         remove();
     }).catch((res)=>{
         console.log(res,222)
