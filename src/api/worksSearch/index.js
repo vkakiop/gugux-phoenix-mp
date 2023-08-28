@@ -5,7 +5,7 @@ export const opusSearchNew = (data) => {
 		url: '/gugux-services-opus-api/app/opus/search/new',
 		method: 'post',
         headers: {
-            isToken: false
+            isToken: true
         },
 		data: data
 	})
@@ -16,7 +16,7 @@ export const opusSearchArticle = (data) => {
 		url: '/gugux-services-opus-api/app/opus/search/article',
 		method: 'post',
         headers: {
-            isToken: false
+            isToken: true
         },
 		data: data
 	})
@@ -27,7 +27,7 @@ export const opusSearchVideo = (data) => {
 		url: '/gugux-services-opus-api/app/opus/search/video',
 		method: 'post',
         headers: {
-            isToken:false
+            isToken: true
         },
 		data: data
 	})

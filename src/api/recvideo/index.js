@@ -6,7 +6,7 @@ export const opusrecommend = (data) => {
 		url: '/gugux-services-opus-api/app/opus/recommend',
 		method: 'get',
 		headers: {
-            isToken: false
+            isToken: true
         },
 		params: data,
 	})
