@@ -57,7 +57,7 @@
 		</view>
 		<!-- 菜单 -->
 		<!-- 吸顶 -->
-		<view class="bg-white pl-14 w-full  -mt-25 pt-10 fixed top-110 z-50 left-0" v-if="pageData.isshowfixed">
+		<view class="bg-white pl-14 w-full  -mt-25 pt-10 fixed top-80 z-50 left-0" v-if="pageData.isshowfixed">
 			<view class="flex ">
 				<view v-for="(waterItem, index) in pageData.waterfallItems" :key="index" class="mr-26"
 					@click="changeWaterfall(index)">
