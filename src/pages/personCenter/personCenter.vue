@@ -68,8 +68,8 @@
 				</view>
 			</view>
 		</view>
-		<view class="h-42 leading-42 text-center">
-			<text @click="logOff" style="color: #EC5938;">退出登录</text>
+		<view class="h-42 leading-42 text-center" @click="logOff">
+			<text style="color: #EC5938;">退出登录</text>
 		</view>
 		<view>
 			<uni-popup ref="popup" background-color="#fff">
