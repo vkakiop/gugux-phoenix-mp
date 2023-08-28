@@ -34,6 +34,7 @@ function ack(receiveMsg) {
   });
   WebIM.conn.send(ackMsg.body);
 }
+
 function onMessageError(err) {
   if (err.type === "error") {
     uni.showToast({
@@ -44,6 +45,7 @@ function onMessageError(err) {
 
   return true;
 }
+
 function getCurrentRoute() {
   let pages = getCurrentPages();
   if (pages.length > 0) {
@@ -52,6 +54,8 @@ function getCurrentRoute() {
   }
   return "/";
 }
+
+
 
 
 
