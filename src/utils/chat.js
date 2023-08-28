@@ -1,7 +1,7 @@
 import WebIM from '@/utils/WebIM'
 import {configLoginToken} from '@/config/index'
 
-function getSendMsgExt() {
+export function getSendMsgExt() {
     //登录信息处理
     let ggx_login_token_text = uni.getStorageSync(configLoginToken)
     let loginToken = {}
@@ -23,7 +23,7 @@ function getSendMsgExt() {
     return ext;
 }
 
-function onSendText(payload) {
+export function onSendText(payload) {
     return new Promise((resolve, reject) => {
         const {chatType, chatId, message} = payload;
         const id = WebIM.conn.getUniqueId();
@@ -53,7 +53,7 @@ function onSendText(payload) {
     })
 }
 
-function onSendCustomEmergencyContactAgree(payload) {
+export function onSendCustomEmergencyContactAgree(payload) {
     return new Promise((resolve, reject) => {
         const { chatType, chatId } = payload;
         const id = WebIM.conn.getUniqueId();

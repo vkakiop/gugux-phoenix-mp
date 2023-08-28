@@ -37,7 +37,7 @@
 <script setup>
 import { ref, onMounted, reactive, watch } from 'vue'
 import { emergenccontactadd } from '@/api/safeguard/safeguard'
-import { onSendCustomEmergencyContactAgree } from '@/utils/chat.js'
+import {onSendCustomEmergencyContactAgree} from "@/utils/chat.js"
 import { onLoad, onReachBottom } from '@dcloudio/uni-app'
 import useSafeguardStore from '@/store/modules/safeguard'
 const show = ref(false);
