@@ -188,6 +188,7 @@ const changeWaterfall = (waterIndex) => {
 	} else {
 		pageData.waterfallItems[waterIndex].query.path.pageNum = 1
 	}
+	pageData.waterfallItems[waterIndex].isLoading = false
 	pageData.waterfallItems[waterIndex].isComplete = false
 	pageData.waterfallItems[waterIndex].items = []
 	pageData.currentIndex = waterIndex
