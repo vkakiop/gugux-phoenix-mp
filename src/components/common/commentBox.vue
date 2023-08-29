@@ -6,7 +6,7 @@
                     <u-input
                         placeholder="请输入内容" always-embed="{{true}}" 
                         border="surround" ref="inputRef"
-                        v-model="pageData.content"
+                        v-model="pageData.content" :focus="pageData.showKey"
                         @focus="pageData.isFocus = true"
                         @blur="pageData.isFocus = false"
                     ></u-input>
@@ -38,7 +38,6 @@ import emoji from "@/utils/imconfig/emoji";
 import {opuscomment} from '@/api/comment/index'
 const emits = defineEmits(['close'])
 
-
 const pageData = reactive({
     emojiList: emoji.obj,
     show:false,
@@ -48,13 +47,15 @@ const pageData = reactive({
     replyId:'',
     replyCommentId:'',
     showIcon:false,
-    isFocus:false
+    isFocus:false,
+    showKey:false
 })
 const init = (val,obj)=>{
     pageData.show = val;
     nextTick(()=>{
-        console.log(inputRef.value);
-        inputRef.value.focus = true;
+        pageData.showKey =true;
+        // inputRef.value.focus = true;
+        
     })
     if(obj){
         pageData.opusId = obj.opusId ||'';
@@ -68,6 +69,7 @@ defineExpose({init})
 const inputRef = ref();
 
 const close = () =>{
+    pageData.showKey = false;
     pageData.show = false;
 }
 const open = () =>{
