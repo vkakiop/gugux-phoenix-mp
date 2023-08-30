@@ -76,7 +76,7 @@ const getPhoneNumber = (e)=> {
   if (e.detail.code) {
     if (pageData.jsCode) {
       authWxLogin({code:e.detail.code,jsCode:pageData.jsCode}).then(res=>{
-        tokenSave(res,'')
+        tokenSave(res,'', true)
       })
       emits('close')
     }
@@ -84,7 +84,7 @@ const getPhoneNumber = (e)=> {
       setTimeout(()=>{
         if (pageData.jsCode) {
           authWxLogin({code: e.detail.code, jsCode: pageData.jsCode}).then(res => {
-            tokenSave(res, '')
+            tokenSave(res, '', true)
           })
           emits('close')
         }

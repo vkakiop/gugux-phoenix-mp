@@ -3,7 +3,7 @@ import useLoginTokenStore from '@/store/modules/loginToken'
 import {getUserInfo} from '@/api/mine/index'
 import WebIM from '@/utils/WebIM'
 
-export function tokenSave(res,returnUrl) {
+export function tokenSave(res,returnUrl,isPop) {
     //const app = getApp()
     let tokenRes = res.data
     if (tokenRes && tokenRes.accessToken) {
@@ -32,7 +32,9 @@ export function tokenSave(res,returnUrl) {
                         }
                     }
                     else {
-                        uni.navigateBack({delta: 1})
+                        if (!isPop) {
+                            uni.navigateBack({delta: 1})
+                        }
                     }
                 }
             });
