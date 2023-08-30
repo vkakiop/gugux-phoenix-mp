@@ -52,6 +52,17 @@
           </view>
         </view>
       </u-popup>
+      <u-popup :show="pageData.isShowMessage" @close="close" @open="open"  mode="center" bgColor="transparent">
+        <view class="w-300 bg-white rounded-20">
+          <view class="mt-40 flex justify-center">
+            <view class="w-4/5 text-center">
+              <view>{{pageData.messageText}}</view>
+              <view>请等待下一轮抽奖吧</view>
+            </view>
+          </view>
+          <view class="mt-30 h-50 leading-50 rounded-b-20 bg-[#f2f2f2] text-center text-[#333333]" @click="close">关闭</view>
+        </view>
+      </u-popup>
     </view>
   </view>
 </template>
@@ -66,17 +77,22 @@ const pageData = reactive({
   isShow:true,
   isShowLogin:false,
   isShowRedbag:false,
-
+  isShowMessage:false,
+  messageText:'',
   jsCode:'',
 })
 
-const init = (row) => {
-  if (row) {
-    uni.showToast({title: 'test',icon:'none',duration: 2000
+const init = (row,isOfficialAccount) => {
+  if (isOfficialAccount) {
+    uni.showToast({title: '关注公众号测试',icon:'none',duration: 2000
     });
+  }
+  else {
     pageData.isShow = true
-    pageData.isShowLogin = false
+    //pageData.isShowLogin = false
     pageData.isShowRedbag = true
+    //pageData.isShowMessage = true
+    //pageData.messageText = '您的抽奖次数已用完'
   }
 }
 defineExpose({ init })
