@@ -73,6 +73,7 @@ import {authWxLogin} from '@/api/login/index'
 import {tokenSave} from '@/utils/login'
 import {configStaticPath} from '@/config/index'
 
+const emit = defineEmits(['ShowOfficialAccount'])
 const pageData = reactive({
   isShow:true,
   isShowLogin:false,
@@ -84,8 +85,8 @@ const pageData = reactive({
 
 const init = (row,isOfficialAccount) => {
   if (isOfficialAccount) {
-    uni.showToast({title: '关注公众号测试',icon:'none',duration: 2000
-    });
+    uni.showToast({title: '关注公众号测试',icon:'none',duration: 2000});
+    emit('ShowOfficialAccount',false)
   }
   else {
     pageData.isShow = true
@@ -93,6 +94,8 @@ const init = (row,isOfficialAccount) => {
     pageData.isShowRedbag = true
     //pageData.isShowMessage = true
     //pageData.messageText = '您的抽奖次数已用完'
+
+    emit('ShowOfficialAccount',true)
   }
 }
 defineExpose({ init })

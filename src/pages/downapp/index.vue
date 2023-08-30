@@ -1,7 +1,7 @@
 <template>
   <customNav>
     <view @click="gotoBack" class="pl-10 mt-[3rpx]"><uni-icons type="back" size="24"></uni-icons></view>
-    <view class="name mx-6 text-18 line-clamp-1">下载app</view>
+    <view class="name mx-6 text-18 line-clamp-1">下载咕咕行APP</view>
   </customNav>
   <view>
     咕咕行，同行一路有我
