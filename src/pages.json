@@ -18,6 +18,12 @@
 			}
 		},
 		{
+			"path": "pages/downapp/index",
+			"style": {
+				"navigationBarTitleText": "下载app"
+			}
+		},
+		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "咕咕行"
