@@ -23,7 +23,7 @@
           </view>
         </view>
       </u-popup>
-      <u-popup :show="pageData.isShowRedbag" @close="close" @open="open"  mode="center" bgColor="transparent">
+      <u-popup :show="pageData.isShowRedbag" @close="close" mode="center" bgColor="transparent">
         <view>
           <view class="relative w-250 h-400">
             <image :src="configStaticPath('/static/redbag/popbg.jpg')" class="w-full h-300 absolute left-0 top-0"/>
@@ -52,7 +52,7 @@
           </view>
         </view>
       </u-popup>
-      <u-popup :show="pageData.isShowMessage" @close="close" @open="open"  mode="center" bgColor="transparent">
+      <u-popup :show="pageData.isShowMessage" @close="close" mode="center" bgColor="transparent">
         <view class="w-300 bg-white rounded-20">
           <view class="mt-40 flex justify-center">
             <view class="w-4/5 text-center">
