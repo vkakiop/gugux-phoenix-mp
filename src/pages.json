@@ -12,6 +12,12 @@
 	},
 	"pages": [
 		{
+			"path": "pages/redbag/index",
+			"style": {
+				"navigationBarTitleText": "抢红包"
+			}
+		},
+		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "咕咕行"
