@@ -20,7 +20,21 @@
 </template>
 
 <script setup>
+import {reactive} from "vue"
 import {configStaticPath} from '@/config/index'
+import {redbagAdd,redbagInfo} from '@/api/redbag/index'
+import {onLoad} from '@dcloudio/uni-app'
+
+const pageData = reactive({
+  type:'',
+  id:'',
+})
+onLoad(option=>{
+  pageData.type = option.type
+  pageData.id = option.id
+
+  console.log('pageData',pageData)
+})
 
 const copyUrl = ()=>{
   let url = 'https://gugux.caigetuxun.com/down/index.html'
@@ -31,6 +45,10 @@ const copyUrl = ()=>{
         title: '复制成功',
         icon:'none'
       })
+      if (pageData.type == 'redbag' && pageData.id) {
+        redbagAdd({type:2,pageData.id}).then(res=>{
+        })
+      }
     },
     fail: ()=>{
       uni.showToast({
