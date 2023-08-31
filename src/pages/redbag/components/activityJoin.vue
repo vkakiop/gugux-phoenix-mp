@@ -4,7 +4,7 @@
         <view class="mx-30 mt-20 mb-16">
           <view class="flex justify-between">
             <view class="flex">
-              <image :src="configStaticPath('/static/redbag/poplogo.png')" class="w-20 h-20"></image>
+              <image :src="configStaticPath('/static/redbag/poplogo.png')" class="w-20 h-20 rounded-full"></image>
               <view class="ml-5 text-16 text-[#000000] text-center font-bold">咕咕行</view>
             </view>
             <image :src="configStaticPath('/static/redbag/popicon.png')" class="w-20 h-20" @click="closeLogin"></image>
@@ -24,42 +24,55 @@
       </u-popup>
     <u-popup :show="pageData.isShowRedbag" mode="center" bgColor="transparent">
       <view>
-        <view class="relative w-250 h-400">
-          <image :src="configStaticPath('/static/redbag/popbg.jpg')" class="w-full h-300 absolute left-0 top-0"/>
-          <view class="absolute w-full text-center text-[#fed9ac]">
-            <view v-if="false">
-              <view class="mt-30">恭喜您获得咕咕行红包</view>
-              <view>
-                <text class="text-20">￥</text>
-                <text class="text-40">6.60</text>
+        <view class="relative w-375 h-460">
+          <image :src="configStaticPath('/static/redbag/popbg.png')" class="w-full h-408 absolute left-0 top-0"/>
+          <view class="absolute w-full text-center text-[#FFEDAC]">
+            <view v-if="pageData.redbagInfo.isDraw">
+              <view class="mt-63 text-14">恭喜您获得咕咕行红包</view>
+              <view class="text-[#FFFFFC] mt-20">
+                <!--text class="text-20">￥</text-->
+                <text class="text-46">{{pageData.redbagInfo.amount}}</text>
+                <text class="text-15">元</text>
               </view>
             </view>
-            <view v-else class="pt-30">
+            <view v-else class="mt-65 pb-50 text-14">
               非常遗憾，没有抽中咕咕行红包
             </view>
-            <view class="mt-50">
+            <view class="mt-20 text-16">
               <view>关注咕咕行公众号</view>
-              <view>可获得额外一次抽奖机会!</view>
+              <view>可获得额外1次抽奖机会!</view>
             </view>
           </view>
-          <image :src="configStaticPath('/static/redbag/popbutton.png')" class="w-160 h-40 absolute left-[calc(50%-160rpx)] bottom-150" @click="close"/>
-          <image :src="configStaticPath('/static/redbag/popbuttondown.png')" class="w-160 h-40 absolute left-[calc(50%-160rpx)] bottom-150" @click="downApp"/>
-          <view class="absolute w-full flex justify-center bottom-100">
-            <view class="text-center text-12 text-[#fed9ac] bg-[red] inline-block rounded-full">红包已转入您的微信零钱</view>
+          <image :src="configStaticPath('/static/redbag/popbutton.png')" class="w-122 h-41 absolute left-[calc(50%-122rpx)] bottom-125" @click="close"/>
+          <image :src="configStaticPath('/static/redbag/popbuttondown.png')" class="w-122 h-41 absolute left-[calc(50%-122rpx)] bottom-125" @click="downApp"/>
+          <view class="absolute w-full flex justify-center bottom-105">
+            <view class="text-center text-14 text-[#FFEDAC] inline-block rounded-full">红包已转入您的微信零钱</view>
           </view>
-          <image :src="configStaticPath('/static/redbag/popclose.png')" class="w-40 h-40 absolute left-[calc(50%-40rpx)] bottom-0" @click="closeRedbag"/>
+          <image :src="configStaticPath('/static/redbag/popclose.png')" class="w-39 h-39 absolute left-[calc(50%-39rpx)] bottom-0" @click="closeRedbag"/>
         </view>
+      </view>
+    </u-popup>
+    <u-popup :show="pageData.isShowOfficialAccount" mode="bottom">
+      <view class="w-300 bg-white rounded-20">
+        <view class="mt-40 flex justify-center">
+          <official-account></official-account>
+        </view>
+        <view class="mt-30 h-50 leading-50 rounded-b-20 bg-[#f2f2f2] text-center text-[#333333]" @click="closeOfficialAccount">关闭</view>
       </view>
     </u-popup>
     <u-popup :show="pageData.isShowMessage" mode="center" bgColor="transparent">
       <view class="w-300 bg-white rounded-20">
-        <view class="mt-40 flex justify-center">
-          <view class="w-4/5 text-center">
-            <view>{{pageData.messageText}}</view>
-            <view>请等待下一轮抽奖吧</view>
+        <view class="mt-17 mx-auto">
+          <view class="flex justify-center">
+            <image :src="configStaticPath('/static/redbag/popicon.png')" class="w-49 h-49"></image>
+          </view>
+          <view class="mt-13 flex justify-center">
+            <rich-text v-html="pageData.messageText" class="w-4/5 font-bold text-center text-18 text-[#333333]"></rich-text>
           </view>
         </view>
-        <view class="mt-30 h-50 leading-50 rounded-b-20 bg-[#f2f2f2] text-center text-[#333333]" @click="closeMessage">关闭</view>
+        <view class="flex justify-center">
+          <view class="mt-13 mb-13 w-146 h-43 leading-43 rounded-full bg-[#F4F5F6] text-17 text-center text-[#333333]" @click="closeMessage">关闭</view>
+        </view>
       </view>
     </u-popup>
   </view>
@@ -70,15 +83,20 @@ import {reactive} from "vue"
 import {authWxLogin} from '@/api/login/index'
 import {tokenSave} from '@/utils/login'
 import {configStaticPath} from '@/config/index'
-import {getTokenValue,isWxPhoneLogin} from '@/utils/utils'
-import {redbagInfo} from '@/api/redbag/index'
+import {getTokenValue,isWxPhoneLogin,getHtmlReplaceEnter} from '@/utils/utils'
+import {redbagAdd,redbagInfo} from '@/api/redbag/index'
 
-const emit = defineEmits(['ShowOfficialAccount'])
 const pageData = reactive({
   isShowLogin:false,
+
   isShowRedbag:false,
+  redbagInfo:{},
+
+  isShowOfficialAccount:false,
+
   isShowMessage:false,
   messageText:'',
+
   jsCode:'',
 })
 
@@ -91,25 +109,23 @@ const init = (row) => {
   }
 
   //判断是否微信授权登录
-  if (isWxPhoneLogin()) {
+  if (!isWxPhoneLogin()) {
     pageData.isShowLogin = true
-    //emit('ShowOfficialAccount',true)
     return
   }
 
-  redbagInfo({}).then(res=>{
+  redbagInfo({id:id}).then(res=>{
+    pageData.redbagInfo = res.data
     pageData.isShowRedbag = true
 
     //判断是否有关注公众号的机会
-    if (true) {
-      emit('ShowOfficialAccount',true)
+    if (!pageData.redbagInfo.isType) {
+      pageData.isShowOfficialAccount = true
     }
+  }).catch(e=>{
+    pageData.isShowMessage = true
+    pageData.messageText = getHtmlReplaceEnter(e.toString())
   })
-}
-
-const officialAccount = (row) => {
-  uni.showToast({title: '关注公众号测试',icon:'none',duration: 2000});
-  emit('ShowOfficialAccount',false)
 }
 
 const message = (row) => {
@@ -118,7 +134,7 @@ const message = (row) => {
     pageData.messageText = row.messageText
   }
 }
-defineExpose({ init,officialAccount,message })
+defineExpose({ init,message })
 
 const getPhoneNumberValid = ()=>{
 }
@@ -168,6 +184,10 @@ const closeRedbag = ()=>{
 
 const closeMessage = ()=>{
   pageData.isShowMessage = false
+}
+
+const closeOfficialAccount = ()=>{
+  pageData.isShowOfficialAccount = false
 }
 
 const downApp = ()=>{

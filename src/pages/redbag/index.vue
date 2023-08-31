@@ -70,18 +70,15 @@
     </view>
     <!-- <button @click="onRedbagOpen">打开</button> -->
 
-    <view v-show="pageData.isShowOfficialAccount" class="fixed z-[9999] bottom-0 left-0 w-full" @click="onOfficialAccount">【测试公众号】
-      <official-account></official-account>
-    </view>
-    <activityJoin ref="activityJoinRef" @ShowOfficialAccount="showOfficialAccount"></activityJoin>
+    <activityJoin ref="activityJoinRef"></activityJoin>
   </view>
 </template>
 
 <script setup>
-import {ref,reactive,onMounted,onBeforeUnmount} from 'vue'
+import {ref,reactive,onMounted,onBeforeUnmount,nextTick} from 'vue'
 import {configStaticPath} from '@/config/index'
 import activityJoin from './components/activityJoin.vue'
-
+import {getHtmlReplaceEnter} from '@/utils/utils'
 const pageData = reactive({
   isShowOfficialAccount:false, //是否在底部显示公众号
   timeList:[
@@ -122,31 +119,28 @@ const pageData = reactive({
 onMounted(()=>{
   //onMessageText('hello wold')
   if(pageData.scrollList.length>5){
-    console.log(1111)
     pageData.timer = setInterval(showMarquee, 2000);
-    console.log(1111)
   }
+
+
+onMounted(()=>{
+  onMessageText('本轮活动已经结束\n请等待下一轮抽奖吧')
 })
 
 //开始红包流程
 const activityJoinRef = ref()
 const onRedbagOpen = ()=>{
+  nextTick(()=>{
+    activityJoinRef.value.message({messageText:text},true)
+  })
   activityJoinRef.value.init({})
-}
-
-//公众号点击添加一次机会
-const onOfficialAccount = ()=>{
-  activityJoinRef.value.officialAccount({})
 }
 
 //显示消息
 const onMessageText = (text)=>{
-  activityJoinRef.value.message({messageText:text},true)
-}
-
-//公众号显示与关闭
-const showOfficialAccount = (value)=>{
-  pageData.isShowOfficialAccount = value
+  nextTick(()=>{
+    activityJoinRef.value.message({messageText:getHtmlReplaceEnter(text)},true)
+  })
 }
 
 const changeClick = (key)=>{
