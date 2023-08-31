@@ -33,7 +33,7 @@
           <view class="red-container">
             <view class="title">抽奖机会　<view class="wbig">{{ pageData.num }}</view>　次</view>
             <view class="bag-box">
-              <view class="box-contain" @click="changeClick('bagClick1')">
+              <view class="box-contain" @click="changeClick('bagClick1',1)">
                 <view v-if="!pageData.bagClick1">
                   <image  :src="configStaticPath('/static/redbag/bag1.png')" mode="widthFix"></image>
                 </view>  
@@ -42,7 +42,7 @@
                   <view class="rlt">{{ pageData.bagNum1 }}</view>
                 </view>
               </view>
-              <view class="box-contain" @click="changeClick('bagClick2')">
+              <view class="box-contain" @click="changeClick('bagClick2',2)">
                 <view v-if="!pageData.bagClick2">
                   <image  :src="configStaticPath('/static/redbag/bag2.png')" mode="widthFix"></image>
                 </view>  
@@ -51,7 +51,7 @@
                   <view class="rlt">{{ pageData.bagNum2 }}</view>
                 </view>
               </view>
-              <view class="box-contain" @click="changeClick('bagClick3')">
+              <view class="box-contain" @click="changeClick('bagClick3',3)">
                 <view  v-if="!pageData.bagClick3">
                   <image  :src="configStaticPath('/static/redbag/bag3.png')" mode="widthFix"></image>
                 </view>  
@@ -77,7 +77,7 @@
     </view>
     <!-- <button @click="onRedbagOpen">打开</button> -->
 
-    <activityJoin ref="activityJoinRef"></activityJoin>
+    <activityJoin ref="activityJoinRef" @clickChange="clickChange"></activityJoin>
   </view>
 </template>
 
@@ -127,14 +127,18 @@ const pageData = reactive({
   animate :false,
   timer:'',
   id:'',
+  geo_x:'',
+  geo_y:'',
 })
 onLoad((option)=>{
     pageData.id = option.id;
     getTime();
     getredbagAdd();
+    
     getwinningList({id:pageData.id});
 })
 onMounted(()=>{
+  getGeoLocation();
   //onMessageText('hello wold')
   // pageData.isOver = true;
   
@@ -146,11 +150,28 @@ onMounted(()=>{
 
 //开始红包流程
 const activityJoinRef = ref()
-const onRedbagOpen = ()=>{
+const onRedbagOpen = (sort)=>{
   nextTick(()=>{
     activityJoinRef.value.message({messageText:text},true)
   })
-  activityJoinRef.value.init({})
+  activityJoinRef.value.init({
+    id:pageData.id,
+    number:pageData.num,
+    geo_x:pageData.geo_x,
+    geo_y:pageData.geo_y,
+    sort:sort
+  })
+}
+//距离获取
+const getGeoLocation = (res) => {
+  uni.getLocation({
+    type:'gcj02',
+    success: function (res) {
+      pageData.geo_x = res.longitude;
+      pageData.geo_y = res.latitude;
+      console.log(res.latitude)
+    }
+  })
 }
 const getTime = ()=>{
   pageData.timeList[0].time =  moment().add(0, 'days').format("MM.DD");
@@ -182,15 +203,17 @@ const getwinningList = (params)=>{
   })
 }
 
-const changeClick = (key)=>{
+const changeClick = (key,sort)=>{
   if(pageData.num == 0 ){
     return
   }
   pageData[key] = true;
   pageData.num -- ;
-  onRedbagOpen();
+  onRedbagOpen(sort);
 }
 
+const clickChange= (sort,text)=>{
+}
 const showMarquee = () =>{
     pageData.animate = true;
     setTimeout(()=>{
