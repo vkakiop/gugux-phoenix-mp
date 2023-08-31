@@ -43,21 +43,13 @@
               <view>可获得额外1次抽奖机会!</view>
             </view>
           </view>
-          <image :src="configStaticPath('/static/redbag/popbutton.png')" class="w-122 h-41 absolute left-[calc(50%-122rpx)] bottom-125" @click="close"/>
+          <!--image :src="configStaticPath('/static/redbag/popbutton.png')" class="w-122 h-41 absolute left-[calc(50%-122rpx)] bottom-125" @click="close"/-->
           <image :src="configStaticPath('/static/redbag/popbuttondown.png')" class="w-122 h-41 absolute left-[calc(50%-122rpx)] bottom-125" @click="downApp"/>
           <view class="absolute w-full flex justify-center bottom-105">
             <view class="text-center text-14 text-[#FFEDAC] inline-block rounded-full">红包已转入您的微信零钱</view>
           </view>
           <image :src="configStaticPath('/static/redbag/popclose.png')" class="w-39 h-39 absolute left-[calc(50%-39rpx)] bottom-0" @click="closeRedbag"/>
         </view>
-      </view>
-    </u-popup>
-    <u-popup :show="pageData.isShowOfficialAccount" mode="bottom">
-      <view class="w-300 bg-white rounded-20">
-        <view class="mt-40 flex justify-center">
-          <official-account></official-account>
-        </view>
-        <view class="mt-30 h-50 leading-50 rounded-b-20 bg-[#f2f2f2] text-center text-[#333333]" @click="closeOfficialAccount">关闭</view>
       </view>
     </u-popup>
     <u-popup :show="pageData.isShowMessage" mode="center" bgColor="transparent">
@@ -86,13 +78,13 @@ import {configStaticPath} from '@/config/index'
 import {getTokenValue,isWxPhoneLogin,getHtmlReplaceEnter} from '@/utils/utils'
 import {redbagAdd,redbagInfo} from '@/api/redbag/index'
 
+const emit = defineEmits(['clickChange'])
 const pageData = reactive({
+  parentInfo: {},
   isShowLogin:false,
 
   isShowRedbag:false,
   redbagInfo:{},
-
-  isShowOfficialAccount:false,
 
   isShowMessage:false,
   messageText:'',
@@ -101,34 +93,33 @@ const pageData = reactive({
 })
 
 const init = (row) => {
-  //debug
-  pageData.isShowOfficialAccount = true
-  return
-
   //判断数量如果为0弹出消息
-  if (false) {
+  pageData.parentInfo = row
+  if (row.num <= 0) {
     pageData.isShowMessage = true
     pageData.messageText = '您的抽奖次数已用完'
     return
   }
 
   //判断是否微信授权登录
-  if (!isWxPhoneLogin()) {
+  if (!getTokenValue()/*!isWxPhoneLogin()*/) {
+    uni.navigateTo({url:'/pages/login/index'})
+    //debug
     pageData.isShowLogin = true
     return
   }
 
-  redbagInfo({id:id}).then(res=>{
-    pageData.redbagInfo = res.data
+  redbagInfo({id:pageData.parentInfo.id}).then(res=>{
+    pageData.redbagInfo = res.data || {}
     pageData.isShowRedbag = true
 
-    //判断是否有关注公众号的机会
-    if (!pageData.redbagInfo.isType) {
-      pageData.isShowOfficialAccount = true
-    }
+    let text = pageData.redbagInfo.isDraw ? pageData.redbagInfo.amount + '元' : '未中奖'
+    emit('clickChange',pageData.parentInfo.sort,text)
+
   }).catch(e=>{
     pageData.isShowMessage = true
-    pageData.messageText = getHtmlReplaceEnter(e.toString())
+    pageData.messageText = getHtmlReplaceEnter(e.msg)
+    emit('clickChange',4,'')
   })
 }
 
@@ -188,10 +179,6 @@ const closeRedbag = ()=>{
 
 const closeMessage = ()=>{
   pageData.isShowMessage = false
-}
-
-const closeOfficialAccount = ()=>{
-  pageData.isShowOfficialAccount = false
 }
 
 const downApp = ()=>{

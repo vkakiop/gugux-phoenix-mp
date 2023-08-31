@@ -152,14 +152,13 @@ onMounted(()=>{
 const activityJoinRef = ref()
 const onRedbagOpen = (sort)=>{
   nextTick(()=>{
-    activityJoinRef.value.message({messageText:text},true)
-  })
-  activityJoinRef.value.init({
-    id:pageData.id,
-    number:pageData.num,
-    geo_x:pageData.geo_x,
-    geo_y:pageData.geo_y,
-    sort:sort
+    activityJoinRef.value.init({
+      id:pageData.id,
+      number:pageData.num,
+      geo_x:pageData.geo_x,
+      geo_y:pageData.geo_y,
+      sort:sort
+    })
   })
 }
 //距离获取

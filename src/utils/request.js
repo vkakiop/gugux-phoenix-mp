@@ -87,7 +87,10 @@ service.interceptors.response.use(res => {
         }
         if (code !== 200) {
             //Toast.fail(msg);
-            let ignoreErrorUrls = ['/gugux-services-location-api/app/security/safe/emergency/contact/help/add']
+            let ignoreErrorUrls = [
+                '/gugux-services-location-api/app/security/safe/emergency/contact/help/add',
+                '/gugux-services-activity-api/app/moyu/draw'
+            ]
             let isFind = false;
             ignoreErrorUrls.forEach((item)=>{
                 if(oldres.url.indexOf(item) != -1){
