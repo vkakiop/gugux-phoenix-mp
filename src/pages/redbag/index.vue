@@ -134,6 +134,9 @@ const pageData = reactive({
   geo_y:'',
 })
 onLoad((option)=>{
+  if(option.id){
+    onMessageText('参数错误！');
+  }
     pageData.id = option.id;
     getTime();
     getwinningList({id:pageData.id});
