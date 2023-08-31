@@ -11,22 +11,31 @@
 </template>
 
 <script setup>
-import {ref,reactive} from 'vue'
+import {ref,reactive,onMounted} from 'vue'
 import activityJoin from './components/activityJoin.vue'
 
 const pageData = reactive({
   isShowOfficialAccount:false //是否在底部显示公众号
 })
 
+onMounted(()=>{
+  //onMessageText('hello wold')
+})
+
 //开始红包流程
 const activityJoinRef = ref()
 const onRedbagOpen = ()=>{
-  activityJoinRef.value.init({},false)
+  activityJoinRef.value.init({})
 }
 
 //公众号点击添加一次机会
 const onOfficialAccount = ()=>{
-  activityJoinRef.value.init({},true)
+  activityJoinRef.value.officialAccount({})
+}
+
+//显示消息
+const onMessageText = (text)=>{
+  activityJoinRef.value.message({messageText:text},true)
 }
 
 //公众号显示与关闭

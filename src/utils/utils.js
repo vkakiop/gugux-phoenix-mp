@@ -144,6 +144,26 @@ export function getTokenValue() {
 	return token
 }
 
+export function isWxPhoneLogin() {
+	if (getTokenValue()) {
+		const loginTokenStore = useLoginTokenStore()
+		let loginToken = loginTokenStore.get()
+		let userInfo = loginToken && loginToken.user ? loginToken.user : {}
+		return userInfo.isWxPhoneLogin ? true : false
+	}
+	return false
+}
+
+export function needLogin() {
+	//const app = getApp()
+	//if (!app.globalData.loginToken.accessToken) {
+	if (!getTokenValue()) {
+		uni.navigateTo({url:'/pages/login/index?url='+encodeURIComponent(getCurrentPageUrl())})
+		return false
+	}
+	return true
+}
+
 export function getCurrentPageUrl() {
 	let pages = getCurrentPages();    //获取加载的页面
 	let currentPages = pages[pages.length - 1];  //获取当前页面的对象
@@ -157,16 +177,6 @@ export function getCurrentPageUrl() {
 	}
 	currentPage= '/'+currentPage.substring(0, currentPage.length - 1);
 	return currentPage;
-}
-
-export function needLogin() {
-	//const app = getApp()
-	//if (!app.globalData.loginToken.accessToken) {
-	if (!getTokenValue()) {
-		uni.navigateTo({url:'/pages/login/index?url='+encodeURIComponent(getCurrentPageUrl())})
-		return false
-	}
-	return true
 }
 
 

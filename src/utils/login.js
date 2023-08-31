@@ -11,6 +11,7 @@ export function tokenSave(res,returnUrl,isPop) {
             //app.globalData.loginToken = res.data
             const loginTokenStore = useLoginTokenStore()
             tokenRes['user'] = res.data || {id:''}
+            tokenRes['user'].isWxPhoneLogin = isPop ? true :false
             loginTokenStore.set(tokenRes)
 
             uni.setStorage({
@@ -32,7 +33,13 @@ export function tokenSave(res,returnUrl,isPop) {
                         }
                     }
                     else {
-                        if (!isPop) {
+                        if (isPop) {
+                            uni.showToast({
+                                title: "登录成功",
+                                icon: "none"
+                            });
+                        }
+                        else {
                             uni.navigateBack({delta: 1})
                         }
                     }
