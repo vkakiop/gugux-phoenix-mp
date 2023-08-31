@@ -101,6 +101,10 @@ const pageData = reactive({
 })
 
 const init = (row) => {
+  //debug
+  pageData.isShowOfficialAccount = true
+  return
+
   //判断数量如果为0弹出消息
   if (false) {
     pageData.isShowMessage = true
