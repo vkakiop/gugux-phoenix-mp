@@ -224,9 +224,9 @@ const changeClick = (key,sort)=>{
 
 const clickChange= (sort,text)=>{
   if(sort == 4){
-    pageData.bagClick1 = false;
-    pageData.bagClick2 = false;
-    pageData.bagClick3 = false;
+    // pageData.bagClick1 = false;
+    // pageData.bagClick2 = false;
+    // pageData.bagClick3 = false;
   }else{
     pageData['bagNum'+sort] = text;
     pageData['bagClick'+sort] = true;

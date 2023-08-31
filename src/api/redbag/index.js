@@ -27,4 +27,12 @@ export function getwinning(data) {
         params:data
     })
 }
+//中奖信息
+export function amountBag(data) {
+    return request({
+        url: '/gugux-services-activity-api/app/moyu/amount',
+        method: 'get',
+        params:data
+    })
+}
 
