@@ -1,6 +1,13 @@
 <template>
   <view class="redbag">
-    <view class="container">
+    <view class="over" v-if="pageData.isOver">
+      <view>
+        <image :src="configStaticPath('/static/redbag/over.png')" mode="widthFix"></image>
+        <view>活动已过期</view>
+        <view>请耐心等待下一轮活动吧~</view>
+      </view>
+    </view>
+    <view class="container" v-else>
       <view class="red-top">
         <image :src="configStaticPath('/static/redbag/bg.png')" mode="widthFix"></image>
         <view class="box">
@@ -75,17 +82,21 @@
 </template>
 
 <script setup>
-import {ref,reactive,onMounted,onBeforeUnmount,nextTick} from 'vue'
-import {configStaticPath} from '@/config/index'
-import activityJoin from './components/activityJoin.vue'
-import {getHtmlReplaceEnter} from '@/utils/utils'
+import {ref,reactive,onMounted,onBeforeUnmount,nextTick} from 'vue';
+import {configStaticPath} from '@/config/index';
+import {getHtmlReplaceEnter} from '@/utils/utils';
+import {onLoad,onShow,onPageScroll} from '@dcloudio/uni-app';
+import {redbagAdd,getwinning} from '@/api/redbag/index';
+import activityJoin from './components/activityJoin.vue';
+import moment from 'moment'
 const pageData = reactive({
   isShowOfficialAccount:false, //是否在底部显示公众号
+  isOver:false,
   timeList:[
     {id:1,time:'9.16',num:6000},
-    {id:1,time:'9.17',num:4000},
-    {id:1,time:'9.18',num:7000},
-    {id:1,time:'9.19',num:10000},
+    {id:2,time:'9.17',num:6000},
+    {id:3,time:'9.18',num:6000},
+    {id:4,time:'9.19',num:6000},
   ],
   num:3,
   bagClick1:false,
@@ -115,16 +126,22 @@ const pageData = reactive({
   ],
   animate :false,
   timer:'',
+  id:'',
+})
+onLoad((option)=>{
+    pageData.id = option.id;
+    getTime();
+    getredbagAdd();
+    getwinningList({id:pageData.id});
 })
 onMounted(()=>{
   //onMessageText('hello wold')
-  if(pageData.scrollList.length>5){
-    pageData.timer = setInterval(showMarquee, 2000);
-  }
-
-
-onMounted(()=>{
-  onMessageText('本轮活动已经结束\n请等待下一轮抽奖吧')
+  // pageData.isOver = true;
+  
+  // if(pageData.isOver == true){
+  //   onMessageText('本轮活动已经结束\n请等待下一轮抽奖吧');
+  // }
+  
 })
 
 //开始红包流程
@@ -135,11 +152,33 @@ const onRedbagOpen = ()=>{
   })
   activityJoinRef.value.init({})
 }
-
+const getTime = ()=>{
+  pageData.timeList[0].time =  moment().add(0, 'days').format("MM.DD");
+  pageData.timeList[1].time =  moment().add(1, 'days').format("MM.DD");
+  pageData.timeList[2].time =  moment().add(2, 'days').format("MM.DD");
+  pageData.timeList[3].time =  moment().add(3, 'days').format("MM.DD");
+}
 //显示消息
 const onMessageText = (text)=>{
   nextTick(()=>{
     activityJoinRef.value.message({messageText:getHtmlReplaceEnter(text)},true)
+  })
+}
+const getredbagAdd = ()=>{
+  let obj = {
+    id:pageData.id,
+    type:1
+  }
+  redbagAdd(obj).then((res)=>{
+    pageData.num = res.data.number||0;
+  })
+}
+const getwinningList = (params)=>{
+  getwinning(params).then((res)=>{
+    pageData.scrollList = res.data;
+    if(pageData.scrollList.length>5){
+      pageData.timer = setInterval(showMarquee, 2000);
+    }
   })
 }
 
@@ -161,12 +200,26 @@ const showMarquee = () =>{
     },500);
 }
 onBeforeUnmount(()=>{
-    clearInterval(pageData.timer)
-    pageData.timer = null
+    clearInterval(pageData.timer);
+    pageData.timer = null;
 })
+
 </script>
 
 <style lang="scss" scoped>
+  .over{
+    background-color: #fff;
+    height: 100vh;
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 30rpx;
+    font-family: Hiragino Sans GB;
+    font-weight: normal;
+    color: #000000;
+  }
 .redbag{
   background-color: #DA1533;
   .container{

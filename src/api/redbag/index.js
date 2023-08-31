@@ -18,3 +18,13 @@ export function redbagAdd(data) {
     })
 }
 
+
+//活动中奖用户
+export function getwinning(data) {
+    return request({
+        url: '/gugux-services-activity-api/app/moyu/winning',
+        method: 'get',
+        params:data
+    })
+}
+

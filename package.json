@@ -54,6 +54,7 @@
     "@uni-ui/code-ui": "^1.5.3",
     "axios": "^0.27.2",
     "json-bigint": "^1.0.0",
+    "moment": "^2.29.3",
     "pinia": "2.0.28",
     "vue": "3.2.45",
     "vue-i18n": "9.1.9"
@@ -65,6 +66,7 @@
     "@dcloudio/uni-stacktracey": "3.0.0-3070320230222002",
     "@dcloudio/uni-vue-devtools": "3.0.0-3070320230222002",
     "@dcloudio/vite-plugin-uni": "3.0.0-3070320230222002",
+    "@tailwindcss/line-clamp": "^0.4.2",
     "autoprefixer": "^10.4.14",
     "miniprogram-api-typings": "^3.9.0",
     "postcss": "^8.4.21",
@@ -82,7 +84,6 @@
     "weapp-ide-cli": "^1.0.1",
     "weapp-tailwindcss-children": "^0.1.0",
     "weapp-tailwindcss-webpack-plugin": "^2.0.0",
-    "windicss": "^3.5.6",
-    "@tailwindcss/line-clamp": "^0.4.2"
+    "windicss": "^3.5.6"
   }
 }
