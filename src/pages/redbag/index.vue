@@ -75,7 +75,7 @@
         </view>
       </view>
     </view>
-    <!-- <button @click="onRedbagOpen">打开</button> -->
+    <button @click="others">打开</button>
 
     <activityJoin ref="activityJoinRef" @clickChange="clickChange"></activityJoin>
   </view>
@@ -133,9 +133,12 @@ const pageData = reactive({
 onLoad((option)=>{
     pageData.id = option.id;
     getTime();
-    getredbagAdd();
+    
     
     getwinningList({id:pageData.id});
+})
+onShow(()=>{
+  getredbagAdd();
 })
 onMounted(()=>{
   getGeoLocation();
@@ -202,7 +205,11 @@ const getwinningList = (params)=>{
     }
   })
 }
-
+const others = ()=>{
+  uni.navigateTo({
+    url: '/pages/index/searchHistory'
+  })
+}
 const changeClick = (key,sort)=>{
   if(pageData.num == 0 ){
     return
