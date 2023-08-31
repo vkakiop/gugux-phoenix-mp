@@ -96,39 +96,34 @@ const pageData = reactive({
 })
 
 const init = (row) => {
-  pageData.parentInfo = row
-  pageData.isShowRedbag = true
-  pageData.redbagInfo = {isDraw:true,amount:20.99}
-  return
+  if (row) {
+    //判断数量如果为0弹出消息
+    pageData.parentInfo = row
+    if (row.num <= 0) {
+      pageData.isShowMessage = true
+      pageData.messageText = '您的抽奖次数已用完'
+      return
+    }
 
-  //判断数量如果为0弹出消息
-  pageData.parentInfo = row
-  if (row.num <= 0) {
-    pageData.isShowMessage = true
-    pageData.messageText = '您的抽奖次数已用完'
-    return
+    //判断是否微信授权登录
+    if (!isWxPhoneLogin()) {
+      pageData.isShowLogin = true
+      return
+    }
+
+    redbagInfo({id:pageData.parentInfo.id,sort:pageData.parentInfo.sort,lng:pageData.parentInfo.geo_x,lat:pageData.parentInfo.geo_y}).then(res=>{
+      pageData.redbagInfo = res.data || {}
+      pageData.isShowRedbag = true
+
+      let text = pageData.redbagInfo.isDraw ? pageData.redbagInfo.amount + '元' : '未中奖'
+      emit('clickChange',pageData.parentInfo.sort,text)
+
+    }).catch(e=>{
+      pageData.isShowMessage = true
+      pageData.messageText = getHtmlReplaceEnter(e.msg)
+      emit('clickChange',4,'')
+    })
   }
-
-  //判断是否微信授权登录
-  if (!getTokenValue()/*!isWxPhoneLogin()*/) {
-    uni.navigateTo({url:'/pages/login/index'})
-    //debug
-    pageData.isShowLogin = true
-    return
-  }
-
-  redbagInfo({id:pageData.parentInfo.id,sort:pageData.parentInfo.sort,lng:pageData.parentInfo.geo_x,lat:pageData.parentInfo.geo_y}).then(res=>{
-    pageData.redbagInfo = res.data || {}
-    pageData.isShowRedbag = true
-
-    let text = pageData.redbagInfo.isDraw ? pageData.redbagInfo.amount + '元' : '未中奖'
-    emit('clickChange',pageData.parentInfo.sort,text)
-
-  }).catch(e=>{
-    pageData.isShowMessage = true
-    pageData.messageText = getHtmlReplaceEnter(e.msg)
-    emit('clickChange',4,'')
-  })
 }
 
 const message = (row) => {
@@ -190,7 +185,7 @@ const closeMessage = ()=>{
 }
 
 const downApp = ()=>{
-  uni.navigateTo({url:'/pages/downapp/index?type=redbag&id='+pageData.parentInfo.id})
+  uni.navigateTo({url:'/pages/downapp/index?type=redbag&id='+pageData.parentInfo.isType ? pageData.parentInfo.id : ''})
 }
 </script>
 
