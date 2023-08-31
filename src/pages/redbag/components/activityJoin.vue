@@ -81,7 +81,7 @@ import {configStaticPath} from '@/config/index'
 import {getTokenValue,isWxPhoneLogin,getHtmlReplaceEnter} from '@/utils/utils'
 import {redbagAdd,redbagInfo} from '@/api/redbag/index'
 
-const emit = defineEmits(['clickChange'])
+const emit = defineEmits(['clickChange','updataList'])
 const pageData = reactive({
   parentInfo: {},
   isShowLogin:false,
@@ -135,6 +135,7 @@ const message = (row) => {
 defineExpose({ init,message })
 
 const getPhoneNumberValid = ()=>{
+  pageData.isShowLogin = false
 }
 
 const getPhoneNumber = (e)=> {
@@ -143,16 +144,17 @@ const getPhoneNumber = (e)=> {
     if (pageData.jsCode) {
       authWxLogin({code:e.detail.code,jsCode:pageData.jsCode}).then(res=>{
         tokenSave(res,'', true)
+        emit('updataList')
       })
-      emits('close')
+
     }
     else {
       setTimeout(()=>{
         if (pageData.jsCode) {
           authWxLogin({code: e.detail.code, jsCode: pageData.jsCode}).then(res => {
             tokenSave(res, '', true)
+            emit('updataList')
           })
-          emits('close')
         }
         else {
           uni.showToast({title:'登录获取code错误',icon: 'none', duration: 2000})
