@@ -217,8 +217,6 @@ const changeClick = (key,sort)=>{
   // if(pageData.num == 0 ){
   //   return
   // }
-  pageData[key] = true;
-  pageData.num -- ;
   onRedbagOpen(sort);
 }
 
@@ -229,6 +227,8 @@ const clickChange= (sort,text)=>{
     pageData.bagClick3 = false;
   }else{
     pageData['bagNum'+sort] = text;
+    pageData['bagClick'+sort] = true;
+    pageData.num -- ;
   }
 }
 const showMarquee = () =>{
