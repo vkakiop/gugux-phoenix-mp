@@ -68,7 +68,7 @@
         <view style="overflow: hidden;height: 500rpx;" v-if="!isArrayEmpty(pageData.scrollList)">
           <view class="scroll-ul" :class="{marquee_top:pageData.animate}">
             <view class="scroll-li" v-for="(item,index) in pageData.scrollList" :key="index">
-              {{ item.text }}
+              {{ item.phone }} {{ item.amountStr }}
             </view>
           </view>
         </view>
