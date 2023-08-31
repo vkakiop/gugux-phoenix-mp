@@ -111,19 +111,41 @@ const init = (row) => {
       return
     }
 
-    redbagInfo({id:pageData.parentInfo.id,sort:pageData.parentInfo.sort,lng:pageData.parentInfo.geo_x,lat:pageData.parentInfo.geo_y}).then(res=>{
-      pageData.redbagInfo = res.data || {}
-      pageData.isShowRedbag = true
-
-      let text = pageData.redbagInfo.isDraw ? pageData.redbagInfo.amount + '元' : '未中奖'
-      emit('clickChange',pageData.parentInfo.sort,text)
-
-    }).catch(e=>{
-      pageData.isShowMessage = true
-      pageData.messageText = getHtmlReplaceEnter(e.msg)
-      emit('clickChange',4,'')
-    })
+    //没有经纬度再定位
+    let lng = pageData.parentInfo.geo_x
+    let lat = pageData.parentInfo.geo_y
+    if (!(pageData.parentInfo.geo_x && pageData.parentInfo.geo_y)) {
+      uni.getLocation({
+        type:'gcj02',
+        success: function (res) {
+          pageData.parentInfo.geo_x = res.longitude
+          pageData.parentInfo.geo_y = res.latitude
+          getRedbagInfo()
+        },
+        fail: function (res) {
+          getRedbagInfo()
+        }
+      })
+    }
+    else {
+      getRedbagInfo()
+    }
   }
+}
+
+const getRedbagInfo = ()=>{
+  redbagInfo({id:pageData.parentInfo.id,sort:pageData.parentInfo.sort,lng:pageData.parentInfo.geo_x,lat:pageData.parentInfo.geo_y}).then(res=>{
+    pageData.redbagInfo = res.data || {}
+    pageData.isShowRedbag = true
+
+    let text = pageData.redbagInfo.isDraw ? pageData.redbagInfo.amount + '元' : '未中奖'
+    emit('clickChange',pageData.parentInfo.sort,text)
+
+  }).catch(e=>{
+    pageData.isShowMessage = true
+    pageData.messageText = getHtmlReplaceEnter(e.msg)
+    emit('clickChange',4,'')
+  })
 }
 
 const message = (row) => {
