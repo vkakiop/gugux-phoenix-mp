@@ -136,6 +136,7 @@
                 </view>
         </view>
         <commentBox ref="commentBoxRef" @close="commentClose"></commentBox>
+        <loginPop :isShow="pageData.isShowLoginPop" @close="pageData.isShowLoginPop = false"></loginPop>
     </view>
 </template>
 <script setup>
@@ -176,7 +177,8 @@ const pageData = reactive({
     total:-1,
     indexList:[],
     content:'',
-    height:'500rpx'
+    height:'500rpx',
+    isShowLoginPop: false,
 })
 const commentBoxRef = ref();
 const init = (val)=>{
@@ -288,7 +290,8 @@ const isLogin = ()=>{
 		// scrolltolower();
         return true;
 	} else {
-		uni.navigateTo({url:'/pages/login/index'});
+		pageData.isShowLoginPop = true;
+		// uni.navigateTo({url:'/pages/login/index'});
 	}
 }
 
