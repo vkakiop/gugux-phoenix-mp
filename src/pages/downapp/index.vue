@@ -46,7 +46,7 @@ const copyUrl = ()=>{
         icon:'none'
       })
       if (pageData.type == 'redbag' && pageData.id) {
-        redbagAdd({type:2,pageData.id}).then(res=>{
+        redbagAdd({type:2,id:pageData.id}).then(res=>{
         })
       }
     },
