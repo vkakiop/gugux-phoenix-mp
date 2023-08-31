@@ -209,7 +209,8 @@ const closeMessage = ()=>{
 }
 
 const downApp = ()=>{
-  uni.navigateTo({url:'/pages/downapp/index?type=redbag&id='+(pageData.parentInfo.isType ? '' : pageData.parentInfo.id)})
+  pageData.isShowRedbag = false
+  uni.navigateTo({url:'/pages/downapp/index?type=redbag&id='+(pageData.redbagInfo.isType ? '' : pageData.parentInfo.id)})
 }
 </script>
 
