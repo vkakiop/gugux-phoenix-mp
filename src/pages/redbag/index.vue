@@ -65,17 +65,19 @@
         </view>
       </view>
       <view class="scroll">
-        <view style="overflow: hidden;height: 500rpx;">
+        <view style="overflow: hidden;height: 500rpx;" v-if="!isArrayEmpty(pageData.scrollList)">
           <view class="scroll-ul" :class="{marquee_top:pageData.animate}">
             <view class="scroll-li" v-for="(item,index) in pageData.scrollList" :key="index">
               {{ item.text }}
             </view>
           </view>
-
+        </view>
+        <view class="nodata" v-else>
+          暂无中奖用户
         </view>
       </view>
     </view>
-    <button @click="others">打开</button>
+    <!-- <button @click="others">打开</button> -->
 
     <activityJoin ref="activityJoinRef" @clickChange="clickChange"></activityJoin>
   </view>
@@ -84,10 +86,11 @@
 <script setup>
 import {ref,reactive,onMounted,onBeforeUnmount,nextTick} from 'vue';
 import {configStaticPath} from '@/config/index';
-import {getHtmlReplaceEnter} from '@/utils/utils';
+import {getHtmlReplaceEnter,isArrayEmpty} from '@/utils/utils';
 import {onLoad,onShow,onPageScroll} from '@dcloudio/uni-app';
 import {redbagAdd,getwinning} from '@/api/redbag/index';
 import activityJoin from './components/activityJoin.vue';
+import {getTokenValue,isWxPhoneLogin} from '@/utils/utils'
 import moment from 'moment'
 const pageData = reactive({
   isShowOfficialAccount:false, //是否在底部显示公众号
@@ -98,7 +101,7 @@ const pageData = reactive({
     {id:3,time:'9.18',num:6000},
     {id:4,time:'9.19',num:6000},
   ],
-  num:3,
+  num:1,
   bagClick1:false,
   bagNum1:'未抽中',
   bagClick2:false,
@@ -133,12 +136,12 @@ const pageData = reactive({
 onLoad((option)=>{
     pageData.id = option.id;
     getTime();
-    
-    
     getwinningList({id:pageData.id});
 })
 onShow(()=>{
-  getredbagAdd();
+  if(isWxPhoneLogin()){
+    getredbagAdd();
+  }
 })
 onMounted(()=>{
   getGeoLocation();
@@ -194,6 +197,7 @@ const getredbagAdd = ()=>{
   }
   redbagAdd(obj).then((res)=>{
     pageData.num = res.data.number||0;
+    pageData.isOver = res.data.isUseless;
   })
 }
 const getwinningList = (params)=>{
@@ -204,11 +208,11 @@ const getwinningList = (params)=>{
     }
   })
 }
-const others = ()=>{
-  uni.navigateTo({
-    url: '/pages/index/searchHistory'
-  })
-}
+// const others = ()=>{
+//   uni.navigateTo({
+//     url: '/pages/index/searchHistory'
+//   })
+// }
 const changeClick = (key,sort)=>{
   if(pageData.num == 0 ){
     return
@@ -255,6 +259,9 @@ onBeforeUnmount(()=>{
     font-family: Hiragino Sans GB;
     font-weight: normal;
     color: #000000;
+    image{
+      width:330rpx;
+    }
   }
 .redbag{
   background-color: #DA1533;
@@ -421,6 +428,9 @@ onBeforeUnmount(()=>{
       }
       .scroll-li{
         margin: 10rpx 0;;
+      }
+      .nodata{
+        padding:200rpx 0;
       }
     }
   }
