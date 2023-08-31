@@ -29,7 +29,7 @@
           <view class="absolute w-full text-center text-[#FFEDAC]">
             <view v-if="pageData.redbagInfo.isDraw">
               <view class="mt-63 text-14">恭喜您获得咕咕行红包</view>
-              <view class="text-[#FFFFFC] mt-20">
+              <view class="text-[#FFFFFC] mt-10">
                 <!--text class="text-20">￥</text-->
                 <text class="text-46">{{pageData.redbagInfo.amount}}</text>
                 <text class="text-15">元</text>
@@ -38,14 +38,17 @@
             <view v-else class="mt-65 pb-50 text-14">
               非常遗憾，没有抽中咕咕行红包
             </view>
-            <view class="mt-20 text-16">
-              <view>关注咕咕行公众号</view>
-              <view>可获得额外1次抽奖机会!</view>
+            <view class="mt-15 text-16">
+              <view>
+                <view>咕咕行出行社交APP</view>
+                <view>海量摩友聚集地</view>
+              </view>
+              <view class="mt-20 text-14">下载APP可获得1次抽奖机会</view>
             </view>
           </view>
           <!--image :src="configStaticPath('/static/redbag/popbutton.png')" class="w-122 h-41 absolute left-[calc(50%-122rpx)] bottom-125" @click="close"/-->
           <image :src="configStaticPath('/static/redbag/popbuttondown.png')" class="w-122 h-41 absolute left-[calc(50%-122rpx)] bottom-125" @click="downApp"/>
-          <view class="absolute w-full flex justify-center bottom-105">
+          <view v-if="pageData.redbagInfo.isDraw" class="absolute w-full flex justify-center bottom-105">
             <view class="text-center text-14 text-[#FFEDAC] inline-block rounded-full">红包已转入您的微信零钱</view>
           </view>
           <image :src="configStaticPath('/static/redbag/popclose.png')" class="w-39 h-39 absolute left-[calc(50%-39rpx)] bottom-0" @click="closeRedbag"/>
@@ -93,6 +96,11 @@ const pageData = reactive({
 })
 
 const init = (row) => {
+  pageData.parentInfo = row
+  pageData.isShowRedbag = true
+  pageData.redbagInfo = {isDraw:true,amount:20.99}
+  return
+
   //判断数量如果为0弹出消息
   pageData.parentInfo = row
   if (row.num <= 0) {
@@ -109,7 +117,7 @@ const init = (row) => {
     return
   }
 
-  redbagInfo({id:pageData.parentInfo.id}).then(res=>{
+  redbagInfo({id:pageData.parentInfo.id,sort:pageData.parentInfo.sort,lng:pageData.parentInfo.geo_x,lat:pageData.parentInfo.geo_y}).then(res=>{
     pageData.redbagInfo = res.data || {}
     pageData.isShowRedbag = true
 
@@ -126,7 +134,7 @@ const init = (row) => {
 const message = (row) => {
   if (row) {
     pageData.isShowMessage = true
-    pageData.messageText = row.messageText
+    pageData.messageText = getHtmlReplaceEnter(row.messageText)
   }
 }
 defineExpose({ init,message })
@@ -182,7 +190,7 @@ const closeMessage = ()=>{
 }
 
 const downApp = ()=>{
-  uni.navigateTo({url:'/pages/downapp/index'})
+  uni.navigateTo({url:'/pages/downapp/index?type=redbag&id='+pageData.parentInfo.id})
 }
 </script>
 

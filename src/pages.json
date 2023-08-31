@@ -12,12 +12,6 @@
 	},
 	"pages": [
 		{
-			"path": "pages/redbag/index",
-			"style": {
-				"navigationBarTitleText": "抢红包"
-			}
-		},
-		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "咕咕行"
@@ -161,6 +155,12 @@
                 "enablePullDownRefresh": false
             }
         },
+		{
+			"path": "pages/redbag/index",
+			"style": {
+				"navigationBarTitleText": "抢红包"
+			}
+		},
 		{
 			"path": "pages/downapp/index",
 			"style": {

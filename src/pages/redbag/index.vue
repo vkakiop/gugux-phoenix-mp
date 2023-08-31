@@ -214,9 +214,9 @@ const getwinningList = (params)=>{
 //   })
 // }
 const changeClick = (key,sort)=>{
-  if(pageData.num == 0 ){
-    return
-  }
+  // if(pageData.num == 0 ){
+  //   return
+  // }
   pageData[key] = true;
   pageData.num -- ;
   onRedbagOpen(sort);
