@@ -261,3 +261,33 @@ export function rpxTopx(rpx) {
 export function pxTorpx(px) {
 	return 750/wx.getSystemInfoSync().windowWidth*px
 }
+
+export function htmlEncode (str){
+	var temp = "";
+	if(!str) return "";
+	temp = str.replace(/&/g,"&amp;");
+	temp = temp.replace(/</g,"&lt;");
+	temp = temp.replace(/>/g,"&gt;");
+	temp = temp.replace(/[ ]/g,"&nbsp;");
+	temp = temp.replace(/\'/g,"&#39;");
+	temp = temp.replace(/\"/g,"&quot;");
+	return temp;
+}
+
+/* 用正则表达式实现html解码（反转义）*/
+export function htmlDecode (str){
+	var temp = "";
+	if(!str) return "";
+	temp = str.replace(/&amp;/g,"&");
+	temp = temp.replace(/&lt;/g,"<");
+	temp = temp.replace(/&gt;/g,">");
+	temp = temp.replace(/&nbsp;/g," ");
+	temp = temp.replace(/&#39;/g,"\'");
+	temp = temp.replace(/&quot;/g,"\"");
+	return temp;
+}
+
+export function getHtmlReplaceEnter(text) {
+	text = htmlEncode(text)
+	return (text+'').replace(/\r|\n/g,'<br/>')
+}
