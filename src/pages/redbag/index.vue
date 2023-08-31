@@ -79,7 +79,7 @@
     </view>
     <!-- <button @click="others">打开</button> -->
 
-    <activityJoin ref="activityJoinRef" @clickChange="clickChange"></activityJoin>
+    <activityJoin ref="activityJoinRef" @clickChange="clickChange" @updataList="updataList"></activityJoin>
   </view>
 </template>
 
@@ -139,9 +139,7 @@ onLoad((option)=>{
     getwinningList({id:pageData.id});
 })
 onShow(()=>{
-  if(isWxPhoneLogin()){
-    getredbagAdd();
-  }
+  updataList();
 })
 onMounted(()=>{
   getGeoLocation();
@@ -153,7 +151,11 @@ onMounted(()=>{
   // }
   
 })
-
+const updataList = ()=>{
+  if(isWxPhoneLogin()){
+    getredbagAdd();
+  }
+}
 //开始红包流程
 const activityJoinRef = ref()
 const onRedbagOpen = (sort)=>{
