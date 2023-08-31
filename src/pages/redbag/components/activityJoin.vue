@@ -209,7 +209,7 @@ const closeMessage = ()=>{
 }
 
 const downApp = ()=>{
-  uni.navigateTo({url:'/pages/downapp/index?type=redbag&id='+(pageData.parentInfo.isType ? pageData.parentInfo.id : '')})
+  uni.navigateTo({url:'/pages/downapp/index?type=redbag&id='+(!pageData.parentInfo.isType ? pageData.parentInfo.id : '')})
 }
 </script>
 
