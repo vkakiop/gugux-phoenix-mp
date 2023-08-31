@@ -219,6 +219,9 @@ const changeClick = (key,sort)=>{
   // if(pageData.num == 0 ){
   //   return
   // }
+  if(pageData['bagClick'+sort] == true){
+    return
+  }
   onRedbagOpen(sort);
 }
 
