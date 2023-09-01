@@ -141,7 +141,7 @@ onLoad((option)=>{
   pageData.id = option.id;
   getTime();
   getwinningList({id:pageData.id});
-  getamountBag({id:pageData.id});
+  
 })
 onShow(()=>{
   updataList();
@@ -179,6 +179,7 @@ const getamountBag = (params)=>{
 const updataList = ()=>{
   if(isWxPhoneLogin()){
     getredbagAdd();
+    getamountBag({id:pageData.id});
   }
 }
 //开始红包流程
