@@ -183,9 +183,8 @@ const getPhoneNumber = (e)=> {
         tokenSave(res,'', true).then(res=>{
           redbagAdd({type:1,id:pageData.parentInfo.id}).then(res=>{
             emit('updataList')
-            if (res.data.number > 0) {
-              init()
-            }
+            pageData.parentInfo.num = res.data.number
+            init()
           })
         })
       })
@@ -198,9 +197,8 @@ const getPhoneNumber = (e)=> {
             tokenSave(res, '', true).then(res=>{
               redbagAdd({type:1,id:pageData.parentInfo.id}).then(res=> {
                 emit('updataList')
-                if (res.data.number > 0) {
-                  init()
-                }
+                pageData.parentInfo.num = res.data.number
+                init()
               })
             })
           })
