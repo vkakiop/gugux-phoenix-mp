@@ -132,6 +132,7 @@ const init = (row) => {
 }
 
 const getRedbagInfo = ()=>{
+  console.log('请求经纬度信息：',pageData.parentInfo.geo_x,pageData.parentInfo.geo_y)
   redbagInfo({id:pageData.parentInfo.id,sort:pageData.parentInfo.sort,lng:pageData.parentInfo.geo_x,lat:pageData.parentInfo.geo_y}).then(res=>{
     pageData.redbagInfo = res.data || {}
     pageData.isShowRedbag = true
@@ -182,9 +183,11 @@ const getPhoneNumber = (e)=> {
       authWxLogin({code:e.detail.code,jsCode:pageData.jsCode}).then(res=>{
         tokenSave(res,'', true).then(res=>{
           redbagAdd({type:1,id:pageData.parentInfo.id}).then(res=>{
-            emit('updataList')
             pageData.parentInfo.num = res.data.number
-            init()
+            if (pageData.parentInfo.num > 0) {
+              init()
+            }
+            emit('updataList')
           })
         })
       })
@@ -196,9 +199,11 @@ const getPhoneNumber = (e)=> {
           authWxLogin({code: e.detail.code, jsCode: pageData.jsCode}).then(res => {
             tokenSave(res, '', true).then(res=>{
               redbagAdd({type:1,id:pageData.parentInfo.id}).then(res=> {
-                emit('updataList')
                 pageData.parentInfo.num = res.data.number
-                init()
+                if (pageData.parentInfo.num > 0) {
+                  init()
+                }
+                emit('updataList')
               })
             })
           })
