@@ -88,7 +88,7 @@ import {ref,reactive,onMounted,onBeforeUnmount,nextTick} from 'vue';
 import {configStaticPath} from '@/config/index';
 import {getHtmlReplaceEnter,isArrayEmpty} from '@/utils/utils';
 import {onLoad,onShow,onPageScroll} from '@dcloudio/uni-app';
-import {redbagAdd,getwinning} from '@/api/redbag/index';
+import {redbagAdd,getwinning,amountBag} from '@/api/redbag/index';
 import activityJoin from './components/activityJoin.vue';
 import {getTokenValue,isWxPhoneLogin} from '@/utils/utils'
 import moment from 'moment'
@@ -136,10 +136,12 @@ const pageData = reactive({
 onLoad((option)=>{
   if(!option.id){
     onMessageText('参数错误！');
+    return
   }
   pageData.id = option.id;
   getTime();
   getwinningList({id:pageData.id});
+  getamountBag({id:pageData.id});
 })
 onShow(()=>{
   updataList();
@@ -154,6 +156,26 @@ onMounted(()=>{
   // }
   
 })
+const getamountBag = (params)=>{
+  amountBag(params).then((res)=>{
+    if(res.data.isRecord){
+      res.data.record.forEach((item)=>{
+        pageData['bagClick'+item.sort] = true;
+        pageData['bagNum'+item.sort] = item.state == 0 ? '未中奖': item.amount+'元';
+        // if(item.sort == 1){
+        //   pageData.bagClick1 = true;
+        //   pageData.bagNum1 = item.state == 0 ? '未中奖': item.amount+'元';
+        // }else if(item.sort == 2){
+        //   pageData.bagClick2 = true;
+        //   pageData.bagNum2 = item.state == 0 ? '未中奖': item.amount+'元';
+        // }else if(item.sort == 3){
+        //   pageData.bagClick3 = true;
+        //   pageData.bagNum3 = item.state == 0 ? '未中奖': item.amount+'元';
+        // }
+      })
+    }
+  })
+}
 const updataList = ()=>{
   if(isWxPhoneLogin()){
     getredbagAdd();
