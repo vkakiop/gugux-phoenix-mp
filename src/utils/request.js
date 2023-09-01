@@ -38,9 +38,11 @@ const service = axios.create({
 service.interceptors.request.use(config => {
     // 是否需要设置 token
     if (config.headers['isToken'] !== false) {
-        let token = getTokenValue()
-        if (token) {
-            config.headers['token'] = token // 让每个请求携带自定义token 请根据实际情况自行修改
+        if (!config.headers['token']) {
+            let token = getTokenValue()
+            if (token) {
+                config.headers['token'] = token // 让每个请求携带自定义token 请根据实际情况自行修改
+            }
         }
     }
     //config.headers = {...config.headers,...configHeadersDefault()}

@@ -156,6 +156,23 @@ defineExpose({ init,message })
 
 const getPhoneNumberValid = ()=>{
   pageData.isShowLogin = false
+
+  uni.login({
+    provider: 'weixin', //使用微信登录
+    success: function (res) {
+      if (res.code) {
+        pageData.jsCode = res.code
+      }
+      else {
+        let title = '登录错误：'+res.errMsg
+        uni.showToast({title:title,icon: 'none', duration: 2000})
+      }
+      console.log('wxLogin',res)
+    },
+    fail : function(res) {
+      uni.showToast({title:'登录错误：'+res.detail.code,icon: 'none', duration: 2000})
+    },
+  });
 }
 
 const getPhoneNumber = (e)=> {
@@ -163,9 +180,13 @@ const getPhoneNumber = (e)=> {
   if (e.detail.code) {
     if (pageData.jsCode) {
       authWxLogin({code:e.detail.code,jsCode:pageData.jsCode}).then(res=>{
-        tokenSave(res,'', true)
-        redbagAdd({type:1,id:pageData.parentInfo.id}).then(res=>{
-          emit('updataList')
+        tokenSave(res,'', true).then(res=>{
+          redbagAdd({type:1,id:pageData.parentInfo.id}).then(res=>{
+            emit('updataList')
+            if (res.data.number > 0) {
+              init()
+            }
+          })
         })
       })
 
@@ -174,9 +195,13 @@ const getPhoneNumber = (e)=> {
       setTimeout(()=>{
         if (pageData.jsCode) {
           authWxLogin({code: e.detail.code, jsCode: pageData.jsCode}).then(res => {
-            tokenSave(res, '', true)
-            redbagAdd({type:1,id:pageData.parentInfo.id}).then(res=> {
-              emit('updataList')
+            tokenSave(res, '', true).then(res=>{
+              redbagAdd({type:1,id:pageData.parentInfo.id}).then(res=> {
+                emit('updataList')
+                if (res.data.number > 0) {
+                  init()
+                }
+              })
             })
           })
         }
