@@ -97,39 +97,37 @@ const pageData = reactive({
 
 const init = (row) => {
   if (row) {
-    //判断数量如果为0弹出消息
     pageData.parentInfo = row
-    if (row.num <= 0) {
-      pageData.isShowMessage = true
-      pageData.messageText = '您的抽奖次数已用完'
-      return
-    }
+    //判断数量如果为0弹出消息
+  }
+  if (pageData.parentInfo.num <= 0) {
+    pageData.isShowMessage = true
+    pageData.messageText = '您的抽奖次数已用完'
+    return
+  }
 
-    //判断是否微信授权登录
-    if (!isWxPhoneLogin()) {
-      pageData.isShowLogin = true
-      return
-    }
+  //判断是否微信授权登录
+  if (!isWxPhoneLogin()) {
+    pageData.isShowLogin = true
+    return
+  }
 
-    //没有经纬度再定位
-    let lng = pageData.parentInfo.geo_x
-    let lat = pageData.parentInfo.geo_y
-    if (!(pageData.parentInfo.geo_x && pageData.parentInfo.geo_y)) {
-      uni.getLocation({
-        type:'gcj02',
-        success: function (res) {
-          pageData.parentInfo.geo_x = res.longitude
-          pageData.parentInfo.geo_y = res.latitude
-          getRedbagInfo()
-        },
-        fail: function (res) {
-          getRedbagInfo()
-        }
-      })
-    }
-    else {
-      getRedbagInfo()
-    }
+  //没有经纬度再定位
+  if (!(pageData.parentInfo.geo_x && pageData.parentInfo.geo_y)) {
+    uni.getLocation({
+      type:'gcj02',
+      success: function (res) {
+        pageData.parentInfo.geo_x = res.longitude
+        pageData.parentInfo.geo_y = res.latitude
+        getRedbagInfo()
+      },
+      fail: function (res) {
+        getRedbagInfo()
+      }
+    })
+  }
+  else {
+    getRedbagInfo()
   }
 }
 
@@ -166,7 +164,9 @@ const getPhoneNumber = (e)=> {
     if (pageData.jsCode) {
       authWxLogin({code:e.detail.code,jsCode:pageData.jsCode}).then(res=>{
         tokenSave(res,'', true)
-        emit('updataList')
+        redbagAdd({type:1,id:pageData.parentInfo.id}).then(res=>{
+          emit('updataList')
+        })
       })
 
     }
@@ -175,7 +175,9 @@ const getPhoneNumber = (e)=> {
         if (pageData.jsCode) {
           authWxLogin({code: e.detail.code, jsCode: pageData.jsCode}).then(res => {
             tokenSave(res, '', true)
-            emit('updataList')
+            redbagAdd({type:1,id:pageData.parentInfo.id}).then(res=> {
+              emit('updataList')
+            })
           })
         }
         else {
