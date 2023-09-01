@@ -9,7 +9,7 @@
     </view>
     <view class="container" v-else>
       <view class="red-top">
-        <image :src="configStaticPath('/static/redbag/bg.png')" mode="widthFix"></image>
+        <image :src="configStaticPath('/static/redbag/bg.jpg')" mode="widthFix"></image>
         <view class="box">
           <view class="red-time">
             <view class="time-left">
