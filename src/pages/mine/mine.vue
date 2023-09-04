@@ -6,7 +6,7 @@
 					<image :src="pageInfo.mineMessage.icon" class="w-76 h-76 rounded-full" />
 				</view>
 				<view class="mx-11 pt-10 w-">
-					<view class="text-21 line-clamp-1">
+					<view class="text-21 line-clamp-1 w-200">
 						{{ pageInfo.mineMessage.nickname }}
 					</view>
 					<view class=" text-14 flex items-center mt-18">

@@ -1,7 +1,9 @@
 <template>
   <view>
-    <view v-if="pageData.bannerImage" class="mx-15 flex justify-center"><image :src="pageData.bannerImage" mode="center" class="w-347 h-120 rounded-5 fixed -top-5"></image></view>
-    <view class="fixed -top-5 z-50 bg-white w-full pt-10 mb-14">
+    <view v-if="pageData.bannerImage" class="w-full h-120  flex justify-center fixed  z-50 bg-[#fff] py-5">
+      <image :src="pageData.bannerImage" mode="center" class="w-347 h-120 rounded-5 "></image>
+    </view>
+    <view :class="['fixed', pageData.bannerImage?'top-120':'-top-5', 'z-50', 'bg-white', 'w-full', 'pt-10', 'mb-14']">
       <view class="bg-[#fff] w-full pt-7 pb-2 pl-14  pr-22 flex justify-between">
         <!-- 菜单 -->
         <scroll-view class="scroll-view_H" scroll-x="true" @scroll="scroll" scroll-left="60">
@@ -22,7 +24,7 @@
         <!-- 菜单 -->
       </view>
     </view>
-    <view class="pt-65">
+    <view :class="pageData.bannerImage?'pt-200':'pt-65'">
       <view>
         <view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
           <view v-if="waterIndex == pageData.currentIndex">
@@ -66,8 +68,7 @@ const pageData = reactive({
   scrollTop: 0,
   currentIndex: 0,
   waterfallItems: [],
-
-  bannerImage:'https://cdn.caigetuxun.com/prod/7e4096e2787b43298f16aa720a5a6d76.jpg',
+  bannerImage: 'https://cdn.caigetuxun.com/prod/7e4096e2787b43298f16aa720a5a6d76.jpg',
 })
 frontpage({}).then(res => {
   const opusCategoryVOS = res.data.opusCategoryVOS
@@ -102,8 +103,8 @@ const changeWaterfall = (waterIndex) => {
   // }
   // pageData.waterfallItems[waterIndex].query.path.pageNum = 1
   // pageData.waterfallItems[waterIndex].items=[]
-  pageData.waterfallItems[waterIndex].isLoading=false
-  pageData.waterfallItems[waterIndex].isComplete=false
+  pageData.waterfallItems[waterIndex].isLoading = false
+  pageData.waterfallItems[waterIndex].isComplete = false
   pageData.currentIndex = waterIndex
   if (pageData.waterfallItems[waterIndex].items.length == 0) {
     getData()
