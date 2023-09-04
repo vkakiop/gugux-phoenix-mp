@@ -192,7 +192,7 @@ const onRedbagOpen = (sort)=>{
   nextTick(()=>{
     activityJoinRef.value.init({
       id:pageData.id,
-      number:pageData.num,
+      num:pageData.num,
       geo_x:pageData.geo_x,
       geo_y:pageData.geo_y,
       sort:sort,

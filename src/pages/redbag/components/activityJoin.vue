@@ -112,7 +112,7 @@ const init = (row) => {
     pageData.parentInfo = row
   }
   //判断数量如果为0弹出消息
-  if (pageData.parentInfo.number <= 0) {
+  if (pageData.parentInfo.num <= 0) {
     pageData.isShowMessage = true
     pageData.messageText = '您的抽奖次数已用完'
     return
