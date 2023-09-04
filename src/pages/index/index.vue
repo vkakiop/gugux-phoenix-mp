@@ -1,5 +1,6 @@
 <template>
   <view>
+    <view v-if="pageData.bannerImage" class="mx-15 flex justify-center"><image :src="pageData.bannerImage" mode="center" class="w-347 h-120 rounded-5 fixed -top-5"></image></view>
     <view class="fixed -top-5 z-50 bg-white w-full pt-10 mb-14">
       <view class="bg-[#fff] w-full pt-7 pb-2 pl-14  pr-22 flex justify-between">
         <!-- 菜单 -->
@@ -65,6 +66,8 @@ const pageData = reactive({
   scrollTop: 0,
   currentIndex: 0,
   waterfallItems: [],
+
+  bannerImage:'https://cdn.caigetuxun.com/prod/7e4096e2787b43298f16aa720a5a6d76.jpg',
 })
 frontpage({}).then(res => {
   const opusCategoryVOS = res.data.opusCategoryVOS
