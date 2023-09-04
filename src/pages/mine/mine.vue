@@ -15,7 +15,7 @@
 						<!-- 	<image src="/static/mine/copy.png" class="w-15 h-15 ml-10" @click.stop="copy(pageInfo.mineMessage.guguId)" /> -->
 					</view>
 				</view>
-				<view class="red-bag" @click="gopage">红包明细</view>
+				<view class="red-bag" @click="gopage" v-if="pageData.testFlag">红包明细</view>
 			</view>
 			<view class="flex text-14">
 				<view class="flex items-center">
@@ -96,14 +96,18 @@
 import waterfall from '@/components/index/waterfall.vue'
 import { configStaticPath } from '@/config/index'
 import { userhomepage, homepagelike, homepageopus, homepagecollection } from "@/api/mine/index.js"
-import { ref, reactive, computed, watch } from 'vue'
+import { ref, reactive, computed, watch, onMounted } from 'vue'
 import { onShow, onReachBottom, onPageScroll } from "@dcloudio/uni-app"
 import { getTokenValue } from "@/utils/utils"
+import { globalStatus } from '@/api/index/index'
 import useLoginTokenStore from '@/store/modules/loginToken'
 import useRouterStore from '@/store/modules/router'
 import _ from 'lodash'
 const computedNumber = computed({
 	get: (num) => { return function (num) { return num > 9999 ? (num / 10000).toFixed(1) + 'w' : num } }
+})
+onMounted(()=>{
+	getGlobalStatus()
 })
 onShow(() => {
 	if (getTokenValue()) {
@@ -130,44 +134,27 @@ onShow(() => {
 	}
 })
 
-const waterfallItems = [{
-	isshowfixed: false,
-	scrollTop: -1,
-	isComplete: false,
-	isLoading: false,
-	itemType: 'title',
-	name: '作品',
-	items: [],
-	query: {
-		path: { pageNum: 1, pageSize: 20, },
-		data: { totalCount: 0 }
+const waterfallItems = [
+	{
+		isshowfixed: false, scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '作品', items: [],
+		query: { path: { pageNum: 1, pageSize: 20, }, data: { totalCount: 0 } }
+	},
+	{
+		scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '喜欢', items: [],
+		query: { path: { index: '', pageSize: 20, }, data: { totalCount: 0 } }
+	},
+	{
+		scrollTop: -1, isComplete: false, isLoading: false, name: '收藏', items: [],
+		query: { path: { index: '', pageSize: 20, }, data: { totalCount: 0 } }
 	}
-},
-{
-	scrollTop: -1,
-	isComplete: false,
-	isLoading: false,
-	itemType: 'title',
-	name: '喜欢',
-	items: [],
-	query: {
-		path: { index: '', pageSize: 20, },
-		data: { totalCount: 0 }
-	}
-},
-{
-	scrollTop: -1,
-	isComplete: false,
-	isLoading: false,
-	name: '收藏',
-	items: [],
-	query: {
-		path: { index: '', pageSize: 20, },
-		data: { totalCount: 0 }
-	}
-}
 ]
+const getGlobalStatus = () => {
+	globalStatus({}).then(res => {
+		pageData.testFlag = res.data.testFlag
+	})
+}
 const pageData = reactive({
+	testFlag: false,
 	isload: false,
 	masterId: '',
 	scrollTop: 0,
@@ -298,10 +285,10 @@ const gettolcount = () => {
 		}
 	})
 }
-const gopage = () =>{
+const gopage = () => {
 	uni.navigateTo({
-	url:
-		"/pages/redbag/redbagdetail"
+		url:
+			"/pages/redbag/redbagdetail"
 	});
 }
 
@@ -414,10 +401,11 @@ watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
 	transform: scale(0.5);
 	transform-origin: left bottom;
 }
-.red-bag{
+
+.red-bag {
 	position: absolute;
-	right:0;
-	top:20rpx;
+	right: 0;
+	top: 20rpx;
 	color: #000;
 	font-weight: bold;
 }
