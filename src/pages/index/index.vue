@@ -70,12 +70,14 @@ const pageData = reactive({
   currentIndex: 0,
   waterfallItems: [],
   bannerImage: '',
+  redbagId:'',
 })
 
 const getGlobalStatus = ()=>{
   globalStatus({}).then(res=>{
     pageData.testFlag = res.data.testFlag
     pageData.bannerImage = pageData.testFlag ? res.data.banner : ''
+    pageData.redbagId = res.data.id
   })
 }
 
@@ -84,7 +86,7 @@ onMounted(()=>{
 })
 
 const goRedbag = ()=>{
-  uni.navigateTo({url:'/pages/redbag/index'})
+  uni.navigateTo({url:'/pages/redbag/index?id='+pageData.redbagId})
 }
 
 frontpage({}).then(res => {
