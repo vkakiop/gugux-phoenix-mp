@@ -3,7 +3,7 @@
     <view v-if="pageData.bannerImage" @click="goRedbag" class="w-full h-120  flex justify-center fixed  z-50 bg-[#fff]">
       <image :src="pageData.bannerImage" class="w-347 h-120 rounded-5 object-cover"></image>
     </view>
-    <view :class="['fixed', pageData.bannerImage?'top-120':'-top-5', 'z-50', 'bg-white', 'w-full', 'pt-10', 'mb-14']">
+    <view :class="['fixed', pageData.bannerImage ? 'top-120' : '-top-5', 'z-50', 'bg-white', 'w-full', 'pt-10', 'mb-14']">
       <view class="bg-[#fff] w-full pt-7 pb-2 pl-14  pr-22 flex justify-between">
         <!-- 菜单 -->
         <scroll-view class="scroll-view_H" scroll-x="true" @scroll="scroll" scroll-left="60">
@@ -24,7 +24,7 @@
         <!-- 菜单 -->
       </view>
     </view>
-    <view :class="pageData.bannerImage?'pt-190':'pt-65'">
+    <view :class="pageData.bannerImage ? 'pt-190' : 'pt-65'">
       <view>
         <view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
           <view v-if="waterIndex == pageData.currentIndex">
@@ -44,7 +44,7 @@
 <script setup>
 import { ref, onMounted, reactive, watch, nextTick } from 'vue'
 import { opusList } from '@/api/opus/list'
-import {globalStatus} from '@/api/index/index'
+import { globalStatus } from '@/api/index/index'
 import { configStaticPath } from '@/config/index'
 import waterfall from '@/components/index/waterfall.vue'
 // import safeguardconfirm from '@/components/safeguard/safeguardconfirm.vue'
@@ -70,40 +70,39 @@ const pageData = reactive({
   currentIndex: 0,
   waterfallItems: [],
   bannerImage: '',
-  redbagId:'',
+  redbagId: '',
 })
 
-const getGlobalStatus = ()=>{
-  globalStatus({}).then(res=>{
+const getGlobalStatus = () => {
+  globalStatus({}).then(res => {
     pageData.testFlag = res.data.testFlag
     pageData.bannerImage = pageData.testFlag ? res.data.banner : ''
     pageData.redbagId = res.data.id
   })
 }
 
-onMounted(()=>{
+onMounted(() => {
   getGlobalStatus()
-})
-
-const goRedbag = ()=>{
-  uni.navigateTo({url:'/pages/redbag/index?id='+pageData.redbagId})
-}
-
-frontpage({}).then(res => {
-  const opusCategoryVOS = res.data.opusCategoryVOS
-  opusCategoryVOS.forEach((item, index) => {
-    let obj = {
-      scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '', items: [], query: {
-        path: { categoryId: '', getNum: 20 }
+  frontpage({}).then(res => {
+    const opusCategoryVOS = res.data.opusCategoryVOS
+    opusCategoryVOS.forEach((item, index) => {
+      let obj = {
+        scrollTop: -1, isComplete: false, isLoading: false, itemType: 'title', name: '', items: [], query: {
+          path: { categoryId: '', getNum: 20 }
+        }
       }
-    }
-    obj.name = item.name
-    obj.query.path.categoryId = item.id
-    waterfallItems.push(obj)
+      obj.name = item.name
+      obj.query.path.categoryId = item.id
+      waterfallItems.push(obj)
+    })
+    pageData.waterfallItems = _.cloneDeep(waterfallItems)
+    nextTick(() => { changeWaterfall(0) })
   })
-  pageData.waterfallItems = _.cloneDeep(waterfallItems)
-  nextTick(() => { changeWaterfall(0) })
 })
+
+const goRedbag = () => {
+  uni.navigateTo({ url: '/pages/redbag/index?id=' + pageData.redbagId })
+}
 onShow(() => {
   useRouterStore().setRouter('/pages/mine/mine', false)
 
