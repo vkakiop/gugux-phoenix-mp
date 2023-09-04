@@ -4,7 +4,16 @@ import request from '@/utils/request'
 export function frontpage(data) {
     return request({
       url: '/gugux-services-opus-api/app/front/page',
-      params:data,
+      params: data,
       method: 'get'
     })
   }
+
+// 获取审核状态
+export function globalStatus(data) {
+    return request({
+        url: '/gugux-services-activity-api/app/moyu/status',
+        params: data,
+        method: 'get'
+    })
+}
