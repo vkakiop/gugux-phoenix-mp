@@ -1,7 +1,7 @@
 <template>
   <view>
-    <view v-if="pageData.bannerImage" class="w-full h-120  flex justify-center fixed  z-50 bg-[#fff] py-5">
-      <image :src="pageData.bannerImage" mode="center" class="w-347 h-120 rounded-5 "></image>
+    <view v-if="pageData.bannerImage" class="w-full h-120  flex justify-center fixed  z-50 bg-[#fff]">
+      <image :src="pageData.bannerImage" class="w-347 h-120 rounded-5 object-cover"></image>
     </view>
     <view :class="['fixed', pageData.bannerImage?'top-120':'-top-5', 'z-50', 'bg-white', 'w-full', 'pt-10', 'mb-14']">
       <view class="bg-[#fff] w-full pt-7 pb-2 pl-14  pr-22 flex justify-between">
