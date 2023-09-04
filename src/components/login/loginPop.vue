@@ -33,7 +33,20 @@
 import {reactive} from 'vue'
 import {authWxLogin} from '@/api/login/index'
 import {tokenSave} from '@/utils/login'
-const props = defineProps(['isShow'])
+const props = defineProps({
+  isShow: {
+    type: Boolean,
+    default: false
+  },
+  isShowWxPhoneNumber: {
+    type: Boolean,
+    default: true,
+  },
+  isShowPhoneNumber: {
+    type: Boolean,
+    default: true,
+  }
+})
 const emits = defineEmits(['close'])
 const pageData = reactive({
   isShow:true,

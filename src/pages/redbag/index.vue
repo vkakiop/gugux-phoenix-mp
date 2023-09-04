@@ -88,11 +88,15 @@ import {ref,reactive,onMounted,onBeforeUnmount,nextTick} from 'vue';
 import {configStaticPath} from '@/config/index';
 import {getHtmlReplaceEnter,isArrayEmpty} from '@/utils/utils';
 import {onLoad,onShow,onPageScroll} from '@dcloudio/uni-app';
+import {globalStatus} from '@/api/index/index'
 import {redbagAdd,getwinning,amountBag} from '@/api/redbag/index';
 import activityJoin from './components/activityJoin.vue';
 import {getTokenValue,isWxPhoneLogin} from '@/utils/utils'
 import moment from 'moment'
 const pageData = reactive({
+  testFlag:false,
+  testFlagLoaded:false,
+
   isShowOfficialAccount:false, //是否在底部显示公众号
   isOver:false,
   timeList:[
@@ -141,7 +145,7 @@ onLoad((option)=>{
   pageData.id = option.id;
   getTime();
   getwinningList({id:pageData.id});
-  
+  getGlobalStatus()
 })
 onShow(()=>{
   updataList();
@@ -177,7 +181,7 @@ const getamountBag = (params)=>{
   })
 }
 const updataList = ()=>{
-  if(isWxPhoneLogin()){
+  if(isWxPhoneLoginCheck()){
     getredbagAdd();
     getamountBag({id:pageData.id});
   }
@@ -191,7 +195,8 @@ const onRedbagOpen = (sort)=>{
       number:pageData.num,
       geo_x:pageData.geo_x,
       geo_y:pageData.geo_y,
-      sort:sort
+      sort:sort,
+      testFlag:pageData.testFlag,
     })
   })
 }
@@ -228,6 +233,23 @@ const getredbagAdd = ()=>{
     pageData.isOver = res.data.isUseless;
   })
 }
+
+const getGlobalStatus = ()=>{
+  globalStatus({}).then(res=>{
+    pageData.testFlag = res.data.testFlag
+    pageData.testFlagLoaded = true
+  })
+}
+
+const isWxPhoneLoginCheck = () =>{
+  if (pageData.parentInfo.testFlag) {
+    return getTokenValue() ? true : false
+  }
+  else {
+    return isWxPhoneLogin()
+  }
+}
+
 const getwinningList = (params)=>{
   getwinning(params).then((res)=>{
     pageData.scrollList = res.data;

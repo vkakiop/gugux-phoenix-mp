@@ -1,27 +1,27 @@
 <template>
   <view>
     <u-popup :show="pageData.isShowLogin" mode="bottom" round="10" :customStyle="{marginLeft:'0rpx',marginRight:'0rpx'}">
-        <view class="mx-30 mt-20 mb-16">
-          <view class="flex justify-between">
-            <view class="flex">
-              <image :src="configStaticPath('/static/redbag/poplogo.png')" class="w-20 h-20 rounded-full"></image>
-              <view class="ml-5 text-16 text-[#000000] text-center font-bold">咕咕行</view>
-            </view>
-            <image :src="configStaticPath('/static/redbag/popicon.png')" class="w-20 h-20" @click="closeLogin"></image>
+      <view class="mx-30 mt-20 mb-16">
+        <view class="flex justify-between">
+          <view class="flex">
+            <image :src="configStaticPath('/static/redbag/poplogo.png')" class="w-20 h-20 rounded-full"></image>
+            <view class="ml-5 text-16 text-[#000000] text-center font-bold">咕咕行</view>
           </view>
-          <view class="mt-20 text-15">
-            <view class="leading-22 text-[#333] font-bold">
-              申请获取以下权限
-            </view>
-            <view class="text-[#999] mt-50">
-              获得你微信绑定的手机号码
-            </view>
+          <image :src="configStaticPath('/static/redbag/popicon.png')" class="w-20 h-20" @click="closeLogin"></image>
+        </view>
+        <view class="mt-20 text-15">
+          <view class="leading-22 text-[#333] font-bold">
+            申请获取以下权限
           </view>
-          <view class="mt-20">
-            <button :open-type="true ? 'getPhoneNumber':''" @click="getPhoneNumberValid" @getphonenumber="getPhoneNumber" class="h-40 leading-40 rounded-full bg-[#51ab3a] active:bg-[#09b307] text-white text-14">授权登录</button>
+          <view class="text-[#999] mt-50">
+            获得你微信绑定的手机号码
           </view>
         </view>
-      </u-popup>
+        <view class="mt-20">
+          <button :open-type="true ? 'getPhoneNumber':''" @click="getPhoneNumberValid" @getphonenumber="getPhoneNumber" class="h-40 leading-40 rounded-full bg-[#51ab3a] active:bg-[#09b307] text-white text-14">授权登录</button>
+        </view>
+      </view>
+    </u-popup>
     <u-popup :show="pageData.isShowRedbag" mode="center" bgColor="transparent">
       <view>
         <view class="relative w-375 h-460">
@@ -70,6 +70,7 @@
         </view>
       </view>
     </u-popup>
+    <loginPop :isShow="pageData.isShowLoginPop" :isShowWxPhoneNumber="false" @close="closeLogin"></loginPop>
   </view>
 </template>
 
@@ -83,6 +84,8 @@ import {redbagAdd,redbagInfo} from '@/api/redbag/index'
 
 const emit = defineEmits(['clickChange','updataList'])
 const pageData = reactive({
+  isShowLoginPop:false, //过审用
+
   parentInfo: {},
   isShowLogin:false,
 
@@ -94,6 +97,15 @@ const pageData = reactive({
 
   jsCode:'',
 })
+
+const isWxPhoneLoginCheck = () =>{
+  if (pageData.parentInfo.testFlag) {
+    return getTokenValue() ? true : false
+  }
+  else {
+    return isWxPhoneLogin()
+  }
+}
 
 const init = (row) => {
   if (row) {
@@ -107,7 +119,7 @@ const init = (row) => {
   }
 
   //判断是否微信授权登录
-  if (!isWxPhoneLogin()) {
+  if (!isWxPhoneLoginCheck()) {
     pageData.isShowLogin = true
     return
   }
@@ -157,6 +169,7 @@ defineExpose({ init,message })
 
 const getPhoneNumberValid = ()=>{
   pageData.isShowLogin = false
+  pageData.isShowLoginPop = false
 
   uni.login({
     provider: 'weixin', //使用微信登录
@@ -228,6 +241,7 @@ const getPhoneNumber = (e)=> {
 
 const closeLogin = ()=>{
   pageData.isShowLogin = false
+  pageData.isShowLoginPop = false
 }
 
 const closeRedbag = ()=>{

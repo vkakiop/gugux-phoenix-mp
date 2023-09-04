@@ -1,6 +1,6 @@
 <template>
   <view>
-    <view v-if="pageData.bannerImage" class="w-full h-120  flex justify-center fixed  z-50 bg-[#fff]">
+    <view v-if="pageData.bannerImage" @click="goRedbag" class="w-full h-120  flex justify-center fixed  z-50 bg-[#fff]">
       <image :src="pageData.bannerImage" class="w-347 h-120 rounded-5 object-cover"></image>
     </view>
     <view :class="['fixed', pageData.bannerImage?'top-120':'-top-5', 'z-50', 'bg-white', 'w-full', 'pt-10', 'mb-14']">
@@ -44,6 +44,7 @@
 <script setup>
 import { ref, onMounted, reactive, watch, nextTick } from 'vue'
 import { opusList } from '@/api/opus/list'
+import {globalStatus} from '@/api/index/index'
 import { configStaticPath } from '@/config/index'
 import waterfall from '@/components/index/waterfall.vue'
 // import safeguardconfirm from '@/components/safeguard/safeguardconfirm.vue'
@@ -70,6 +71,22 @@ const pageData = reactive({
   waterfallItems: [],
   bannerImage: 'https://cdn.caigetuxun.com/prod/7e4096e2787b43298f16aa720a5a6d76.jpg',
 })
+
+const getGlobalStatus = ()=>{
+  globalStatus({}).then(res=>{
+    pageData.testFlag = res.data.testFlag
+    pageData.bannerImage = pageData.testFlag ? res.data.banner : ''
+  })
+}
+
+onMounted(()=>{
+  getGlobalStatus()
+})
+
+const goRedbag = ()=>{
+  uni.navigateTo({url:'/pages/redbag/index'})
+}
+
 frontpage({}).then(res => {
   const opusCategoryVOS = res.data.opusCategoryVOS
   opusCategoryVOS.forEach((item, index) => {
