@@ -3,7 +3,7 @@
     <view class="mx-30 mt-20 mb-16">
       <view class="text-18 text-[#000000] text-center font-bold">登录或注册</view>
       <view class="mt-20 text-13 flex items-center">
-        <u-checkbox-group v-model="pageData.isAgreeItems">
+        <u-checkbox-group v-if="isShowWxPhoneNumber" v-model="pageData.isAgreeItems">
           <u-checkbox shape="circle" activeColor="#4ba1f8" label="" iconSize="15" size="22"></u-checkbox>
         </u-checkbox-group>
         <view class="text-13 leading-22 text-[#333]">
@@ -11,7 +11,7 @@
         </view>
       </view>
       <view class="mt-20">
-        <button :open-type="pageData.isAgreeItems.length ? 'getPhoneNumber':''" @click="getPhoneNumberValid" @getphonenumber="getPhoneNumber" class="h-40 leading-40 rounded-full bg-[#51ab3a] active:bg-[#09b307] text-white text-14">微信一键登录</button>
+        <button v-if="isShowWxPhoneNumber" :open-type="pageData.isAgreeItems.length ? 'getPhoneNumber':''" @click="getPhoneNumberValid" @getphonenumber="getPhoneNumber" class="h-40 leading-40 rounded-full bg-[#51ab3a] active:bg-[#09b307] text-white text-14">微信一键登录</button>
         <button @click="gotoLogin" class="mt-15 h-40 leading-40 rounded-full bg-[#e9ebef] active:bg-[#e4e5e9] text-[#929292] text-14">手机号登录/注册</button>
       </view>
       <!--u-popup :show="pageData.isDialogShow" mode="center" round="10" :customStyle="{marginLeft:'60rpx',marginRight:'60rpx'}">
