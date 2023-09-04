@@ -24,7 +24,7 @@
         <!-- 菜单 -->
       </view>
     </view>
-    <view :class="pageData.bannerImage?'pt-200':'pt-65'">
+    <view :class="pageData.bannerImage?'pt-190':'pt-65'">
       <view>
         <view v-for="(waterItem, waterIndex) in pageData.waterfallItems" :key="waterIndex">
           <view v-if="waterIndex == pageData.currentIndex">
