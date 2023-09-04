@@ -14,7 +14,7 @@
           <view class="red-time">
             <view class="time-left">
               <image class="img1" :src="configStaticPath('/static/redbag/bagtime1.png')" mode="widthFix"></image>
-              <view class="time-text">超多红包等你来扫</view>
+              <view class="time-text">超多油费等你来扫</view>
             </view>
             <view class="time-right">
               <view class="time-red" v-for="(item,index) in pageData.timeList" :key="index">
@@ -22,7 +22,7 @@
                 <view class="time-red-box">
                   <view class="time-text p1">{{ item.time }}</view>
                   <view class="time-text p2">{{ item.num }}</view>
-                  <view class="time-text p3">红包</view>
+                  <view class="time-text p3"><!--红包--></view>
                 </view>
               </view>
             </view>

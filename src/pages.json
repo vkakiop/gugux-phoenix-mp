@@ -158,13 +158,13 @@
 		{
 			"path": "pages/redbag/index",
 			"style": {
-				"navigationBarTitleText": "抢红包"
+				"navigationBarTitleText": "赢油费"
 			}
 		},
 		{
 			"path": "pages/redbag/redbagdetail",
 			"style": {
-				"navigationBarTitleText": "红包明细"
+				"navigationBarTitleText": "抽奖明细"
 			}
 		},
 		{

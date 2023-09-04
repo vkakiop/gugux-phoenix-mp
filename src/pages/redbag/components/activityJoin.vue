@@ -28,7 +28,7 @@
           <image :src="configStaticPath('/static/redbag/popbg.png')" class="w-full h-408 absolute left-0 top-0"/>
           <view class="absolute w-full text-center text-[#FFEDAC]">
             <view v-if="pageData.redbagInfo.isDraw">
-              <view class="mt-63 text-14">恭喜您获得咕咕行红包</view>
+              <view class="mt-63 text-14">恭喜您获得咕咕行油费</view>
               <view class="text-[#FFFFFC] mt-10">
                 <!--text class="text-20">￥</text-->
                 <text class="text-46">{{pageData.redbagInfo.amount}}</text>
@@ -36,7 +36,7 @@
               </view>
             </view>
             <view v-else class="mt-65 pb-50 text-14">
-              非常遗憾，没有抽中咕咕行红包
+              非常遗憾，没有抽中咕咕行油费
             </view>
             <view class="mt-15 text-16">
               <view>
@@ -49,7 +49,7 @@
           <!--image :src="configStaticPath('/static/redbag/popbutton.png')" class="w-122 h-41 absolute left-[calc(50%-122rpx)] bottom-125" @click="close"/-->
           <image :src="configStaticPath('/static/redbag/popbuttondown.png')" class="w-122 h-41 absolute left-[calc(50%-122rpx)] bottom-125" @click="downApp"/>
           <view v-if="pageData.redbagInfo.isDraw" class="absolute w-full flex justify-center bottom-105">
-            <view class="text-center text-14 text-[#FFEDAC] inline-block rounded-full">红包已转入您的微信零钱</view>
+            <view class="text-center text-14 text-[#FFEDAC] inline-block rounded-full">油费已转入您的微信零钱</view>
           </view>
           <image :src="configStaticPath('/static/redbag/popclose.png')" class="w-39 h-39 absolute left-[calc(50%-39rpx)] bottom-0" @click="closeRedbag"/>
         </view>

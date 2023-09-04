@@ -15,7 +15,7 @@
 						<!-- 	<image src="/static/mine/copy.png" class="w-15 h-15 ml-10" @click.stop="copy(pageInfo.mineMessage.guguId)" /> -->
 					</view>
 				</view>
-				<view class="red-bag" @click="gopage" v-if="pageData.testFlag">红包明细</view>
+				<view class="red-bag" @click="gopage" v-if="pageData.testFlag">抽奖明细</view>
 			</view>
 			<view class="flex text-14">
 				<view class="flex items-center">

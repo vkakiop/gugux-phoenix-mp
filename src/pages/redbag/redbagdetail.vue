@@ -3,7 +3,7 @@
         <view class="contain-list" v-if="!isArrayEmpty(pageData.detailList)">
             <view class="list-li" v-for="(item,index) in pageData.detailList" :key="index">
                 <view>
-                    <view class="p1">现金红包</view>
+                    <view class="p1">现金油费</view>
                     <view class="p2">{{ item.createTime }}</view>
                 </view>
                 <view v-if="item.amount >=0" class="p4">+ {{ item.amount }}</view>
@@ -12,7 +12,7 @@
         </view>
         <view class="nodata" v-else>
             <u-empty
-                    mode="data" text="暂时没有红包明细"
+                    mode="data" text="暂时没有抽奖明细"
                     :icon="configStaticPath('/static/img/nodata.png')"
             >
             </u-empty>
