@@ -69,7 +69,7 @@ const pageData = reactive({
   scrollTop: 0,
   currentIndex: 0,
   waterfallItems: [],
-  bannerImage: 'https://cdn.caigetuxun.com/prod/7e4096e2787b43298f16aa720a5a6d76.jpg',
+  bannerImage: '',
 })
 
 const getGlobalStatus = ()=>{
