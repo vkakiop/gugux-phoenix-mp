@@ -1,12 +1,12 @@
 <template>
 	<view v-if="pageInfo.mineMessage.guguId" class="bg-[#F6F6F6] h-screen">
 		<view class="bg-[#fff] w-screen py-20 px-14 ">
-			<view class="flex  pb-15  ">
+			<view class="flex  pb-15  relative">
 				<view class=" border-2 border-[#fff] w-80 rounded-full h-80 iconShadow" @click="skipPerson">
 					<image :src="pageInfo.mineMessage.icon" class="w-76 h-76 rounded-full" />
 				</view>
-				<view class="mx-11 pt-10">
-					<view class="text-21">
+				<view class="mx-11 pt-10 w-">
+					<view class="text-21 line-clamp-1">
 						{{ pageInfo.mineMessage.nickname }}
 					</view>
 					<view class=" text-14 flex items-center mt-18">
@@ -15,6 +15,7 @@
 						<!-- 	<image src="/static/mine/copy.png" class="w-15 h-15 ml-10" @click.stop="copy(pageInfo.mineMessage.guguId)" /> -->
 					</view>
 				</view>
+				<view class="red-bag" @click="gopage">红包明细</view>
 			</view>
 			<view class="flex text-14">
 				<view class="flex items-center">
@@ -297,6 +298,12 @@ const gettolcount = () => {
 		}
 	})
 }
+const gopage = () =>{
+	uni.navigateTo({
+	url:
+		"/pages/redbag/redbagdetail"
+	});
+}
 
 function copy(value) {
 	uni.setClipboardData({
@@ -406,5 +413,12 @@ watch(() => useLoginTokenStore().get().accessToken, (newVal, oldVal) => {
 	border-right: 1rpx solid gray;
 	transform: scale(0.5);
 	transform-origin: left bottom;
+}
+.red-bag{
+	position: absolute;
+	right:0;
+	top:20rpx;
+	color: #000;
+	font-weight: bold;
 }
 </style>

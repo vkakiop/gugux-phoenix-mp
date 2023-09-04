@@ -162,6 +162,12 @@
 			}
 		},
 		{
+			"path": "pages/redbag/redbagdetail",
+			"style": {
+				"navigationBarTitleText": "钱包明细"
+			}
+		},
+		{
 			"path": "pages/downapp/index",
 			"style": {
 				"navigationBarTitleText": "下载app",
