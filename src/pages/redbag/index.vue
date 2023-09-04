@@ -267,6 +267,9 @@ const changeClick = (key,sort)=>{
   // if(pageData.num == 0 ){
   //   return
   // }
+  if(!pageData.testFlagLoaded){
+    return
+  }
   if(pageData['bagClick'+sort] == true){
     return
   }
