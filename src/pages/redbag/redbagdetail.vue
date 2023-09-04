@@ -3,11 +3,11 @@
         <view class="contain-list">
             <view class="list-li" v-for="(item,index) in pageData.detailList" :key="index">
                 <view>
-                    <view class="p1">{{ item.name }}</view>
-                    <view class="p2">{{ item.time }}</view>
+                    <view class="p1">{{ item.amountStr }}</view>
+                    <view class="p2">{{ item.createTime }}</view>
                 </view>
-                <view v-if="item.type==1" class="p3">- {{ item.num }}</view>
-                <view v-else class="p4">+ {{ item.num }}</view>
+                <view v-if="item.amount >=0" class="p4">+ {{ item.amount }}</view>
+                <view v-else class="p3">- {{ item.amount }}</view>
             </view>
         </view>
     </view>
@@ -16,13 +16,21 @@
 import {ref,reactive,onMounted,onBeforeUnmount,nextTick} from 'vue';
 import {configStaticPath} from '@/config/index';
 import {onLoad,onShow,onPageScroll} from '@dcloudio/uni-app';
-import {redbagAdd} from '@/api/redbag/index';
+import {awardBag} from '@/api/redbag/index';
 const pageData = reactive({
     detailList:[
-        {id:123,name:'提现',time:'2013-12-13 12:12:12' ,type:1,num:'20'},
-        {id:124,name:'红包雨活动',time:'2013-12-03 12:12:12' ,type:2,num:'50'},
+        // {id:123,amountStr:'提现',createTime:'2013-12-13 12:12:12' ,type:1,amount:'20'},
+        // {id:124,amountStr:'红包雨活动',createTime:'2013-12-03 12:12:12' ,type:2,amount:'50'},
     ]
 })
+onMounted(()=>{
+    getawardBag();
+})
+const getawardBag = ()=>{
+    awardBag().then((res)=>{
+        pageData.detailList = res.data;
+    })
+}
 </script>
 <style lang="scss" scoped>
 .red{

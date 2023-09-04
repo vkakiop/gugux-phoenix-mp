@@ -35,4 +35,12 @@ export function amountBag(data) {
         params:data
     })
 }
+//用户中奖列表
+export function awardBag(data) {
+    return request({
+        url: '/gugux-services-activity-api/app/moyu/award',
+        method: 'get',
+        params:data
+    })
+}
 
