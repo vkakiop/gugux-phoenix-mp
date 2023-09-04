@@ -1,6 +1,6 @@
 <template>
     <view class="red">
-        <view class="contain-list">
+        <view class="contain-list" v-if="!isArrayEmpty(pageData.detailList)">
             <view class="list-li" v-for="(item,index) in pageData.detailList" :key="index">
                 <view>
                     <view class="p1">{{ item.amountStr }}</view>
@@ -10,6 +10,13 @@
                 <view v-else class="p3">- {{ item.amount }}</view>
             </view>
         </view>
+        <view class="nodata" v-else>
+            <u-empty
+                    mode="data" text="暂时没有红包明细"
+                    :icon="configStaticPath('/static/img/nodata.png')"
+            >
+            </u-empty>
+        </view>
     </view>
 </template>
 <script setup>
@@ -17,6 +24,7 @@ import {ref,reactive,onMounted,onBeforeUnmount,nextTick} from 'vue';
 import {configStaticPath} from '@/config/index';
 import {onLoad,onShow,onPageScroll} from '@dcloudio/uni-app';
 import {awardBag} from '@/api/redbag/index';
+import {isArrayEmpty} from '@/utils/utils';
 const pageData = reactive({
     detailList:[
         // {id:123,amountStr:'提现',createTime:'2013-12-13 12:12:12' ,type:1,amount:'20'},
@@ -72,4 +80,7 @@ const getawardBag = ()=>{
         }
     }
 }
+.nodata{
+    padding:200rpx 0;
+    }
 </style>

@@ -164,7 +164,7 @@
 		{
 			"path": "pages/redbag/redbagdetail",
 			"style": {
-				"navigationBarTitleText": "钱包明细"
+				"navigationBarTitleText": "红包明细"
 			}
 		},
 		{
