@@ -69,13 +69,15 @@ const pageData = reactive({
   scrollTop: 0,
   currentIndex: 0,
   waterfallItems: [],
-  bannerImage: 'https://cdn.caigetuxun.com/prod/7e4096e2787b43298f16aa720a5a6d76.jpg',
+  bannerImage: '',
+  redbagId:'',
 })
 
 const getGlobalStatus = ()=>{
   globalStatus({}).then(res=>{
     pageData.testFlag = res.data.testFlag
     pageData.bannerImage = pageData.testFlag ? res.data.banner : ''
+    pageData.redbagId = res.data.id
   })
 }
 
@@ -84,7 +86,7 @@ onMounted(()=>{
 })
 
 const goRedbag = ()=>{
-  uni.navigateTo({url:'/pages/redbag/index'})
+  uni.navigateTo({url:'/pages/redbag/index?id='+pageData.redbagId})
 }
 
 frontpage({}).then(res => {

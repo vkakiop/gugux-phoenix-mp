@@ -242,7 +242,7 @@ const getGlobalStatus = ()=>{
 }
 
 const isWxPhoneLoginCheck = () =>{
-  if (pageData.parentInfo.testFlag) {
+  if (pageData.testFlag) {
     return getTokenValue() ? true : false
   }
   else {

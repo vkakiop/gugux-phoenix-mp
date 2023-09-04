@@ -110,8 +110,8 @@ const isWxPhoneLoginCheck = () =>{
 const init = (row) => {
   if (row) {
     pageData.parentInfo = row
-    //判断数量如果为0弹出消息
   }
+  //判断数量如果为0弹出消息
   if (pageData.parentInfo.num <= 0) {
     pageData.isShowMessage = true
     pageData.messageText = '您的抽奖次数已用完'
@@ -120,7 +120,12 @@ const init = (row) => {
 
   //判断是否微信授权登录
   if (!isWxPhoneLoginCheck()) {
-    pageData.isShowLogin = true
+    if (pageData.parentInfo.testFlag) {
+      pageData.isShowLoginPop = true
+    }
+    else {
+      pageData.isShowLogin = true
+    }
     return
   }
 
