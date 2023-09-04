@@ -1,6 +1,6 @@
 <template>
   <view>
-    <view v-if="pageData.bannerImage"><image :src="pageData.bannerImage" mode="aspectFit" class="mx-15 rounded-5 fixed -top-5"></image></view>
+    <view v-if="pageData.bannerImage" class="mx-15 flex justify-center"><image :src="pageData.bannerImage" mode="center" class="w-347 h-120 rounded-5 fixed -top-5"></image></view>
     <view class="fixed -top-5 z-50 bg-white w-full pt-10 mb-14">
       <view class="bg-[#fff] w-full pt-7 pb-2 pl-14  pr-22 flex justify-between">
         <!-- 菜单 -->
