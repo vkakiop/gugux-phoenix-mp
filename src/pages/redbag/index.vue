@@ -185,6 +185,7 @@ const getamountBag = (params)=>{
 const updataList = ()=>{
   
   if(isWxPhoneLoginCheck()){
+    pageData.isClick = false;
     getredbagAdd();
     getamountBag({id:pageData.id});
   }
