@@ -132,6 +132,7 @@ const pageData = reactive({
     // {id:1,text:'177****113 用户获得10元红包'},
   ],
   animate :false,
+  isClick:false,//是否点击抽奖，等待接口返回后才可继续点击
   timer:'',
   id:'',
   geo_x:'',
@@ -275,18 +276,24 @@ const changeClick = (key,sort)=>{
   if(pageData['bagClick'+sort] == true){
     return
   }
+  if(pageData.isClick){
+    return
+  }
+  pageData.isClick = true;
   onRedbagOpen(sort);
 }
 
 const clickChange= (sort,text)=>{
   if(sort == 4){
+    pageData.isClick = false;
     // pageData.bagClick1 = false;
     // pageData.bagClick2 = false;
     // pageData.bagClick3 = false;
   }else{
     pageData['bagNum'+sort] = text;
     pageData['bagClick'+sort] = true;
-    pageData.num -- ;
+    pageData.isClick = false;
+    pageData.num > 0 && pageData.num -- ;
   }
 }
 const showMarquee = () =>{
