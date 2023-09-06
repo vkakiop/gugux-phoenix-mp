@@ -145,10 +145,11 @@ onLoad((option)=>{
   pageData.id = option.id;
   getTime();
   getwinningList({id:pageData.id});
-  getGlobalStatus()
+  
 })
 onShow(()=>{
-  updataList();
+  getGlobalStatus();
+  
 })
 onMounted(()=>{
   getGeoLocation();
@@ -181,6 +182,7 @@ const getamountBag = (params)=>{
   })
 }
 const updataList = ()=>{
+  
   if(isWxPhoneLoginCheck()){
     getredbagAdd();
     getamountBag({id:pageData.id});
@@ -207,7 +209,6 @@ const getGeoLocation = (res) => {
     success: function (res) {
       pageData.geo_x = res.longitude;
       pageData.geo_y = res.latitude;
-      console.log(res.latitude)
     }
   })
 }
@@ -238,6 +239,7 @@ const getGlobalStatus = ()=>{
   globalStatus({}).then(res=>{
     pageData.testFlag = res.data.testFlag
     pageData.testFlagLoaded = true
+    updataList();
   })
 }
 
