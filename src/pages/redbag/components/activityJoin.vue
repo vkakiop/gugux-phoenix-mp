@@ -115,6 +115,7 @@ const init = (row) => {
   if (pageData.parentInfo.num <= 0) {
     pageData.isShowMessage = true
     pageData.messageText = '您的抽奖次数已用完'
+    emit('clickChange',4,'')
     return
   }
 
@@ -126,6 +127,7 @@ const init = (row) => {
     else {
       pageData.isShowLogin = true
     }
+    emit('clickChange',4,'')
     return
   }
 
