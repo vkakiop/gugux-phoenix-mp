@@ -95,7 +95,7 @@ import {getTokenValue,isWxPhoneLogin} from '@/utils/utils'
 import moment from 'moment'
 const pageData = reactive({
   testFlag:false,
-  testFlagLoaded:true,
+  testFlagLoaded:false,
 
   isShowOfficialAccount:false, //是否在底部显示公众号
   isOver:false,
@@ -271,9 +271,9 @@ const changeClick = (key,sort)=>{
   // if(pageData.num == 0 ){
   //   return
   // }
-  if(!pageData.testFlagLoaded){
-    return
-  }
+  // if(!pageData.testFlagLoaded){
+  //   return
+  // }
   if(pageData['bagClick'+sort] == true){
     return
   }
