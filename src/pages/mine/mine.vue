@@ -107,7 +107,7 @@ const computedNumber = computed({
 	get: (num) => { return function (num) { return num > 9999 ? (num / 10000).toFixed(1) + 'w' : num } }
 })
 onMounted(()=>{
-	getGlobalStatus()
+	//getGlobalStatus()
 })
 onShow(() => {
 	if (getTokenValue()) {

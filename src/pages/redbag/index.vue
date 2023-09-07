@@ -95,7 +95,7 @@ import {getTokenValue,isWxPhoneLogin} from '@/utils/utils'
 import moment from 'moment'
 const pageData = reactive({
   testFlag:false,
-  testFlagLoaded:false,
+  testFlagLoaded:true,
 
   isShowOfficialAccount:false, //是否在底部显示公众号
   isOver:false,
@@ -149,8 +149,8 @@ onLoad((option)=>{
   
 })
 onShow(()=>{
-  getGlobalStatus();
-  
+  //getGlobalStatus();
+  updataList()
 })
 onMounted(()=>{
   getGeoLocation();
@@ -241,7 +241,7 @@ const getGlobalStatus = ()=>{
   globalStatus({}).then(res=>{
     pageData.testFlag = res.data.testFlag
     pageData.testFlagLoaded = true
-    updataList();
+    //updataList();
   })
 }
 

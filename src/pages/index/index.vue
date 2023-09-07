@@ -82,7 +82,7 @@ const getGlobalStatus = () => {
 }
 
 onMounted(() => {
-  getGlobalStatus()
+  //getGlobalStatus()
   frontpage({}).then(res => {
     const opusCategoryVOS = res.data.opusCategoryVOS
     opusCategoryVOS.forEach((item, index) => {
