@@ -7,7 +7,7 @@
             <image :src="configStaticPath('/static/redbag/poplogo.png')" class="w-20 h-20 rounded-full"></image>
             <view class="ml-5 text-16 text-[#000000] text-center font-bold">咕咕行</view>
           </view>
-          <image :src="configStaticPath('/static/redbag/popicon.png')" class="w-20 h-20" @click="closeLogin"></image>
+          <image :src="configStaticPath('/static/redbag/popicon.png')" class="w-20 h-20" @click="closeLogin(true)"></image>
         </view>
         <view class="mt-20 text-15">
           <view class="leading-22 text-[#333] font-bold">
@@ -127,7 +127,6 @@ const init = (row) => {
     else {
       pageData.isShowLogin = true
     }
-    emit('clickChange',4,'')
     return
   }
 
@@ -247,10 +246,12 @@ const getPhoneNumber = (e)=> {
   }
 }
 
-const closeLogin = ()=>{
+const closeLogin = (isRelease)=>{
   pageData.isShowLogin = false
   pageData.isShowLoginPop = false
-  emit('clickChange',4,'')
+  if (isRelease) {
+    emit('clickChange',4,'')
+  }
 }
 
 const closeRedbag = ()=>{
