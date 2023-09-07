@@ -237,13 +237,13 @@ const getredbagAdd = ()=>{
   })
 }
 
-const getGlobalStatus = ()=>{
-  globalStatus({}).then(res=>{
-    pageData.testFlag = res.data.testFlag
-    pageData.testFlagLoaded = true
-    //updataList();
-  })
-}
+// const getGlobalStatus = ()=>{
+//   globalStatus({}).then(res=>{
+//     pageData.testFlag = res.data.testFlag
+//     pageData.testFlagLoaded = true
+//     //updataList();
+//   })
+// }
 
 const isWxPhoneLoginCheck = () =>{
   if (pageData.testFlag) {

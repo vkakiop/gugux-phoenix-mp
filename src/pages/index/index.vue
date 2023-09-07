@@ -73,13 +73,13 @@ const pageData = reactive({
   redbagId: '',
 })
 
-const getGlobalStatus = () => {
-  globalStatus({}).then(res => {
-    pageData.testFlag = res.data.testFlag
-    pageData.bannerImage = pageData.testFlag ? res.data.banner : ''
-    pageData.redbagId = res.data.id
-  })
-}
+// const getGlobalStatus = () => {
+//   globalStatus({}).then(res => {
+//     pageData.testFlag = res.data.testFlag
+//     pageData.bannerImage = pageData.testFlag ? res.data.banner : ''
+//     pageData.redbagId = res.data.id
+//   })
+// }
 
 onMounted(() => {
   //getGlobalStatus()

@@ -148,11 +148,11 @@ const waterfallItems = [
 		query: { path: { index: '', pageSize: 20, }, data: { totalCount: 0 } }
 	}
 ]
-const getGlobalStatus = () => {
-	globalStatus({}).then(res => {
-		pageData.testFlag = res.data.testFlag
-	})
-}
+// const getGlobalStatus = () => {
+// 	globalStatus({}).then(res => {
+// 		pageData.testFlag = res.data.testFlag
+// 	})
+// }
 const pageData = reactive({
 	testFlag: false,
 	isload: false,
