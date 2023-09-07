@@ -203,12 +203,20 @@ const getPhoneNumber = (e)=> {
         tokenSave(res,'', true).then(res=>{
           redbagAdd({type:1,id:pageData.parentInfo.id}).then(res=>{
             pageData.parentInfo.num = res.data.number
-            if (pageData.parentInfo.num > 0) {
-              init()
-            }
+            // if (pageData.parentInfo.num > 0) {
+            //   init()
+            // }
             emit('updataList')
+            uni.showToast({title:'登录成功',icon: 'none', duration: 2000})
+            emit('clickChange',4,'')
+          }).catch(e=>{
+            emit('clickChange',4,'')
           })
+        }).catch(e=>{
+          emit('clickChange',4,'')
         })
+      }).catch(e=>{
+        emit('clickChange',4,'')
       })
 
     }
@@ -219,12 +227,20 @@ const getPhoneNumber = (e)=> {
             tokenSave(res, '', true).then(res=>{
               redbagAdd({type:1,id:pageData.parentInfo.id}).then(res=> {
                 pageData.parentInfo.num = res.data.number
-                if (pageData.parentInfo.num > 0) {
-                  init()
-                }
+                // if (pageData.parentInfo.num > 0) {
+                //   init()
+                // }
                 emit('updataList')
+                uni.showToast({title:'登录成功',icon: 'none', duration: 2000})
+                emit('clickChange',4,'')
+              }).catch(e=>{
+                emit('clickChange',4,'')
               })
+            }).catch(e=>{
+              emit('clickChange',4,'')
             })
+          }).catch(e=>{
+            emit('clickChange',4,'')
           })
         }
         else {

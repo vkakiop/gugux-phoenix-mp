@@ -145,8 +145,6 @@ onLoad((option)=>{
   }
   pageData.id = option.id;
   getTime();
-  getwinningList({id:pageData.id});
-  
 })
 onShow(()=>{
   //getGlobalStatus();
@@ -183,7 +181,7 @@ const getamountBag = (params)=>{
   })
 }
 const updataList = ()=>{
-  
+  getwinningList({id:pageData.id})
   if(isWxPhoneLoginCheck()){
     pageData.isClick = false;
     getredbagAdd();
