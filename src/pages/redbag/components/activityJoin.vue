@@ -230,6 +230,7 @@ const getPhoneNumber = (e)=> {
         }
         else {
           uni.showToast({title:'登录获取code错误',icon: 'none', duration: 2000})
+          emit('clickChange',4,'')
         }
       },2000)
     }
@@ -249,6 +250,7 @@ const getPhoneNumber = (e)=> {
 const closeLogin = ()=>{
   pageData.isShowLogin = false
   pageData.isShowLoginPop = false
+  emit('clickChange',4,'')
 }
 
 const closeRedbag = ()=>{
