@@ -80,18 +80,18 @@
     <!-- <button @click="others">打开</button> -->
 
     <activityJoin ref="activityJoinRef" @clickChange="clickChange" @updataList="updataList"></activityJoin>
+    <ws-wx-privacy id="privacy-popup"></ws-wx-privacy>
   </view>
 </template>
 
 <script setup>
-import {ref,reactive,onMounted,onBeforeUnmount,nextTick} from 'vue';
-import {configStaticPath} from '@/config/index';
-import {getHtmlReplaceEnter,isArrayEmpty} from '@/utils/utils';
-import {onLoad,onShow,onPageScroll} from '@dcloudio/uni-app';
+import {ref,reactive,onMounted,onBeforeUnmount,nextTick} from 'vue'
+import {configStaticPath} from '@/config/index'
+import {getTokenValue,isWxPhoneLogin,getHtmlReplaceEnter,isArrayEmpty,privacyAuth} from '@/utils/utils'
+import {onLoad,onShow,onPageScroll} from '@dcloudio/uni-app'
 import {globalStatus} from '@/api/index/index'
-import {redbagAdd,getwinning,amountBag} from '@/api/redbag/index';
-import activityJoin from './components/activityJoin.vue';
-import {getTokenValue,isWxPhoneLogin} from '@/utils/utils'
+import {redbagAdd,getwinning,amountBag} from '@/api/redbag/index'
+import activityJoin from './components/activityJoin.vue'
 import moment from 'moment'
 const pageData = reactive({
   testFlag:false,
@@ -143,6 +143,7 @@ onLoad((option)=>{
     onMessageText('参数错误！');
     return
   }
+  privacyAuth()
   pageData.id = option.id;
   getTime();
 })

@@ -59,13 +59,14 @@
     <view v-else-if="pageData.isLoadError" class="w-screen h-screen flex justify-center items-center">
       <u-empty mode="data" text="获取文章失败" :icon="configStaticPath('/static/img/nodata.png')"/>
     </view>
+    <ws-wx-privacy id="privacy-popup"></ws-wx-privacy>
 </template>
 
 <script setup>
 import {reactive, ref, watch, getCurrentInstance, nextTick, computed} from "vue"
 import {configStaticPath} from '@/config/index'
 import { opusInfo,opusCollect,opusLike,userFans,userFansRemove } from "@/api/opus/index"
-import { getTokenValue } from "@/utils/utils"
+import { getTokenValue,privacyAuth } from "@/utils/utils"
 import {onLoad,onShow,onPageScroll} from '@dcloudio/uni-app'
 import opusArticle from './components/opusArticle'
 import comment from "@/components/common/comment.vue"
@@ -77,6 +78,7 @@ const comment2Ref = ref()
 const _this = getCurrentInstance()
 
 onLoad((option)=>{
+    privacyAuth()
     pageData.id = option.id
     pageData.traceInfo = decodeURIComponent(option.traceInfo || '')
     pageData.categoryId = option.categoryId || ''
