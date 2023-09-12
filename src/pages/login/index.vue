@@ -53,16 +53,19 @@
       </u-popup-->
     </view>
   </view>
+  <ws-wx-privacy id="privacy-popup"></ws-wx-privacy>
 </template>
 
 <script setup>
 import {reactive,watch,onMounted} from 'vue'
 import {tokenSave,isSwitchTab} from '@/utils/login'
+import { privacyAuth } from "@/utils/utils"
 import {authSms,authSmsLogin} from '@/api/login/index'
 import phoneslogan from './components/phoneslogan.vue'
 import {onLoad} from "@dcloudio/uni-app"
 
 onLoad((option)=>{
+  privacyAuth()
   pageData.url = decodeURIComponent(option.url || '')
 })
 
