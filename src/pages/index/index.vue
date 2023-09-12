@@ -38,6 +38,7 @@
     </view>
     <safe-guard-confirm></safe-guard-confirm>
     <safe-guard></safe-guard>
+    <ws-wx-privacy id="privacy-popup"></ws-wx-privacy>
   </view>
 </template>
 
@@ -46,6 +47,7 @@ import { ref, onMounted, reactive, watch, nextTick } from 'vue'
 import { opusList } from '@/api/opus/list'
 import { globalStatus } from '@/api/index/index'
 import { configStaticPath } from '@/config/index'
+import {privacyAuth} from '@/utils/utils'
 import waterfall from '@/components/index/waterfall.vue'
 // import safeguardconfirm from '@/components/safeguard/safeguardconfirm.vue'
 // import safeguard from '@/components/safeguard/safeguard.vue'
@@ -82,6 +84,7 @@ const pageData = reactive({
 // }
 
 onMounted(() => {
+  privacyAuth()
   //getGlobalStatus()
   frontpage({}).then(res => {
     const opusCategoryVOS = res.data.opusCategoryVOS

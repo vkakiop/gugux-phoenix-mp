@@ -291,3 +291,15 @@ export function getHtmlReplaceEnter(text) {
 	text = htmlEncode(text)
 	return (text+'').replace(/\r|\n/g,'<br/>')
 }
+
+export function privacyAuth() {
+	uni.requirePrivacyAuthorize({
+		success: () => {
+			console.log('同意');
+		},
+		fail: () => {
+			console.log('拒绝');
+		}, // 用户拒绝授权
+		complete: () => {}
+	})
+}
