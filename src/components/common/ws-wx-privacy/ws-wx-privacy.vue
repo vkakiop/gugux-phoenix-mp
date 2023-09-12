@@ -16,9 +16,9 @@
                 @agreeprivacyauthorization="handleAgree">
           {{agreeText}}
         </button>
-        <button class="is-disagree" id="disagree-btn" @click="handleDisagree">
+        <!--button class="is-disagree" id="disagree-btn" @click="handleDisagree">
           {{disagreeText}}
-        </button>
+        </button-->
       </view>
     </view>
   </uni-popup>
