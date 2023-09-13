@@ -70,7 +70,7 @@
         </view>
       </view>
     </u-popup>
-    <loginPop :isShow="pageData.isShowLoginPop" :isShowWxPhoneNumber="false" @close="closeLogin"></loginPop>
+    <loginPop :isShow="pageData.isShowLoginPop" :isShowWxPhoneNumber="false" @close="closeLogin(true)"></loginPop>
   </view>
 </template>
 
@@ -121,12 +121,13 @@ const init = (row) => {
 
   //判断是否微信授权登录
   if (!isWxPhoneLoginCheck()) {
-    if (pageData.parentInfo.testFlag) {
-      pageData.isShowLoginPop = true
-    }
-    else {
-      pageData.isShowLogin = true
-    }
+    // if (pageData.parentInfo.testFlag) {
+    //   pageData.isShowLoginPop = true
+    // }
+    // else {
+    //   pageData.isShowLogin = true
+    // }
+    pageData.isShowLoginPop = true
     return
   }
 
@@ -259,6 +260,7 @@ const getPhoneNumber = (e)=> {
       title = '获取手机号暂无权限'
     }
     uni.showToast({title:title,icon: 'none', duration: 2000})
+    emit('clickChange',4,'')
   }
 }
 

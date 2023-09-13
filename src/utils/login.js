@@ -12,7 +12,7 @@ export function tokenSave(res,returnUrl,isPop) {
                 //app.globalData.loginToken = res.data
                 const loginTokenStore = useLoginTokenStore()
                 tokenRes['user'] = res.data || {id:''}
-                tokenRes['user'].isWxPhoneLogin = isPop ? true :false
+                tokenRes['user'].isWxPhoneLogin = true;//isPop ? true :false
                 loginTokenStore.set(tokenRes)
                 uni.setStorageSync(configLoginToken,JSON.stringify(tokenRes))
                 //环信登录

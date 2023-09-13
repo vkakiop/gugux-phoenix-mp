@@ -79,6 +79,7 @@ const pageData = reactive({
   count:60,
   isReget: false,  // 判断是否显示 ‘重新获取’按钮
   isGetCode:false, // 是否获取过验证码
+  jsCode:'',
 })
 
 watch(()=>pageData.count,(newVal,oldVal)=>{
@@ -99,9 +100,25 @@ const onLogin = ()=>{
         uni.showToast({title: '请勾选同意隐私条款',icon:'none',duration: 2000})
       }
       else {
-        authSmsLogin({phone:pageData.phone,code:pageData.code}).then(res=>{
-          tokenSave(res,pageData.url)
-        })
+        uni.login({
+          provider: 'weixin', //使用微信登录
+          success: function (res) {
+            if (res.code) {
+              pageData.jsCode = res.code
+              authSmsLogin({phone:pageData.phone,code:pageData.code,jsCode:pageData.jsCode}).then(res=>{
+                tokenSave(res,pageData.url)
+              })
+            }
+            else {
+              let title = '登录错误：'+res.errMsg
+              uni.showToast({title:title,icon: 'none', duration: 2000})
+            }
+            console.log('wxLogin',res)
+          },
+          fail : function(res) {
+            uni.showToast({title:'登录错误：'+res.detail.code,icon: 'none', duration: 2000})
+          },
+        });
       }
     }
   }
