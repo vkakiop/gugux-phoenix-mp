@@ -9,7 +9,7 @@
       <view class="absolute left-0 bottom-0 w-full">
         <view class="flex justify-center">
           <view>
-            <view class="w-278 h-52 leading-52 rounded-10 bg-[#F8CF01] text-center text-[#00000] text-18" @click="copyUrl">复制下载连接</view>
+            <view class="w-278 h-52 leading-52 rounded-10 bg-[#F8CF01] text-center text-[#00000] text-18" @click="copyUrl">复制下载链接</view>
             <view class="mt-15 pb-10 text-16 text-[#121212] text-center">粘贴到手机浏览器打开进行下载</view>
           </view>
         </view>
