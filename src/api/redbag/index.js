@@ -3,7 +3,7 @@ import request from '@/utils/request'
 //抽奖
 export function redbagInfo(data) {
     return request({
-        url: '/gugux-services-activity-api/app/moyu/draw',
+        url: '/gugux-services-activity-api/app/moyu/draw/plus',
         method: 'get',
         params:data
     })
