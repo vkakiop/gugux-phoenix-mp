@@ -40,7 +40,7 @@ const props = defineProps({
   },
   isShowWxPhoneNumber: {
     type: Boolean,
-    default: true,
+    default: false,
   },
   isShowPhoneNumber: {
     type: Boolean,
