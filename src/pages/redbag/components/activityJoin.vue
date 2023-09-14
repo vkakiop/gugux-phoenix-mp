@@ -43,11 +43,13 @@
                 <view>咕咕行出行社交APP</view>
                 <view>海量摩友聚集地</view>
               </view>
-              <view class="mt-20 text-14">下载APP可获得1次抽奖机会</view>
+              <view class="mt-20 text-14"><!--下载APP可获得1次抽奖机会--></view>
             </view>
           </view>
           <!--image :src="configStaticPath('/static/redbag/popbutton.png')" class="w-122 h-41 absolute left-[calc(50%-122rpx)] bottom-125" @click="close"/-->
-          <image :src="configStaticPath('/static/redbag/popbuttondown.png')" class="w-122 h-41 absolute left-[calc(50%-122rpx)] bottom-125" @click="downApp"/>
+          <!--image :src="configStaticPath('/static/redbag/popbuttondown.png')" class="w-122 h-41 absolute left-[calc(50%-122rpx)] bottom-125" @click="downApp"/-->
+          <image :src="configStaticPath('/static/redbag/popbuttonok.png')" class="w-122 h-41 absolute left-[calc(50%-122rpx)] bottom-125" @click="buttonOk"/>
+
           <view v-if="pageData.redbagInfo.isDraw" class="absolute w-full flex justify-center bottom-105">
             <view class="text-center text-14 text-[#FFEDAC] inline-block rounded-full">油费已转入您的微信零钱</view>
           </view>
@@ -283,6 +285,10 @@ const closeMessage = ()=>{
 const downApp = ()=>{
   pageData.isShowRedbag = false
   uni.navigateTo({url:'/pages/downapp/index?type=redbag&id='+(pageData.redbagInfo.isType ? '' : pageData.parentInfo.id)})
+}
+
+const buttonOk = ()=>{
+  pageData.isShowRedbag = false
 }
 </script>
 
