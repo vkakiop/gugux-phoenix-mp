@@ -53,6 +53,7 @@
     "@dcloudio/uni-ui": "^1.4.26",
     "@uni-ui/code-ui": "^1.5.3",
     "axios": "^0.27.2",
+    "crypto-js": "^4.2.0",
     "json-bigint": "^1.0.0",
     "moment": "^2.29.3",
     "pinia": "2.0.28",

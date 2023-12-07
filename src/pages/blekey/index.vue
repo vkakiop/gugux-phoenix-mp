@@ -10,9 +10,9 @@
     </view>
     <view class="h-10 relative z-[1] bg-[#fff]"></view>
     <view class="px-13 relative z-[2] bg-[#fff] border-solid border-t-1 border-[#ebebeb]">
-      <view class="pt-10 flex justify-start">
-        <view class="text-13 text-[#666]">车辆未连接</view>
-        <bleimage></bleimage>
+      <view v-if="[1,3].includes(pageData.connectState)" class="pt-10 flex justify-start">
+        <view v-if="pageData.connectState==3" class="text-13 text-[#666]">车辆未连接</view>
+        <bleimage v-if="pageData.connectState==1"></bleimage>
       </view>
       <view class="py-10">
         <!--bleselect :disabled="false" v-model="pageData.select" :options="pageData.options"></bleselect-->
@@ -25,7 +25,7 @@
         </view>
       </view>
     </view>
-    <view class="relative z-[1] bg-[#fff] mx-13 mt-13 px-15 py-25 rounded-10 shadow-[1rpx_2rpx_18rpx_2rpx_rgba(164,164,164,0.61)] text-[#000] leading-25">
+    <view v-if="pageData.connectState==3" class="relative z-[1] bg-[#fff] mx-13 mt-13 px-15 py-25 rounded-10 shadow-[1rpx_2rpx_18rpx_2rpx_rgba(164,164,164,0.61)] text-[#000] leading-25">
       <view>APP与车机未建立连接，请检查以下内容</view>
       <view class="mt-20">1、确保您已打开手机蓝牙服务 </view>
       <view>2、确保您已打开车辆电源或手动轻摇晃车辆 </view>
@@ -87,7 +87,19 @@ const pageData = reactive({
   isDialogIconSuccess:false,
 
   isShared:false,
-  sharedData:{}
+  sharedData:{},
+
+  connectState:0,//0未连接 1连接中 2已连接 3连接失败
+  connectTimer:null,
+
+  //蓝牙连接
+  devices: [],
+  connected: false,
+  chs: [],
+
+  _discoveryStarted:false,
+  _deviceId:'',
+  //蓝牙连接结束
 })
 
 onLoad((option)=>{
@@ -128,11 +140,24 @@ const getBlekeyIsShared = ()=>{
 const getBlekeyShared = ()=>{
   blekeyShared({},pageData.spToken).then(res=>{
     pageData.sharedData = res.data || {}
+
+    bleConnect()
   })
 }
 
 const gotoBack = ()=>{
   uni.switchTab({url:'/pages/index/index'})
+}
+
+const bleConnect = ()=>{
+  //连接蓝牙开锁
+  pageData.connectState = 1
+  pageData.connectTimer = setTimeout(()=>{
+    if (pageData.connectState == 1) {
+      pageData.connectState = 3
+    }
+  },30000)
+  openBluetoothAdapter()
 }
 
 const onUnlock = ()=>{
@@ -159,10 +184,17 @@ const onUnlock = ()=>{
     return false
   }
 
-  //连接蓝牙开锁
+  if (pageData._characteristicId) {
+    writeBLECharacteristicValue()
+    //开锁成功
+    //sendBlekeyOpenResult()
+  }
+  else {
 
+  }
+}
 
-  //开锁成功
+const sendBlekeyOpenResult = ()=>{
   blekeyOpenResult({
     address: '',
     code: 0,
@@ -188,6 +220,226 @@ const onCopy = ()=>{
     }
   })
 }
+
+
+//蓝牙连接开始
+const utils_max = function(n1, n2) {
+  return Math.max(n1, n2)
+}
+const utils_len = function(arr) {
+  arr = arr || []
+  return arr.length
+}
+
+function inArray(arr, key, val) {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i][key] === val) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+// ArrayBuffer转16进度字符串示例
+function ab2hex(buffer) {
+  var hexArr = Array.prototype.map.call(
+      new Uint8Array(buffer),
+      function (bit) {
+        return ('00' + bit.toString(16)).slice(-2)
+      }
+  )
+  return hexArr.join('');
+}
+
+const openBluetoothAdapter = ()=> {
+  wx.openBluetoothAdapter({
+    success: (res) => {
+      console.log('openBluetoothAdapter success', res)
+      startBluetoothDevicesDiscovery()
+    },
+    fail: (res) => {
+      if (res.errCode === 10001) {
+        wx.onBluetoothAdapterStateChange(function (res) {
+          console.log('onBluetoothAdapterStateChange', res)
+          if (res.available) {
+            startBluetoothDevicesDiscovery()
+          }
+        })
+      }
+    }
+  })
+}
+
+const getBluetoothAdapterState = ()=> {
+  wx.getBluetoothAdapterState({
+    success: (res) => {
+      console.log('getBluetoothAdapterState', res)
+      if (res.discovering) {
+        onBluetoothDeviceFound()
+      } else if (res.available) {
+        startBluetoothDevicesDiscovery()
+      }
+    }
+  })
+}
+
+const startBluetoothDevicesDiscovery = ()=> {
+  if (pageData._discoveryStarted) {
+    return
+  }
+  pageData._discoveryStarted = true
+  wx.startBluetoothDevicesDiscovery({
+    allowDuplicatesKey: true,
+    success: (res) => {
+      console.log('startBluetoothDevicesDiscovery success', res)
+      onBluetoothDeviceFound()
+    },
+  })
+}
+
+const stopBluetoothDevicesDiscovery = ()=> {
+  wx.stopBluetoothDevicesDiscovery()
+}
+
+const onBluetoothDeviceFound = ()=> {
+  wx.onBluetoothDeviceFound((res) => {
+    res.devices.forEach(device => {
+      if (!device.name && !device.localName) {
+        return
+      }
+      const foundDevices = pageData.devices
+      const idx = inArray(foundDevices, 'deviceId', device.deviceId)
+
+      if (idx === -1) {
+        pageData[`devices[${foundDevices.length}]`] = device
+      } else {
+        pageData[`devices[${idx}]`] = device
+      }
+
+      //找到了tbox直接连接
+      createBLEConnection(pageData.devices[0])
+    })
+  })
+}
+
+const createBLEConnection = (row)=> {
+  const deviceId = row.deviceId
+  const name = row.name || row.localName
+  wx.createBLEConnection({
+    deviceId,
+    success: (res) => {
+      pageData.connected = true
+      pageData.name = name
+      pageData.deviceId = deviceId
+      getBLEDeviceServices(deviceId)
+    }
+  })
+  stopBluetoothDevicesDiscovery()
+}
+
+const closeBLEConnection = ()=> {
+  wx.closeBLEConnection({
+    deviceId: pageData.deviceId
+  })
+  pageData.connected = false
+  pageData.chs = []
+  pageData.canWrite =  false
+}
+
+const getBLEDeviceServices = (deviceId)=> {
+  wx.getBLEDeviceServices({
+    deviceId,
+    success: (res) => {
+      for (let i = 0; i < res.services.length; i++) {
+        if (res.services[i].isPrimary) {
+          getBLEDeviceCharacteristics(deviceId, res.services[i].uuid)
+          return
+        }
+      }
+    }
+  })
+}
+
+const getBLEDeviceCharacteristics = (deviceId, serviceId)=> {
+  wx.getBLEDeviceCharacteristics({
+    deviceId,
+    serviceId,
+    success: (res) => {
+      console.log('getBLEDeviceCharacteristics success', res.characteristics)
+      for (let i = 0; i < res.characteristics.length; i++) {
+        let item = res.characteristics[i]
+        if (item.properties.read) {
+          wx.readBLECharacteristicValue({
+            deviceId,
+            serviceId,
+            characteristicId: item.uuid,
+          })
+        }
+        if (item.properties.write) {
+          pageData.canWrite = true
+
+          pageData._deviceId = deviceId
+          pageData._serviceId = serviceId
+          pageData._characteristicId = item.uuid
+
+          pageData.connectState = 2
+          //writeBLECharacteristicValue()
+        }
+        if (item.properties.notify || item.properties.indicate) {
+          wx.notifyBLECharacteristicValueChange({
+            deviceId,
+            serviceId,
+            characteristicId: item.uuid,
+            state: true,
+          })
+        }
+      }
+    },
+    fail(res) {
+      console.error('getBLEDeviceCharacteristics', res)
+    }
+  })
+  // 操作之前先监听，保证第一时间获取数据
+  wx.onBLECharacteristicValueChange((characteristic) => {
+    const idx = inArray(pageData.chs, 'uuid', characteristic.characteristicId)
+
+    if (idx === -1) {
+      pageData[`chs[${pageData.chs.length}]`] = {
+        uuid: characteristic.characteristicId,
+        value: ab2hex(characteristic.value)
+      }
+    } else {
+      pageData[`chs[${idx}]`] = {
+        uuid: characteristic.characteristicId,
+        value: ab2hex(characteristic.value)
+      }
+    }
+    // data[`chs[${pageData.chs.length}]`] = {
+    //   uuid: characteristic.characteristicId,
+    //   value: ab2hex(characteristic.value)
+    // }
+
+  })
+}
+
+const writeBLECharacteristicValue = ()=> {
+  // 向蓝牙设备发送一个0x00的16进制数据
+  let buffer = new ArrayBuffer(1)
+  let dataView = new DataView(buffer)
+  dataView.setUint8(0, Math.random() * 255 | 0)
+  wx.writeBLECharacteristicValue({
+    deviceId: pageData._deviceId,
+    serviceId: pageData._deviceId,
+    characteristicId: pageData._characteristicId,
+    value: buffer,
+  })
+}
+
+const closeBluetoothAdapter = ()=> {
+  wx.closeBluetoothAdapter()
+  pageData._discoveryStarted = false
+}
+//蓝牙连接结束
 </script>
 
 <style lang="scss" scoped>
