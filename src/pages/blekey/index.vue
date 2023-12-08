@@ -58,6 +58,7 @@
 <script setup>
 import {onMounted,reactive,ref,nextTick} from 'vue'
 import {getTokenValue,local} from '@/utils/utils'
+import {blekeyEncode,blekeyDecode,ab2hex,hex2ab,ab2str,str2ab} from '@/utils/cryto'
 import {blekeyShared,blekeyIsShared,blekeyOpen,blekeyOpenResult} from '@/api/blekey/index'
 import bleselect from './components/bleselect.vue'
 import bleimage from './components/bleimage.vue'
@@ -99,6 +100,9 @@ const pageData = reactive({
 
   connectState:0,//0未连接 1连接中 2已连接 3连接失败
   connectTimer:null,
+
+  encryptedStr:'',
+  encryptedStrDecode:'',
 
   //蓝牙连接
   devices: [],
@@ -228,6 +232,12 @@ const gotoBack = ()=>{
   uni.switchTab({url:'/pages/index/index'})
 }
 
+const getCrytoKey = ()=>{
+  let mac = pageData.sharedData.mac + ''
+  mac = mac.replace(':','')
+  return mac + mac
+}
+
 const bleConnect = ()=>{
   //连接蓝牙开锁
   pageData.connectState = 1
@@ -273,7 +283,41 @@ const onUnlock = ()=>{
   }
 
   blekeyOpen({id:pageData.sharedData.id,token:pageData.spTokenInfo.spToken}).then(res=>{
-    bleConnect()
+    let status = res.data.status
+    if (status == 1) {
+      pageData.encryptedStr = res.data.encryptedStr
+      pageData.encryptedStrDecode = blekeyDecode(pageData.encryptedStr,getCrytoKey())
+      bleConnect()
+    }
+    else {
+
+      let title = ''
+      if (status == 0) {
+        title = '操作异常，请重试'
+      }
+      else if (status == 2) {
+        title = '您未获得蓝牙钥匙合法授权，请联系车主；双卡手机请重新设置主从号顺序后重试'
+      }
+      else if (status == 3) {
+        title = '您的蓝牙钥匙授权已被删除，不能开锁'
+      }
+      else if (status == 4) {
+        title = '您的蓝牙钥匙授权已冻结，请联系车主恢复'
+      }
+      else if (status == 5) {
+        title = '您的蓝牙钥匙授权未生效，暂不能开锁'
+      }
+      else if (status == 6) {
+        title = '您的蓝牙钥匙授权已过期，不能开锁'
+      }
+
+      if (title) {
+        pageData.dialogTitle = title
+        pageData.isDialogIconSuccess = false
+        pageData.dialogCallback = ()=>{}
+        pageData.isDialogShow = true
+      }
+    }
   })
 }
 
@@ -323,16 +367,7 @@ function inArray(arr, key, val) {
   return -1;
 }
 
-// ArrayBuffer转16进度字符串示例
-function ab2hex(buffer) {
-  var hexArr = Array.prototype.map.call(
-      new Uint8Array(buffer),
-      function (bit) {
-        return ('00' + bit.toString(16)).slice(-2)
-      }
-  )
-  return hexArr.join('');
-}
+
 
 const openBluetoothAdapter = ()=> {
   wx.openBluetoothAdapter({
@@ -387,20 +422,22 @@ const stopBluetoothDevicesDiscovery = ()=> {
 const onBluetoothDeviceFound = ()=> {
   wx.onBluetoothDeviceFound((res) => {
     res.devices.forEach(device => {
-      if (!device.name && !device.localName) {
-        return
-      }
-      const foundDevices = pageData.devices
-      const idx = inArray(foundDevices, 'deviceId', device.deviceId)
-
-      if (idx === -1) {
-        pageData[`devices[${foundDevices.length}]`] = device
-      } else {
-        pageData[`devices[${idx}]`] = device
-      }
+      // if (!device.name && !device.localName) {
+      //   return
+      // }
+      // const foundDevices = pageData.devices
+      // const idx = inArray(foundDevices, 'deviceId', device.deviceId)
+      //
+      // if (idx === -1) {
+      //   pageData[`devices[${foundDevices.length}]`] = device
+      // } else {
+      //   pageData[`devices[${idx}]`] = device
+      // }
 
       //找到了tbox直接连接
-      createBLEConnection(pageData.devices[0])
+      if (device.deviceId == pageData.sharedData.mac) {
+        createBLEConnection(device)
+      }
     })
   })
 }
@@ -484,6 +521,7 @@ const getBLEDeviceCharacteristics = (deviceId, serviceId)=> {
   })
   // 操作之前先监听，保证第一时间获取数据
   wx.onBLECharacteristicValueChange((characteristic) => {
+    console.log('读取数据：',characteristic)
     const idx = inArray(pageData.chs, 'uuid', characteristic.characteristicId)
 
     if (idx === -1) {
@@ -507,9 +545,10 @@ const getBLEDeviceCharacteristics = (deviceId, serviceId)=> {
 
 const writeBLECharacteristicValue = ()=> {
   // 向蓝牙设备发送一个0x00的16进制数据
-  let buffer = new ArrayBuffer(1)
-  let dataView = new DataView(buffer)
-  dataView.setUint8(0, Math.random() * 255 | 0)
+  // let buffer = new ArrayBuffer(1)
+  // let dataView = new DataView(buffer)
+  // dataView.setUint8(0, Math.random() * 255 | 0)
+  let buffer = str2ab(pageData.encryptedStrDecode)
   wx.writeBLECharacteristicValue({
     deviceId: pageData._deviceId,
     serviceId: pageData._deviceId,
