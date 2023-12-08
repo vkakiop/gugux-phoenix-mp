@@ -4,8 +4,7 @@ import request from '@/utils/request'
 export function blekeyIsShared(data) {
     return request({
         url: '/gugux-services-user-api/app/digital/share/is/shared',
-        method: 'get',
-        headers:{token:spToken}
+        method: 'get'
     })
 }
 
@@ -13,8 +12,7 @@ export function blekeyIsShared(data) {
 export function blekeyShared(data) {
     return request({
       url: '/gugux-services-user-api/app/digital/share/shared',
-      method: 'get',
-      headers:{token:spToken}
+      method: 'get'
     })
 }
 
@@ -32,7 +30,6 @@ export function blekeyOpenResult(data) {
     return request({
         url: '/gugux-services-user-api/app/digital/key/share/open/result',
         method: 'post',
-        data:data,
-        headers:{token:spToken}
+        data:data
     })
 }

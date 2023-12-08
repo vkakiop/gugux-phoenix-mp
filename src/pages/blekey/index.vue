@@ -105,7 +105,7 @@ const pageData = reactive({
 
 onLoad((option)=>{
   if (!getTokenValue()) {
-    uni.redirectTo({url:'/pages/login/index'})
+    uni.redirectTo({url:'/pages/login/index?url='+encodeURIComponent('/pages/blekey/index')})
     return false
   }
   if (option.spTokenData) {
@@ -199,6 +199,11 @@ const onUnlock = ()=>{
     pageData.isDialogIconSuccess = false
     pageData.dialogCallback = ()=>{}
     pageData.isDialogShow = true
+    return false
+  }
+
+  if (!pageData.spTokenInfo.spToken) {
+    uni.redirectTo({url:'/pages/blekey/spweblogin'})
     return false
   }
 

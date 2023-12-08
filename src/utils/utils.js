@@ -113,7 +113,8 @@ export const local = {
 		uni.setStorageSync(key, JSON.stringify(value));
 	},
 	get(key) {
-		return JSON.parse(uni.getStorageSync(key));
+		let data = uni.getStorageSync(key)
+		return data ? JSON.parse(data) : null
 	},
 	remove(key) {
 		uni.removeStorageSync(key);
