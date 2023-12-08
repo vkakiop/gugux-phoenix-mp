@@ -14,7 +14,7 @@
     <view v-show="pageData.show" class="ep-picker-content-wrap">
       <scroll-view class="ep-picker-content" :scroll-y="true">
         <view v-for="item in options" :key="item[value_key]"
-              :class="{'disabled':item.disabled,'active':value==item[value_key]}"
+              :class="{'disabled':item.disabled,'active':modelValue==item[value_key]}"
               class="option-item"
               @click="itemClick(item)">
           <view class="line-clamp-1">
@@ -67,8 +67,9 @@ const itemClick = (item)=>{
   if(item.disabled) return
   pageData.show = false
   emits('update:modelValue',item[props.value_key])
-  emits('change',item[props.value_key])
+  emits('change',item)
 }
+defineExpose({itemClick})
 
 const openOptions = ()=>{
   if(!props.disabled){
@@ -188,7 +189,8 @@ const showLabelStateColor = computed(()=>{
 }
 
 .ep-picker-content-wrap .ep-picker-content .option-item.active{
-  color:#007AFF;
+  color:#000000;
+  font-weight: bold;
 }
 
 .ep-picker-content-wrap .ep-picker-content .option-item.disabled{

@@ -18,7 +18,7 @@ const pageData = reactive({
 onMounted(()=>{
   pageData.token = getTokenValue()
   if (pageData.token) {
-    pageData.spTokenUrl = 'http://192.168.0.99:81/#/blekey/mpindex?tokenEncode='+encodeBlekey(pageData.token,'')
+    pageData.spTokenUrl = 'http://192.168.0.99:81/#/blekey/mpindex?tokenEncode='+encodeURIComponent(encodeBlekey(pageData.token,''))
   }
   else {
     uni.navigateTo({url:'/pages/login/index'})

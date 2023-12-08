@@ -185,7 +185,7 @@
 		{
 			"path": "pages/blekey/spweblogin",
 			"style": {
-				"navigationBarTitleText": "蓝牙钥匙登录中"
+				"navigationBarTitleText": "手机号验证"
 			}
 		}
 	],

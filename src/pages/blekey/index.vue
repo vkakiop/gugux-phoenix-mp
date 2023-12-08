@@ -15,14 +15,14 @@
         <bleimage v-if="pageData.connectState==1"></bleimage>
       </view>
       <view class="py-10">
-        <!--bleselect :disabled="false" v-model="pageData.select" :options="pageData.options"></bleselect-->
-        <view class="bg-[#F3F3F3] rounded-7 h-38 leading-38 flex justify-between">
+        <bleselect ref="bleselectRef" @change="bleselectChange" :disabled="false" v-model="pageData.select" :options="pageData.options"></bleselect>
+        <!--view class="bg-[#F3F3F3] rounded-7 h-38 leading-38 flex justify-between">
           <view class="line-clamp-1">
-            <text class="text-[#000] text-14 pl-15">{{pageData.sharedData.name}}</text>
+            <text class="text-[#000] text-14 pl-15">{{pageData.sharedData}}{{pageData.sharedData.name}}</text>
             <text :style="pageData.sharedData.state == 0 ? 'color:#80c70f' : '' " class="pl-10 text-14">{{pageData.sharedData.stateStr}}</text>
           </view>
           <image class="w-18 h-12 flex-none mt-14 mr-10" :src="configStaticPath('/static/blekey/select.png')"></image>
-        </view>
+        </view-->
       </view>
     </view>
     <view v-if="pageData.connectState==3" class="relative z-[1] bg-[#fff] mx-13 mt-13 px-15 py-25 rounded-10 shadow-[1rpx_2rpx_18rpx_2rpx_rgba(164,164,164,0.61)] text-[#000] leading-25">
@@ -41,28 +41,31 @@
       </view>
       <u-safe-bottom></u-safe-bottom>
     </view>
-    <u-popup :show="pageData.isDialogShow" mode="center" round="10" :customStyle="{marginLeft:'60rpx',marginRight:'60rpx'}">
-      <view class="m-22">
-        <view class="my-28">{{pageData.dialogTitle}}</view>
-        <view v-if="pageData.isDialogIconSuccess" class="mt-40 mb-35">
-          <imgage class="w-58 h-58 text-center" :src="configStaticPath('/static/blekey/success.png')"></imgage>
-        </view>
-        <view class="flex justify-center items-center">
-          <button class="w-115 h-40 leading-40 rounded-full bg-[#f8cf01] active:bg-[#f0c801] text-[#333333]" @click="pageData.isDialogShow = false;pageData.dialogCallback();">确定</button>
-        </view>
-      </view>
-    </u-popup>
   </view>
+  <u-popup :show="pageData.isDialogShow" mode="center" round="10" :customStyle="{marginLeft:'60rpx',marginRight:'60rpx'}">
+    <view class="m-22">
+      <view class="my-28 text-17 text-[#333] font-bold"><text class="leading-30">{{pageData.dialogTitle}}</text></view>
+      <view v-if="pageData.isDialogIconSuccess" class="mt-40 mb-35">
+        <imgage class="w-58 h-58 text-center" :src="configStaticPath('/static/blekey/success.png')"></imgage>
+      </view>
+      <view class="flex justify-center items-center">
+        <button class="w-115 h-40 leading-40 rounded-full bg-[#f8cf01] active:bg-[#f0c801] text-[#333333]" @click="pageData.isDialogShow = false;pageData.dialogCallback();">确定</button>
+      </view>
+    </view>
+  </u-popup>
 </template>
 
 <script setup>
-import {onMounted,reactive} from 'vue'
+import {onMounted,reactive,ref,nextTick} from 'vue'
 import {getTokenValue,local} from '@/utils/utils'
 import {blekeyShared,blekeyIsShared,blekeyOpen,blekeyOpenResult} from '@/api/blekey/index'
 import bleselect from './components/bleselect.vue'
 import bleimage from './components/bleimage.vue'
 import {configStaticPath} from '@/config/index'
 import {onLoad,onShow} from '@dcloudio/uni-app'
+
+const bleselectRef = ref()
+
 const pageData = reactive({
   lng:106.550513, //车所在经纬度
   lat:29.562014,
@@ -89,6 +92,9 @@ const pageData = reactive({
 
   isShared:false,
   sharedData:{},
+  sharedItems:[],
+  select:'',
+  options:[],
 
   connectState:0,//0未连接 1连接中 2已连接 3连接失败
   connectTimer:null,
@@ -104,15 +110,28 @@ const pageData = reactive({
 })
 
 onLoad((option)=>{
+  //debug
+  pageData.geo_x = pageData.lng
+  pageData.geo_y = pageData.lat
+  //enddebug
   if (!getTokenValue()) {
     uni.redirectTo({url:'/pages/login/index?url='+encodeURIComponent('/pages/blekey/index')})
     return false
   }
   if (option.spTokenData) {
     pageData.spTokenInfo = JSON.parse(decodeURIComponent(option.spTokenData))
-    local.set('blekeySpTokenInfo',pageData.spTokenInfo)
-    //debug
-    uni.showToast({title: pageData.spTokenInfo.spToken,icon:'none',duration: 2000})
+    if (pageData.spTokenInfo.spToken) {
+      local.set('blekeySpTokenInfo',pageData.spTokenInfo)
+
+      //debug
+      uni.showToast({title: pageData.spTokenInfo.spToken,icon:'none',duration: 2000})
+    }
+    else if (pageData.spTokenInfo.errorMsg) {
+      pageData.dialogTitle = pageData.spTokenInfo.errorMsg
+      pageData.isDialogIconSuccess = false
+      pageData.dialogCallback = ()=>{}
+      pageData.isDialogShow = true
+    }
   }
   else {
     let spTokenInfo = local.get('blekeySpTokenInfo')
@@ -155,8 +174,42 @@ const getBlekeyIsShared = ()=>{
 
 const getBlekeyShared = ()=>{
   blekeyShared({}).then(res=>{
-    pageData.sharedData = res.data || {}
+    pageData.sharedItems = res.data || []
+    if (pageData.sharedItems.length == 0) {
+      pageData.isShared = false
+
+      pageData.dialogTitle = '您无该钥匙使用权限,请联系车主进行授权'
+      pageData.isDialogIconSuccess = false
+      pageData.dialogCallback = ()=>{gotoBack()}
+      pageData.isDialogShow = true
+
+      return false
+    }
+
+    let items = []
+    pageData.sharedItems.forEach(item=>{
+      items.push({value:item.id,label:item.name,labelState:item.stateStr,labelStateColor:'#80c70f'})
+      //模拟多个
+      //items.push({value:item.id+'x',label:item.name+'2',labelState:item.stateStr,labelStateColor:'red'})
+    })
+    pageData.options = items
+
+    //选中第一个
+    nextTick(()=>{
+      if (bleselectRef.value) {
+        bleselectRef.value.itemClick(items[0])
+      }
+    })
   })
+}
+
+const bleselectChange = (row)=>{
+  let index = pageData.sharedItems.findIndex(item=>{
+    return item.id == row.value
+  })
+  if (index != -1) {
+    pageData.sharedData = pageData.sharedItems[index]
+  }
 }
 
 const gotoBack = ()=>{
@@ -187,7 +240,7 @@ const onUnlock = ()=>{
 
     return false
   }
-  if (!pageData.sharedData.id) {
+  if (!pageData.sharedItems.length) {
     pageData.dialogTitle = '数据加载中，请稍后重试！'
     pageData.isDialogIconSuccess = false
     pageData.dialogCallback = ()=>{}
