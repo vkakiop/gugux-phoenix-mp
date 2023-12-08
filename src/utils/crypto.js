@@ -1,6 +1,6 @@
 import CryptoJS from 'crypto-js'
 
-export function encode_blekey(word,keyStr) {
+export function encodeBlekey(word,keyStr) {
     var key = CryptoJS.enc.Utf8.parse(keyStr) //秘钥
     var srcs = CryptoJS.enc.Utf8.parse(word)
     var encrypted = CryptoJS.AES.encrypt(srcs, key, {
@@ -10,7 +10,7 @@ export function encode_blekey(word,keyStr) {
     return encrypted.toString()
 }
 
-export function decode_blekey(word, keyStr) {
+export function decodeBlekey(word, keyStr) {
     //console.log('decrypt key:' + keyStr);
     let keyHex = CryptoJS.enc.Utf8.parse(keyStr); //
     //let ivHex = CryptoJS.enc.Utf8.parse("0000000000000000")

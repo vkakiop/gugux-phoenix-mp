@@ -12,7 +12,7 @@
 
 <script setup>
 import { ref, reactive, onMounted, watch, nextTick, computed, getCurrentInstance } from 'vue'
-
+import {AMapWX} from '@/utils/amap-wx.js'
 let query = null
 let test = null
 let canvas = null

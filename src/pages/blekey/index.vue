@@ -31,7 +31,7 @@
       <view>2、确保您已打开车辆电源或手动轻摇晃车辆 </view>
       <view>3、确保您手机与车辆距离&gl;=1米;并点击“<text class="text-[#fd2d2d]">刷新设备</text>”按钮重新尝试连接</view>
     </view>
-    <view class="w-85 h-85 absolute right-0 bottom-128 z-3 " @click="onUnlock">
+    <view v-if="pageData.sharedData.id" class="w-85 h-85 absolute right-0 bottom-128 z-3 " @click="onUnlock">
       <image :src="configStaticPath('/static/blekey/unlock.png')" class="w-85 h-85"/>
     </view>
     <view class="absolute left-0 bottom-0 z-2 bg-[#fff]">
@@ -57,7 +57,7 @@
 
 <script setup>
 import {onMounted,reactive} from 'vue'
-import {blekeyShared,blekeyIsShared,blekeyOpenResult} from '@/api/blekey/index'
+import {blekeyShared,blekeyIsShared,blekeyOpen,blekeyOpenResult} from '@/api/blekey/index'
 import bleselect from './components/bleselect.vue'
 import bleimage from './components/bleimage.vue'
 import {configStaticPath} from '@/config/index'
@@ -79,7 +79,7 @@ const pageData = reactive({
     //   anchor:{x:.5,y:1}
     // }
   ],
-  spToken:'',
+  spTokenInfo:{},
 
   dialogTitle:'',
   dialogCallback:()=>{},
@@ -103,9 +103,9 @@ const pageData = reactive({
 })
 
 onLoad((option)=>{
-  if (option.spToken) {
-    pageData.spToken = option.spToken
-    uni.showToast({title: option.spToken,icon:'none',duration: 2000})
+  if (option.spTokenData) {
+    pageData.spTokenInfo = JSON.parse(decodeURIComponent(option.spTokenData))
+    uni.showToast({title: pageData.spTokenInfo.spToken,icon:'none',duration: 2000})
   }
   getGeoLocation()
   getBlekeyIsShared()
@@ -123,7 +123,7 @@ const getGeoLocation = () => {
 }
 
 const getBlekeyIsShared = ()=>{
-  blekeyIsShared({},pageData.spToken).then(res=>{
+  blekeyIsShared({}).then(res=>{
     pageData.isShared = res.data.isShared
     if (pageData.isShared) {
       getBlekeyShared()
@@ -138,10 +138,8 @@ const getBlekeyIsShared = ()=>{
 }
 
 const getBlekeyShared = ()=>{
-  blekeyShared({},pageData.spToken).then(res=>{
+  blekeyShared({}).then(res=>{
     pageData.sharedData = res.data || {}
-
-    bleConnect()
   })
 }
 
@@ -184,14 +182,9 @@ const onUnlock = ()=>{
     return false
   }
 
-  if (pageData._characteristicId) {
-    writeBLECharacteristicValue()
-    //开锁成功
-    //sendBlekeyOpenResult()
-  }
-  else {
-
-  }
+  blekeyOpen({id:pageData.sharedData.id,token:pageData.spTokenInfo.spToken}).then(res=>{
+    bleConnect()
+  })
 }
 
 const sendBlekeyOpenResult = ()=>{
@@ -383,7 +376,7 @@ const getBLEDeviceCharacteristics = (deviceId, serviceId)=> {
           pageData._characteristicId = item.uuid
 
           pageData.connectState = 2
-          //writeBLECharacteristicValue()
+          writeBLECharacteristicValue()
         }
         if (item.properties.notify || item.properties.indicate) {
           wx.notifyBLECharacteristicValueChange({
@@ -433,6 +426,7 @@ const writeBLECharacteristicValue = ()=> {
     characteristicId: pageData._characteristicId,
     value: buffer,
   })
+  sendBlekeyOpenResult()
 }
 
 const closeBluetoothAdapter = ()=> {

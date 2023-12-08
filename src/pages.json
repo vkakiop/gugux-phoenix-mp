@@ -13,7 +13,7 @@
 	},
 	"pages": [
 		{
-			"path": "pages/blekey/test",
+			"path": "pages/test/blekeytest",
 			"style": {
 				"navigationBarTitleText": "蓝牙测试页"
 			}
