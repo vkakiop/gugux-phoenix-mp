@@ -63,6 +63,7 @@ import bleselect from './components/bleselect.vue'
 import bleimage from './components/bleimage.vue'
 import {configStaticPath} from '@/config/index'
 import {onLoad,onShow} from '@dcloudio/uni-app'
+import useBlekeyStore from '@/store/modules/blekey'
 
 const bleselectRef = ref()
 
@@ -186,18 +187,27 @@ const getBlekeyShared = ()=>{
       return false
     }
 
+
+    //模拟多个
+    pageData.sharedItems.push({...pageData.sharedItems[0],id:'1',name:'test'})
+
     let items = []
     pageData.sharedItems.forEach(item=>{
       items.push({value:item.id,label:item.name,labelState:item.stateStr,labelStateColor:'#80c70f'})
-      //模拟多个
-      //items.push({value:item.id+'x',label:item.name+'2',labelState:item.stateStr,labelStateColor:'red'})
     })
     pageData.options = items
 
-    //选中第一个
+    //选中前面选中的 如果没有选第一个
+    let selectId = useBlekeyStore().getBlekeyIndexData().selectId
+    let index = items.findIndex(item=>{
+      return item.value == selectId
+    })
+    if (index == -1) {
+      index = 0
+    }
     nextTick(()=>{
       if (bleselectRef.value) {
-        bleselectRef.value.itemClick(items[0])
+        bleselectRef.value.itemClick(items[index])
       }
     })
   })
@@ -209,6 +219,8 @@ const bleselectChange = (row)=>{
   })
   if (index != -1) {
     pageData.sharedData = pageData.sharedItems[index]
+    useBlekeyStore().setBlekeyIndexData({selectId:pageData.sharedData.id})
+console.log('SET selectIndex',pageData.sharedData.id)
   }
 }
 
