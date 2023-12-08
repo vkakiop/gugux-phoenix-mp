@@ -15,7 +15,7 @@
         <bleimage v-if="pageData.connectState==1"></bleimage>
       </view>
       <view class="py-10">
-        <bleselect ref="bleselectRef" id="bleselectRef" @change="bleselectChange" :disabled="false" v-model="pageData.select" :options="pageData.options"></bleselect>
+        <bleselect id="bleselectRef" @change="bleselectChange" :disabled="false" v-model="pageData.select" :options="pageData.options"></bleselect>
         <!--view class="bg-[#F3F3F3] rounded-7 h-38 leading-38 flex justify-between">
           <view class="line-clamp-1">
             <text class="text-[#000] text-14 pl-15">{{pageData.sharedData}}{{pageData.sharedData.name}}</text>
@@ -292,7 +292,6 @@ const onUnlock = ()=>{
       bleConnect()
     }
     else {
-
       let title = ''
       if (status == 0) {
         title = '操作异常，请重试'
@@ -318,6 +317,11 @@ const onUnlock = ()=>{
         pageData.isDialogIconSuccess = false
         pageData.dialogCallback = ()=>{}
         pageData.isDialogShow = true
+      }
+
+      if ([0,2].includes(status)) {
+        pageData.spTokenInfo = {}
+        local.remove('blekeySpTokenInfo')
       }
     }
   })
