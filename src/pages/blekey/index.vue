@@ -15,7 +15,7 @@
         <bleimage v-if="pageData.connectState==1"></bleimage>
       </view>
       <view class="py-10">
-        <bleselect ref="bleselectRef" @change="bleselectChange" :disabled="false" v-model="pageData.select" :options="pageData.options"></bleselect>
+        <bleselect ref="bleselectRef" id="bleselectRef" @change="bleselectChange" :disabled="false" v-model="pageData.select" :options="pageData.options"></bleselect>
         <!--view class="bg-[#F3F3F3] rounded-7 h-38 leading-38 flex justify-between">
           <view class="line-clamp-1">
             <text class="text-[#000] text-14 pl-15">{{pageData.sharedData}}{{pageData.sharedData.name}}</text>
@@ -210,8 +210,11 @@ const getBlekeyShared = ()=>{
       index = 0
     }
     nextTick(()=>{
-      if (bleselectRef.value) {
-        bleselectRef.value.itemClick(items[index])
+      const _this = getCurrentInstance()
+      let query = uni.createSelectorQuery().in(_this);
+      let bleselectRefDom = query.select(`#bleselectRef`)
+      if (bleselectRefDom) {
+        bleselectRefDom.itemClick(items[index])
       }
     })
   })
@@ -224,7 +227,6 @@ const bleselectChange = (row)=>{
   if (index != -1) {
     pageData.sharedData = pageData.sharedItems[index]
     useBlekeyStore().setBlekeyIndexData({selectId:pageData.sharedData.id})
-console.log('SET selectIndex',pageData.sharedData.id)
   }
 }
 
