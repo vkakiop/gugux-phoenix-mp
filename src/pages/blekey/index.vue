@@ -57,6 +57,7 @@
 
 <script setup>
 import {onMounted,reactive} from 'vue'
+import {getTokenValue,local} from '@/utils/utils'
 import {blekeyShared,blekeyIsShared,blekeyOpen,blekeyOpenResult} from '@/api/blekey/index'
 import bleselect from './components/bleselect.vue'
 import bleimage from './components/bleimage.vue'
@@ -103,9 +104,24 @@ const pageData = reactive({
 })
 
 onLoad((option)=>{
+  if (!getTokenValue()) {
+    uni.redirectTo({url:'/pages/login/index'})
+    return false
+  }
   if (option.spTokenData) {
     pageData.spTokenInfo = JSON.parse(decodeURIComponent(option.spTokenData))
+    local.set('blekeySpTokenInfo',pageData.spTokenInfo)
+    //debug
     uni.showToast({title: pageData.spTokenInfo.spToken,icon:'none',duration: 2000})
+  }
+  else {
+    let spTokenInfo = local.get('blekeySpTokenInfo')
+    if (spTokenInfo) {
+      pageData.spTokenInfo = spTokenInfo
+
+      //debug
+      uni.showToast({title: pageData.spTokenInfo.spToken,icon:'none',duration: 2000})
+    }
   }
   getGeoLocation()
   getBlekeyIsShared()
@@ -150,6 +166,7 @@ const gotoBack = ()=>{
 const bleConnect = ()=>{
   //连接蓝牙开锁
   pageData.connectState = 1
+  clearTimeout(pageData.connectTimer)
   pageData.connectTimer = setTimeout(()=>{
     if (pageData.connectState == 1) {
       pageData.connectState = 3
@@ -159,6 +176,9 @@ const bleConnect = ()=>{
 }
 
 const onUnlock = ()=>{
+  if (pageData.connectState == 1) {
+    return false
+  }
   if (!pageData.geo_x) {
     pageData.dialogTitle = '当前位置信息获取不到，请授权位置信息权限后重试！'
     pageData.isDialogIconSuccess = false

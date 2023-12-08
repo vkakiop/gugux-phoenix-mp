@@ -108,6 +108,31 @@ export function rad(d) {
 	return d * Math.PI / 180.0;
 }
 
+export const local = {
+	set(key, value) {
+		uni.setStorageSync(key, JSON.stringify(value));
+	},
+	get(key) {
+		return JSON.parse(uni.getStorageSync(key));
+	},
+	remove(key) {
+		uni.removeStorageSync(key);
+	},
+}
+
+export const session = {
+	set(key, value) {
+		sessionStorage.setItem(key, JSON.stringify(value));
+	},
+	get(key) {
+		return JSON.parse(sessionStorage.getItem(key));
+	},
+	remove(key) {
+		sessionStorage.removeItem(key);
+	},
+}
+
+
 export function distanceOf(p1, p2) {
 	var radLng1 = rad(p1.x);
 	var radLng2 = rad(p2.x);
