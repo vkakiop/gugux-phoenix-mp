@@ -15,7 +15,7 @@
         <bleimage v-if="pageData.connectState==1"></bleimage>
       </view>
       <view class="py-10">
-        <bleselect id="bleselectRef" @change="bleselectChange" :disabled="false" v-model="pageData.select" :options="pageData.options"></bleselect>
+        <bleselect ref="bleselectRef" @change="bleselectChange" :disabled="false" v-model="pageData.select" :options="pageData.options"></bleselect>
         <!--view class="bg-[#F3F3F3] rounded-7 h-38 leading-38 flex justify-between">
           <view class="line-clamp-1">
             <text class="text-[#000] text-14 pl-15">{{pageData.sharedData}}{{pageData.sharedData.name}}</text>
@@ -31,10 +31,10 @@
       <view>2、确保您已打开车辆电源或手动轻摇晃车辆 </view>
       <view>3、确保您手机与车辆距离&gl;=1米;并点击“<text class="text-[#fd2d2d]">刷新设备</text>”按钮重新尝试连接</view>
     </view>
-    <view v-if="pageData.sharedData.id" class="w-85 h-85 absolute right-0 bottom-128 z-3 " @click="onUnlock">
-      <image :src="configStaticPath('/static/blekey/unlock.png')" class="w-85 h-85"/>
+    <view v-if="pageData.sharedData.id" class="w-85 h-85 absolute right-0 bottom-128 z-[3] " @click="onUnlock">
+      <cover-image :src="configStaticPath('/static/blekey/unlock.png')" class="w-85 h-85"/>
     </view>
-    <view class="absolute left-0 bottom-0 z-2 bg-[#fff]">
+    <view class="absolute left-0 bottom-0 z-[2] bg-[#fff]">
       <view class="flex justify-between items-center my-22 mx-13">
         <view class="line-clamp-1 text-l4 text-[#666]">车辆位置：重庆市南岸区重庆市南岸区重庆市南岸区重庆市南岸区重庆市南岸区重庆市南岸区重庆市南岸区</view>
         <button class="flex-none w-70 text-12 h-22 leading-22 rounded-full bg-[#f8cf01] active:bg-[#f0c801]" @click="onCopy">复制</button>
@@ -56,9 +56,9 @@
 </template>
 
 <script setup>
-import {onMounted,reactive,ref,nextTick} from 'vue'
+import {onMounted,reactive,ref,nextTick,getCurrentInstance} from 'vue'
 import {getTokenValue,local} from '@/utils/utils'
-import {blekeyEncode,blekeyDecode,ab2hex,hex2ab,ab2str,str2ab} from '@/utils/cryto'
+import {encodeBlekey,decodeBlekey,ab2hex,hex2ab,ab2str,str2ab} from '@/utils/crypto'
 import {blekeyShared,blekeyIsShared,blekeyOpen,blekeyOpenResult} from '@/api/blekey/index'
 import bleselect from './components/bleselect.vue'
 import bleimage from './components/bleimage.vue'
@@ -66,7 +66,7 @@ import {configStaticPath} from '@/config/index'
 import {onLoad,onShow} from '@dcloudio/uni-app'
 import useBlekeyStore from '@/store/modules/blekey'
 
-const bleselectRef = ref()
+const _this = getCurrentInstance();
 
 const pageData = reactive({
   lng:106.550513, //车所在经纬度
@@ -210,12 +210,8 @@ const getBlekeyShared = ()=>{
       index = 0
     }
     nextTick(()=>{
-      const _this = getCurrentInstance()
-      let query = uni.createSelectorQuery().in(_this);
-      let bleselectRefDom = query.select(`#bleselectRef`)
-      if (bleselectRefDom) {
-        bleselectRefDom.itemClick(items[index])
-      }
+      let bleselectRef = _this.refs.bleselectRef
+      bleselectRef.itemClick(items[index])
     })
   })
 }
@@ -288,7 +284,7 @@ const onUnlock = ()=>{
     let status = res.data.status
     if (status == 1) {
       pageData.encryptedStr = res.data.encryptedStr
-      pageData.encryptedStrDecode = blekeyDecode(pageData.encryptedStr,getCrytoKey())
+      pageData.encryptedStrDecode = decodeBlekey(pageData.encryptedStr,getCrytoKey())
       bleConnect()
     }
     else {

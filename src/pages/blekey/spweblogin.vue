@@ -18,7 +18,7 @@ const pageData = reactive({
 onMounted(()=>{
   pageData.token = getTokenValue()
   if (pageData.token) {
-    pageData.spTokenUrl = 'http://192.168.0.99:81/#/blekey/mpindex?tokenEncode='+encodeURIComponent(encodeBlekey(pageData.token,''))
+    pageData.spTokenUrl = import.meta.env.VITE_APP_SHAREPAGE_H5_URL + '/#/blekey/mpindex?tokenEncode='+encodeURIComponent(encodeBlekey(pageData.token,''))
   }
   else {
     uni.navigateTo({url:'/pages/login/index'})
