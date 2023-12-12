@@ -8,17 +8,23 @@
 import {onMounted,reactive} from 'vue'
 import {getTokenValue} from '@/utils/utils'
 import {encodeBlekey} from '@/utils/crypto'
+import {onLoad,onShow} from '@dcloudio/uni-app'
 
 const pageData = reactive({
   isWebView:true,
   token:'',
   spTokenUrl:'',
+  lng:'',
+  lat:'',
 })
 
-onMounted(()=>{
+onLoad((option)=>{
   pageData.token = getTokenValue()
   if (pageData.token) {
-    pageData.spTokenUrl = import.meta.env.VITE_APP_SHAREPAGE_H5_URL + '/#/blekey/mpindex?tokenEncode='+encodeURIComponent(encodeBlekey(pageData.token,''))
+    pageData.spTokenUrl = import.meta.env.VITE_APP_SHAREPAGE_H5_URL
+        + '/#/blekey/mpindex?tokenEncode='+encodeURIComponent(encodeBlekey(pageData.token,''))
+        + '&lng=' + option.lng + '&lat=' + option.lat
+    console.log('pageData.spTokenUrl:',pageData.spTokenUrl)
   }
   else {
     uni.navigateTo({url:'/pages/login/index'})

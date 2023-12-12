@@ -44,7 +44,7 @@
   </view>
   <u-popup :show="pageData.isDialogShow" mode="center" round="10" :customStyle="{marginLeft:'60rpx',marginRight:'60rpx'}">
     <view class="m-22">
-      <view class="my-28 text-17 text-[#333] font-bold"><text class="leading-30">{{pageData.dialogTitle}}</text></view>
+      <view class="my-28 text-17 text-[#333] font-bold"><text class="leading-30 break-all" user-select>{{pageData.dialogTitle}}</text></view>
       <view v-if="pageData.isDialogIconSuccess" class="mt-40 mb-35">
         <imgage class="w-58 h-58 text-center" :src="configStaticPath('/static/blekey/success.png')"></imgage>
       </view>
@@ -132,6 +132,7 @@ onLoad((option)=>{
       uni.showToast({title: pageData.spTokenInfo.spToken,icon:'none',duration: 2000})
     }
     else if (pageData.spTokenInfo.errorMsg) {
+      console.log('pageData.spTokenInfo',pageData.spTokenInfo)
       pageData.dialogTitle = pageData.spTokenInfo.errorMsg
       pageData.isDialogIconSuccess = false
       pageData.dialogCallback = ()=>{}
@@ -276,7 +277,7 @@ const onUnlock = ()=>{
   }
 
   if (!pageData.spTokenInfo.spToken) {
-    uni.redirectTo({url:'/pages/blekey/spweblogin'})
+    uni.redirectTo({url:'/pages/blekey/spweblogin?lng='+encodeURIComponent(pageData.geo_x) + '&lat='+encodeURIComponent(pageData.geo_y)})
     return false
   }
 
