@@ -138,8 +138,8 @@ onLoad((option)=>{
 
       pageData.needUnlock = true
       //debug
-      console.log('pageData.spTokenInfo.spToken',pageData.spTokenInfo.spToken)
-      uni.showToast({title: pageData.spTokenInfo.spToken,icon:'none',duration: 2000})
+      //console.log('pageData.spTokenInfo.spToken',pageData.spTokenInfo.spToken)
+      //uni.showToast({title: pageData.spTokenInfo.spToken,icon:'none',duration: 2000})
     }
     else if (pageData.spTokenInfo.errorMsg) {
       console.log('pageData.spTokenInfo',pageData.spTokenInfo)
@@ -155,7 +155,7 @@ onLoad((option)=>{
       pageData.spTokenInfo = spTokenInfo
 
       //debug
-      uni.showToast({title: pageData.spTokenInfo.spToken,icon:'none',duration: 2000})
+      //uni.showToast({title: pageData.spTokenInfo.spToken,icon:'none',duration: 2000})
     }
   }
   getGeoLocation()
@@ -309,8 +309,8 @@ const onUnlock = ()=>{
   }
 
   //debug
-  console.log('header token:',getTokenValue())
-  console.log('/gugux-services-user-api/app/digital/key/share/open',{id:pageData.sharedData.id,token:pageData.spTokenInfo.spToken})
+  //console.log('header token:',getTokenValue())
+  //console.log('/gugux-services-user-api/app/digital/key/share/open',{id:pageData.sharedData.id,token:pageData.spTokenInfo.spToken})
   blekeyOpen({id:pageData.sharedData.id,token:pageData.spTokenInfo.spToken,type:2}).then(res=>{
     console.log('RES:',res)
     let status = res.data.status
@@ -349,8 +349,8 @@ const onUnlock = ()=>{
 
       if ([0,2].includes(status)) {
         pageData.spTokenInfo = {}
-//debug
-        //local.remove('blekeySpTokenInfo')
+        //debug
+        local.remove('blekeySpTokenInfo')
       }
     }
   })
@@ -444,11 +444,6 @@ const getBluetoothAdapterState = ()=> {
 }
 
 const startBluetoothDevicesDiscovery = ()=> {
-  // console.log('pageData._discoveryStarted',pageData._discoveryStarted)
-  // if (pageData._discoveryStarted) {
-  //   return
-  // }
-  // //debug
   pageData.connectStateLog = '开始查找设备'
   pageData._discoveryStarted = true
   wx.startBluetoothDevicesDiscovery({
