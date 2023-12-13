@@ -8,7 +8,7 @@ const useBlekeyStore = defineStore(
         actions: {
             // 添加一项数据
             setBlekeyIndexData(data) {
-                this.blekeyIndexData = data || {}
+                this.blekeyIndexData = {...this.blekeyIndexData,...data}
             }
         },
         getters: {

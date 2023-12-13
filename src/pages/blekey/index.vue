@@ -58,12 +58,12 @@
 <script setup>
 import {onMounted,reactive,ref,nextTick,getCurrentInstance} from 'vue'
 import {getTokenValue,local} from '@/utils/utils'
-import {encodeBlekey,decodeBlekey,ab2hex,hex2ab,ab2str,str2ab} from '@/utils/crypto'
+import {encodeBlekey,decodeBlekey,decodeBlekeyAb,ab2hex,hex2ab,ab2str,str2ab} from '@/utils/crypto'
 import {blekeyShared,blekeyIsShared,blekeyOpen,blekeyOpenResult} from '@/api/blekey/index'
 import bleselect from './components/bleselect.vue'
 import bleimage from './components/bleimage.vue'
 import {configStaticPath} from '@/config/index'
-import {onLoad,onShow} from '@dcloudio/uni-app'
+import {onLoad,onShow,onUnload} from '@dcloudio/uni-app'
 import useBlekeyStore from '@/store/modules/blekey'
 
 const _this = getCurrentInstance();
@@ -100,9 +100,10 @@ const pageData = reactive({
 
   connectState:0,//0未连接 1连接中 2已连接 3连接失败
   connectTimer:null,
+  needUnlock:false, //是否需要进入开锁流程
 
   encryptedStr:'',
-  encryptedStrDecode:'',
+  encryptedStrDecodeAb:new ArrayBuffer(1),
 
   //蓝牙连接
   devices: [],
@@ -113,6 +114,12 @@ const pageData = reactive({
   _deviceId:'',
   //蓝牙连接结束
 })
+
+const getCrytoKeyTest = ()=>{
+  let mac = "48:B3:65:89:40:A8"
+  mac = mac.replaceAll(':','')
+  return mac + mac
+}
 
 onLoad((option)=>{
   //debug
@@ -128,7 +135,9 @@ onLoad((option)=>{
     if (pageData.spTokenInfo.spToken) {
       local.set('blekeySpTokenInfo',pageData.spTokenInfo)
 
+      pageData.needUnlock = true
       //debug
+      console.log('pageData.spTokenInfo.spToken',pageData.spTokenInfo.spToken)
       uni.showToast({title: pageData.spTokenInfo.spToken,icon:'none',duration: 2000})
     }
     else if (pageData.spTokenInfo.errorMsg) {
@@ -152,13 +161,22 @@ onLoad((option)=>{
   getBlekeyIsShared()
 })
 
+onUnload(()=>{
+  clearTimeout(pageData.connectTimer)
+})
+
 //距离获取
 const getGeoLocation = () => {
+  pageData.geo_x = useBlekeyStore().getBlekeyIndexData().geo_x || ''
+  pageData.geo_y = useBlekeyStore().getBlekeyIndexData().geo_y || ''
+
   uni.getLocation({
     type:'gcj02',
     success: function (res) {
       pageData.geo_x = res.longitude;
       pageData.geo_y = res.latitude;
+
+      useBlekeyStore().setBlekeyIndexData({geo_x:pageData.geo_x,geo_y:pageData.geo_y})
     }
   })
 }
@@ -224,6 +242,10 @@ const bleselectChange = (row)=>{
   if (index != -1) {
     pageData.sharedData = pageData.sharedItems[index]
     useBlekeyStore().setBlekeyIndexData({selectId:pageData.sharedData.id})
+
+    if (pageData.needUnlock) {
+      onUnlock()
+    }
   }
 }
 
@@ -233,7 +255,7 @@ const gotoBack = ()=>{
 
 const getCrytoKey = ()=>{
   let mac = pageData.sharedData.mac + ''
-  mac = mac.replace(':','')
+  mac = mac.replaceAll(':','')
   return mac + mac
 }
 
@@ -281,11 +303,15 @@ const onUnlock = ()=>{
     return false
   }
 
-  blekeyOpen({id:pageData.sharedData.id,token:pageData.spTokenInfo.spToken}).then(res=>{
+  //debug
+  console.log('header token:',getTokenValue())
+  console.log('/gugux-services-user-api/app/digital/key/share/open',{id:pageData.sharedData.id,token:pageData.spTokenInfo.spToken})
+  blekeyOpen({id:pageData.sharedData.id,token:pageData.spTokenInfo.spToken,type:2}).then(res=>{
+    console.log('RES:',res)
     let status = res.data.status
     if (status == 1) {
       pageData.encryptedStr = res.data.encryptedStr
-      pageData.encryptedStrDecode = decodeBlekey(pageData.encryptedStr,getCrytoKey())
+      pageData.encryptedStrDecodeAb = decodeBlekeyAb(pageData.encryptedStr,getCrytoKey())
       bleConnect()
     }
     else {
@@ -318,7 +344,8 @@ const onUnlock = ()=>{
 
       if ([0,2].includes(status)) {
         pageData.spTokenInfo = {}
-        local.remove('blekeySpTokenInfo')
+//debug
+        //local.remove('blekeySpTokenInfo')
       }
     }
   })
@@ -379,13 +406,25 @@ const openBluetoothAdapter = ()=> {
       startBluetoothDevicesDiscovery()
     },
     fail: (res) => {
+      console.log('openBluetoothAdapter fail',res)
       if (res.errCode === 10001) {
+        pageData.dialogTitle = '当前蓝牙适配器不可用，请打开手机的蓝牙权限！'
+        pageData.isDialogIconSuccess = false
+        pageData.dialogCallback = ()=>{}
+        pageData.isDialogShow = true
+
         wx.onBluetoothAdapterStateChange(function (res) {
           console.log('onBluetoothAdapterStateChange', res)
           if (res.available) {
             startBluetoothDevicesDiscovery()
           }
         })
+      }
+      else {
+        pageData.dialogTitle = '当前蓝牙打开失败，请重试！' + res.errno + res.errMsg
+        pageData.isDialogIconSuccess = false
+        pageData.dialogCallback = ()=>{}
+        pageData.isDialogShow = true
       }
     }
   })
@@ -408,6 +447,8 @@ const startBluetoothDevicesDiscovery = ()=> {
   if (pageData._discoveryStarted) {
     return
   }
+  //debug
+  uni.showToast({title: "开始查找设备",icon:'none'});
   pageData._discoveryStarted = true
   wx.startBluetoothDevicesDiscovery({
     allowDuplicatesKey: true,
@@ -439,6 +480,8 @@ const onBluetoothDeviceFound = ()=> {
 
       //找到了tbox直接连接
       if (device.deviceId == pageData.sharedData.mac) {
+        //debug
+        uni.showToast({title: "找到tbox设备",icon:'none'});
         createBLEConnection(device)
       }
     })
@@ -551,7 +594,7 @@ const writeBLECharacteristicValue = ()=> {
   // let buffer = new ArrayBuffer(1)
   // let dataView = new DataView(buffer)
   // dataView.setUint8(0, Math.random() * 255 | 0)
-  let buffer = str2ab(pageData.encryptedStrDecode)
+  let buffer = str2ab(pageData.encryptedStrDecodeAb)
   wx.writeBLECharacteristicValue({
     deviceId: pageData._deviceId,
     serviceId: pageData._deviceId,
