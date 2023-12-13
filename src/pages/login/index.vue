@@ -60,7 +60,7 @@
 import {reactive,watch,onMounted} from 'vue'
 import {tokenSave,isSwitchTab} from '@/utils/login'
 import { privacyAuth } from "@/utils/utils"
-import {authSms,authSmsLogin} from '@/api/login/index'
+import {authSms,authSmsLogin,authSmsLoginApp} from '@/api/login/index'
 import phoneslogan from './components/phoneslogan.vue'
 import {onLoad} from "@dcloudio/uni-app"
 
