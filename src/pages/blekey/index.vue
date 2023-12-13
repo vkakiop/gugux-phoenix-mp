@@ -37,7 +37,7 @@
     <view class="absolute left-0 bottom-0 z-[2] bg-[#fff]">
       <view class="flex justify-between items-center my-22 mx-13">
         <view class="line-clamp-1 text-l4 text-[#666]">车辆位置：重庆市南岸区重庆市南岸区重庆市南岸区重庆市南岸区重庆市南岸区重庆市南岸区重庆市南岸区</view>
-        <button class="flex-none w-70 text-12 h-22 leading-22 rounded-full bg-[#f8cf01] active:bg-[#f0c801]" @click="onCopy">复制</button>
+        <image :src="configStaticPath('/static/blekey/gotolocation.png')" class="flex-none w-79 h-22" @click="onLocation"/>
       </view>
       <u-safe-bottom></u-safe-bottom>
     </view>
@@ -367,17 +367,13 @@ const sendBlekeyOpenResult = (row)=>{
   }).then(res=>{})
 }
 
-const onCopy = ()=>{
-  uni.setClipboardData({
-    data: 'test',
-    success: () => {
-      uni.showToast({
-        title: '复制成功'
-      })
-    }
+const onLocation = ()=>{
+  uni.openLocation({
+    latitude: parseFloat(pageData.geo_y),
+    longitude: parseFloat(pageData.geo_x),
+    scale: 18
   })
 }
-
 
 //蓝牙连接开始
 const utils_max = function(n1, n2) {
