@@ -12,6 +12,20 @@ export function authSms(data) {
     })
 }
 
+
+
+// 短信登录
+export function authSmsLoginApp(data) {
+    return request({
+        url: '/gugux-services-auth-api/app/auth/sms/login',
+        headers: {
+            isToken: false
+        },
+        method: 'post',
+        data:data
+    })
+}
+
 // 短信登录
 export function authSmsLogin(data) {
     return request({

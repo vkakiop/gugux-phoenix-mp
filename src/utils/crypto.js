@@ -68,6 +68,10 @@ export function ab2str(arrayBuffer) {
     return String.fromCharCode.apply(null, new Uint8Array(arrayBuffer));
 }
 
+export function decimal2hex(decimal) {
+    return decimal.toString(16)
+}
+
 // export function ab2base64(buffer) {
 //     //第一步，将ArrayBuffer转为二进制字符串
 //     var binary = '';

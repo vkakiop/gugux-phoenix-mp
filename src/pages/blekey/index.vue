@@ -10,8 +10,8 @@
     </view>
     <view class="h-10 relative z-[1] bg-[#fff]"></view>
     <view class="px-13 relative z-[2] bg-[#fff] border-solid border-t-1 border-[#ebebeb]">
-      <view v-if="[1,3].includes(pageData.connectState)" class="pt-10 flex justify-start">
-        <view v-if="pageData.connectState==3" class="text-13 text-[#666]">车辆未连接</view>
+      <view v-if="[1,3].includes(pageData.connectState)" class="pt-10 flex justify-end">
+        <view v-if="pageData.connectStateLog" class="text-13 text-[#666]">{{pageData.connectStateLog}}</view>
         <bleimage v-if="pageData.connectState==1"></bleimage>
       </view>
       <view class="py-10">
@@ -58,7 +58,7 @@
 <script setup>
 import {onMounted,reactive,ref,nextTick,getCurrentInstance} from 'vue'
 import {getTokenValue,local} from '@/utils/utils'
-import {encodeBlekey,decodeBlekey,decodeBlekeyAb,ab2hex,hex2ab,ab2str,str2ab} from '@/utils/crypto'
+import {encodeBlekey,encodeBlekeyAb,decodeBlekey,decodeBlekeyAb,ab2hex,hex2ab,ab2str,str2ab,decimal2hex} from '@/utils/crypto'
 import {blekeyShared,blekeyIsShared,blekeyOpen,blekeyOpenResult} from '@/api/blekey/index'
 import bleselect from './components/bleselect.vue'
 import bleimage from './components/bleimage.vue'
@@ -99,6 +99,7 @@ const pageData = reactive({
   options:[],
 
   connectState:0,//0未连接 1连接中 2已连接 3连接失败
+  connectStateLog:'',
   connectTimer:null,
   needUnlock:false, //是否需要进入开锁流程
 
@@ -167,9 +168,10 @@ onUnload(()=>{
 
 //距离获取
 const getGeoLocation = () => {
-  pageData.geo_x = useBlekeyStore().getBlekeyIndexData().geo_x || ''
-  pageData.geo_y = useBlekeyStore().getBlekeyIndexData().geo_y || ''
-
+  if (useBlekeyStore().getBlekeyIndexData().geo_x) {
+    pageData.geo_x = useBlekeyStore().getBlekeyIndexData().geo_x
+    pageData.geo_y = useBlekeyStore().getBlekeyIndexData().geo_y
+  }
   uni.getLocation({
     type:'gcj02',
     success: function (res) {
@@ -243,6 +245,8 @@ const bleselectChange = (row)=>{
     pageData.sharedData = pageData.sharedItems[index]
     useBlekeyStore().setBlekeyIndexData({selectId:pageData.sharedData.id})
 
+    closeBluetoothAdapter(true)
+
     if (pageData.needUnlock) {
       onUnlock()
     }
@@ -266,6 +270,7 @@ const bleConnect = ()=>{
   pageData.connectTimer = setTimeout(()=>{
     if (pageData.connectState == 1) {
       pageData.connectState = 3
+      closeBluetoothAdapter(false)
     }
   },30000)
   openBluetoothAdapter()
@@ -351,20 +356,15 @@ const onUnlock = ()=>{
   })
 }
 
-const sendBlekeyOpenResult = ()=>{
+const sendBlekeyOpenResult = (row)=>{
   blekeyOpenResult({
-    address: '',
-    code: 0,
-    encryptedStr: pageData.sharedData.encryptedStr,
+    address: pageData.spTokenInfo.address,
+    code: row.code,
+    encryptedStr: row.encryptedStr,
     id: pageData.sharedData.id,
     lng: pageData.geo_x,
     lat: pageData.geo_y
-  }).then(res=>{
-    pageData.dialogTitle = '蓝牙钥匙开锁成功!'
-    pageData.isDialogIconSuccess = true
-    pageData.dialogCallback = ()=>{}
-    pageData.isDialogShow = true
-  })
+  }).then(res=>{})
 }
 
 const onCopy = ()=>{
@@ -410,7 +410,7 @@ const openBluetoothAdapter = ()=> {
       if (res.errCode === 10001) {
         pageData.dialogTitle = '当前蓝牙适配器不可用，请打开手机的蓝牙权限！'
         pageData.isDialogIconSuccess = false
-        pageData.dialogCallback = ()=>{}
+        pageData.dialogCallback = ()=>{pageData.connectState = 0}
         pageData.isDialogShow = true
 
         wx.onBluetoothAdapterStateChange(function (res) {
@@ -444,11 +444,12 @@ const getBluetoothAdapterState = ()=> {
 }
 
 const startBluetoothDevicesDiscovery = ()=> {
-  if (pageData._discoveryStarted) {
-    return
-  }
-  //debug
-  uni.showToast({title: "开始查找设备",icon:'none'});
+  // console.log('pageData._discoveryStarted',pageData._discoveryStarted)
+  // if (pageData._discoveryStarted) {
+  //   return
+  // }
+  // //debug
+  pageData.connectStateLog = '开始查找设备'
   pageData._discoveryStarted = true
   wx.startBluetoothDevicesDiscovery({
     allowDuplicatesKey: true,
@@ -477,12 +478,11 @@ const onBluetoothDeviceFound = ()=> {
       // } else {
       //   pageData[`devices[${idx}]`] = device
       // }
-
       //找到了tbox直接连接
       if (device.deviceId == pageData.sharedData.mac) {
-        //debug
-        uni.showToast({title: "找到tbox设备",icon:'none'});
+        pageData.connectStateLog = '找到设备'
         createBLEConnection(device)
+        stopBluetoothDevicesDiscovery()
       }
     })
   })
@@ -494,10 +494,35 @@ const createBLEConnection = (row)=> {
   wx.createBLEConnection({
     deviceId,
     success: (res) => {
-      pageData.connected = true
-      pageData.name = name
-      pageData.deviceId = deviceId
-      getBLEDeviceServices(deviceId)
+      pageData.connectStateLog = '连接设备成功'
+
+      const mtu = 190;
+      wx.setBLEMTU({
+        deviceId: deviceId,
+        mtu,
+        success:(res)=>{
+          console.log('wx.setBLEMTU success',res)
+        },
+        fail:(res)=>{
+          console.log('wx.setBLEMTU fail',res)
+        },
+        complete:(res)=> {
+          pageData.connected = true
+          pageData.name = name
+          pageData.deviceId = deviceId
+          getBLEDeviceServices(deviceId)
+        }
+      })
+    },
+    fail: (res) => {
+      pageData.connectStateLog = '连接设备失败'
+
+      pageData.dialogTitle = '连接设备失败,请重试！'
+      pageData.isDialogIconSuccess = false
+      pageData.dialogCallback = ()=>{}
+      pageData.isDialogShow = true
+
+      closeBluetoothAdapter(true)
     }
   })
   stopBluetoothDevicesDiscovery()
@@ -532,15 +557,9 @@ const getBLEDeviceCharacteristics = (deviceId, serviceId)=> {
     serviceId,
     success: (res) => {
       console.log('getBLEDeviceCharacteristics success', res.characteristics)
-      for (let i = 0; i < res.characteristics.length; i++) {
-        let item = res.characteristics[i]
-        if (item.properties.read) {
-          wx.readBLECharacteristicValue({
-            deviceId,
-            serviceId,
-            characteristicId: item.uuid,
-          })
-        }
+      let items = res.characteristics
+      for (let i = 0; i < items.length; i++) {
+        let item = items[i]
         if (item.properties.write) {
           pageData.canWrite = true
 
@@ -549,14 +568,26 @@ const getBLEDeviceCharacteristics = (deviceId, serviceId)=> {
           pageData._characteristicId = item.uuid
 
           pageData.connectState = 2
-          writeBLECharacteristicValue()
+          break;
         }
+      }
+      for (let i = 0; i < items.length; i++) {
+        let item = items[i]
+
         if (item.properties.notify || item.properties.indicate) {
+          console.log('wx.notifyBLECharacteristicValueChange success')
           wx.notifyBLECharacteristicValueChange({
             deviceId,
             serviceId,
             characteristicId: item.uuid,
             state: true,
+            success: (res) => {
+              console.log('wx.notifyBLECharacteristicValueChange success',res);
+              writeBLECharacteristicValue()
+            },
+            fail: function (res) {
+              console.log('wx.notifyBLECharacteristicValueChange fail',res);
+            },
           })
         }
       }
@@ -567,25 +598,22 @@ const getBLEDeviceCharacteristics = (deviceId, serviceId)=> {
   })
   // 操作之前先监听，保证第一时间获取数据
   wx.onBLECharacteristicValueChange((characteristic) => {
-    console.log('读取数据：',characteristic)
-    const idx = inArray(pageData.chs, 'uuid', characteristic.characteristicId)
 
-    if (idx === -1) {
-      pageData[`chs[${pageData.chs.length}]`] = {
-        uuid: characteristic.characteristicId,
-        value: ab2hex(characteristic.value)
-      }
-    } else {
-      pageData[`chs[${idx}]`] = {
-        uuid: characteristic.characteristicId,
-        value: ab2hex(characteristic.value)
-      }
-    }
-    // data[`chs[${pageData.chs.length}]`] = {
-    //   uuid: characteristic.characteristicId,
-    //   value: ab2hex(characteristic.value)
-    // }
+    let nofityDataHex = ab2hex(characteristic.value)
+    let successHex = nofityDataHex.substr(16,4)
+    let notifySourceData = nofityDataHex.substr(20)
+    let isSuccess = successHex == '3601'
+    console.log('读取原始数据：',nofityDataHex)
 
+    pageData.dialogTitle = isSuccess ? '蓝牙钥匙开锁成功!' : '蓝牙钥匙开锁失败!'
+    pageData.isDialogIconSuccess = true
+    pageData.dialogCallback = ()=>{}
+    pageData.isDialogShow = true
+
+    closeBluetoothAdapter(true)
+
+    let encryptedStr = ab2hex(encodeBlekeyAb(notifySourceData,getCrytoKey()))
+    sendBlekeyOpenResult({code:isSuccess ? 1 : 0,encryptedStr:encryptedStr})
   })
 }
 
@@ -594,19 +622,51 @@ const writeBLECharacteristicValue = ()=> {
   // let buffer = new ArrayBuffer(1)
   // let dataView = new DataView(buffer)
   // dataView.setUint8(0, Math.random() * 255 | 0)
-  let buffer = str2ab(pageData.encryptedStrDecodeAb)
+  let sourceHex = ab2hex(pageData.encryptedStrDecodeAb)
+  console.log('长度十进制:',sourceHex.length/2)
+  console.log('长度',decimal2hex(sourceHex.length/2))
+  let buffer = hex2ab('50'+pageData.sharedData.mac+'303601'+decimal2hex(sourceHex.length/2)+'00'+sourceHex)
   wx.writeBLECharacteristicValue({
     deviceId: pageData._deviceId,
-    serviceId: pageData._deviceId,
+    serviceId: pageData._serviceId,
     characteristicId: pageData._characteristicId,
     value: buffer,
+    success (res) {
+      console.log('解密后数据：',sourceHex)
+      console.log('向蓝牙写入数据：',pageData._deviceId,pageData._characteristicId,ab2hex(buffer))
+      console.log('wx.writeBLECharacteristicValue success', res)
+    },
+    fail (res) {
+      console.log('wx.writeBLECharacteristicValue fail', res)
+    }
   })
-  sendBlekeyOpenResult()
+
+
 }
 
-const closeBluetoothAdapter = ()=> {
-  wx.closeBluetoothAdapter()
-  pageData._discoveryStarted = false
+const closeBluetoothAdapter = (isChangeConnectState)=> {
+  stopBluetoothDevicesDiscovery()
+  wx.offBLECharacteristicValueChange()
+  wx.offBLEConnectionStateChange()
+
+  wx.closeBLEConnection({
+    deviceId:pageData._deviceId,
+    success (res) {
+    },
+    fail (res) {
+    },
+    complete (res) {
+      wx.closeBluetoothAdapter()
+
+      pageData._discoveryStarted = false
+      if (isChangeConnectState) {
+        pageData.connectState = 0
+      }
+      pageData.connectStateLog = ''
+    }
+  })
+
+
 }
 //蓝牙连接结束
 </script>
