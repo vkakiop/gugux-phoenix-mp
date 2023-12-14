@@ -13,9 +13,7 @@ import {onLoad,onShow} from '@dcloudio/uni-app'
 const pageData = reactive({
   isWebView:true,
   token:'',
-  spTokenUrl:'',
-  lng:'',
-  lat:'',
+  spTokenUrl:''
 })
 
 onLoad((option)=>{
@@ -23,7 +21,6 @@ onLoad((option)=>{
   if (pageData.token) {
     pageData.spTokenUrl = import.meta.env.VITE_APP_SHAREPAGE_H5_URL
         + '/#/blekey/mpindex?tokenEncode='+encodeURIComponent(encodeBlekey(pageData.token,''))
-        + '&lng=' + option.lng + '&lat=' + option.lat
     console.log('pageData.spTokenUrl:',pageData.spTokenUrl)
   }
   else {

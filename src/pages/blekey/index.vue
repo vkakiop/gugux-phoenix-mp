@@ -64,6 +64,7 @@ import bleselect from './components/bleselect.vue'
 import bleimage from './components/bleimage.vue'
 import {configStaticPath} from '@/config/index'
 import {onLoad,onShow,onUnload} from '@dcloudio/uni-app'
+import {getAddress} from '@/utils/amap.js'
 import useBlekeyStore from '@/store/modules/blekey'
 
 const _this = getCurrentInstance();
@@ -74,6 +75,7 @@ const pageData = reactive({
 
   geo_x:0, //当前开锁经纬度
   geo_y:0,
+  geo_address:'未知位置',
 
   markers: [
     // {
@@ -168,10 +170,16 @@ onUnload(()=>{
 
 //距离获取
 const getGeoLocation = () => {
-  if (useBlekeyStore().getBlekeyIndexData().geo_x) {
+  if (pageData.needUnlock && useBlekeyStore().getBlekeyIndexData().geo_x) {
     pageData.geo_x = useBlekeyStore().getBlekeyIndexData().geo_x
     pageData.geo_y = useBlekeyStore().getBlekeyIndexData().geo_y
+    pageData.geo_address = useBlekeyStore().getBlekeyIndexData().geo_address
+
+    if (pageData.geo_address != '未知位置') {
+      return
+    }
   }
+
   uni.getLocation({
     type:'gcj02',
     success: function (res) {
@@ -179,6 +187,14 @@ const getGeoLocation = () => {
       pageData.geo_y = res.latitude;
 
       useBlekeyStore().setBlekeyIndexData({geo_x:pageData.geo_x,geo_y:pageData.geo_y})
+
+      getAddress(pageData.lng,pageData.lat).then(res=>{
+        pageData.geo_address = res
+        useBlekeyStore().setBlekeyIndexData({geo_address:pageData.geo_address})
+      }).catch(res=>{
+        pageData.geo_address = res
+        useBlekeyStore().setBlekeyIndexData({geo_address:pageData.geo_address})
+      })
     }
   })
 }
@@ -304,7 +320,7 @@ const onUnlock = ()=>{
   }
 
   if (!pageData.spTokenInfo.spToken) {
-    uni.redirectTo({url:'/pages/blekey/spweblogin?lng='+encodeURIComponent(pageData.geo_x) + '&lat='+encodeURIComponent(pageData.geo_y)})
+    uni.redirectTo({url:'/pages/blekey/spweblogin'})
     return false
   }
 
@@ -358,7 +374,7 @@ const onUnlock = ()=>{
 
 const sendBlekeyOpenResult = (row)=>{
   blekeyOpenResult({
-    address: pageData.spTokenInfo.address,
+    address: pageData.geo_address,
     code: row.code,
     encryptedStr: row.encryptedStr,
     id: pageData.sharedData.id,
@@ -649,6 +665,7 @@ const closeBluetoothAdapter = (isChangeConnectState)=> {
     complete (res) {
       wx.closeBluetoothAdapter()
 
+      pageData.needUnlock = false
       pageData._discoveryStarted = false
       if (isChangeConnectState) {
         pageData.connectState = 0
