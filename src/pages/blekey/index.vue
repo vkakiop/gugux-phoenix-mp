@@ -617,10 +617,14 @@ const getBLEDeviceCharacteristics = (deviceId, serviceId)=> {
     pageData.dialogCallback = ()=>{}
     pageData.isDialogShow = true
 
-    closeBluetoothAdapter(true)
-
     let encryptedStr = ab2hex(encodeBlekeyAb(notifySourceData,getCrytoKey()))
     sendBlekeyOpenResult({code:isSuccess ? 1 : 0,encryptedStr:encryptedStr})
+
+    //开锁完成之后10秒钟再断开
+    setTimeout(()=>{
+      closeBluetoothAdapter(true)
+    },10000)
+
   })
 }
 
