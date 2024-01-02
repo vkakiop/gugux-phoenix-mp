@@ -79,7 +79,7 @@ export function hxLogin(tokenRes,app) {
         apiUrl: WebIM.config.apiURL,
         user: tokenRes.imId,
         pwd: tokenRes.imPwd,
-        accessToken: tokenRes.imToken,
+        //accessToken: tokenRes.imToken,
         //grant_type: this.data.grant_type,
         appKey: WebIM.config.appkey
     });
