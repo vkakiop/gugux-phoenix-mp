@@ -33,3 +33,11 @@ export function blekeyOpenResult(data) {
         data:data
     })
 }
+
+// 获取地理位置
+export function blekeySharePlace(data) {
+    return request({
+        url: '/gugux-services-user-api/app/digital/share/place',
+        method: 'get'
+    })
+}

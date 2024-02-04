@@ -5,7 +5,7 @@
   </customNav>
   <view v-if="pageData.isShared">
     <view class="absolute top-0 left-0 w-screen h-screen">
-      <map style="width: 100%; height: 100vh" :latitude="pageData.lat" :longitude="pageData.lng" :markers="pageData.markers">
+      <map v-if="pageData.lat && pageData.lng" style="width: 100%; height: 100vh" :latitude="pageData.lat" :longitude="pageData.lng" :markers="pageData.markers">
       </map>
     </view>
     <view class="h-10 relative z-[1] bg-[#fff]"></view>
@@ -34,10 +34,10 @@
     <view v-if="pageData.sharedData.id" class="w-85 h-85 absolute right-0 bottom-128 z-[3] " @click="onUnlock">
       <cover-image :src="configStaticPath('/static/blekey/unlock.png')" class="w-85 h-85"/>
     </view>
-    <view class="absolute left-0 bottom-0 z-[2] bg-[#fff]">
+    <view v-if="pageData.address || (pageData.geo_x && pageData.geo_y)" class="absolute left-0 bottom-0 z-[2] bg-[#fff]">
       <view class="flex justify-between items-center my-22 mx-13">
-        <view class="line-clamp-1 text-l4 text-[#666]">车辆位置：重庆市南岸区重庆市南岸区重庆市南岸区重庆市南岸区重庆市南岸区重庆市南岸区重庆市南岸区</view>
-        <image :src="configStaticPath('/static/blekey/gotolocation.png')" class="flex-none w-79 h-22" @click="onLocation"/>
+        <view class="line-clamp-1 text-l4 text-[#666]" v-if="pageData.address">车辆位置：{{pageData.address}}</view>
+        <image v-if="pageData.geo_x && pageData.geo_y" :src="configStaticPath('/static/blekey/gotolocation.png')" class="flex-none w-79 h-22" @click="onLocation"/>
       </view>
       <u-safe-bottom></u-safe-bottom>
     </view>
@@ -59,7 +59,7 @@
 import {onMounted,reactive,ref,nextTick,getCurrentInstance} from 'vue'
 import {getTokenValue,local} from '@/utils/utils'
 import {encodeBlekey,encodeBlekeyAb,decodeBlekey,decodeBlekeyAb,ab2hex,hex2ab,ab2str,str2ab,decimal2hex} from '@/utils/crypto'
-import {blekeyShared,blekeyIsShared,blekeyOpen,blekeyOpenResult} from '@/api/blekey/index'
+import {blekeyShared,blekeyIsShared,blekeyOpen,blekeyOpenResult,blekeySharePlace} from '@/api/blekey/index'
 import bleselect from './components/bleselect.vue'
 import bleimage from './components/bleimage.vue'
 import {configStaticPath} from '@/config/index'
@@ -70,8 +70,9 @@ import useBlekeyStore from '@/store/modules/blekey'
 const _this = getCurrentInstance();
 
 const pageData = reactive({
-  lng:106.550513, //车所在经纬度
-  lat:29.562014,
+  lng:0, //车所在经纬度
+  lat:0,
+  address:'',
 
   geo_x:0, //当前开锁经纬度
   geo_y:0,
@@ -126,8 +127,8 @@ const getCrytoKeyTest = ()=>{
 
 onLoad((option)=>{
   //debug
-  pageData.geo_x = pageData.lng
-  pageData.geo_y = pageData.lat
+  //pageData.geo_x = pageData.lng
+  //pageData.geo_y = pageData.lat
   //enddebug
   if (!getTokenValue()) {
     uni.redirectTo({url:'/pages/login/index?url='+encodeURIComponent('/pages/blekey/index')})
@@ -199,6 +200,16 @@ const getGeoLocation = () => {
   })
 }
 
+const getBlekeySharePlace = ()=>{
+  if (pageData.sharedData && pageData.sharedData.vin) {
+    blekeySharePlace({vin:pageData.sharedData.vin}).then(res=>{
+      pageData.address = res.data.address
+      pageData.lng = res.data.lng
+      pageData.lat = res.data.lat
+    })
+  }
+}
+
 const getBlekeyIsShared = ()=>{
   blekeyIsShared({}).then(res=>{
     pageData.isShared = res.data.isShared
@@ -230,7 +241,7 @@ const getBlekeyShared = ()=>{
 
 
     //模拟多个
-    pageData.sharedItems.push({...pageData.sharedItems[0],id:'1',name:'test'})
+    //pageData.sharedItems.push({...pageData.sharedItems[0],id:'1',name:'test'})
 
     let items = []
     pageData.sharedItems.forEach(item=>{
@@ -259,6 +270,8 @@ const bleselectChange = (row)=>{
   })
   if (index != -1) {
     pageData.sharedData = pageData.sharedItems[index]
+    getBlekeySharePlace()
+
     useBlekeyStore().setBlekeyIndexData({selectId:pageData.sharedData.id})
 
     closeBluetoothAdapter(true)
