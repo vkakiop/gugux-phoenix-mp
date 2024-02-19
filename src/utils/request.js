@@ -74,7 +74,7 @@ service.interceptors.response.use(res => {
             res = res.data
         }
         //登录过期处理
-        if (res.data.code == 401) {
+        if (res.data.msg == 'token信息错误') {
             uni.reLaunch({url:'/pages/login/index?isShowReLoginMsg=1'})
             return Promise.reject(res.data)
         }
