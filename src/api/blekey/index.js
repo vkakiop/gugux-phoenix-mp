@@ -38,6 +38,7 @@ export function blekeyOpenResult(data) {
 export function blekeySharePlace(data) {
     return request({
         url: '/gugux-services-user-api/app/digital/share/place',
-        method: 'get'
+        method: 'get',
+        params:data
     })
 }
