@@ -34,10 +34,10 @@
     <view v-if="pageData.sharedData.id" class="w-85 h-85 absolute right-0 bottom-128 z-[3] " @click="onUnlock">
       <cover-image :src="configStaticPath('/static/blekey/unlock.png')" class="w-85 h-85"/>
     </view>
-    <view v-if="pageData.address || (pageData.geo_x && pageData.geo_y)" class="absolute left-0 bottom-0 z-[2] bg-[#fff]">
+    <view v-if="pageData.address || (pageData.lng && pageData.lat)" class="absolute w-full left-0 bottom-0 z-[2] bg-[#fff]">
       <view class="flex justify-between items-center my-22 mx-13">
         <view class="line-clamp-1 text-l4 text-[#666]" v-if="pageData.address">车辆位置：{{pageData.address}}</view>
-        <image v-if="pageData.geo_x && pageData.geo_y" :src="configStaticPath('/static/blekey/gotolocation.png')" class="flex-none w-79 h-22" @click="onLocation"/>
+        <image v-if="pageData.lng && pageData.lat" :src="configStaticPath('/static/blekey/gotolocation.png')" class="flex-none w-79 h-22" @click="onLocation"/>
       </view>
       <u-safe-bottom></u-safe-bottom>
     </view>
@@ -189,7 +189,7 @@ const getGeoLocation = () => {
 
       useBlekeyStore().setBlekeyIndexData({geo_x:pageData.geo_x,geo_y:pageData.geo_y})
 
-      getAddress(pageData.lng,pageData.lat).then(res=>{
+      getAddress(pageData.geo_x,pageData.geo_y).then(res=>{
         pageData.geo_address = res
         useBlekeyStore().setBlekeyIndexData({geo_address:pageData.geo_address})
       }).catch(res=>{
@@ -206,6 +206,11 @@ const getBlekeySharePlace = ()=>{
       pageData.address = res.data.address
       pageData.lng = res.data.lng
       pageData.lat = res.data.lat
+
+      //测试经纬度
+      // pageData.address = '测试经纬度'
+      // pageData.lng = 106.550513
+      // pageData.lat = 29.562014
     })
   }
 }
@@ -398,8 +403,8 @@ const sendBlekeyOpenResult = (row)=>{
 
 const onLocation = ()=>{
   uni.openLocation({
-    latitude: parseFloat(pageData.geo_y),
-    longitude: parseFloat(pageData.geo_x),
+    latitude: parseFloat(pageData.lat),
+    longitude: parseFloat(pageData.lng),
     scale: 18
   })
 }
