@@ -73,6 +73,16 @@ service.interceptors.response.use(res => {
         if (isPlatformMp()) {
             res = res.data
         }
+        //登录过期处理
+        if (res.data.code == 401) {
+            uni.showToast({
+                title: '登录已过期，请重新登录！',
+                icon:'none',
+                duration: 2000
+            });
+            uni.redirectTo({url:'/pages/login/index'})
+            return Promise.reject(res.data)
+        }
         // 未设置状态码则默认成功状态
         if(res.data?.status!=undefined){
             res.data.code = res.data.status==1? 200 :500;
