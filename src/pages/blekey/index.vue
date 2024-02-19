@@ -161,7 +161,7 @@ onLoad((option)=>{
       //uni.showToast({title: pageData.spTokenInfo.spToken,icon:'none',duration: 2000})
     }
   }
-  getGeoLocation()
+  //getGeoLocation()
   getBlekeyIsShared()
 })
 
@@ -170,33 +170,28 @@ onUnload(()=>{
 })
 
 //距离获取
-const getGeoLocation = () => {
-  if (pageData.needUnlock && useBlekeyStore().getBlekeyIndexData().geo_x) {
-    pageData.geo_x = useBlekeyStore().getBlekeyIndexData().geo_x
-    pageData.geo_y = useBlekeyStore().getBlekeyIndexData().geo_y
-    pageData.geo_address = useBlekeyStore().getBlekeyIndexData().geo_address
+const getGeoLocationPromise = () => {
+  return new Promise((resolve, reject) => {
+    uni.getLocation({
+      type:'gcj02',
+      success: function (res) {
+        pageData.geo_x = res.longitude;
+        pageData.geo_y = res.latitude;
 
-    if (pageData.geo_address != '未知位置') {
-      return
-    }
-  }
-
-  uni.getLocation({
-    type:'gcj02',
-    success: function (res) {
-      pageData.geo_x = res.longitude;
-      pageData.geo_y = res.latitude;
-
-      useBlekeyStore().setBlekeyIndexData({geo_x:pageData.geo_x,geo_y:pageData.geo_y})
-
-      getAddress(pageData.geo_x,pageData.geo_y).then(res=>{
-        pageData.geo_address = res
-        useBlekeyStore().setBlekeyIndexData({geo_address:pageData.geo_address})
-      }).catch(res=>{
-        pageData.geo_address = res
-        useBlekeyStore().setBlekeyIndexData({geo_address:pageData.geo_address})
-      })
-    }
+        getAddress(pageData.geo_x,pageData.geo_y).then(res=>{
+          pageData.geo_address = res
+          resolve()
+        }).catch(res=>{
+          pageData.geo_address = '未知位置'
+          console.log('getAddress error:',res)
+          resolve()
+        })
+      },
+      fail: function(err) {
+        console.log('getGeoLocationPromise error:',err)
+        reject()
+      }
+    })
   })
 }
 
@@ -310,18 +305,22 @@ const bleConnect = ()=>{
   openBluetoothAdapter()
 }
 
-const onUnlock = ()=>{
+const onUnlock = async()=>{
   if (pageData.connectState == 1) {
     return false
   }
-  if (!pageData.geo_x) {
+  try {
+    await getGeoLocationPromise()
+  }
+  catch (e) {
     pageData.dialogTitle = '当前位置信息获取不到，请授权位置信息权限后重试！'
     pageData.isDialogIconSuccess = false
-    pageData.dialogCallback = ()=>{getGeoLocation()}
+    pageData.dialogCallback = ()=>{}
     pageData.isDialogShow = true
 
     return false
   }
+
   if (!pageData.sharedItems.length) {
     pageData.dialogTitle = '数据加载中，请稍后重试！'
     pageData.isDialogIconSuccess = false
