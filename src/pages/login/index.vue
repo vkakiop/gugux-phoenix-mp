@@ -58,7 +58,7 @@
 
 <script setup>
 import {reactive,watch,onMounted} from 'vue'
-import {tokenSave,isSwitchTab} from '@/utils/login'
+import {tokenSave,isSwitchTab,loginout} from '@/utils/login'
 import { privacyAuth } from "@/utils/utils"
 import {authSms,authSmsLogin,authSmsLoginApp} from '@/api/login/index'
 import phoneslogan from './components/phoneslogan.vue'
@@ -67,6 +67,15 @@ import {onLoad} from "@dcloudio/uni-app"
 onLoad((option)=>{
   privacyAuth()
   pageData.url = decodeURIComponent(option.url || '')
+
+  if (option.isShowReLoginMsg) {
+    loginout()
+    uni.showToast({
+      title: '登录已过期，请重新登录！',
+      icon:'none',
+      duration: 2000
+    });
+  }
 })
 
 const pageData = reactive({
@@ -185,7 +194,12 @@ const gotoBack = ()=>{
     uni.switchTab({url:'/pages/index/index'})
   }
   else {
-    uni.navigateBack({delta: 1})
+    if (getCurrentPages().length>1) {
+      uni.navigateBack({delta: 1})
+    }
+    else {
+      uni.switchTab({url:'/pages/index/index'})
+    }
   }
 }
 </script>
