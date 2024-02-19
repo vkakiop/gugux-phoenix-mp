@@ -119,12 +119,6 @@ const pageData = reactive({
   //蓝牙连接结束
 })
 
-const getCrytoKeyTest = ()=>{
-  let mac = "48:B3:65:89:40:A8"
-  mac = mac.replaceAll(':','')
-  return mac + mac
-}
-
 onLoad((option)=>{
   //debug
   //pageData.geo_x = pageData.lng
