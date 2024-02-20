@@ -59,9 +59,9 @@
         "permission" : {
             "scope.userLocation" : {
                 "desc" : "获取您的个人位置信息"
-            },
-            "requiredPrivateInfos" : [ "getLocation" ]
-        }
+            }
+        },
+        "requiredPrivateInfos" : [ "getLocation" ]
     },
     "mp-alipay" : {
         "usingComponents" : true

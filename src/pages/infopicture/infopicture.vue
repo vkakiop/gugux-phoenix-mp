@@ -9,6 +9,7 @@
 		<image  :src="pageData.avatarUrl" mode="widthFix" class="w-full fixed -mt-80">
 		</image>
 	</view>
+  <ws-wx-privacy id="privacy-popup"></ws-wx-privacy>
 </template>
 
 <script setup>

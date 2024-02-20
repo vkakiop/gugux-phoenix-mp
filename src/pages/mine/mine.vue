@@ -90,6 +90,7 @@
 			</view>
 		</view>
 	</view>
+  <ws-wx-privacy id="privacy-popup"></ws-wx-privacy>
 </template>
 
 <script setup>
@@ -299,7 +300,19 @@ function copy(value) {
 			uni.showToast({ //提示
 				title: '复制成功'
 			})
-		}
+		},
+		fail: (e)=>{
+      uni.showToast({ //提示
+        title: '复制失败'
+      })
+      console.log('setClipboardData fail:',e)
+    },
+    complete: (res)=>{
+      uni.showToast({ //提示
+        title: '复制完成'
+      })
+      console.log('setClipboardData complete:',res)
+    }
 	});
 }
 // 数据赋值

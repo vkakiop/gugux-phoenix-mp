@@ -94,6 +94,7 @@
 			</uni-popup>
 		</view>
 	</view>
+  <ws-wx-privacy id="privacy-popup"></ws-wx-privacy>
 </template>
 
 <script setup>
