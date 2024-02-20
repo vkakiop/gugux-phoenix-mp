@@ -15,7 +15,7 @@ const debounceClick = ()=>{
     emit('debounce')
     setTimeout(()=>{
       pageData.isRun = false
-    },1000)
+    },2000)
   }
 }
 </script>
