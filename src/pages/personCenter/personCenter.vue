@@ -170,7 +170,7 @@ const logOff = () => {
 		title: '提示',
 		content: '确定退出当前状态',
 		cancelText: '确定退出',
-		confirmText: '在逛一会',
+		confirmText: '再逛一会',
 		success: function (res) {
 			if (res.cancel) {
 				uni.redirectTo({
