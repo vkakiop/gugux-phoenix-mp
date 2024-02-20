@@ -31,7 +31,7 @@
       <view>2、确保您已打开车辆电源或手动轻摇晃车辆 </view>
       <view>3、确保您手机与车辆距离&gl;=1米;并点击“<text class="text-[#fd2d2d]">刷新设备</text>”按钮重新尝试连接</view>
     </view>
-    <view v-if="pageData.sharedData.id" class="w-85 h-85 absolute right-0 bottom-128 z-[3] " @click="onUnlock">
+    <view v-if="pageData.sharedData.id" class="w-85 h-85 absolute right-0 bottom-128 z-[3] " @click="onUnlockClick">
       <cover-image :src="configStaticPath('/static/blekey/unlock.png')" class="w-85 h-85"/>
     </view>
     <view v-if="pageData.address || (pageData.lng && pageData.lat)" class="absolute w-full left-0 bottom-0 z-[2] bg-[#fff]">
@@ -271,7 +271,7 @@ const bleselectChange = (row)=>{
     closeBluetoothAdapter(true)
 
     if (pageData.needUnlock) {
-      onUnlock()
+      onUnlockClick()
     }
   }
 }
@@ -297,6 +297,50 @@ const bleConnect = ()=>{
     }
   },30000)
   openBluetoothAdapter()
+}
+
+const getSetting = (scope, name, callback)=> {
+  wx.getSetting({
+    success: (res) => {
+      if (res.authSetting[scope]) {
+        callback && callback()
+      } else {
+        wx.authorize({
+          scope: scope,
+          success(res) {
+            callback && callback()
+          },
+          fail(err) {
+            pageData.dialogTitle = '需要您授权'+ name + '权限'
+            pageData.isDialogIconSuccess = false
+            pageData.dialogCallback = ()=>{
+              wx.openSetting({
+                success(ret) {
+                  if (ret.authSetting[scope]) {
+                    callback && callback()
+                  }
+                }
+              })
+            }
+            pageData.isDialogShow = true
+          }
+        });
+      }
+    },
+    fail(err) {
+      console.log(err);
+    }
+  })
+}
+
+const onUnlockClick = ()=>{
+  let callback = ()=>{
+    let callback = ()=>{
+      onUnlock()
+    }
+    getSetting('scope.bluetooth','蓝牙',callback)
+  }
+  getSetting('scope.userLocation','个人位置信息',callback)
 }
 
 const onUnlock = async()=>{
