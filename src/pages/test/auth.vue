@@ -119,12 +119,6 @@ const onCopy2 = ()=>{
         title: '复制失败1'
       })
       console.log('setClipboardData fail:',e)
-    },
-    complete: (res)=>{
-      uni.showToast({ //提示
-        title: '复制完成1'
-      })
-      console.log('setClipboardData complete:',res)
     }
   });
 }
