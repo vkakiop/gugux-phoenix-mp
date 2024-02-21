@@ -61,7 +61,8 @@
                 "desc" : "获取您的个人位置信息"
             }
         },
-        "requiredPrivateInfos" : [ "getLocation" ]
+        "requiredPrivateInfos" : [ "getLocation" ],
+        "__usePrivacyCheck__": false
     },
     "mp-alipay" : {
         "usingComponents" : true
