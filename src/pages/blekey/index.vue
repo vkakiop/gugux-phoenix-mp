@@ -293,6 +293,7 @@ const bleConnect = ()=>{
   pageData.connectTimer = setTimeout(()=>{
     if (pageData.connectState == 1) {
       pageData.connectState = 3
+      pageData.connectStateLog = ''
       closeBluetoothAdapter(false)
     }
   },30000)
@@ -347,6 +348,9 @@ const onUnlock = async()=>{
   if (pageData.connectState == 1) {
     return false
   }
+  pageData.connectState = 1
+  pageData.connectStateLog = '获取位置信息'
+
   try {
     await getGeoLocationPromise()
   }
@@ -356,6 +360,7 @@ const onUnlock = async()=>{
     pageData.dialogCallback = ()=>{}
     pageData.isDialogShow = true
 
+    pageData.connectState = 0
     return false
   }
 
@@ -364,6 +369,8 @@ const onUnlock = async()=>{
     pageData.isDialogIconSuccess = false
     pageData.dialogCallback = ()=>{}
     pageData.isDialogShow = true
+
+    pageData.connectState = 0
     return false
   }
   if (pageData.sharedData.state != 0) {
@@ -371,6 +378,8 @@ const onUnlock = async()=>{
     pageData.isDialogIconSuccess = false
     pageData.dialogCallback = ()=>{}
     pageData.isDialogShow = true
+
+    pageData.connectState = 0
     return false
   }
 
@@ -391,6 +400,8 @@ const onUnlock = async()=>{
       bleConnect()
     }
     else {
+      pageData.connectState = 0
+
       let title = ''
       if (status == 0) {
         title = '操作异常，请重试'
@@ -475,7 +486,7 @@ const openBluetoothAdapter = ()=> {
     fail: (res) => {
       console.log('openBluetoothAdapter fail',res)
       if (res.errCode === 10001) {
-        pageData.dialogTitle = '当前蓝牙适配器不可用，请打开手机的蓝牙权限！'
+        pageData.dialogTitle = '当前蓝牙适配器不可用，请打开手机的蓝牙功能！'
         pageData.isDialogIconSuccess = false
         pageData.dialogCallback = ()=>{pageData.connectState = 0}
         pageData.isDialogShow = true
