@@ -361,6 +361,7 @@ const onUnlock = async()=>{
     pageData.isDialogShow = true
 
     pageData.connectState = 0
+    pageData.connectStateLog = ''
     return false
   }
 
@@ -371,6 +372,7 @@ const onUnlock = async()=>{
     pageData.isDialogShow = true
 
     pageData.connectState = 0
+    pageData.connectStateLog = ''
     return false
   }
   if (pageData.sharedData.state != 0) {
@@ -380,6 +382,7 @@ const onUnlock = async()=>{
     pageData.isDialogShow = true
 
     pageData.connectState = 0
+    pageData.connectStateLog = ''
     return false
   }
 
@@ -401,6 +404,7 @@ const onUnlock = async()=>{
     }
     else {
       pageData.connectState = 0
+      pageData.connectStateLog = ''
 
       let title = ''
       if (status == 0) {
@@ -435,6 +439,15 @@ const onUnlock = async()=>{
         local.remove('blekeySpTokenInfo')
       }
     }
+  }).catch(e=>{
+    console.log('blekeyOpen api error:',e)
+    pageData.connectState = 0
+    pageData.connectStateLog = ''
+
+    pageData.dialogTitle = '开锁失败，请重试！'+e.msg
+    pageData.isDialogIconSuccess = false
+    pageData.dialogCallback = ()=>{}
+    pageData.isDialogShow = true
   })
 }
 
