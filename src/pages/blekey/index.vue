@@ -559,6 +559,8 @@ const stopBluetoothDevicesDiscovery = ()=> {
 }
 
 const onBluetoothDeviceFound = ()=> {
+  console.log('onBluetoothDeviceFound List:',res.devices)
+  console.log('onBluetoothDeviceFound mac:',pageData.sharedData.mac)
   wx.onBluetoothDeviceFound((res) => {
     res.devices.forEach(device => {
       // if (!device.name && !device.localName) {
