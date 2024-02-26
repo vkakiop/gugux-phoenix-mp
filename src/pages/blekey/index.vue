@@ -292,6 +292,16 @@ const getCrytoKey = ()=>{
   return mac + mac
 }
 
+const getNewMac = ()=>{
+  let mac = pageData.sharedData.mac + ''
+  let macItems = mac.split(':')
+  if (macItems.length >=  6) {
+    let newMac = ((parseInt(macItems[0],16) + parseInt(macItems[4],16) + 1) % 256).toString(16)
+    macItems[macItems.length-1] = newMac
+  }
+  return macItems.join(':').toUpperCase()
+}
+
 const bleConnect = ()=>{
   //连接蓝牙开锁
   pageData.connectState = 1
@@ -549,6 +559,8 @@ const startBluetoothDevicesDiscovery = ()=> {
     allowDuplicatesKey: true,
     success: (res) => {
       console.log('startBluetoothDevicesDiscovery success', res)
+      console.log('onBluetoothDeviceFound mac:',pageData.sharedData.mac)
+      console.log('onBluetoothDeviceFound new mac:',pageData.sharedData.mac)
       onBluetoothDeviceFound()
     },
   })
@@ -560,9 +572,6 @@ const stopBluetoothDevicesDiscovery = ()=> {
 
 const onBluetoothDeviceFound = ()=> {
   wx.onBluetoothDeviceFound((res) => {
-    console.log('onBluetoothDeviceFound List:',res.devices)
-    console.log('onBluetoothDeviceFound mac:',pageData.sharedData.mac)
-
     res.devices.forEach(device => {
       // if (!device.name && !device.localName) {
       //   return
@@ -725,8 +734,13 @@ const writeBLECharacteristicValue = ()=> {
   // dataView.setUint8(0, Math.random() * 255 | 0)
   let sourceHex = ab2hex(pageData.encryptedStrDecodeAb)
   console.log('长度十进制:',sourceHex.length/2)
-  console.log('长度',decimal2hex(sourceHex.length/2))
-  let buffer = hex2ab('50'+pageData.sharedData.mac+'303601'+decimal2hex(sourceHex.length/2)+'00'+sourceHex)
+  let hexLength = decimal2hex((sourceHex.length/2) % 256)
+  if (hexLength.length == 1) {
+    hexLength = '0' + hexLength
+  }
+  console.log('长度',hexLength)
+
+  let buffer = hex2ab('50'+pageData.sharedData.mac+'303601'+hexLength+'00'+sourceHex)
   wx.writeBLECharacteristicValue({
     deviceId: pageData._deviceId,
     serviceId: pageData._serviceId,
