@@ -96,7 +96,8 @@ service.interceptors.response.use(res => {
             //Toast.fail(msg);
             let ignoreErrorUrls = [
                 '/gugux-services-location-api/app/security/safe/emergency/contact/help/add',
-                '/gugux-services-activity-api/app/moyu/draw'
+                '/gugux-services-activity-api/app/moyu/draw',
+                '/gugux-services-user-api/app/digital/key/share/open'
             ]
             let isFind = false;
             ignoreErrorUrls.forEach((item)=>{
