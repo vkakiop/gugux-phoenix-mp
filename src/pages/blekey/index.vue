@@ -585,7 +585,7 @@ const onBluetoothDeviceFound = ()=> {
       //   pageData[`devices[${idx}]`] = device
       // }
       //找到了tbox直接连接
-      if (device.deviceId == pageData.sharedData.mac) {
+      if (device.deviceId == getNewMac()) {
         pageData.connectStateLog = '找到设备'
         createBLEConnection(device)
         stopBluetoothDevicesDiscovery()
