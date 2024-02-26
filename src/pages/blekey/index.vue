@@ -200,6 +200,8 @@ const getBlekeySharePlace = ()=>{
       // pageData.address = '测试经纬度'
       // pageData.lng = 106.550513
       // pageData.lat = 29.562014
+    }).catch(e=>{
+      console.log('blekeySharePlace api error:',e)
     })
   }
 }
@@ -216,6 +218,8 @@ const getBlekeyIsShared = ()=>{
       pageData.dialogCallback = ()=>{gotoBack()}
       pageData.isDialogShow = true
     }
+  }).catch(e=>{
+    console.log('blekeyIsShared api error:',e)
   })
 }
 
@@ -255,6 +259,8 @@ const getBlekeyShared = ()=>{
       let bleselectRef = _this.refs.bleselectRef
       bleselectRef.itemClick(items[index])
     })
+  }).catch(e=>{
+    console.log('blekeyShared api error:',e)
   })
 }
 
@@ -459,7 +465,9 @@ const sendBlekeyOpenResult = (row)=>{
     id: pageData.sharedData.id,
     lng: pageData.geo_x,
     lat: pageData.geo_y
-  }).then(res=>{})
+  }).then(res=>{}).catch(e=>{
+    console.log('blekeyOpenResult api error:',e)
+  })
 }
 
 const onLocation = ()=>{
