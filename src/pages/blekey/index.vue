@@ -560,7 +560,7 @@ const startBluetoothDevicesDiscovery = ()=> {
     success: (res) => {
       console.log('startBluetoothDevicesDiscovery success', res)
       console.log('onBluetoothDeviceFound mac:',pageData.sharedData.mac)
-      console.log('onBluetoothDeviceFound new mac:',pageData.sharedData.mac)
+      console.log('onBluetoothDeviceFound new mac:',getNewMac())
       onBluetoothDeviceFound()
     },
   })
