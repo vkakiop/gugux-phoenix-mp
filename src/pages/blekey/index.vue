@@ -524,7 +524,7 @@ const openBluetoothAdapter = ()=> {
     fail: (res) => {
       console.log('openBluetoothAdapter fail',res)
       if (res.errCode === 10001) {
-        pageData.dialogTitle = '当前蓝牙适配器不可用，请打开手机的蓝牙功能！'
+        pageData.dialogTitle = '当前蓝牙适配器不可用，请打开微信蓝牙权限和手机蓝牙功能！'
         pageData.isDialogIconSuccess = false
         pageData.dialogCallback = ()=>{pageData.connectState = 0}
         pageData.isDialogShow = true
