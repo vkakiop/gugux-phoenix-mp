@@ -131,7 +131,7 @@ onLoad((option)=>{
   if (option.spTokenData) {
     pageData.spTokenInfo = JSON.parse(decodeURIComponent(option.spTokenData))
     if (pageData.spTokenInfo.spToken) {
-      local.set('blekeySpTokenInfo',pageData.spTokenInfo)
+      local.set('blekeySpTokenInfo',{...pageData.spTokenInfo,addTime:new Date().getTime()})
 
       pageData.needUnlock = true
       //debug
@@ -148,7 +148,7 @@ onLoad((option)=>{
   }
   else {
     let spTokenInfo = local.get('blekeySpTokenInfo')
-    if (spTokenInfo) {
+    if (spTokenInfo && (new Date().getTime() - spTokenInfo.addTime) < 3600 * 1000) {
       pageData.spTokenInfo = spTokenInfo
 
       //debug
