@@ -411,7 +411,6 @@ const onUnlock = async()=>{
   //console.log('header token:',getTokenValue())
   //console.log('/gugux-services-user-api/app/digital/key/share/open',{id:pageData.sharedData.id,token:pageData.spTokenInfo.spToken})
   blekeyOpen({id:pageData.sharedData.id,token:pageData.spTokenInfo.spToken,type:2}).then(res=>{
-    console.log('RES:',res)
     let status = res.data.status
     if (status == 1) {
       pageData.encryptedStr = res.data.encryptedStr
@@ -464,6 +463,8 @@ const onUnlock = async()=>{
     pageData.isDialogIconSuccess = false
     pageData.dialogCallback = ()=>{}
     pageData.isDialogShow = true
+
+    pageData.spTokenInfo.spToken = ''
   })
 }
 
@@ -543,10 +544,13 @@ const getBluetoothAdapterState = ()=> {
   wx.getBluetoothAdapterState({
     success: (res) => {
       console.log('getBluetoothAdapterState', res)
-      if (res.discovering) {
+      //if (res.discovering) {
+      //  onBluetoothDeviceFound()
+      //} else if (res.available) {
+      //  startBluetoothDevicesDiscovery()
+      //}
+      if (res.available) {
         onBluetoothDeviceFound()
-      } else if (res.available) {
-        startBluetoothDevicesDiscovery()
       }
     }
   })
@@ -585,10 +589,20 @@ const onBluetoothDeviceFound = ()=> {
       //   pageData[`devices[${idx}]`] = device
       // }
       //找到了tbox直接连接
-      if (device.deviceId == getNewMac()) {
+      if (device.deviceId.length == 17 && device.deviceId == getNewMac()) {
         pageData.connectStateLog = '找到设备'
         createBLEConnection(device)
         stopBluetoothDevicesDiscovery()
+      }
+      else if (device.deviceId.length != 17 && device.advertisData) {
+        console.log('device.advertisData:',device.advertisData)
+        let advertisDataStr = ab2str(device.advertisData)
+        console.log('advertisDataStr:',advertisDataStr)
+        if (advertisDataStr.indexOf('Caige') != -1 && advertisDataStr.indexOf(pageData.sharedData.mac) != -1) {
+          pageData.connectStateLog = '找到设备'
+          createBLEConnection(device)
+          stopBluetoothDevicesDiscovery()
+        }
       }
     })
   })
