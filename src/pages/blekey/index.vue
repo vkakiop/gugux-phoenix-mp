@@ -131,7 +131,7 @@ onLoad((option)=>{
   if (option.spTokenData) {
     pageData.spTokenInfo = JSON.parse(decodeURIComponent(option.spTokenData))
     if (pageData.spTokenInfo.spToken) {
-      local.set('blekeySpTokenInfo',{...pageData.spTokenInfo,addTime:new Date().getTime()})
+      //local.set('blekeySpTokenInfo',{...pageData.spTokenInfo,addTime:new Date().getTime()})
 
       pageData.needUnlock = true
       //debug
@@ -147,7 +147,8 @@ onLoad((option)=>{
     }
   }
   else {
-    local.remove('blekeySpTokenInfo')
+    pageData.spTokenInfo = {}
+    //local.remove('blekeySpTokenInfo')
     // let spTokenInfo = local.get('blekeySpTokenInfo')
     // if (spTokenInfo && (new Date().getTime() - spTokenInfo.addTime) < 3600 * 1000) {
     //   pageData.spTokenInfo = spTokenInfo
@@ -419,6 +420,7 @@ const onUnlock = async()=>{
     if (status == 1) {
       pageData.encryptedStr = res.data.encryptedStr
       pageData.encryptedStrDecodeAb = decodeBlekeyAb(pageData.encryptedStr,getCrytoKey())
+      pageData.spTokenInfo = {}
       bleConnect()
     }
     else {
@@ -452,11 +454,11 @@ const onUnlock = async()=>{
         pageData.isDialogShow = true
       }
 
-      if ([0,2].includes(status)) {
-        pageData.spTokenInfo = {}
+      //if ([0,2].includes(status)) {
+      pageData.spTokenInfo = {}
         //debug
-        local.remove('blekeySpTokenInfo')
-      }
+        //local.remove('blekeySpTokenInfo')
+      //}
     }
   }).catch(e=>{
     console.log('blekeyOpen api error:',e)
@@ -468,7 +470,7 @@ const onUnlock = async()=>{
     pageData.dialogCallback = ()=>{}
     pageData.isDialogShow = true
 
-    pageData.spTokenInfo.spToken = ''
+    pageData.spTokenInfo = {}
   })
 }
 
@@ -593,12 +595,12 @@ const onBluetoothDeviceFound = ()=> {
       //   pageData[`devices[${idx}]`] = device
       // }
       //找到了tbox直接连接
-      if (device.deviceId.length == 17 && device.deviceId == getNewMac()) {
-        pageData.connectStateLog = '找到设备'
-        createBLEConnection(device)
-        stopBluetoothDevicesDiscovery()
-      }
-      else if (device.deviceId.length != 17 && device.advertisData) {
+      // if (device.deviceId.length == 17 && device.deviceId == getNewMac()) {
+      //   pageData.connectStateLog = '找到设备'
+      //   createBLEConnection(device)
+      //   stopBluetoothDevicesDiscovery()
+      // }
+      // else if (device.deviceId.length != 17 && device.advertisData) {
         //console.log('device.advertisData:',device.advertisData)
         let advertisDataStr = ab2str(device.advertisData)
         console.log('advertisDataStr:',advertisDataStr)
@@ -608,7 +610,7 @@ const onBluetoothDeviceFound = ()=> {
           createBLEConnection(device)
           stopBluetoothDevicesDiscovery()
         }
-      }
+      //}
     })
   })
 }
