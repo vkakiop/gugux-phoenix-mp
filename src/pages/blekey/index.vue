@@ -147,13 +147,14 @@ onLoad((option)=>{
     }
   }
   else {
-    let spTokenInfo = local.get('blekeySpTokenInfo')
-    if (spTokenInfo && (new Date().getTime() - spTokenInfo.addTime) < 3600 * 1000) {
-      pageData.spTokenInfo = spTokenInfo
-
-      //debug
-      //uni.showToast({title: pageData.spTokenInfo.spToken,icon:'none',duration: 2000})
-    }
+    local.remove('blekeySpTokenInfo')
+    // let spTokenInfo = local.get('blekeySpTokenInfo')
+    // if (spTokenInfo && (new Date().getTime() - spTokenInfo.addTime) < 3600 * 1000) {
+    //   pageData.spTokenInfo = spTokenInfo
+    //
+    //   //debug
+    //   //uni.showToast({title: pageData.spTokenInfo.spToken,icon:'none',duration: 2000})
+    // }
   }
   //getGeoLocation()
   getBlekeyIsShared()
@@ -598,9 +599,10 @@ const onBluetoothDeviceFound = ()=> {
         stopBluetoothDevicesDiscovery()
       }
       else if (device.deviceId.length != 17 && device.advertisData) {
-        console.log('device.advertisData:',device.advertisData)
+        //console.log('device.advertisData:',device.advertisData)
         let advertisDataStr = ab2str(device.advertisData)
         console.log('advertisDataStr:',advertisDataStr)
+        console.log('pageData.sharedData.mac',pageData.sharedData.mac)
         if (advertisDataStr.indexOf('Caige') != -1 && advertisDataStr.indexOf(pageData.sharedData.mac) != -1) {
           pageData.connectStateLog = '找到设备'
           createBLEConnection(device)
