@@ -268,16 +268,19 @@ const bleselectChange = (row)=>{
   let index = pageData.sharedItems.findIndex(item=>{
     return item.id == row.value
   })
+
   if (index != -1) {
     pageData.sharedData = pageData.sharedItems[index]
     getBlekeySharePlace()
 
     useBlekeyStore().setBlekeyIndexData({selectId:pageData.sharedData.id})
 
-    closeBluetoothAdapter(true)
-
     if (pageData.needUnlock) {
+      closeBluetoothAdapter(true)
       onUnlockClick()
+    }
+    else {
+      closeBluetoothAdapter(true)
     }
   }
 }
