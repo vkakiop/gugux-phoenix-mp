@@ -70,7 +70,7 @@ const onLogin = ()=>{
 }
 
 const vaildPhone = ()=>{
-  let reg =  /^1[3456789]\d{9}$/;
+  let reg =  /^1[0-9]{10}$/;
   if(pageData.phone == ''){
     uni.showToast({
       title: '请输入手机号',

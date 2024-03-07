@@ -57,7 +57,7 @@ const pageData = reactive({
     number:10,//倒数时间秒数
     showNumber:0,//显示倒数秒
 })
-// let reg =  /^1[3456789]\d{9}$/;
+// let reg =  /^1[0-9]{10}$/;
 //   if(reg.test(paramsForm.phone)){}
 
 const getemergencyregister = (params)=>{
@@ -67,7 +67,7 @@ const getemergencyregister = (params)=>{
     })
 }
 const vaildPhone = ()=>{
-    let reg =  /^1[3456789]\d{9}$/;
+    let reg =  /^1[0-9]{10}$/;
     if(paramsForm.phone == ''){
         uni.showToast({
             title: "请输入手机号！",
