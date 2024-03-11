@@ -1,5 +1,5 @@
 import {AMapWX} from '@/utils/amap-wx.js'
-let amapKey = '8215e9f07e1aa4f6398d269def8e391b'
+let amapKey = 'd74accc2c7f1186243982b816996f8b0'
 
 export function getAddress(lng,lat) {
     return new Promise((resolve, reject) => {
