@@ -607,8 +607,8 @@ const onBluetoothDeviceFound = ()=> {
         console.log('pageData.sharedData.mac',pageData.sharedData.mac)
         if (advertisDataStr.indexOf('Caige') != -1 && advertisDataStr.indexOf(pageData.sharedData.mac) != -1) {
           pageData.connectStateLog = '找到设备'
-          createBLEConnection(device)
           stopBluetoothDevicesDiscovery()
+          createBLEConnection(device)
         }
       //}
     })
@@ -665,13 +665,17 @@ const closeBLEConnection = ()=> {
 }
 
 const getBLEDeviceServices = (deviceId)=> {
+  //#define kBLE_TBOXServiceUUID                    @"0000fffa-0000-1000-8000-00805f9b34fb"          //蓝牙TBOX服务的UUID
+  //#define kBLE_TBOXWriteCharacteristicUUID        @"0000fffb-0000-1000-8000-00805f9b34fb"          //蓝牙TBOX写入特征的UUID
+  //#define kBLE_TBOXNotifyCharacteristicUUID       @"0000fffc-0000-1000-8000-00805f9b34fb"          //蓝牙TBOX通知特征的UUID
   wx.getBLEDeviceServices({
     deviceId,
     success: (res) => {
+      console.log('getBLEDeviceServices:',res.services)
       for (let i = 0; i < res.services.length; i++) {
-        if (res.services[i].isPrimary) {
+        if (res.services[i].isPrimary && (res.services[i].uuid+'').toLowerCase() == '0000fffa-0000-1000-8000-00805f9b34fb') {
           getBLEDeviceCharacteristics(deviceId, res.services[i].uuid)
-          return
+          break
         }
       }
     }
@@ -685,24 +689,37 @@ const getBLEDeviceCharacteristics = (deviceId, serviceId)=> {
     success: (res) => {
       console.log('getBLEDeviceCharacteristics success', res.characteristics)
       let items = res.characteristics
+      let isWrite = false
+
+      // 操作之前先监听，保证第一时间获取数据
+      wx.onBLECharacteristicValueChange((characteristic) => {
+        console.log('wx.onBLECharacteristicValueChange',characteristic)
+        let nofityDataHex = ab2hex(characteristic.value)
+        let successHex = nofityDataHex.substr(16,4)
+        let notifySourceData = nofityDataHex.substr(20)
+        let isSuccess = successHex == '3601'
+        console.log('读取原始数据：',nofityDataHex)
+
+        pageData.dialogTitle = isSuccess ? '蓝牙钥匙开锁成功!' : '蓝牙钥匙开锁失败!'
+        pageData.isDialogIconSuccess = true
+        pageData.dialogCallback = ()=>{}
+        pageData.isDialogShow = true
+
+        let encryptedStr = ab2hex(encodeBlekeyAb(notifySourceData,getCrytoKey()))
+        sendBlekeyOpenResult({code:isSuccess ? 1 : 0,encryptedStr:encryptedStr})
+
+        //开锁完成之后10秒钟再断开
+        setTimeout(()=>{
+          closeBluetoothAdapter(true)
+        },10000)
+
+      })
+
       for (let i = 0; i < items.length; i++) {
         let item = items[i]
-        if (item.properties.write) {
-          pageData.canWrite = true
 
-          pageData._deviceId = deviceId
-          pageData._serviceId = serviceId
-          pageData._characteristicId = item.uuid
-
-          pageData.connectState = 2
-          break;
-        }
-      }
-      for (let i = 0; i < items.length; i++) {
-        let item = items[i]
-
-        if (item.properties.notify || item.properties.indicate) {
-          console.log('wx.notifyBLECharacteristicValueChange success')
+        if ((item.properties.notify || item.properties.indicate) && (item.uuid + '').toLowerCase() == '0000fffc-0000-1000-8000-00805f9b34fb') {
+          console.log('wx.notifyBLECharacteristicValueChange success',item)
           wx.notifyBLECharacteristicValueChange({
             deviceId,
             serviceId,
@@ -710,7 +727,6 @@ const getBLEDeviceCharacteristics = (deviceId, serviceId)=> {
             state: true,
             success: (res) => {
               console.log('wx.notifyBLECharacteristicValueChange success',res);
-              writeBLECharacteristicValue()
             },
             fail: function (res) {
               console.log('wx.notifyBLECharacteristicValueChange fail',res);
@@ -718,33 +734,50 @@ const getBLEDeviceCharacteristics = (deviceId, serviceId)=> {
           })
         }
       }
+
+      for (let i = 0; i < items.length; i++) {
+        let item = items[i]
+        if (item.properties.write && (item.uuid + '').toLowerCase() == '0000fffb-0000-1000-8000-00805f9b34fb') {
+          pageData.canWrite = true
+
+          pageData._deviceId = deviceId
+          pageData._serviceId = serviceId
+          pageData._characteristicId = item.uuid
+
+          pageData.connectStateLog = '正在写入数据'
+          pageData.connectState = 1
+          writeBLECharacteristicValue()
+          isWrite = true
+          break;
+        }
+      }
+      if (!isWrite) {
+        pageData.connectState = 0
+        pageData.connectStateLog = ''
+
+        pageData.dialogTitle = '连接设备不能写入数据,请重试！'
+        pageData.isDialogIconSuccess = false
+        pageData.dialogCallback = ()=>{}
+        pageData.isDialogShow = true
+
+        closeBluetoothAdapter(true)
+      }
     },
     fail(res) {
       console.error('getBLEDeviceCharacteristics', res)
-    }
-  })
-  // 操作之前先监听，保证第一时间获取数据
-  wx.onBLECharacteristicValueChange((characteristic) => {
 
-    let nofityDataHex = ab2hex(characteristic.value)
-    let successHex = nofityDataHex.substr(16,4)
-    let notifySourceData = nofityDataHex.substr(20)
-    let isSuccess = successHex == '3601'
-    console.log('读取原始数据：',nofityDataHex)
+      if (pageData.connectState != 3) {
+        pageData.dialogTitle = '连接设备不能写入数据,请重试！'
+        pageData.isDialogIconSuccess = false
+        pageData.dialogCallback = ()=>{}
+        pageData.isDialogShow = true
+      }
 
-    pageData.dialogTitle = isSuccess ? '蓝牙钥匙开锁成功!' : '蓝牙钥匙开锁失败!'
-    pageData.isDialogIconSuccess = true
-    pageData.dialogCallback = ()=>{}
-    pageData.isDialogShow = true
+      pageData.connectState = 0
+      pageData.connectStateLog = ''
 
-    let encryptedStr = ab2hex(encodeBlekeyAb(notifySourceData,getCrytoKey()))
-    sendBlekeyOpenResult({code:isSuccess ? 1 : 0,encryptedStr:encryptedStr})
-
-    //开锁完成之后10秒钟再断开
-    setTimeout(()=>{
       closeBluetoothAdapter(true)
-    },10000)
-
+    }
   })
 }
 
@@ -774,6 +807,18 @@ const writeBLECharacteristicValue = ()=> {
     },
     fail (res) {
       console.log('wx.writeBLECharacteristicValue fail', res)
+      console.log('deviceId',pageData._deviceId)
+      console.log('serviceId',pageData._serviceId)
+      console.log('characteristicId',pageData._characteristicId)
+      console.log('value',ab2hex(buffer))
+
+
+      pageData.dialogTitle = '连接设备写入数据失败,请重试！'
+      pageData.isDialogIconSuccess = false
+      pageData.dialogCallback = ()=>{}
+      pageData.isDialogShow = true
+
+      closeBluetoothAdapter(true)
     }
   })
 
