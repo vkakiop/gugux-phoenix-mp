@@ -58,7 +58,7 @@
 <script setup>
 import {onMounted,reactive,ref,nextTick,getCurrentInstance} from 'vue'
 import {getTokenValue,local} from '@/utils/utils'
-import {encodeBlekey,encodeBlekeyAb,decodeBlekey,decodeBlekeyAb,ab2hex,hex2ab,ab2str,str2ab,decimal2hex} from '@/utils/crypto'
+import {encodeBlekey,encodeBlekeyAb,decodeBlekey,decodeBlekeyAb,ab2hex,hex2ab,ab2str,str2ab,decimal2hex,hex2decimal} from '@/utils/crypto'
 import {blekeyShared,blekeyIsShared,blekeyOpen,blekeyOpenResult,blekeySharePlace} from '@/api/blekey/index'
 import bleselect from './components/bleselect.vue'
 import bleimage from './components/bleimage.vue'
@@ -124,9 +124,13 @@ onLoad((option)=>{
   //pageData.geo_x = pageData.lng
   //pageData.geo_y = pageData.lat
   //enddebug
+
   if (!getTokenValue()) {
     uni.redirectTo({url:'/pages/login/index?url='+encodeURIComponent('/pages/blekey/index')})
     return false
+  }
+  else {
+    console.log('token',getTokenValue())
   }
   if (option.spTokenData) {
     pageData.spTokenInfo = JSON.parse(decodeURIComponent(option.spTokenData))
@@ -475,6 +479,14 @@ const onUnlock = async()=>{
 }
 
 const sendBlekeyOpenResult = (row)=>{
+  console.log('blekeyOpenResult api param:',{
+    address: pageData.geo_address,
+    code: row.code,
+    encryptedStr: row.encryptedStr,
+    id: pageData.sharedData.id,
+    lng: pageData.geo_x,
+    lat: pageData.geo_y
+  })
   blekeyOpenResult({
     address: pageData.geo_address,
     code: row.code,
@@ -482,7 +494,9 @@ const sendBlekeyOpenResult = (row)=>{
     id: pageData.sharedData.id,
     lng: pageData.geo_x,
     lat: pageData.geo_y
-  }).then(res=>{}).catch(e=>{
+  }).then(res=>{
+    console.log('blekeyOpenResult api success:',res)
+  }).catch(e=>{
     console.log('blekeyOpenResult api error:',e)
   })
 }
@@ -696,16 +710,24 @@ const getBLEDeviceCharacteristics = (deviceId, serviceId)=> {
         console.log('wx.onBLECharacteristicValueChange',characteristic)
         let nofityDataHex = ab2hex(characteristic.value)
         let successHex = nofityDataHex.substr(16,4)
-        let notifySourceData = nofityDataHex.substr(20)
         let isSuccess = successHex == '3601'
         console.log('读取原始数据：',nofityDataHex)
+
+        pageData.connectStateLog = ''
+        pageData.connectState = 2
 
         pageData.dialogTitle = isSuccess ? '蓝牙钥匙开锁成功!' : '蓝牙钥匙开锁失败!'
         pageData.isDialogIconSuccess = true
         pageData.dialogCallback = ()=>{}
         pageData.isDialogShow = true
 
-        let encryptedStr = ab2hex(encodeBlekeyAb(notifySourceData,getCrytoKey()))
+        let lenhexbig = nofityDataHex.substr(22,2) + nofityDataHex.substr(20,2)
+        let lenhexbig_decimal = hex2decimal(lenhexbig)
+        let notifySourceData = nofityDataHex.substr(24,lenhexbig_decimal*2)
+        console.log('加密前数据',notifySourceData)
+        console.log('加密key',getCrytoKey())
+        let jmtext = encodeBlekey(ab2str(hex2ab(notifySourceData)),getCrytoKey())
+        let encryptedStr = ab2hex(uni.base64ToArrayBuffer(jmtext))
         sendBlekeyOpenResult({code:isSuccess ? 1 : 0,encryptedStr:encryptedStr})
 
         //开锁完成之后10秒钟再断开

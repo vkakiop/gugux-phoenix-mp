@@ -72,6 +72,10 @@ export function decimal2hex(decimal) {
     return decimal.toString(16)
 }
 
+export function hex2decimal(hex) {
+    return parseInt(hex,16)
+}
+
 // export function ab2base64(buffer) {
 //     //第一步，将ArrayBuffer转为二进制字符串
 //     var binary = '';
