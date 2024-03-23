@@ -133,11 +133,13 @@ onLoad((option)=>{
     console.log('token',getTokenValue())
   }
   if (option.spTokenData) {
-    pageData.spTokenInfo = JSON.parse(decodeURIComponent(option.spTokenData))
-    if (pageData.spTokenInfo.spToken) {
+    let spTokenInfo = JSON.parse(decodeURIComponent(option.spTokenData))
+    pageData.spTokenInfo = spTokenInfo
+    if (pageData.spTokenInfo.spToken && pageData.spTokenInfo.spToken != useBlekeyStore().getBlekeyIndexData().spToken) {
       //local.set('blekeySpTokenInfo',{...pageData.spTokenInfo,addTime:new Date().getTime()})
 
       pageData.needUnlock = true
+      useBlekeyStore().setBlekeyIndexData({spToken:pageData.spTokenInfo.spToken})
       //debug
       //console.log('pageData.spTokenInfo.spToken',pageData.spTokenInfo.spToken)
       //uni.showToast({title: pageData.spTokenInfo.spToken,icon:'none',duration: 2000})
