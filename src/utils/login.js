@@ -33,7 +33,12 @@ export function tokenSave(res,returnUrl,isPop) {
                     if (isPop) {
                     }
                     else {
-                        uni.navigateBack({delta: 1})
+                        if (getCurrentPages().length>1) {
+                            uni.navigateBack({delta: 1})
+                        }
+                        else {
+                            uni.switchTab({url:'/pages/index/index'})
+                        }
                     }
                 }
                 resolve(tokenRes)
