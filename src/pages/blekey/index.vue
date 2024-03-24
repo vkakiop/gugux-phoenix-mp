@@ -144,6 +144,9 @@ onLoad((option)=>{
       //console.log('pageData.spTokenInfo.spToken',pageData.spTokenInfo.spToken)
       //uni.showToast({title: pageData.spTokenInfo.spToken,icon:'none',duration: 2000})
     }
+    else if (pageData.spTokenInfo.spToken) {
+      pageData.spTokenInfo = {}
+    }
     else if (pageData.spTokenInfo.errorMsg) {
       console.log('pageData.spTokenInfo',pageData.spTokenInfo)
       pageData.dialogTitle = pageData.spTokenInfo.errorMsg
