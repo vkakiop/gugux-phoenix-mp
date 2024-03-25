@@ -28,9 +28,7 @@
         <input class="w-4/5 h-48 ml-40" v-model="pageData.code" placeholder="请输入验证码" maxlength="6"/>
         <!--image v-if="pageData.code" class="w-18 h-18 absolute right-15 top-14" src="@/static/login/eye.png" @click="pageData.code = '';"></image-->
       </view>
-      <debounce @debounce="onLogin">
-        <button :class="['mt-25','h-48','leading-48','rounded-full','bg-[#f8cf01]',pageData.code.length < 6 ? '' : 'active:bg-[#f0c801]',pageData.code.length < 6 ? 'text-[#666666]' : 'text-[#333333]']">登录</button>
-      </debounce>
+      <button @click="onLogin" :class="['mt-25','h-48','leading-48','rounded-full','bg-[#f8cf01]',pageData.code.length < 6 ? '' : 'active:bg-[#f0c801]',pageData.code.length < 6 ? 'text-[#666666]' : 'text-[#333333]']" :disabled="pageData.isLoading">登录</button>
       <!--view class="mt-18 text-center" @click="gotoLoginPhone">验证码登录</view-->
       <view class="mt-58 text-13 flex items-center">
         <u-checkbox-group v-model="pageData.isAgreeItems">
@@ -89,6 +87,7 @@ const pageData = reactive({
   isReget: false,  // 判断是否显示 ‘重新获取’按钮
   isGetCode:false, // 是否获取过验证码
   jsCode:'',
+  isLoading:false,
 })
 
 watch(()=>pageData.count,(newVal,oldVal)=>{
@@ -109,6 +108,7 @@ const onLogin = ()=>{
         uni.showToast({title: '请勾选同意隐私条款',icon:'none',duration: 2000})
       }
       else {
+        pageData.isLoading = true
         uni.login({
           provider: 'weixin', //使用微信登录
           success: function (res) {
@@ -116,16 +116,21 @@ const onLogin = ()=>{
               pageData.jsCode = res.code
               authSmsLogin({phone:pageData.phone,code:pageData.code,jsCode:pageData.jsCode}).then(res=>{
                 tokenSave(res,pageData.url)
+                pageData.isLoading = false
+              }).catch(err=>{
+                pageData.isLoading = false
               })
             }
             else {
               let title = '登录错误：'+res.errMsg
               uni.showToast({title:title,icon: 'none', duration: 2000})
+              pageData.isLoading = false
             }
             console.log('wxLogin',res)
           },
           fail : function(res) {
             uni.showToast({title:'登录错误：'+res.detail.code,icon: 'none', duration: 2000})
+            pageData.isLoading = false
           },
         });
       }

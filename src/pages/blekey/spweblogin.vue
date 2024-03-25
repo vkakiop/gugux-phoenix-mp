@@ -21,6 +21,7 @@ onLoad((option)=>{
   if (pageData.token) {
     pageData.spTokenUrl = import.meta.env.VITE_APP_SHAREPAGE_H5_URL
         + '/#/blekey/mpindex?tokenEncode='+encodeURIComponent(encodeBlekey(pageData.token,''))
+        + '&timestamp='+(new Date().getTime() + '' + Math.floor(Math.random() * 10000))
     console.log('pageData.spTokenUrl:',pageData.spTokenUrl)
   }
   else {
