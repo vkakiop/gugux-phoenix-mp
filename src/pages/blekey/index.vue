@@ -423,8 +423,9 @@ const onUnlock = async()=>{
 
   //debug
   //console.log('header token:',getTokenValue())
-  //console.log('/gugux-services-user-api/app/digital/key/share/open',{id:pageData.sharedData.id,token:pageData.spTokenInfo.spToken})
+  console.log('blekeyOpen param:',{id:pageData.sharedData.id,token:pageData.spTokenInfo.spToken})
   blekeyOpen({id:pageData.sharedData.id,token:pageData.spTokenInfo.spToken,type:2}).then(res=>{
+    console.log('blekeyOpen sucess:',res)
     let status = res.data.status
     if (status == 1) {
       pageData.encryptedStr = res.data.encryptedStr
@@ -622,8 +623,8 @@ const onBluetoothDeviceFound = ()=> {
       // else if (device.deviceId.length != 17 && device.advertisData) {
         //console.log('device.advertisData:',device.advertisData)
         let advertisDataStr = ab2str(device.advertisData)
-        console.log('advertisDataStr:',advertisDataStr)
-        console.log('pageData.sharedData.mac',pageData.sharedData.mac)
+        //console.log('advertisDataStr:',advertisDataStr)
+        //console.log('pageData.sharedData.mac',pageData.sharedData.mac)
         if (advertisDataStr.indexOf('Caige') != -1 && advertisDataStr.indexOf(pageData.sharedData.mac) != -1) {
           pageData.connectStateLog = '找到设备'
           stopBluetoothDevicesDiscovery()
