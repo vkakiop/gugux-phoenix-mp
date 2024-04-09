@@ -58,7 +58,7 @@ import { configStaticPath } from '@/config/index'
 import {encodeBlekey,encodeBlekeyAb,decodeBlekey,decodeBlekeyAb,ab2hex,hex2ab,ab2str,str2ab,decimal2hex,hex2decimal} from '@/utils/crypto'
 import {abcrc16} from '@/utils/crc16'
 import useGetSettingStore from '@/store/modules/getSetting'
-import {onLoad, onUnload} from '@dcloudio/uni-app'
+import {onLoad, onUnload, onShow} from '@dcloudio/uni-app'
 const pageData = reactive({
   mac1:'60',
   mac2:'E7',
@@ -89,6 +89,10 @@ const pageData = reactive({
 
 onUnload(()=>{
   clearTimeout(pageData.connectTimer)
+})
+
+onShow(()=>{
+  changeMac()
 })
 
 const changeMac = ()=>{
