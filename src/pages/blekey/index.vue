@@ -66,6 +66,7 @@ import {configStaticPath} from '@/config/index'
 import {onLoad,onShow,onUnload} from '@dcloudio/uni-app'
 import {getAddress} from '@/utils/amap.js'
 import useBlekeyStore from '@/store/modules/blekey'
+import useGetSettingStore from '@/store/modules/getSetting'
 
 const _this = getCurrentInstance();
 
@@ -331,37 +332,88 @@ const bleConnect = ()=>{
 }
 
 const getSetting = (scope, name, callback)=> {
-  wx.getSetting({
-    success: (res) => {
-      if (res.authSetting[scope]) {
-        callback && callback()
-      } else {
-        wx.authorize({
-          scope: scope,
-          success(res) {
-            callback && callback()
-          },
-          fail(err) {
-            pageData.dialogTitle = '需要您授权'+ name + '权限'
-            pageData.isDialogIconSuccess = false
-            pageData.dialogCallback = ()=>{
-              wx.openSetting({
-                success(ret) {
-                  if (ret.authSetting[scope]) {
-                    callback && callback()
-                  }
-                }
-              })
-            }
-            pageData.isDialogShow = true
-          }
-        });
-      }
-    },
-    fail(err) {
-      console.log(err);
+  let getSettingStore = useGetSettingStore().getGetSetting()
+  if (Object.keys(getSettingStore).includes(scope)) {
+    if (getSettingStore[scope]) {
+      callback && callback()
     }
-  })
+    else {
+      pageData.dialogTitle = '需要您授权'+ name + '权限'
+      pageData.isDialogIconSuccess = false
+      pageData.dialogCallback = ()=>{
+        wx.openSetting({
+          success(ret) {
+            if (ret.authSetting[scope]) {
+              let obj = {}
+              obj[scope] = true
+              useGetSettingStore().setGetSetting(obj)
+              callback && callback()
+            }
+            else {
+              let obj = {}
+              obj[scope] = false
+              useGetSettingStore().setGetSetting(obj)
+            }
+          }
+        })
+      }
+      pageData.isDialogShow = true
+    }
+  }
+  else {
+    wx.getSetting({
+      success: (res) => {
+        if (res.authSetting[scope]) {
+          let obj = {}
+          obj[scope] = true
+          useGetSettingStore().setGetSetting(obj)
+          callback && callback()
+        } else {
+          let obj = {}
+          obj[scope] = false
+          useGetSettingStore().setGetSetting(obj)
+          wx.authorize({
+            scope: scope,
+            success(res) {
+              let obj = {}
+              obj[scope] = true
+              useGetSettingStore().setGetSetting(obj)
+              callback && callback()
+            },
+            fail(err) {
+              let obj = {}
+              obj[scope] = false
+              useGetSettingStore().setGetSetting(obj)
+
+              pageData.dialogTitle = '需要您授权'+ name + '权限'
+              pageData.isDialogIconSuccess = false
+              pageData.dialogCallback = ()=>{
+                wx.openSetting({
+                  success(ret) {
+                    if (ret.authSetting[scope]) {
+                      let obj = {}
+                      obj[scope] = true
+                      useGetSettingStore().setGetSetting(obj)
+                      callback && callback()
+                    }
+                    else {
+                      let obj = {}
+                      obj[scope] = false
+                      useGetSettingStore().setGetSetting(obj)
+                    }
+                  }
+                })
+              }
+              pageData.isDialogShow = true
+            }
+          });
+        }
+      },
+      fail(err) {
+        console.log(err);
+      }
+    })
+  }
 }
 
 const onUnlockClick = ()=>{

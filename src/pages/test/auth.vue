@@ -14,6 +14,7 @@
 <script setup>
 import {onLoad} from "@dcloudio/uni-app"
 import {reactive} from 'vue'
+import useGetSettingStore from '@/store/modules/getSetting'
 
 let setting = {}
 const pageData = reactive({
@@ -33,44 +34,95 @@ onLoad((option)=>{
   onCopy()
 })
 
-const getSetting = (scope, title, callback)=> {
-  wx.getSetting({
-    success: (res) => {
-      if (res.authSetting[scope]) {
-        callback && callback()
-      } else {
-        wx.authorize({
-          scope: scope,
-          success(res) {
-            callback && callback()
-          },
-          fail(err) {
-            console.log('getSetting '+scope,err)
-            wx.showModal({
-              title: '提示',
-              content: '需要您授权' + title,
-              success: (res) => {
-                if (res.confirm) {
-                  wx.openSetting({
-                    success(ret) {
-                      if (ret.authSetting[scope]) {
-                        callback && callback()
-                      }
-                    }
-                  })
-                }
-              },
-              fail(err) {
-              }
-            })
-          }
-        });
-      }
-    },
-    fail(err) {
-      console.log(err);
+const getSetting = (scope, name, callback)=> {
+  let getSettingStore = useGetSettingStore().getGetSetting()
+  if (Object.keys(getSettingStore).includes(scope)) {
+    if (getSettingStore[scope]) {
+      callback && callback()
     }
-  })
+    else {
+      pageData.dialogTitle = '需要您授权'+ name + '权限'
+      pageData.isDialogIconSuccess = false
+      pageData.dialogCallback = ()=>{
+        wx.openSetting({
+          success(ret) {
+            if (ret.authSetting[scope]) {
+              let obj = {}
+              obj[scope] = true
+              useGetSettingStore().setGetSetting(obj)
+              callback && callback()
+            }
+            else {
+              let obj = {}
+              obj[scope] = false
+              useGetSettingStore().setGetSetting(obj)
+            }
+          }
+        })
+      }
+      pageData.isDialogShow = true
+    }
+  }
+  else {
+    wx.getSetting({
+      success: (res) => {
+        if (res.authSetting[scope]) {
+          let obj = {}
+          obj[scope] = true
+          useGetSettingStore().setGetSetting(obj)
+          callback && callback()
+        } else {
+          let obj = {}
+          obj[scope] = false
+          useGetSettingStore().setGetSetting(obj)
+          wx.authorize({
+            scope: scope,
+            success(res) {
+              let obj = {}
+              obj[scope] = true
+              useGetSettingStore().setGetSetting(obj)
+              callback && callback()
+            },
+            fail(err) {
+              let obj = {}
+              obj[scope] = false
+              useGetSettingStore().setGetSetting(obj)
+
+
+              wx.showModal({
+                title: '提示',
+                content: '需要您授权' + name + '权限',
+                success: (res) => {
+                  if (res.confirm) {
+                    wx.openSetting({
+                      success(ret) {
+                        if (ret.authSetting[scope]) {
+                          let obj = {}
+                          obj[scope] = true
+                          useGetSettingStore().setGetSetting(obj)
+                          callback && callback()
+                        }
+                        else {
+                          let obj = {}
+                          obj[scope] = false
+                          useGetSettingStore().setGetSetting(obj)
+                        }
+                      }
+                    })
+                  }
+                },
+                fail(err) {
+                }
+              })
+            }
+          });
+        }
+      },
+      fail(err) {
+        console.log(err);
+      }
+    })
+  }
 }
 
 const handleAgreePrivacyAuthorization = ()=> {

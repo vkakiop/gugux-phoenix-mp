@@ -98,7 +98,7 @@ onShow(()=>{
 const changeMac = ()=>{
   pageData.connectState = 0
   pageData.connectStateLog = ''
-  closeBluetoothAdapter()
+  closeBluetoothAdapterPromise().finally(()=>{})
 }
 
 //距离获取
@@ -150,14 +150,13 @@ const bleConnect = ()=>{
       //closeBluetoothAdapter(false)
     }
   },30000)
-  closeBluetoothAdapter().finally(()=>{
+  closeBluetoothAdapterPromise().finally(()=>{
     openBluetoothAdapter()
   })
 }
 
 const getSetting = (scope, name, callback)=> {
   let getSettingStore = useGetSettingStore().getGetSetting()
-  console.log('Object.keys(getSettingStore)',Object.keys(getSettingStore),getSettingStore)
   if (Object.keys(getSettingStore).includes(scope)) {
     if (getSettingStore[scope]) {
       callback && callback()
@@ -389,7 +388,7 @@ const createBLEConnection = (row)=> {
       pageData.dialogCallback = ()=>{}
       pageData.isDialogShow = true
 
-      closeBluetoothAdapter(true)
+      closeBluetoothAdapterPromise(true).finally(()=>{})
     }
   })
   stopBluetoothDevicesDiscovery()
@@ -624,7 +623,7 @@ const writeBLECharacteristicValue = (type)=> {
   })
 }
 
-const closeBluetoothAdapter = (isChangeConnectState)=> {
+const closeBluetoothAdapterPromise = (isChangeConnectState)=> {
   return new Promise((resolve, reject)=>{
     stopBluetoothDevicesDiscovery()
     wx.offBLECharacteristicValueChange()
