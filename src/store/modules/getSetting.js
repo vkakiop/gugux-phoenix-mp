@@ -9,11 +9,20 @@ const useGetSettingStore = defineStore(
             // 添加一项数据
             setGetSetting(data) {
                 this.getSetting = {...this.getSetting,...data}
+                uni.setStorageSync('store_getSetting',JSON.stringify(this.getSetting))
             }
         },
         getters: {
             getGetSetting() {
-                return ()=> this.getSetting || {}
+                return ()=> {
+                    //this.getSetting || {}
+                    let storageValue = uni.getStorageSync('store_getSetting')
+                    let obj = {}
+                    if (storageValue) {
+                        obj = JSON.parse(storageValue) || {}
+                    }
+                    return obj
+                }
             }
         }
     })
