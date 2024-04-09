@@ -74,6 +74,7 @@ const pageData = reactive({
 
   isLocked:false,
   type:0, //0查询 1解锁 2上锁
+  types:['查询','解锁','上锁'],
   isLockLoading:true,
 
   connectState:0,//0未连接 1连接中 2已连接 3连接失败
@@ -434,20 +435,20 @@ const getBLEDeviceCharacteristics = (deviceId, serviceId)=> {
         let successHex = nofityDataHex.substr(24,4)
         if (successHex == '1000') { //上锁解锁失败
           pageData.connectState = 2
-          pageData.connectStateLog = '执行'+['查询','解锁','上锁'][pageData.type]+'失败！'
+          pageData.connectStateLog = '执行'+pageData.types[pageData.type]+'失败！'
           pageData.isLockLoading = false
 
-          pageData.dialogTitle = '执行'+['查询','解锁','上锁'][pageData.type]+'失败！'
+          pageData.dialogTitle = '执行'+pageData.types[pageData.type]+'失败！'
           pageData.isDialogIconSuccess = true
           pageData.dialogCallback = ()=>{}
           pageData.isDialogShow = true
         }
         else if(successHex == '1001') { //上锁解锁成功
           pageData.connectState = 2
-          pageData.connectStateLog = (pageData.isLocked ? '解锁' : '上锁') + '成功！'
+          pageData.connectStateLog = pageData.types[pageData.type] + '成功！'
           pageData.isLockLoading = false
 
-          pageData.dialogTitle = (pageData.isLocked ? '解锁' : '上锁') + '成功！'
+          pageData.dialogTitle = pageData.types[pageData.type] + '成功！'
           pageData.isDialogIconSuccess = true
           pageData.dialogCallback = ()=>{}
           pageData.isDialogShow = true
