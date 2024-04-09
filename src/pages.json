@@ -187,6 +187,12 @@
 			"style": {
 				"navigationBarTitleText": "手机号验证"
 			}
+		},
+		{
+			"path": "pages/blelock/index",
+			"style": {
+				"navigationBarTitleText": "河南三轮车项目蓝牙锁demo"
+			}
 		}
 	],
 	"globalStyle": {
