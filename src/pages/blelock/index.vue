@@ -343,7 +343,7 @@ const onBluetoothDeviceFound = ()=> {
   wx.onBluetoothDeviceFound((res) => {
     res.devices.forEach(device => {
       let advertisDataStr = ab2str(device.advertisData)
-      if (advertisDataStr.indexOf('CG-RT') != -1 /*&& advertisDataStr.indexOf(pageData.sharedData.mac) != -1*/) {
+      if (advertisDataStr.indexOf('CG-RT') != -1 && advertisDataStr.indexOf(pageData.mac) != -1) {
         pageData.connectStateLog = '找到设备'
         stopBluetoothDevicesDiscovery()
         createBLEConnection(device)
