@@ -91,7 +91,16 @@ onUnload(()=>{
   clearTimeout(pageData.connectTimer)
 })
 
-onShow(()=>{
+onShow(() => {
+   wx.openBluetoothAdapter({
+      success: (res) => {
+        console.log('第一步，蓝牙初始化成功', res)
+      },
+      fail: (res) => {
+        console.log("第一步、蓝牙初始化失败", res);
+        // wx.showToast({ title: '蓝牙初始化失败', icon: 'none' }
+      }
+    })
   changeMac()
 })
 

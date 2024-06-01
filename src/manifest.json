@@ -59,6 +59,9 @@
         "permission" : {
             "scope.userLocation" : {
                 "desc" : "获取您的个人位置信息"
+            },
+             "scope.bluetooth": {
+             "desc": "你的蓝牙信息将用于小程序连接设备"
             }
         },
         "requiredPrivateInfos" : [ "getLocation" ]
