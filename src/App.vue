@@ -210,11 +210,11 @@ export default {
   onLaunch: function (options) {
     uni.setStorage({
       key: 'orderId',
-      data: options.query.orderId
+      data: "3696300944316809217"
     });
     uni.setStorage({
       key: 'tokens',
-      data: options.query.token
+      data: "eyJhbGciOiJIUzUxMiJ9.eyJjdXJyZW50X3VzZXJfaWQiOjI2MTY1NzIxNzY0MTU2NjUxNzMsInRpbWVzcGFuIjoxNzE4MTYxNTU2OTQxLCJjdXJyZW50X3VzZXJfaW1faWQiOjI2MTY1NzIxNzY0MTU2NjUxNzR9.RHZoGsIa4w7IrFZ_LtTD4TuLZLmPpYYVb-qBQ0cwlSywpWz1WhMTYugJi2soxh2-cwHC8aUwtMsImI8QM0Uw8A"
     });
     //登录信息处理
     let ggx_login_token_text = uni.getStorageSync(configLoginToken)

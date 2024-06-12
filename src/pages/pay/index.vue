@@ -3,12 +3,9 @@
 </template>
 
 <script setup>
-import { reactive, watch, onMounted } from 'vue'
-import { tokenSave, isSwitchTab, loginout } from '@/utils/login'
-import { privacyAuth } from "@/utils/utils"
+import { reactive } from 'vue'
 import { payWx } from '@/api/pay/index'
-import phoneslogan from './components/phoneslogan.vue'
-import { onLaunch, onLoad } from "@dcloudio/uni-app"
+import { onLoad } from "@dcloudio/uni-app"
 
 
 onLoad(() => {
