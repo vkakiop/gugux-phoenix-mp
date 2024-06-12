@@ -6,12 +6,12 @@ import msgStorage from '@/components/chat/msgstorage'
 import msgType from '@/components/chat/msgtype'
 import disp from '@/utils/broadcast'
 import { onGetSilentConfig } from './components/chat/pushStorage'
-import {loginout} from '@/utils/login'
+import { loginout } from '@/utils/login'
 
-import {getCurrentPageUrl} from '@/utils/utils'
-import {configLoginToken} from '@/config/index'
+import { getCurrentPageUrl } from '@/utils/utils'
+import { configLoginToken } from '@/config/index'
 import useLoginTokenStore from '@/store/modules/loginToken'
-import {hxLogin} from "./utils/login";
+import { hxLogin } from "./utils/login";
 import useSafeguardStore from '@/store/modules/safeguard'
 let logout = false;
 
@@ -133,9 +133,9 @@ function saveGroups() {
 
 export default {
   globalData: {
-    loginToken:{
-      accessToken:'',
-      expireTime:0,
+    loginToken: {
+      accessToken: '',
+      expireTime: 0,
     },
     //IM global初始化
     phoneNumber: '',
@@ -207,7 +207,15 @@ export default {
     },
     //IM global初始化结束
   },
-  onLaunch: function () {
+  onLaunch: function (options) {
+    uni.setStorage({
+      key: 'orderId',
+      data: options.query.orderId
+    });
+    uni.setStorage({
+      key: 'tokens',
+      data: options.query.token
+    });
     //登录信息处理
     let ggx_login_token_text = uni.getStorageSync(configLoginToken)
     let loginToken = {}
@@ -297,20 +305,20 @@ export default {
         //     }
         //   }
         // });
-      //   // uni.showToast({
-      //   //   title: "连接已关闭",
-      //   //   icon: "none",
-      //   //   duration: 2000,
-      //   // });
-      //
-      //   me.globalData.conn.closed = true;
-      //   WebIM.conn.close();
-      //   // uni.removeStorageSync('pushStorageData');
-      //   // uni.clearStorageSync();
+        //   // uni.showToast({
+        //   //   title: "连接已关闭",
+        //   //   icon: "none",
+        //   //   duration: 2000,
+        //   // });
+        //
+        //   me.globalData.conn.closed = true;
+        //   WebIM.conn.close();
+        //   // uni.removeStorageSync('pushStorageData');
+        //   // uni.clearStorageSync();
       },
 
       onInviteMessage(message) {
-        console.log('onInviteMessage',message)
+        console.log('onInviteMessage', message)
         //me.globalData.saveGroupInvitedList.push(message);
         //disp.fire("em.invite.joingroup", message); // uni.showModal({
         // 	title: message.from + " 已邀你入群 " + message.roomid,
@@ -329,7 +337,7 @@ export default {
 
       //onPresence为旧版 ，建议参考最新增删好友api文档 ：http://docs-im.easemob.com/im/web/basics/buddy
       onPresence(message) {
-        console.log('message',message)
+        console.log('message', message)
         // switch (message.type) {
         //   case "unsubscribe":
         //     break;
@@ -476,11 +484,11 @@ export default {
           //calcUnReadSpot(message);
           // ack(message);
           //onGetSilentConfig(message);
-          if(message.from == "admin-safe"){
+          if (message.from == "admin-safe") {
             uni.setStorage({
               key: 'admin-safe',
               data: {
-                data:message.ext.custom_json.connectContact
+                data: message.ext.custom_json.connectContact
               }
             });
             useSafeguardStore().set(!useSafeguardStore().get());
@@ -488,12 +496,12 @@ export default {
               url: '/pages/index/index'
             })
           }
-          else if ((message.data+'').indexOf('debug:test:') != -1) {
+          else if ((message.data + '').indexOf('debug:test:') != -1) {
             uni.showModal({
               title: '提示',
               content: message.data + '',
-              showCancel:false,
-              cancelText:'知道了',
+              showCancel: false,
+              cancelText: '知道了',
               success: function (res) {
                 if (res.confirm) {
                 } else if (res.cancel) {
@@ -508,14 +516,14 @@ export default {
         console.log("onCustomMessage", message);
         if (message) {
           console.log(message.customEvent)
-          if(message.customEvent == "help_contact"){
+          if (message.customEvent == "help_contact") {
             uni.setStorage({
               key: 'help_contact',
               data: {
-                data:{
+                data: {
                   ...message.ext,
-                  userId:JSON.parse(message.customExts.custom_json).userId,
-                  imId:message.to
+                  userId: JSON.parse(message.customExts.custom_json).userId,
+                  imId: message.to
                 }
               }
             });
@@ -634,13 +642,13 @@ export default {
         // }
         //206 用户在其他设备登录。
         //217 用户被踢下线。
-        if ([206,217].includes(error.type)) {
+        if ([206, 217].includes(error.type)) {
           loginout()
           uni.showModal({
             title: '提示',
             content: '您的账号已在其他系统登录',
-            showCancel:false,
-            cancelText:'知道了',
+            showCancel: false,
+            cancelText: '知道了',
             success: function (res) {
               if (res.confirm) {
                 uni.switchTab({
@@ -653,7 +661,7 @@ export default {
         }
         else if (error.type == 40) {
           if (error.data.errMsg.indexOf('url not in domain list') != -1) {
-            uni.showToast({title: '环信未加入socket白名单', icon: "none", duration: 2000})
+            uni.showToast({ title: '环信未加入socket白名单', icon: "none", duration: 2000 })
           }
           else if (error.message == 'on socket error') {
             //onClosed
@@ -679,13 +687,13 @@ export default {
         // 12   获取 Chat token 失败。
         // 1  登录失败。
         // 207 用户已经被注销。
-        else if ([1,12,32,204,207].includes(error.type)) {
+        else if ([1, 12, 32, 204, 207].includes(error.type)) {
           loginout()
           uni.showModal({
             title: '提示',
             content: '环信账号信息不存在',
-            showCancel:false,
-            cancelText:'知道了',
+            showCancel: false,
+            cancelText: '知道了',
             success: function (res) {
               if (res.confirm) {
                 uni.switchTab({
@@ -749,15 +757,15 @@ export default {
     //已登录登录环信
     if (loginToken.accessToken) {
       //环信登录
-      hxLogin(loginToken,this)
+      hxLogin(loginToken, this)
     }
-      // setTimeout(()=>{
-      //   console.log(123)
-      //   // useSafeguardStore().set(!useSafeguardStore().get());
-      //     uni.switchTab({
-      //       url: '/pages/index/index'
-      //     })
-      // },5000)
+    // setTimeout(()=>{
+    //   console.log(123)
+    //   // useSafeguardStore().set(!useSafeguardStore().get());
+    //     uni.switchTab({
+    //       url: '/pages/index/index'
+    //     })
+    // },5000)
     //通过网络状态监听IM状态
     uni.onNetworkStatusChange((res) => {
       // uni.showToast({
@@ -782,5 +790,4 @@ export default {
 //@import './windi.scss';
 // @import "vk-uview-ui/index.scss";
 @import "uview-plus/index.scss";
-
 </style>

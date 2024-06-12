@@ -82,7 +82,6 @@ const pageData = reactive({
 //     pageData.redbagId = res.data.id
 //   })
 // }
-
 onMounted(() => {
   privacyAuth()
   //getGlobalStatus()
